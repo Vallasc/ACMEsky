@@ -17,8 +17,8 @@
             foundOffer: ACMEsky -> Prontogram ; 
             // sequenza foundOffer: (a-> d;(..)) | timeout: (a-> d)
             (
-                (confirmOffer: user -> ACMEsky ; sendBankService: ACMEsky -> user ; payment: user -> BankService ; 
-                // sequenza (confirmOffer: c-> a ; sendBankService: a -> c ; payment: c -> e ; (..))    
+                (confirmOffer: user -> ACMEsky ; askBankLink: ACMEsky -> BankService ; responseLink: BankService -> ACMEsky ; sendBankService: ACMEsky -> user ; payment: user -> BankService ; 
+                // sequenza (confirmOffer: c-> a ; askBankLink: a -> e ; responseLink: e -> a ; sendBankService: a -> c ; payment: c -> e ; (..))    
                     (
                         (successPayment: BankService -> ACMEsky;
                         // sequenza (successPayment: e -> a; (..); successOrder: a -> c; stopTimeout: a -> d) + (failPayment: e -> a; failOrder: a -> c )
