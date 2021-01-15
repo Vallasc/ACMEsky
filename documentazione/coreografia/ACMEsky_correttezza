@@ -1,44 +1,49 @@
 (( query: ACMEsky -> flyCompany ; response: flyCompany -> ACMEsky)* | (sendLastMinute: flyCompany -> ACMEsky )* ) |
 
-// sequenza query: a-> b; response: b-> a
+// sequenza query: b-> a; response: a-> b
 // sincrono corretto perchè prima riceve poi invia 
 // condizioni di sender, receiver e disjoint rispettate
 // sequenza corretta pertanto anche iteration è corretta.
 
-// sequenza sendLastMinute: b -> a; 
+// sequenza sendLastMinute: a -> b; 
 // sequenza corretta poiché atomica, pertanto anche iteration è corretta.
-
-
-(
-    request: user -> ACMEsky ; 
-    // sequenza request: (c -> b ; (..))
-    (
-        (
-            foundOffer: ACMEsky -> Prontogram ; 
-            // sequenza foundOffer: (a-> d;(..)) | timeout: (a-> d)
-            (
-                (confirmOffer: user -> ACMEsky ; askBankLink: ACMEsky -> BankService ; responseLink: BankService -> ACMEsky ; sendBankService: ACMEsky -> user ; payment: user -> BankService ; 
-                // sequenza (confirmOffer: c-> a ; askBankLink: a -> e ; responseLink: e -> a ; sendBankService: a -> c ; payment: c -> e ; (..))    
-                    (
-                        (successPayment: BankService -> ACMEsky;
-                        // sequenza (successPayment: e -> a; (..); successOrder: a -> c; stopTimeout: a -> d) + (failPayment: e -> a; failOrder: a -> c )
-                            (
-                                1 + 
-                                (askForDistance: ACMEsky -> GeoDistanceService ; distanceResponse: GeoDistanceService -> ACMEsky; 
-                                // sequenza 1 + (askForDistance: a -> f ; distanceResponse: f -> a;(..)) 
-                                    (
-                                        1 +  (askForRent: ACMEsky -> RentCompany; responseForRent: RentCompany-> ACMEsky )
-                                        // sequenza 1 + (askForRent: a -> g; responseForRent: g-> a )
-                                    )
-                                )
-                            )
-                        ) ; successOrder: ACMEsky -> user; stopTimeout: ACMEsky -> Prontogram
-                    )
-                    +
-                    (failPayment: BankService -> ACMEsky; failOrder: ACMEsky -> user )
-                )
-            )
-        ) | 
-        timeout: ACMEsky -> Prontogram
-    )
+|
+( 
+    request: user -> ACMEsky 
+    // sequenza (request: c -> b)* | (..)*
 )*
+| 
+( 
+    (foundOffer: ACMESky -> Prontogram ; notifyUser: Prontogram -> User ; 
+     // sequenza (foundOffer: b -> d ; notifyUser: d -> c ; (..)) + 1
+    ( 
+        (confirmOffer: user -> ACMEsky ; 
+         //sequenza confirmOffer: c -> b; (..) 
+            (successResponse: ACMESky -> User ; askBankLink: ACMEsky -> BankService ; responseLink: BankService -> ACMEsky ; sendBankService: ACMEsky -> user ; payment: user -> BankService ;  
+             // sequenza successResponse: (b -> c; askBankLink: b -> e ; responseLink: e -> b ; sendBankService: b -> c ; payment: c -> e ; (..)) + failResponse: b -> c;
+            (
+                (successPayment: BankService -> ACMEsky; confirmSuccessPayment: ACMESky -> User ; informFlyCompany: ACMESky -> flyCompany ; response: flyCompany -> ACMESky ; payTicket: ACMESky -> bank ; payFlyCompany: bank -> flyCompany;
+                // sequenza (successPayment: e -> b ; confirmSuccessPayment: b -> c ; informFlyCompany: b -> a ; response: a -> b ; payTicket: b -> e ; payFlyCompany: e -> a; (..)); successOrder: b -> c ;  +  (failPayment: e -> b; failOrder: b -> c )
+                    ( 
+                        1 + 
+                        (askForDistance: ACMEsky -> GeoDistanceService ; distanceResponse: GeoDistanceService -> ACMEsky; 
+                        // sequenza 1 + (askForDistance: b -> f ; distanceResponse: f -> b;(..)) 
+                            ( 
+                                1 +  (askForRent: ACMEsky -> RentCompany; responseForRent: RentCompany-> ACMEsky )
+                                // sequenza 1 + (askForRent: b -> g; responseForRent: g-> b )
+                            )
+                        )
+                    )
+                ); successOrder: ACMEsky -> user; 
+            )
+            +
+            (failPayment: BankService -> ACMEsky; failOrder: ACMEsky -> user )
+            )
+            +
+            failResponse: ACMESky -> User 
+        )
+    )) 
+    + 
+    1
+)*
+
