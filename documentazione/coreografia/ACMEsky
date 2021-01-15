@@ -20,7 +20,7 @@
                             )
                         )
                     )
-                ); successOrder: ACMEsky -> user; stopTimeout: ACMEsky -> Prontogram
+                ); successOrder: ACMEsky -> user
             )
             +
             (failPayment: BankService -> ACMEsky; failOrder: ACMEsky -> user )
