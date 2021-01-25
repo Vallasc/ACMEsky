@@ -8,9 +8,11 @@
     (foundOffer: ACMESky -> Prontogram ; notifyUser: Prontogram -> User ; 
     ( // Utente conferma offerta
         (confirmOffer: user -> ACMEsky ; 
-            (successResponse: ACMESky -> User ; askBankLink: ACMEsky -> BankService ; responseLink: BankService -> ACMEsky ; sendBankService: ACMEsky -> user ; payment: user -> BankService ;  
+            (successResponse: ACMESky -> User ; informFlyCompany: ACMESky -> flyCompany; 
+            ( confirmAvailableFlight: flyCompany -> ACMESky; confirmFlightToUser: ACMESky -> user; 
+                askBankLink: ACMEsky -> BankService ; responseLink: BankService -> ACMEsky ; sendBankService: ACMEsky -> user ; payment: user -> BankService ;  
             (
-                (successPayment: BankService -> ACMEsky; confirmSuccessPayment: ACMESky -> User ; informFlyCompany: ACMESky -> flyCompany ; response: flyCompany -> ACMESky ; payTicket: ACMESky -> bank ; payFlyCompany: bank -> flyCompany ;  
+                (successPayment: BankService -> ACMEsky; confirmSuccessPayment: ACMESky -> User ; payTickets: ACMESky -> BankService ; receiveTickets: flyCompany -> ACMESky ;  
                     ( // Richiesta a GeoDistanceService se costo > 1000
                         1 + 
                         (askForDistance: ACMEsky -> GeoDistanceService ; distanceResponse: GeoDistanceService -> ACMEsky; 
@@ -24,9 +26,11 @@
             )
             +
             (failPayment: BankService -> ACMEsky; failOrder: ACMEsky -> user )
+            ) + 
+            flightNotAvailable: flyCompany -> ACMESky; FlightNotAvailableError: ACMESky -> user
             )
             +
-            failResponse: ACMESky -> User 
+            failResponse: ACMESky -> User
         )
     )) 
     + 
