@@ -101,6 +101,19 @@
         </packagedElement>
         <packagedElement xmi:type="uml:Dependency" xmi:id="_XhaTsFzGEeu2L6vfUkKT0Q" client="_D2MXYFqDEeuYkt8_IjT4RQ" supplier="_ZTUK0FqEEeuYkt8_IjT4RQ"/>
         <packagedElement xmi:type="uml:Dependency" xmi:id="_lQ4NAF86EeuY2poK1PVmHA" client="_ChSZ8FqDEeuYkt8_IjT4RQ" supplier="_D2MXYFqDEeuYkt8_IjT4RQ"/>
+        <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_z2zIQGh0EeupnMarUEKsrw">
+          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_z22yoGh0EeupnMarUEKsrw" source="PapyrusVersion">
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_z22yoWh0EeupnMarUEKsrw" key="Version" value="1.0.0"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_z22yomh0EeupnMarUEKsrw" key="Comment" value=""/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_z22yo2h0EeupnMarUEKsrw" key="Copyright" value=""/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_z22ypGh0EeupnMarUEKsrw" key="Date" value="2016-11-24"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_z22ypWh0EeupnMarUEKsrw" key="Author" value=""/>
+          </eAnnotations>
+          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_z2zvUGh0EeupnMarUEKsrw" source="http://www.eclipse.org/uml2/2.0.0/UML">
+            <references xmi:type="ecore:EPackage" href="platform:/resource/prova/TinySOA.profile.uml#_c3UpgLIeEealFoL0yAyV8Q"/>
+          </eAnnotations>
+          <appliedProfile xmi:type="uml:Profile" href="platform:/resource/prova/TinySOA.profile.uml#_eL5hsLIcEealFoL0yAyV8Q"/>
+        </profileApplication>
       </packagedElement>
       <packagedElement xmi:type="uml:Package" xmi:id="_U-nbcFqEEeuYkt8_IjT4RQ" name="ACMEskyEntities">
         <packagedElement xmi:type="uml:Interface" xmi:id="_ZTUK0FqEEeuYkt8_IjT4RQ" name="DataBase">
@@ -110,6 +123,19 @@
           <ownedOperation xmi:type="uml:Operation" xmi:id="_cqOnoFzGEeu2L6vfUkKT0Q" name="RetrieveFlights"/>
         </packagedElement>
         <packagedElement xmi:type="uml:Dependency" xmi:id="_Pzi7AFzEEeu2L6vfUkKT0Q" client="_ZTUK0FqEEeuYkt8_IjT4RQ" supplier="_glUrkFzDEeu2L6vfUkKT0Q"/>
+        <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_3p5mcGh0EeupnMarUEKsrw">
+          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_3p_tEGh0EeupnMarUEKsrw" source="PapyrusVersion">
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_3p_tEWh0EeupnMarUEKsrw" key="Version" value="1.0.0"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_3p_tEmh0EeupnMarUEKsrw" key="Comment" value=""/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_3p_tE2h0EeupnMarUEKsrw" key="Copyright" value=""/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_3p_tFGh0EeupnMarUEKsrw" key="Date" value="2016-11-24"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_3p_tFWh0EeupnMarUEKsrw" key="Author" value=""/>
+          </eAnnotations>
+          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_3p6NgGh0EeupnMarUEKsrw" source="http://www.eclipse.org/uml2/2.0.0/UML">
+            <references xmi:type="ecore:EPackage" href="platform:/resource/prova/TinySOA.profile.uml#_c3UpgLIeEealFoL0yAyV8Q"/>
+          </eAnnotations>
+          <appliedProfile xmi:type="uml:Profile" href="platform:/resource/prova/TinySOA.profile.uml#_eL5hsLIcEealFoL0yAyV8Q"/>
+        </profileApplication>
       </packagedElement>
     </packagedElement>
     <packagedElement xmi:type="uml:Package" xmi:id="_1CItMFqCEeuYkt8_IjT4RQ" name="Prontogram">
@@ -336,6 +362,19 @@
           <ownedOperation xmi:type="uml:Operation" xmi:id="__SUBgF8tEeuY2poK1PVmHA" name="ComputeDistance"/>
         </packagedElement>
         <packagedElement xmi:type="uml:Dependency" xmi:id="_gtc7kF8uEeuY2poK1PVmHA" client="_cf0S8F8tEeuY2poK1PVmHA" supplier="_dn5VUF8tEeuY2poK1PVmHA"/>
+        <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_CaMgQGh1EeupnMarUEKsrw">
+          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_CaR_0Gh1EeupnMarUEKsrw" source="PapyrusVersion">
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_CaR_0Wh1EeupnMarUEKsrw" key="Version" value="1.0.0"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_CaR_0mh1EeupnMarUEKsrw" key="Comment" value=""/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_CaR_02h1EeupnMarUEKsrw" key="Copyright" value=""/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_CaR_1Gh1EeupnMarUEKsrw" key="Date" value="2016-11-24"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_CaR_1Wh1EeupnMarUEKsrw" key="Author" value=""/>
+          </eAnnotations>
+          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_CaNHUGh1EeupnMarUEKsrw" source="http://www.eclipse.org/uml2/2.0.0/UML">
+            <references xmi:type="ecore:EPackage" href="platform:/resource/prova/TinySOA.profile.uml#_c3UpgLIeEealFoL0yAyV8Q"/>
+          </eAnnotations>
+          <appliedProfile xmi:type="uml:Profile" href="platform:/resource/prova/TinySOA.profile.uml#_eL5hsLIcEealFoL0yAyV8Q"/>
+        </profileApplication>
       </packagedElement>
     </packagedElement>
     <packagedElement xmi:type="uml:Package" xmi:id="_KLAe0F8tEeuY2poK1PVmHA" name="RentService">
@@ -347,6 +386,19 @@
           <ownedOperation xmi:type="uml:Operation" xmi:id="_RhRsUF8uEeuY2poK1PVmHA" name="BookRent"/>
         </packagedElement>
         <packagedElement xmi:type="uml:Dependency" xmi:id="_hdPZwF8uEeuY2poK1PVmHA" client="_c1_-UF8tEeuY2poK1PVmHA" supplier="_dSUt8F8tEeuY2poK1PVmHA"/>
+        <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_J0_d4Gh1EeupnMarUEKsrw">
+          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_J1EWYGh1EeupnMarUEKsrw" source="PapyrusVersion">
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_J1EWYWh1EeupnMarUEKsrw" key="Version" value="1.0.0"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_J1EWYmh1EeupnMarUEKsrw" key="Comment" value=""/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_J1EWY2h1EeupnMarUEKsrw" key="Copyright" value=""/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_J1EWZGh1EeupnMarUEKsrw" key="Date" value="2016-11-24"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_J1EWZWh1EeupnMarUEKsrw" key="Author" value=""/>
+          </eAnnotations>
+          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_J1AE8Gh1EeupnMarUEKsrw" source="http://www.eclipse.org/uml2/2.0.0/UML">
+            <references xmi:type="ecore:EPackage" href="platform:/resource/prova/TinySOA.profile.uml#_c3UpgLIeEealFoL0yAyV8Q"/>
+          </eAnnotations>
+          <appliedProfile xmi:type="uml:Profile" href="platform:/resource/prova/TinySOA.profile.uml#_eL5hsLIcEealFoL0yAyV8Q"/>
+        </profileApplication>
       </packagedElement>
     </packagedElement>
     <packagedElement xmi:type="uml:Package" xmi:id="_AKOmkGhmEeupnMarUEKsrw" name="User">
@@ -650,4 +702,8 @@
   <TinySOA:Entities xmi:id="_EGJhMGh0EeupnMarUEKsrw" base_Package="_rGUAgGhoEeupnMarUEKsrw"/>
   <TinySOA:Expose xmi:id="_IWFFUGh0EeupnMarUEKsrw" base_Dependency="_GxoQAGh0EeupnMarUEKsrw"/>
   <TinySOA:ServiceInterface xmi:id="_XYIIMGh0EeupnMarUEKsrw" base_Interface="_xbnCUF8rEeuY2poK1PVmHA"/>
+  <TinySOA:Tasks xmi:id="_1ZTc0Gh0EeupnMarUEKsrw" base_Package="_JEtOMFqEEeuYkt8_IjT4RQ"/>
+  <TinySOA:Entities xmi:id="_6kbd4Gh0EeupnMarUEKsrw" base_Package="_U-nbcFqEEeuYkt8_IjT4RQ"/>
+  <TinySOA:Utilities xmi:id="_DzkuAGh1EeupnMarUEKsrw" base_Package="_JTcksF8tEeuY2poK1PVmHA"/>
+  <TinySOA:Utilities xmi:id="_LlKbAGh1EeupnMarUEKsrw" base_Package="_LjO2AF8tEeuY2poK1PVmHA"/>
 </xmi:XMI>
