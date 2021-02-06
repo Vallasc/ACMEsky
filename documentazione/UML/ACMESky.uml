@@ -18,8 +18,10 @@
     <ownedComment xmi:type="uml:Comment" xmi:id="_Pw1WgFzKEeu2L6vfUkKT0Q">
       <body>Utente invia la richiesta di volo</body>
     </ownedComment>
-    <ownedComment xmi:type="uml:Comment" xmi:id="_VIm-MF8UEeuY2poK1PVmHA">
-      <body>verifica nomenclatura entità</body>
+    <ownedComment xmi:type="uml:Comment" xmi:id="_PPhIgGhXEeuxHfem00KLIw">
+      <body>TokenSuccess/TokenError servono per informare l'utente &#xD;
+della validità o meno del token &#xD;
+(il token può anche essere scaduto).</body>
     </ownedComment>
     <packageImport xmi:type="uml:PackageImport" xmi:id="_sOavcFf-Eeucctr5RKw0lg">
       <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
@@ -70,15 +72,15 @@
         </packagedElement>
       </packagedElement>
     </packagedElement>
-    <packagedElement xmi:type="uml:Package" xmi:id="_Xln0kFgAEeucctr5RKw0lg" name="FlyCompany">
-      <packagedElement xmi:type="uml:Package" xmi:id="_dIaHsFgAEeucctr5RKw0lg" name="FlyCompanyTasks">
+    <packagedElement xmi:type="uml:Package" xmi:id="_Xln0kFgAEeucctr5RKw0lg" name="AirlineCompany">
+      <packagedElement xmi:type="uml:Package" xmi:id="_dIaHsFgAEeucctr5RKw0lg" name="AirlineCompanyTasks">
         <packagedElement xmi:type="uml:Class" xmi:id="_OLjRYFgBEeucctr5RKw0lg" name="SearchFlightsManagement">
           <ownedOperation xmi:type="uml:Operation" xmi:id="_NC1ZAFgFEeucctr5RKw0lg" name="SearchFlights"/>
         </packagedElement>
         <packagedElement xmi:type="uml:Interface" xmi:id="_auyBEFgEEeucctr5RKw0lg" name="SearchFlights">
           <ownedOperation xmi:type="uml:Operation" xmi:id="_Q6p_IFgFEeucctr5RKw0lg" name="SearchFlights"/>
         </packagedElement>
-        <packagedElement xmi:type="uml:Dependency" xmi:id="_CF-B0FqBEeuYkt8_IjT4RQ" name="c" client="_auyBEFgEEeucctr5RKw0lg" supplier="_OLjRYFgBEeucctr5RKw0lg"/>
+        <packagedElement xmi:type="uml:Dependency" xmi:id="_QeFp4GhWEeuxHfem00KLIw" client="_auyBEFgEEeucctr5RKw0lg" supplier="_OLjRYFgBEeucctr5RKw0lg"/>
       </packagedElement>
     </packagedElement>
     <packagedElement xmi:type="uml:Package" xmi:id="_vaZBkFqCEeuYkt8_IjT4RQ" name="ACMEsky">
@@ -126,8 +128,8 @@
         <packagedElement xmi:type="uml:Dependency" xmi:id="_8_r9IFqDEeuYkt8_IjT4RQ" client="_sUUMAFqDEeuYkt8_IjT4RQ" supplier="_teNMQFqDEeuYkt8_IjT4RQ"/>
       </packagedElement>
     </packagedElement>
-    <packagedElement xmi:type="uml:Package" xmi:id="_DNc68FsIEeu0YJP7mY_Beg" name="FlyCompany">
-      <packagedElement xmi:type="uml:Package" xmi:id="_DrPqMFsIEeu0YJP7mY_Beg" name="FlyCompanyTasks">
+    <packagedElement xmi:type="uml:Package" xmi:id="_DNc68FsIEeu0YJP7mY_Beg" name="AirlineCompany">
+      <packagedElement xmi:type="uml:Package" xmi:id="_DrPqMFsIEeu0YJP7mY_Beg" name="AirlineCompanyTasks">
         <packagedElement xmi:type="uml:Class" xmi:id="_jPNx0FsJEeu0YJP7mY_Beg" name="LastMinuteManagement">
           <ownedOperation xmi:type="uml:Operation" xmi:id="_jPNx0VsJEeu0YJP7mY_Beg" name="SearchFlights"/>
           <ownedOperation xmi:type="uml:Operation" xmi:id="_FSWDgFsLEeu0YJP7mY_Beg" name="SendLastMinute"/>
@@ -198,13 +200,13 @@
         <packagedElement xmi:type="uml:Dependency" xmi:id="_UnfY4FzJEeu2L6vfUkKT0Q" client="_GilJIFzIEeu2L6vfUkKT0Q" supplier="_EKvIAFzIEeu2L6vfUkKT0Q"/>
       </packagedElement>
     </packagedElement>
-    <packagedElement xmi:type="uml:Package" xmi:id="_j0y0EFzKEeu2L6vfUkKT0Q" name="FlyCompany">
-      <packagedElement xmi:type="uml:Package" xmi:id="_CVZ74F8qEeuY2poK1PVmHA" name="FlyCompanyUtilities">
-        <packagedElement xmi:type="uml:Interface" xmi:id="_4TP6cF8pEeuY2poK1PVmHA" name="FlyCompany">
-          <ownedOperation xmi:type="uml:Operation" xmi:id="_Zcbh0F8qEeuY2poK1PVmHA" name="ConfirmFlight"/>
+    <packagedElement xmi:type="uml:Package" xmi:id="_j0y0EFzKEeu2L6vfUkKT0Q" name="AirlineCompany">
+      <packagedElement xmi:type="uml:Package" xmi:id="_CVZ74F8qEeuY2poK1PVmHA" name="AirlineCompanyUtilities">
+        <packagedElement xmi:type="uml:Interface" xmi:id="_4TP6cF8pEeuY2poK1PVmHA" name="AirlineCompany">
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_Zcbh0F8qEeuY2poK1PVmHA" name="VerifyFlights"/>
         </packagedElement>
-        <packagedElement xmi:type="uml:Class" xmi:id="_5C6c0F8pEeuY2poK1PVmHA" name="FlyCompanyManagement">
-          <ownedOperation xmi:type="uml:Operation" xmi:id="_bvUxgF8qEeuY2poK1PVmHA" name="ConfirmFlight"/>
+        <packagedElement xmi:type="uml:Class" xmi:id="_5C6c0F8pEeuY2poK1PVmHA" name="AirlineCompanyManagement">
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_bvUxgF8qEeuY2poK1PVmHA" name="VerifyFlights"/>
           <ownedOperation xmi:type="uml:Operation" xmi:id="_cTKB4F8rEeuY2poK1PVmHA" name="ReceivePayment"/>
         </packagedElement>
         <packagedElement xmi:type="uml:Dependency" xmi:id="_s4n0wF8qEeuY2poK1PVmHA" client="_4TP6cF8pEeuY2poK1PVmHA" supplier="_5C6c0F8pEeuY2poK1PVmHA"/>
@@ -217,14 +219,13 @@
     <packagedElement xmi:type="uml:Package" xmi:id="_mJk6IFzKEeu2L6vfUkKT0Q" name="ACMESky">
       <packagedElement xmi:type="uml:Package" xmi:id="_d0NfwFzMEeu2L6vfUkKT0Q" name="ACMESkyTasks">
         <packagedElement xmi:type="uml:Interface" xmi:id="_eCGqcFzPEeu2L6vfUkKT0Q" name="ReceiveToken">
-          <ownedOperation xmi:type="uml:Operation" xmi:id="_8Mtn4FzPEeu2L6vfUkKT0Q" name="ReceiveToken"/>
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_8Mtn4FzPEeu2L6vfUkKT0Q" name="VerifyToken"/>
         </packagedElement>
         <packagedElement xmi:type="uml:Class" xmi:id="_hZTPwFzPEeu2L6vfUkKT0Q" name="TokenManagement">
-          <ownedOperation xmi:type="uml:Operation" xmi:id="_bniakFzREeu2L6vfUkKT0Q" name="ReceiveToken"/>
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_bniakFzREeu2L6vfUkKT0Q" name="VerifyToken"/>
         </packagedElement>
         <packagedElement xmi:type="uml:Dependency" xmi:id="_wu2A8FzQEeu2L6vfUkKT0Q" client="_eCGqcFzPEeu2L6vfUkKT0Q" supplier="_hZTPwFzPEeu2L6vfUkKT0Q"/>
         <packagedElement xmi:type="uml:Dependency" xmi:id="_HosGgFzREeu2L6vfUkKT0Q" client="_hZTPwFzPEeu2L6vfUkKT0Q" supplier="_-6lt8FzQEeu2L6vfUkKT0Q"/>
-        <packagedElement xmi:type="uml:Dependency" xmi:id="_KowlQFzREeu2L6vfUkKT0Q" client="_hZTPwFzPEeu2L6vfUkKT0Q" supplier="_jLbcEFzMEeu2L6vfUkKT0Q"/>
         <packagedElement xmi:type="uml:Class" xmi:id="_DC-3wF8jEeuY2poK1PVmHA" name="BankManagement">
           <ownedOperation xmi:type="uml:Operation" xmi:id="_PmBPoF8lEeuY2poK1PVmHA" name="RetrievePaymentLink"/>
           <ownedOperation xmi:type="uml:Operation" xmi:id="_l6Ya0F8rEeuY2poK1PVmHA" name="PayTickets"/>
@@ -233,11 +234,11 @@
           <ownedOperation xmi:type="uml:Operation" xmi:id="_3RnQkF8kEeuY2poK1PVmHA" name="PayTickets"/>
           <ownedOperation xmi:type="uml:Operation" xmi:id="_6HkxEF8kEeuY2poK1PVmHA" name="RetrievePaymentLink"/>
         </packagedElement>
-        <packagedElement xmi:type="uml:Interface" xmi:id="_Efif4F8kEeuY2poK1PVmHA" name="FlyCompany">
+        <packagedElement xmi:type="uml:Interface" xmi:id="_Efif4F8kEeuY2poK1PVmHA" name="AirlineCompany">
           <ownedOperation xmi:type="uml:Operation" xmi:id="_ntMRsF8qEeuY2poK1PVmHA" name="RequestFlight"/>
         </packagedElement>
-        <packagedElement xmi:type="uml:Class" xmi:id="_LkS8EF8kEeuY2poK1PVmHA" name="FlyCompanyManagement">
-          <ownedOperation xmi:type="uml:Operation" xmi:id="_l_idEF8qEeuY2poK1PVmHA" name="RequestFlight"/>
+        <packagedElement xmi:type="uml:Class" xmi:id="_LkS8EF8kEeuY2poK1PVmHA" name="AirlineCompanyManagement">
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_l_idEF8qEeuY2poK1PVmHA" name="RequestFlights"/>
         </packagedElement>
         <packagedElement xmi:type="uml:Dependency" xmi:id="_KwSPwF8lEeuY2poK1PVmHA" client="_EhrqYF8jEeuY2poK1PVmHA" supplier="_DC-3wF8jEeuY2poK1PVmHA"/>
         <packagedElement xmi:type="uml:Dependency" xmi:id="_ei-20F8oEeuY2poK1PVmHA" client="_DC-3wF8jEeuY2poK1PVmHA" supplier="_mJDiQF8mEeuY2poK1PVmHA"/>
@@ -266,6 +267,7 @@
         </packagedElement>
         <packagedElement xmi:type="uml:Dependency" xmi:id="_Ir5VIF8wEeuY2poK1PVmHA" client="_ZpFEcF8vEeuY2poK1PVmHA" supplier="_YaS9IF8vEeuY2poK1PVmHA"/>
         <packagedElement xmi:type="uml:Dependency" xmi:id="_waGIsF8wEeuY2poK1PVmHA" client="_YaS9IF8vEeuY2poK1PVmHA" supplier="_Z_T9sF8wEeuY2poK1PVmHA"/>
+        <packagedElement xmi:type="uml:Dependency" xmi:id="_SHP74GhdEeuxHfem00KLIw" client="_LkS8EF8kEeuY2poK1PVmHA" supplier="_GCmwMGhbEeuxHfem00KLIw"/>
       </packagedElement>
       <packagedElement xmi:type="uml:Package" xmi:id="_5W4NwFzQEeu2L6vfUkKT0Q" name="ACMESkyEntities">
         <packagedElement xmi:type="uml:Class" xmi:id="_9hVcAFzQEeu2L6vfUkKT0Q" name="DataBaseManagement">
@@ -286,24 +288,21 @@
     </packagedElement>
     <packagedElement xmi:type="uml:Package" xmi:id="_moC-0FzKEeu2L6vfUkKT0Q" name="User">
       <packagedElement xmi:type="uml:Package" xmi:id="_LD8esFzMEeu2L6vfUkKT0Q" name="UserTasks">
-        <packagedElement xmi:type="uml:Interface" xmi:id="_jLbcEFzMEeu2L6vfUkKT0Q" name="TokenResult">
-          <ownedOperation xmi:type="uml:Operation" xmi:id="_aviRAFzQEeu2L6vfUkKT0Q" name="TokenSuccess"/>
-          <ownedOperation xmi:type="uml:Operation" xmi:id="_cqpS0FzQEeu2L6vfUkKT0Q" name="TokenError"/>
-        </packagedElement>
         <packagedElement xmi:type="uml:Class" xmi:id="_j01lcFzMEeu2L6vfUkKT0Q" name="TokenManagement">
           <ownedOperation xmi:type="uml:Operation" xmi:id="_DfgVgFzPEeu2L6vfUkKT0Q" name="SendToken"/>
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_48H-8GhWEeuxHfem00KLIw" name="TokenSuccess"/>
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_6hVCMGhWEeuxHfem00KLIw" name="TokenError"/>
         </packagedElement>
         <packagedElement xmi:type="uml:Interface" xmi:id="_nrxv4FzOEeu2L6vfUkKT0Q" name="Token">
           <ownedOperation xmi:type="uml:Operation" xmi:id="_ByUa8FzPEeu2L6vfUkKT0Q" name="SendToken"/>
         </packagedElement>
         <packagedElement xmi:type="uml:Dependency" xmi:id="_krhOcFzPEeu2L6vfUkKT0Q" client="_j01lcFzMEeu2L6vfUkKT0Q" supplier="_eCGqcFzPEeu2L6vfUkKT0Q"/>
         <packagedElement xmi:type="uml:Dependency" xmi:id="_JuiRUFzUEeu2L6vfUkKT0Q" client="_nrxv4FzOEeu2L6vfUkKT0Q" supplier="_j01lcFzMEeu2L6vfUkKT0Q"/>
-        <packagedElement xmi:type="uml:Dependency" xmi:id="_Kx39oFzUEeu2L6vfUkKT0Q" client="_jLbcEFzMEeu2L6vfUkKT0Q" supplier="_j01lcFzMEeu2L6vfUkKT0Q"/>
         <packagedElement xmi:type="uml:Class" xmi:id="_r-YsAF8oEeuY2poK1PVmHA" name="PayBankManagement">
-          <ownedOperation xmi:type="uml:Operation" xmi:id="__lAGQF8oEeuY2poK1PVmHA" name="PayOffer"/>
+          <ownedOperation xmi:type="uml:Operation" xmi:id="__lAGQF8oEeuY2poK1PVmHA" name="ReceivePaymentLink"/>
         </packagedElement>
         <packagedElement xmi:type="uml:Interface" xmi:id="_tgBd4F8oEeuY2poK1PVmHA" name="PayBank">
-          <ownedOperation xmi:type="uml:Operation" xmi:id="_9OgwAF8oEeuY2poK1PVmHA" name="PayOffer"/>
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_9OgwAF8oEeuY2poK1PVmHA" name="ReceivePaymentLink"/>
         </packagedElement>
         <packagedElement xmi:type="uml:Dependency" xmi:id="_4kTDoF8oEeuY2poK1PVmHA" client="_r-YsAF8oEeuY2poK1PVmHA" supplier="_lpLvYF8mEeuY2poK1PVmHA"/>
         <packagedElement xmi:type="uml:Dependency" xmi:id="_52ZksF8oEeuY2poK1PVmHA" client="_tgBd4F8oEeuY2poK1PVmHA" supplier="_r-YsAF8oEeuY2poK1PVmHA"/>
@@ -314,6 +313,15 @@
           <ownedOperation xmi:type="uml:Operation" xmi:id="_8CquUF8wEeuY2poK1PVmHA" name="ReceiveTickets"/>
         </packagedElement>
         <packagedElement xmi:type="uml:Dependency" xmi:id="_ztLqEF8wEeuY2poK1PVmHA" client="_Z_T9sF8wEeuY2poK1PVmHA" supplier="_nS8W8F8wEeuY2poK1PVmHA"/>
+        <packagedElement xmi:type="uml:Class" xmi:id="_FK-koGhbEeuxHfem00KLIw" name="OfferManagement">
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_52C3QGhbEeuxHfem00KLIw" name="OfferSuccess"/>
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_7PkO8GhbEeuxHfem00KLIw" name="OfferError"/>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Interface" xmi:id="_GCmwMGhbEeuxHfem00KLIw" name="OfferAvailability">
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_r0iEUGhbEeuxHfem00KLIw" name="OfferSuccess"/>
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_yvHQ0GhbEeuxHfem00KLIw" name="OfferError"/>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Dependency" xmi:id="_3jdJkGhbEeuxHfem00KLIw" client="_GCmwMGhbEeuxHfem00KLIw" supplier="_FK-koGhbEeuxHfem00KLIw"/>
       </packagedElement>
     </packagedElement>
     <packagedElement xmi:type="uml:Package" xmi:id="_Hi2HwFzSEeu2L6vfUkKT0Q" name="BankService">
@@ -323,12 +331,12 @@
         </packagedElement>
         <packagedElement xmi:type="uml:Interface" xmi:id="_mJDiQF8mEeuY2poK1PVmHA" name="ACMEskyPaymentProvider">
           <ownedOperation xmi:type="uml:Operation" xmi:id="_Q7Q5YF8nEeuY2poK1PVmHA" name="CreatePaymentLink"/>
-          <ownedOperation xmi:type="uml:Operation" xmi:id="_YDBJwF8oEeuY2poK1PVmHA" name="PayFlyCompany"/>
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_YDBJwF8oEeuY2poK1PVmHA" name="PayAirlineCompany"/>
         </packagedElement>
         <packagedElement xmi:type="uml:Class" xmi:id="_mzpXYF8mEeuY2poK1PVmHA" name="PaymentManager">
           <ownedOperation xmi:type="uml:Operation" xmi:id="_Pg7pYF8nEeuY2poK1PVmHA" name="PayOffer"/>
           <ownedOperation xmi:type="uml:Operation" xmi:id="_UoDUMF8nEeuY2poK1PVmHA" name="CreatePaymentLink"/>
-          <ownedOperation xmi:type="uml:Operation" xmi:id="_atImoF8oEeuY2poK1PVmHA" name="PayFlyCompany"/>
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_atImoF8oEeuY2poK1PVmHA" name="PayAirlineCompany"/>
         </packagedElement>
         <packagedElement xmi:type="uml:Dependency" xmi:id="_r_P5kF8mEeuY2poK1PVmHA" client="_lpLvYF8mEeuY2poK1PVmHA" supplier="_mzpXYF8mEeuY2poK1PVmHA"/>
         <packagedElement xmi:type="uml:Dependency" xmi:id="_IHsgEF8pEeuY2poK1PVmHA" client="_mJDiQF8mEeuY2poK1PVmHA" supplier="_mzpXYF8mEeuY2poK1PVmHA"/>
@@ -390,7 +398,6 @@
   <TinySOA:Capability xmi:id="_81OWYFp_EeuYkt8_IjT4RQ" base_Class="_vIb2QFp_EeuYkt8_IjT4RQ"/>
   <TinySOA:Expose xmi:id="_hnsYoFqAEeuYkt8_IjT4RQ" base_Dependency="_gxyrYFqAEeuYkt8_IjT4RQ"/>
   <TinySOA:Expose xmi:id="_9DWcgFqAEeuYkt8_IjT4RQ" base_Dependency="_7mp1AFqAEeuYkt8_IjT4RQ"/>
-  <TinySOA:Expose xmi:id="_GHmEMFqBEeuYkt8_IjT4RQ" base_Dependency="_CF-B0FqBEeuYkt8_IjT4RQ"/>
   <TinySOA:Tasks xmi:id="_YLCwoFqDEeuYkt8_IjT4RQ" base_Package="_NZiV4FqDEeuYkt8_IjT4RQ"/>
   <TinySOA:ServiceInterface xmi:id="_G1nx8Fr8Eeu0YJP7mY_Beg" base_Interface="_-IjmgFp_EeuYkt8_IjT4RQ"/>
   <TinySOA:Tasks xmi:id="_cODHEFsHEeu0YJP7mY_Beg" base_Package="_cOBR4VsHEeu0YJP7mY_Beg"/>
@@ -439,9 +446,7 @@
   <TinySOA:ServiceInterface xmi:id="_JXhEAFzKEeu2L6vfUkKT0Q" base_Interface="_GilJIFzIEeu2L6vfUkKT0Q"/>
   <TinySOA:Capability xmi:id="_vEk0UFzMEeu2L6vfUkKT0Q" base_Class="_j01lcFzMEeu2L6vfUkKT0Q"/>
   <TinySOA:ServiceInterface xmi:id="_fid0gFzQEeu2L6vfUkKT0Q" base_Interface="_nrxv4FzOEeu2L6vfUkKT0Q"/>
-  <TinySOA:ServiceInterface xmi:id="_hMJIEFzQEeu2L6vfUkKT0Q" base_Interface="_jLbcEFzMEeu2L6vfUkKT0Q"/>
   <TinySOA:Expose xmi:id="_TDwUQFzUEeu2L6vfUkKT0Q" base_Dependency="_JuiRUFzUEeu2L6vfUkKT0Q"/>
-  <TinySOA:Expose xmi:id="_U4H04FzUEeu2L6vfUkKT0Q" base_Dependency="_Kx39oFzUEeu2L6vfUkKT0Q"/>
   <TinySOA:Capability xmi:id="_fzQaoF8iEeuY2poK1PVmHA" base_Class="_9hVcAFzQEeu2L6vfUkKT0Q"/>
   <TinySOA:Capability xmi:id="_hDdeQF8iEeuY2poK1PVmHA" base_Class="_hZTPwFzPEeu2L6vfUkKT0Q"/>
   <TinySOA:ServiceInterface xmi:id="_mceKUF8iEeuY2poK1PVmHA" base_Interface="_eCGqcFzPEeu2L6vfUkKT0Q"/>
@@ -491,4 +496,10 @@
   <TinySOA:Expose xmi:id="_gs4dYF86EeuY2poK1PVmHA" base_Dependency="_j_J34FqDEeuYkt8_IjT4RQ"/>
   <TinySOA:Expose xmi:id="_jmnDkF86EeuY2poK1PVmHA" base_Dependency="_Pzi7AFzEEeu2L6vfUkKT0Q"/>
   <TinySOA:Expose xmi:id="_mLbwwF86EeuY2poK1PVmHA" base_Dependency="_lQ4NAF86EeuY2poK1PVmHA"/>
+  <TinySOA:Expose xmi:id="_TBjFIGhWEeuxHfem00KLIw" base_Dependency="_QeFp4GhWEeuxHfem00KLIw"/>
+  <TinySOA:Capability xmi:id="_V1xcEGhdEeuxHfem00KLIw" base_Class="_FK-koGhbEeuxHfem00KLIw"/>
+  <TinySOA:ServiceInterface xmi:id="_W-fXoGhdEeuxHfem00KLIw" base_Interface="_GCmwMGhbEeuxHfem00KLIw"/>
+  <TinySOA:Expose xmi:id="_YU-CYGhdEeuxHfem00KLIw" base_Dependency="_3jdJkGhbEeuxHfem00KLIw"/>
+  <TinySOA:Expose xmi:id="_gGhTIGhdEeuxHfem00KLIw" base_Dependency="_4kTDoF8oEeuY2poK1PVmHA"/>
+  <TinySOA:Expose xmi:id="_pU9_sGhdEeuxHfem00KLIw" base_Dependency="_SHP74GhdEeuxHfem00KLIw"/>
 </xmi:XMI>
