@@ -270,9 +270,10 @@
         </packagedElement>
         <packagedElement xmi:type="uml:Class" xmi:id="_LkS8EF8kEeuY2poK1PVmHA" name="AirlineCompanyManagement">
           <ownedOperation xmi:type="uml:Operation" xmi:id="_l_idEF8qEeuY2poK1PVmHA" name="RequestFlights"/>
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_NURBAGn9EeuA7Y8f9V1YoQ" name="ReceiveTickets"/>
         </packagedElement>
         <packagedElement xmi:type="uml:Dependency" xmi:id="_KwSPwF8lEeuY2poK1PVmHA" client="_EhrqYF8jEeuY2poK1PVmHA" supplier="_DC-3wF8jEeuY2poK1PVmHA"/>
-        <packagedElement xmi:type="uml:Dependency" xmi:id="_ei-20F8oEeuY2poK1PVmHA" client="_DC-3wF8jEeuY2poK1PVmHA" supplier="_0NuzYF8lEeuY2poK1PVmHA"/>
+        <packagedElement xmi:type="uml:Dependency" xmi:id="_ei-20F8oEeuY2poK1PVmHA" client="_DC-3wF8jEeuY2poK1PVmHA" supplier="_mJDiQF8mEeuY2poK1PVmHA"/>
         <packagedElement xmi:type="uml:Dependency" xmi:id="_Xp4bkF8pEeuY2poK1PVmHA" client="_DC-3wF8jEeuY2poK1PVmHA" supplier="_tgBd4F8oEeuY2poK1PVmHA"/>
         <packagedElement xmi:type="uml:Dependency" xmi:id="_lPZZkF8qEeuY2poK1PVmHA" client="_LkS8EF8kEeuY2poK1PVmHA" supplier="_4TP6cF8pEeuY2poK1PVmHA"/>
         <packagedElement xmi:type="uml:Dependency" xmi:id="_qCVkIF8qEeuY2poK1PVmHA" client="_Efif4F8kEeuY2poK1PVmHA" supplier="_LkS8EF8kEeuY2poK1PVmHA"/>
@@ -517,6 +518,7 @@
         <packagedElement xmi:type="uml:Class" xmi:id="_YaS9IF8vEeuY2poK1PVmHA" name="OrderManagement">
           <ownedOperation xmi:type="uml:Operation" xmi:id="_EX7lkF8wEeuY2poK1PVmHA" name="SendTickets"/>
         </packagedElement>
+        <packagedElement xmi:type="uml:Dependency" xmi:id="_VURdIGoAEeuA7Y8f9V1YoQ" client="_OqLOQF8sEeuY2poK1PVmHA" supplier="_ofkp0Gn_EeuA7Y8f9V1YoQ"/>
         <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_5jvu4GhyEeupnMarUEKsrw">
           <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_5jzZQGhyEeupnMarUEKsrw" source="PapyrusVersion">
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_5jzZQWhyEeupnMarUEKsrw" key="Version" value="1.0.0"/>
@@ -539,6 +541,13 @@
           <ownedOperation xmi:type="uml:Operation" xmi:id="_Af3PMF8tEeuY2poK1PVmHA" name="ComputePrice"/>
         </packagedElement>
         <packagedElement xmi:type="uml:Dependency" xmi:id="_GxoQAGh0EeupnMarUEKsrw" client="_xbnCUF8rEeuY2poK1PVmHA" supplier="_yRpScF8rEeuY2poK1PVmHA"/>
+        <packagedElement xmi:type="uml:Class" xmi:id="_nZhnwGn_EeuA7Y8f9V1YoQ" name="CheckDistanceManagement">
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_QgK08GoAEeuA7Y8f9V1YoQ" name="ComputeDistance"/>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Interface" xmi:id="_ofkp0Gn_EeuA7Y8f9V1YoQ" name="CheckDistance">
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_57o4EGn_EeuA7Y8f9V1YoQ" name="ComputeDistance"/>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Dependency" xmi:id="_XD_HQGoAEeuA7Y8f9V1YoQ" client="_ofkp0Gn_EeuA7Y8f9V1YoQ" supplier="_nZhnwGn_EeuA7Y8f9V1YoQ"/>
         <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_COuFgGh0EeupnMarUEKsrw">
           <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_COwhwGh0EeupnMarUEKsrw" source="PapyrusVersion">
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_COwhwWh0EeupnMarUEKsrw" key="Version" value="1.0.0"/>
@@ -706,4 +715,7 @@
   <TinySOA:Entities xmi:id="_6kbd4Gh0EeupnMarUEKsrw" base_Package="_U-nbcFqEEeuYkt8_IjT4RQ"/>
   <TinySOA:Utilities xmi:id="_DzkuAGh1EeupnMarUEKsrw" base_Package="_JTcksF8tEeuY2poK1PVmHA"/>
   <TinySOA:Utilities xmi:id="_LlKbAGh1EeupnMarUEKsrw" base_Package="_LjO2AF8tEeuY2poK1PVmHA"/>
+  <TinySOA:Capability xmi:id="_w0o3UGn_EeuA7Y8f9V1YoQ" base_Class="_nZhnwGn_EeuA7Y8f9V1YoQ"/>
+  <TinySOA:ServiceInterface xmi:id="_yDiTYGn_EeuA7Y8f9V1YoQ" base_Interface="_ofkp0Gn_EeuA7Y8f9V1YoQ"/>
+  <TinySOA:Expose xmi:id="_YhgOIGoAEeuA7Y8f9V1YoQ" base_Dependency="_XD_HQGoAEeuA7Y8f9V1YoQ"/>
 </xmi:XMI>
