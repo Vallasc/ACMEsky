@@ -1,11 +1,20 @@
-Run:
+# ACMEbank
+A useless bank service
+### Run:
+```sh
 mvnw spring-boot:run
+```
 
-Buid fat Jar:
+### Build fat Jar:
+```sh
 mvn package
+```
 
+### Create and run on Docker container
+```sh
 docker build -t bank_service:0.0.1 .
 docker run --rm -d  -p 8080:8080/tcp bank_service:0.0.1
+```
 
-API:
+### API:
 http://localhost:8080/swagger-ui
