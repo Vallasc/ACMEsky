@@ -25,9 +25,6 @@ public class User {
 	@Column(name = "token")
 	private String token;
 
-    @Column(name = "entry_point")
-	private String entryPoint;
-
     @Column(name = "balance")
 	private long balance;
 
@@ -36,7 +33,6 @@ public class User {
 	public User(String name, String password, String entryPoint) {
 		this.name = name;
 		this.password = password;
-		this.entryPoint = entryPoint;
 	}
 
 	public long getId() {
@@ -57,10 +53,6 @@ public class User {
 
 	public String getToken() {
 		return token;
-	}
-
-	public String getEntryPoint() {
-		return entryPoint;
 	}
 
 	public long getBalance() {
