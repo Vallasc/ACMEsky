@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>ACMEbank</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="overlay-container" class="d-flex align-items-center" style="display:none !important">
+        <div style="margin: auto">
+            <div class="d-flex justify-content-center">
+                <div class="spinner-border text-light"></div>
+            </div>
+            <div class="d-flex justify-content-center">
+                <h5 class="text-light">Loading...</h5> 
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid px-1 px-md-2 px-lg-4 mx-auto">
+        <div class="row d-flex justify-content-center">
+            <div class="col-xl-7 col-lg-8 col-md-9 col-sm-11">
+                <div class="card border-0">
+                    <div class="row justify-content-center">
+                        <h3 class="mb-5">ACMEbank Pay</h3>
+                    </div>
+                    <div class="row" id="pay-container">
+                        <div class="col-sm-7 border-line pb-3">
+                            <div class="form-group">
+                                <p class="text-muted text-sm mb-0">Name on the card</p> <input type="text" name="name" placeholder="Name" size="15">
+                            </div>
+                            <div class="form-group">
+                                <p class="text-muted text-sm mb-0">Card Number</p>
+                                <div class="row px-3"> <input type="text" name="card-num" placeholder="0000 0000 0000 0000" size="18" id="cr_no" minlength="19" maxlength="19">
+                                    <p class="mb-0 ml-3">/</p> <img class="image ml-1" src="https://i.imgur.com/WIAP9Ku.jpg">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <p class="text-muted text-sm mb-0">Expiry date</p> <input type="text" name="exp" placeholder="MM/YY" size="6" id="exp" minlength="5" maxlength="5">
+                            </div>
+                            <div class="form-group">
+                                <p class="text-muted text-sm mb-0">CVV/CVC</p> <input type="password" name="cvv" placeholder="000" size="1" minlength="3" maxlength="3">
+                            </div>
+                            <div class="form-group mb-0">
+                                <div class="custom-control custom-checkbox custom-control-inline"> <input id="chk1" type="checkbox" name="chk" class="custom-control-input" checked> <label for="chk1" class="custom-control-label text-muted text-sm">save my card for future payment</label> </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-5 text-sm-center justify-content-center pt-4 pb-4"> 
+                            <small class="text-sm text-muted">Payment number</small>
+                            <h5 class="mb-5" id="payment_number">00000000</h5> 
+                            <small class="text-sm text-muted">Description</small>
+                            <h5 class="mb-5" id="description">00000000</h5> 
+                            <small class="text-sm text-muted">Payment amount</small>
+                            <div class="row px-3 justify-content-sm-center">
+                                <h2 class=""><span class="text-md font-weight-bold mr-2 number-color" >€</span><span class="number-color" id="payment_amount">0.00</span></h2>
+                            </div> <button type="submit" class="btn btn-blue text-center mt-4" id="pay-btn">PAY</button>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center" id="done-container" style="display: none !important">
+                        <h5 class="mb-3">Payment successful</h2>
+                        <small class="text-sm text-muted">You can close this window</small>
+                    </div>
+                    <div class="row justify-content-center" id="invalid-container" style="display: none !important">
+                        <h5 class="mb-3">Invalid payment</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var payment;
+        var overlayContainer = document.getElementById("overlay-container");
+        var payContainer = document.getElementById("pay-container");
+        var doneContainer = document.getElementById("done-container");
+        var invalidContainer = document.getElementById("invalid-container");
+
+        function setView(){
+            document.getElementById("payment_number").innerHTML = payment.paymentToken;
+            document.getElementById("description").innerHTML = payment.description;
+            document.getElementById("payment_amount").innerHTML = payment.amount.toFixed(2);
+        }
+
+        function setLoading(){
+            overlayContainer.style = "display: block";
+        }
+
+        function setPaymentDone(){
+            payContainer.style = "display: none !important";
+            overlayContainer.style = "display: none !important";
+            doneContainer.style = "display: block";
+        }
+
+        function setInvalidPayment(){
+            payContainer.style = "display: none !important";
+            overlayContainer.style = "display: none !important";
+            invalidContainer.style = "display: block";
+        }
+
+        function getPayment(){
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4) {
+                    if(this.status == 200){
+                        payment = JSON.parse(this.responseText);
+                        console.log(payment);
+                        setView();
+                    } else { //404 or other
+                        setInvalidPayment(); 
+                    }
+                }
+            };
+            xhttp.open("GET", "/payments/"+getParameterByName("token"), true);
+            xhttp.send();
+        }
+
+        function pay(){
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4) {
+                    if(this.status == 200){
+                        setTimeout(()=>{
+                            setPaymentDone();
+                        }, 3000)
+                    } else { //404 or other
+                        setInvalidPayment(); 
+                    }
+                }
+            };
+            xhttp.open("PUT", "/payments/"+getParameterByName("token"), true);
+            xhttp.send();
+        }
+
+        document.getElementById("pay-btn").onclick = () => {
+            setLoading();
+            pay();
+        }
+
+        function getParameterByName(name, url = window.location.href) {
+            name = name.replace(/[\[\]]/g, '\\$&');
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+
+        getPayment();
+    </script>
+</body>
+
+</html>
