@@ -21,15 +21,25 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 
+/**
+ * Filtro per la gestione delle richieste 
+ * Controllo se nella richiesta è presente un JWT valido
+ * Giacomo Vallorani 
+ * giacomo.vallorani4@studio.unibo.it
+ */
 @Configuration
 public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
 	private final String HEADER = "Authorization";
 	private final String PREFIX = "Bearer ";
 
+	//TODO
 	//@Value("${server.JWTsecret}")
 	private String SECRET = "unibo";
 
+	/**
+	 * Override filtro spring
+	 */
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
 		try {
@@ -51,14 +61,16 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 		}
 	}	
 
+	/**
+	 * Validazione del token
+	 */
 	private Claims validateToken(HttpServletRequest request) {
 		String jwtToken = request.getHeader(HEADER).replace(PREFIX, "");
 		return Jwts.parser().setSigningKey(SECRET.getBytes()).parseClaimsJws(jwtToken).getBody();
 	}
 
 	/**
-	 * Authentication method in Spring flow
-	 * 
+	 * Metodo di autenticazione in Spring flow
 	 * @param claims
 	 */
 	private void setUpSpringAuthentication(Claims claims) {
@@ -71,6 +83,12 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
 	}
 
+	/**
+	 * Controllo token nell'header http
+	 * @param request richiesta http
+	 * @param res risposta
+	 * @return vero se presente, falso altrimenti
+	 */
 	private boolean checkJWTToken(HttpServletRequest request, HttpServletResponse res) {
 		String authenticationHeader = request.getHeader(HEADER);
 		if (authenticationHeader == null || !authenticationHeader.startsWith(PREFIX))

@@ -26,6 +26,11 @@ import org.springframework.web.bind.annotation.RestController;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+/**
+ * Controller che effettua la gestione dell'autenticazione con token JWT
+ * Giacomo Vallorani 
+ * giacomo.vallorani4@studio.unibo.it
+ */
 @RestController
 @RequestMapping("/")
 public class AuthController {
@@ -36,6 +41,12 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
+	/**
+	 * Gestisce le richieste di autenticazione
+	 * @param request	AuthRequestDTO
+	 * @return AuthResponseDTO con JWT
+	 * @throws ServletException
+	 */
     @PostMapping("/auth")
     public ResponseEntity<AuthResponseDTO> auth(@Valid @RequestBody AuthRequestDTO request) throws ServletException {
 
@@ -45,17 +56,16 @@ public class AuthController {
             throw new ServletException("User not present!");
         }
 
-        /*String token = Jwts.builder().
-            setSubject(authUsuario.getLogin()).
-            signWith(SignatureAlgorithm.HS512, TOKEN_KEY).
-            setExpiration(new Date(System.currentTimeMillis() + 1 * 60 * 1000))
-            .compact();*/
-
         String token = getJWTToken(authUser.getLoginId());
 		return new ResponseEntity<AuthResponseDTO>(new AuthResponseDTO(token), HttpStatus.OK);
 
     }
 
+	/**
+	 * Crea il token in base all'identificativo dell'utente
+	 * @param userId	identificativo
+	 * @return Bearer token
+	 */
     private String getJWTToken(String userId) {
 		List<GrantedAuthority> grantedAuthorities = AuthorityUtils
 				.commaSeparatedStringToAuthorityList("ROLE_USER");
@@ -69,7 +79,7 @@ public class AuthController {
 								.map(GrantedAuthority::getAuthority)
 								.collect(Collectors.toList()))
 				.setIssuedAt(new Date(System.currentTimeMillis()))
-				.setExpiration(new Date(System.currentTimeMillis() + 600000)) // 10 minuti
+				.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 10)) // 10 minuti
 				.signWith(SignatureAlgorithm.HS512,
 						SECRET.getBytes()).compact();
 

@@ -4,7 +4,11 @@ import javax.persistence.*;
 
 import com.ACMEbank.BankService.dto.UserRequestDTO;
 
-
+/**
+ * Modello per la gestione degli utenti registrati
+ * Giacomo Vallorani 
+ * giacomo.vallorani4@studio.unibo.it
+ */
 @Entity
 @Table(name = "users")
 public class User {
@@ -21,9 +25,6 @@ public class User {
 
 	@Column(name = "password")
 	private String password;
-
-	@Column(name = "token")
-	private String token;
 
     @Column(name = "balance")
 	private long balance;
@@ -51,20 +52,12 @@ public class User {
 		return password;
 	}
 
-	public String getToken() {
-		return token;
-	}
-
 	public long getBalance() {
 		return balance;
 	}
 
 	public void setLoginId(String loginId) {
 		this.loginId = loginId;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
 	}
 
 	public void setBalance(long balance) {

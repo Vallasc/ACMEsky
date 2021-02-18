@@ -6,6 +6,11 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.ACMEbank.BankService.model.User;
 
+/**
+ * Interfaccia tabella users
+ * Giacomo Vallorani 
+ * giacomo.vallorani4@studio.unibo.it
+ */
 public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "SELECT * FROM USERS u WHERE u.LOGIN_ID = ?1 AND u.password = ?2", nativeQuery = true)

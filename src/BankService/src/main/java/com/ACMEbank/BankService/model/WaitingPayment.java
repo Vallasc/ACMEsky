@@ -4,7 +4,11 @@ import javax.persistence.*;
 
 import com.ACMEbank.BankService.dto.PaymentLinkRequestDTO;
 
-
+/**
+ * Modello per la gestione dei link di pagamento
+ * Giacomo Vallorani 
+ * giacomo.vallorani4@studio.unibo.it
+ */
 @Entity
 @Table(name = "waiting_payments")
 public class WaitingPayment {
