@@ -17,4 +17,10 @@ docker run --rm -d  -p 8080:8080/tcp bank_service:0.0.1
 ```
 
 ### API:
-http://localhost:8080/swagger-ui
+http://localhost:8080/swagger-ui.html
+
+## DB console
+http://localhost:8080/h2
+URL: jdbc:h2:./db/bankdb./db/bankdb
+user: sa
+passw: 
