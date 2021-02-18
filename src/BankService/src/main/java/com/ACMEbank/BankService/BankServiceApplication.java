@@ -12,7 +12,14 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/**
+ * Entry point dell'applicazione
+ * Giacomo Vallorani 
+ * giacomo.vallorani4@studio.unibo.it
+ */
 @SpringBootApplication
 @RestController
 public class BankServiceApplication {
@@ -24,7 +31,6 @@ public class BankServiceApplication {
 	@EnableWebSecurity
 	@Configuration
 	class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 			http.csrf().disable()
@@ -40,6 +46,14 @@ public class BankServiceApplication {
 				.antMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
 				.anyRequest().authenticated();
 			http.headers().frameOptions().disable();
+		}
+	}
+
+	@Configuration
+	public class WebAppConfig implements WebMvcConfigurer {
+		@Override
+		public void addViewControllers(ViewControllerRegistry registry) {
+			registry.addViewController("/link").setViewName("forward:/link/index.html");
 		}
 	}
 
