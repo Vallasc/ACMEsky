@@ -1,0 +1,32 @@
+{
+    "OFFERS": [
+        {
+            "departure": "Milano",
+            "destination": "Pescara",
+            "departureTime": "2021-08-27 20:00:00",
+            "destinationTime": "2021-08-27 21:00:00",
+            "price": "130,00"
+        },
+        {
+            "departure": "Roma",
+            "destination": "Torino",
+            "departureTime": "2021-02-27 20:00:00",
+            "destinationTime": "2021-02-27 21:00:00",
+            "price": "170,00"
+        },
+        {
+            "departure": "Pescara",
+            "destination": "Palermo",
+            "departureTime": "2021-03-03 20:00:00",
+            "destinationTime": "2021-03-03 21:00:00",
+            "price": "25,00"
+        },
+        {
+            "departure": "Bologna",
+            "destination": "Napoli",
+            "departureTime": "2021-03-02 20:00:00",
+            "destinationTime": "2021-03-02 21:00:00",
+            "price": "25,00"
+        }
+    ]
+}
