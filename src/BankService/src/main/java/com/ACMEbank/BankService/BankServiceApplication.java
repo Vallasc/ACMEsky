@@ -16,7 +16,7 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * Entry point dell'applicazione
+ * Entry point dell'applicazione 
  * Giacomo Vallorani 
  * giacomo.vallorani4@studio.unibo.it
  */
