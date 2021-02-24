@@ -9,9 +9,9 @@
 	</parent>
 	<groupId>it.soseng.unibo</groupId>
 	<artifactId>airlineService</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>airlineService</name>
-	<description>Demo project for Spring Boot</description>
+	<description>an airlineService that wants to sell flight offers</description>
 	<properties>
 		<java.version>15</java.version>
 	</properties>
@@ -53,7 +53,7 @@
 			<groupId>org.awaitility</groupId>
 			<artifactId>awaitility</artifactId>
 			<version>3.1.2</version>
-			<scope>test</scope>
+			<scope>runtime</scope>
 		  </dependency>
 	</dependencies>
 

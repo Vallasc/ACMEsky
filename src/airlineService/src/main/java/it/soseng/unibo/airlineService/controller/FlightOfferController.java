@@ -25,7 +25,7 @@ public class FlightOfferController {
     @Autowired
     private FlightOfferService s;
 
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(fixedRate = 6000)
     @PostMapping("/createOffer")
     private FlightOffer autoCreateOffer() throws JsonProcessingException, IOException {
         

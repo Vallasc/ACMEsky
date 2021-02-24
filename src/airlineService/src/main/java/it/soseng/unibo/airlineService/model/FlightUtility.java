@@ -28,7 +28,7 @@ public class FlightUtility {
     }
 
     public File GetFile(){
-        String filePath = "src/main/java/it/soseng/unibo/airlineService/fileSampleOffers/flights.json";
+        String filePath = "fileSampleOffers/flights.json";
         File file = new File(filePath);
         return file;
     }

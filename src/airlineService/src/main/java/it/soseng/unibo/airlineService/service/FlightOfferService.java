@@ -39,9 +39,10 @@ public class FlightOfferService implements FlightOfferServiceInterface {
         JsonNode n = u.GetRandomJsonObject(u.GetFile());
         FlightOffer o = u.createOffer(n);
         if(u.LastMinuteCheck(o)){
-            return null;
-            // sendLastMinuteOffer(o);
-        }else{return repo.save(o);}
+            sendLastMinuteOffer(o);
+        }else{}
+
+        return repo.save(o);
 
         
     }
@@ -72,22 +73,23 @@ public class FlightOfferService implements FlightOfferServiceInterface {
                     
     }
 
-    public ResponseEntity<FlightOffer> sendLastMinuteOffer(FlightOffer o) {
-        String url = "https://jsonplaceholder.typicode.com";
+    public void sendLastMinuteOffer(FlightOffer o) {
+        // String url = "https://jsonplaceholder.typicode.com";
     
-        // create headers
-        HttpHeaders headers = new HttpHeaders();
-        // set `content-type` header
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        // set `accept` header
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        // // create headers
+        // HttpHeaders headers = new HttpHeaders();
+        // // set `content-type` header
+        // headers.setContentType(MediaType.APPLICATION_JSON);
+        // // set `accept` header
+        // headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
     
-        // build the request
-        HttpEntity<FlightOffer> entity = new HttpEntity<>(o, headers);
+        // // build the request
+        // HttpEntity<FlightOffer> entity = new HttpEntity<>(o, headers);
     
-        // send POST request
-        ResponseEntity<FlightOffer> result = restTemplate.postForEntity(url, entity, FlightOffer.class);
-        return result;
+        // // send POST request
+        // ResponseEntity<FlightOffer> result = restTemplate.postForEntity(url, entity, FlightOffer.class);
+        // return result;
+    
     }
 
     
