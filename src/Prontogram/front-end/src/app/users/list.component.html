@@ -1,0 +1,31 @@
+﻿<h1>Utenti</h1>
+<a routerLink="add" class="btn btn-sm btn-success mb-2">Aggiungi utente</a>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th style="width: 30%">Nome</th>
+            <th style="width: 30%">Cognome</th>
+            <th style="width: 30%">Username</th>
+            <th style="width: 10%"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let user of users">
+            <td>{{user.name}}</td>
+            <td>{{user.secondName}}</td>
+            <td>{{user.username}}</td>
+            <td style="white-space: nowrap">
+                <a routerLink="edit/{{user._id}}" class="btn btn-sm btn-primary mr-1">Modifica</a>
+                <button (click)="deleteUser(user._id)" class="btn btn-sm btn-danger btn-delete-user" >
+                    <span *ngIf="user.isDeleting" class="spinner-border spinner-border-sm"></span>
+                    <span *ngIf="!user.isDeleting">Elimina</span>
+                </button>
+            </td>
+        </tr>
+        <tr *ngIf="!users">
+            <td colspan="4" class="text-center">
+                <span class="spinner-border spinner-border-lg align-center"></span>
+            </td>
+        </tr>
+    </tbody>
+</table>

@@ -1,0 +1,44 @@
+﻿<h4 align="center">Effettua la registazione per accedere a Prontogram!</h4>
+<div class="card">
+    <h4 class="card-header">Registazione</h4>
+    <div class="card-body">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+                <label for="nome">Nome</label>
+                <input type="text" formControlName="name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+                <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                    <div *ngIf="f.name.errors.required">Nome obbligatorio</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="cognome">Cognome</label>
+                <input type="text" formControlName="secondName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.secondName.errors }" />
+                <div *ngIf="submitted && f.secondName.errors" class="invalid-feedback">
+                    <div *ngIf="f.secondName.errors.required">Cognome obbligatorio</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" formControlName="username" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
+                <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+                    <div *ngIf="f.username.errors.required">Username is required</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+                <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                    <div *ngIf="f.password.errors.required">Password is required</div>
+                    <div *ngIf="f.password.errors.minlength">PLa password deve essere almeno di 6 caratteri</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <button [disabled]="loading" class="btn btn-primary">
+                    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                    Registrazione
+                </button>
+                <a routerLink="../login" class="btn btn-link">Cancella</a>
+            </div>
+        </form>
+    </div>
+</div>
