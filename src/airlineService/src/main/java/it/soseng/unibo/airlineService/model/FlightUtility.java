@@ -10,12 +10,25 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * Questa classe definisce una serie di funzioni utili per la generazione randomica da file json
+ * delle offerte di volo e per il riconoscimento di offerte last-minute
+ * @author Andrea Di Ubaldo
+ * andrea.diubaldo@studio.unibo.it
+ */
 
 public class FlightUtility {
 
     public FlightUtility() {
     }
 
+    
+    /** 
+     * restituisce un boolean che sta ad indicare se l'offerta è last-minute, ovvero se la partenza
+     * prevista è entro i 10 giorni successivi alla data della ricerca
+     * @param o FlightOffer da valutare
+     * @return boolean true che indica che l'offerta è last-minute(false per il viceversa)
+     */
     public boolean LastMinuteCheck(FlightOffer o) {
         LocalDateTime now = LocalDateTime.now();
         long period = ChronoUnit.DAYS.between(now, o.getDepartureTime());
@@ -27,12 +40,26 @@ public class FlightUtility {
         }
     }
 
+    
+    /** 
+     * specifica il file json da cui si possono generare i voli (attraverso l'url)
+     * @return File che contiene un array di possibili offerte di volo
+     */
     public File GetFile(){
         String filePath = "fileSampleOffers/flights.json";
         File file = new File(filePath);
         return file;
     }
 
+    
+    /**
+     * restituisce un oggetto JsonNode che fa parte dell'array di oggetti json,
+     * rappresentante un offerta di volo 
+     * @param file il file json 
+     * @return JsonNode il risultato della funzione
+     * @throws JsonProcessingException
+     * @throws IOException
+     */
     public JsonNode GetRandomJsonObject(File file) throws JsonProcessingException, IOException {
             
             
@@ -45,71 +72,27 @@ public class FlightUtility {
         return n;
     }
 
+    
+    /** 
+     * restituisce l'offerta di volo a partire dall'oggetto jsonNode
+     * i cui parametri vengono convertiti nei valori che andranno a riempire i campi
+     * dell'offerta di volo 
+     * 
+     * @param n oggetto JsonNode
+     * @return FlightOffer corrispondente al parametro n
+     */
     public FlightOffer createOffer(JsonNode n){
         FlightOffer o = new FlightOffer();
             o.setDeparture(n.get("departure").textValue());
             o.setDestination(n.get("destination").textValue());
             o.setDepartureTime(n.get("departureTime").textValue());
             o.setDestinationTime(n.get("destinationTime").textValue());
-            o.setPrice(n.get("price").textValue());
+            o.setPrice(n.get("price").asDouble());
 
             return o;
     }
 
 
-        // public String RandomLine() throws FileNotFoundException {
-
-        //     String result = new String();
-        //     String file = "d:/flights.txt";
-        //     Random r = new Random();
-        //     int i = r.nextInt(2);
-        //     i++;
-        //     Scanner scanner = new Scanner(new File(file));
-        //     int cicle = 0;
-        //     while (cicle != i) {
-        //         cicle++;
-        //         String l = scanner.nextLine();
-        //         result = l;
-        //     }
-        //     scanner.close();
-        //     return result;
-        // }
-
-        // public String[] FlightParts(String line) {
-        //     StringTokenizer st = new StringTokenizer(line);
-        //     String[] arr = new String[7];
-        //     int i = 0;
-
-        //     while (st.hasMoreTokens()){
-        //         String s = st.nextToken().toString(); 
-        //         arr[i] = s;
-        //         i++;
-        //     }
-            
-        //     return arr;
-        // }
-
-        // public FlightOffer createOffer(String[] flightParts) throws ParseException, FileNotFoundException {
-        //     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        //     String dateDepartureString = flightParts[1] + " " + flightParts[2];
-        //     String dateDestinationString = flightParts[3]  + " " + flightParts[4];
-		// 	LocalDateTime dateDeparture = LocalDateTime.parse(dateDepartureString, formatter);
-        //     LocalDateTime dateDestination= LocalDateTime.parse(dateDestinationString, formatter);  
-        //     return new FlightOffer(flightParts[0], dateDeparture, dateDestination,  flightParts[5], flightParts[6]);        
-        // }
-    
-        // public String[] flightCities(){
-        //     Random r = new Random();
-        //     int[] i = new int[2];
-        //     do {
-        //         i = r.ints(2, 0, cities.size()).toArray();
-        //     }
-        //         while (i[0] == i[1]);
-        //     String cities[] = new String [2];
-        //     cities[0] = this.cities.get(i[0]);
-        //     cities[1] = this.cities.get(i[1]);
-        //     return cities;
-        // }
     
 
 

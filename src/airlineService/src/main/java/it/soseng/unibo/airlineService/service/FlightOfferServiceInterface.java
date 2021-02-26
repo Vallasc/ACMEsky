@@ -8,6 +8,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import it.soseng.unibo.airlineService.model.FlightOffer;
 import it.soseng.unibo.airlineService.DTO.UserRequest;
 
+/**
+ * Quest'interfaccia deve essere implementata dal servizio di airlineService
+ * @author Andrea Di Ubaldo
+ * andrea.diubaldo@studio.unibo.it
+ */
 public interface FlightOfferServiceInterface {
 
     public FlightOffer createFlightOffer() throws JsonProcessingException, IOException ;

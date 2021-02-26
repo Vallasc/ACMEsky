@@ -102,3 +102,9 @@ Caused by: java.nio.channels.OverlappingFileLockException
 	at java.base/java.nio.channels.FileChannel.tryLock(FileChannel.java:1178)
 	at org.h2.mvstore.FileStore.open(FileStore.java:163)
 	... 28 more
+2021-02-24 17:52:15 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "DELETE TABLE[*] FLIGHT_OFFERS"; expected "identifier"; SQL statement:
+DELETE TABLE FLIGHT_OFFERS [42001-200]
+2021-02-24 17:52:37 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "FLIGHT_OFFERS" not found; SQL statement:
+insert into flight_offers (id, departure, departure_time, destination, destination_time, price) values (null, ?, ?, ?, ?, ?) [42102-200]
