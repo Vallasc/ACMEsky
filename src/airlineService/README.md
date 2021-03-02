@@ -1,5 +1,5 @@
 # AirlineService
-A very easy AirlineService
+A very simple AirlineService
 ### Run:
 ```sh
 mvnw spring-boot:run
