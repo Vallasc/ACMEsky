@@ -3,12 +3,12 @@ type RentRequest: void {
     .clientSurname: string
     .fromAddress: string
     .toAddress: string
-    .timeMillis: int
+    .toDateTime: string
 }
 
 type RentResponse: void {
     .status: string
-    .departureTimeMillis: int
+    .departureDateTime: string
     .rentId: string
 }
 
