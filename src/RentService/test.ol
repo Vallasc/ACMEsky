@@ -1,4 +1,5 @@
 include "console.iol"
+include "time.iol"
 include "rent.iol"
 
 outputPort RentOutput {
@@ -13,13 +14,14 @@ outputPort RentOutput {
 
 main {
     request.clientName = "Pippo"
-    request.clientSurname = "Coca"
+    request.clientSurname = "Rossi"
     request.fromAddress = "Piazza Verdi 69, 40127, Bologna"
     request.toAddress = "Via del lavoro 10, 40136, Bologna"
-    request.timeMillis = 0000023433424
+    request.toDateTime = "2021-03-03T10:36:23+0100"
     bookRent@RentOutput( request )( response )
-    println@Console("status"+response.status)()
+    println@Console("Status: "+response.status)()
+    println@Console("Departure DateTime: "+response.departureDateTime)()
+    println@Console("Rent ID: "+response.rentId)()
 }
 
-// wsdl2jolie wsdl_uri [output filename]
 
