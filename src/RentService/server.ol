@@ -1,5 +1,5 @@
 include "console.iol"
-include "Time.iol"
+include "time.iol"
 include "rent.iol"
 
 inputPort Rent {
