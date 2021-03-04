@@ -15,7 +15,7 @@
 	<description>ACMEbank a useless bank service</description>
 	<packaging>jar</packaging>
 	<properties>
-		<java.version>15</java.version>
+		<java.version>8</java.version>
 	</properties>
 
 	<dependencies>
