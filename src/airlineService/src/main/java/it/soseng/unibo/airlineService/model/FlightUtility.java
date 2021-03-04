@@ -10,6 +10,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
+import org.springframework.core.env.Environment;
+
 /**
  * Questa classe definisce una serie di funzioni utili per la generazione randomica da file json
  * delle offerte di volo e per il riconoscimento di offerte last-minute
@@ -18,6 +24,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 
 public class FlightUtility {
+
+    
 
     public FlightUtility() {
     }
@@ -45,8 +53,9 @@ public class FlightUtility {
      * specifica il file json da cui si possono generare i voli (attraverso l'url)
      * @return File che contiene un array di possibili offerte di volo
      */
-    public File GetFile(){
-        String filePath = "fileSampleOffers/flights.json";
+    public File GetFile(String s){
+        
+        String filePath = s;
         File file = new File(filePath);
         return file;
     }
@@ -91,6 +100,9 @@ public class FlightUtility {
 
             return o;
     }
+
+    
+
 
 
     

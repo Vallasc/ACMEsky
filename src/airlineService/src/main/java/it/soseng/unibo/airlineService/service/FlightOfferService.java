@@ -44,8 +44,8 @@ public class FlightOfferService implements FlightOfferServiceInterface {
      * @throws JsonProcessingException
      * @throws IOException
      */
-    public FlightOffer createFlightOffer() throws JsonProcessingException, IOException {
-        JsonNode n = u.GetRandomJsonObject(u.GetFile());
+    public FlightOffer createFlightOffer(String s) throws JsonProcessingException, IOException {
+        JsonNode n = u.GetRandomJsonObject(u.GetFile(s));
         FlightOffer o = u.createOffer(n);
         if(u.LastMinuteCheck(o)){
             sendLastMinuteOffer(o);

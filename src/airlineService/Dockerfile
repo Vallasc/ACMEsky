@@ -1,7 +1,5 @@
 FROM openjdk:15-jdk-alpine
-EXPOSE 8080
 ARG JAR_FILE=target/*.jar
+RUN mkdir /list
 COPY ${JAR_FILE} app.jar
-COPY fileSampleOffers /fileSampleOffers
-COPY db /db
 ENTRYPOINT ["java","-jar","/app.jar"]

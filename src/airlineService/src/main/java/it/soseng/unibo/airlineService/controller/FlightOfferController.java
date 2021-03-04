@@ -36,6 +36,8 @@ public class FlightOfferController {
     @Autowired
     private FlightOfferService s;
 
+    @Value("${server.file}") 
+    public String FILE;
     
 
     
@@ -49,7 +51,7 @@ public class FlightOfferController {
     @Scheduled(fixedRate = 6000)
     @PostMapping("/createOffer")
     private void autoCreateOffer() throws JsonProcessingException, IOException {
-        s.createFlightOffer();
+        s.createFlightOffer(FILE);
     }
 
     

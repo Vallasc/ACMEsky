@@ -15,7 +15,7 @@ import it.soseng.unibo.airlineService.DTO.UserRequest;
  */
 public interface FlightOfferServiceInterface {
 
-    public FlightOffer createFlightOffer() throws JsonProcessingException, IOException ;
+    // public FlightOffer createFlightOffer() throws JsonProcessingException, IOException ;
 
     public void deleteFlightOffer(long id);
 
