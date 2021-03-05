@@ -9,6 +9,7 @@ type RentRequest: void {
 type RentResponse: void {
     .status: string
     .departureDateTime: string
+    .arrivalDateTime: string
     .rentId: string
 }
 
