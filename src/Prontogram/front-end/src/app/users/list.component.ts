@@ -16,7 +16,8 @@ export class ListComponent implements OnInit {
     basicDetails(user) {
   
         const { _id, email, name, password, secondName, username, token} = user;
-        return { _id, email, name, password, secondName, username, token } ;
+        return { _id, email, name, password, secondName, username, token };
+
     }
     deleteUser(id: string) {
        
