@@ -3,14 +3,14 @@ type RentRequest: void {
     .clientSurname: string
     .fromAddress: string
     .toAddress: string
-    .toDateTime: string
+    .arrivalDateTime: string
 }
 
 type RentResponse: void {
     .status: string
-    .departureDateTime: string
-    .arrivalDateTime: string
-    .rentId: string
+    .departureDateTime?: string
+    .arrivalDateTime?: string
+    .rentId?: string
 }
 
 interface RentInterface {
