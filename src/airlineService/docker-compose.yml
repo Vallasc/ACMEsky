@@ -20,6 +20,6 @@ services:
         # riferimento della cartella db nell'host
         # all'interno della cartella "/db" nel container
             - ./db:/db
-            - ./fileSampleOffers/InternationFlights.json:/list/list.json
+            - ./fileSampleOffers/InternationalFlights.json:/list/list.json
         ports:
             - 8082:8082

@@ -1,8 +1,8 @@
 {
     "OFFERS": [
         {
-            "departure": "New York",
-            "destination": "Boston",
+            "departure": "John F. Kennedy International Airport, Queens, NY 11430, USA",
+            "destination": "Boston Logan International Airport (BOS), MA 02128, USA",
             "departureTime": "2021-08-27 20:00:00",
             "destinationTime": "2021-08-27 21:00:00",
             "price": 130.00

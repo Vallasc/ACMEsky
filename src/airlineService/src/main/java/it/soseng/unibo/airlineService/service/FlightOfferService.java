@@ -11,7 +11,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
 import it.soseng.unibo.airlineService.model.FlightUtility;
 import it.soseng.unibo.airlineService.model.FlightOffer;
@@ -32,8 +31,6 @@ public class FlightOfferService implements FlightOfferServiceInterface {
     private FlightOfferRepository repo;
 
     private FlightUtility u = new FlightUtility();
-
-    private final RestTemplate restTemplate = new RestTemplate();
 
     
     /** 

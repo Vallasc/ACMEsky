@@ -1,7 +1,5 @@
 package it.soseng.unibo.airlineService.model;
 
-import org.springframework.beans.factory.annotation.Value;
-
 /**
  * Questa classe definisce l'unica istanza della classe Iban,
  * definita secondo il pattern Singleton,
