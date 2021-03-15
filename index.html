@@ -15,20 +15,22 @@
             let files = [
                 "src/BankService/README.md"
             ];
-            let concatFiles = ""   
 
             async function getFiles(){
+                let concatFiles = ""   
                 for(let file in files){
                     let response = await fetch(file)
                     concatFiles += response.text()
                 }
+                console.log(concatFiles)
+                return concatFiles;
             }
 
             async function render(){
-                await getFiles()
+                let concat = await getFiles()
                 let md = new Remarkable({typographer: true})
-                let doc = md.render(concatFiles)
-                document.getElementById("content").innerHTML = doc
+                let doc = md.render(concat)
+                document.getElementById("content").innerHTML = concat
             }
 
             render()
