@@ -18,7 +18,7 @@
 
             async function getFiles(){
                 let concatFiles = ""   
-                for(let file in files){
+                for(const file of files){
                     let response = await fetch(file)
                     concatFiles += response.text()
                 }
