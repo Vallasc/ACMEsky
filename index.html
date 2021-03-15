@@ -17,11 +17,9 @@
             ]
         
             let concatFiles = ""    
-            files.forEach( (file) =>{
-                fetch(file)
-                    .then(response => {
-                        concatFiles += response
-                    })
+            await files.forEach( async (file) => {
+                let response = await fetch(file)
+                concatFiles += response.text()
             })
             let md = new Remarkable({typographer: true})
             let doc = md.render(concatFiles)
