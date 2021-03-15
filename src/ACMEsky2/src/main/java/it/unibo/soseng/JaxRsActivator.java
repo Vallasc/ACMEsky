@@ -3,7 +3,7 @@ package it.unibo.soseng;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
-@ApplicationPath("/rest")
+@ApplicationPath("/")
 public class JaxRsActivator extends Application {
 
 }

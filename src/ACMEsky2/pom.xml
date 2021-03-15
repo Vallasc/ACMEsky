@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>it.unibo.soseng</groupId>
-  <artifactId>ACMEsky</artifactId>
+  <artifactId>acmesky</artifactId>
   <version>1.0</version>
   <packaging>war</packaging>
 

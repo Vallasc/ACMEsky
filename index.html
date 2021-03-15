@@ -1,0 +1,20 @@
+<div id="content">
+
+</div>
+<script src="https://cdn.jsdelivr.net/remarkable/2.0.0/remarkable.min.js"></script>
+<script>
+    let files = [
+        "sddssd"
+    ]
+    
+    let concatFiles = ""
+
+    files.forEach( (file) =>{
+        fetch(file)
+            .then(response => {
+                concatFiles += response
+            })
+    })
+    let md = new Remarkable({typographer: true})
+    let doc = md.render('# Remarkable rulezz!')
+</script>

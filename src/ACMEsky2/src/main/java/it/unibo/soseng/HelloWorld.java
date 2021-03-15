@@ -2,7 +2,7 @@ package it.unibo.soseng;
 
 import javax.ws.rs.*;
 
-@Path("tutorial")
+@Path("user")
 public class HelloWorld
 {
 
