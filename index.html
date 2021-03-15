@@ -24,10 +24,14 @@
                 }
             }
 
-            await getFiles()
-            let md = new Remarkable({typographer: true})
-            let doc = md.render(concatFiles)
-            document.getElementById("content").innerHTML = doc;
+            async function render(){
+                await getFiles()
+                let md = new Remarkable({typographer: true})
+                let doc = md.render(concatFiles)
+                document.getElementById("content").innerHTML = doc
+            }
+
+            render()
         </script>
     </body>
 </html>
