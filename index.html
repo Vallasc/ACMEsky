@@ -16,8 +16,7 @@
                 "src/BankService/README.md"
             ]
         
-            let concatFiles = ""
-        
+            let concatFiles = ""    
             files.forEach( (file) =>{
                 fetch(file)
                     .then(response => {
@@ -25,7 +24,7 @@
                     })
             })
             let md = new Remarkable({typographer: true})
-            let doc = md.render('# Remarkable rulezz!')
+            let doc = md.render(concatFiles)
             document.getElementById("content").innerHTML = doc;
         </script>
     </body>
