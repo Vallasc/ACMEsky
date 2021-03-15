@@ -1,21 +1,32 @@
-<div id="content">
-
-</div>
-<script src="https://cdn.jsdelivr.net/remarkable/2.0.0/remarkable.min.js"></script>
-<script>
-    let files = [
-        "src/BankService/README.md"
-    ]
-
-    let concatFiles = ""
-
-    files.forEach( (file) =>{
-        fetch(file)
-            .then(response => {
-                concatFiles += response
+<!DOCTYPE html>
+<html lang="en">
+    <meta charset="UTF-8">
+    <title>ACMEsky doc</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" href="">
+    <style>
+    </style>
+    <script src=""></script>
+    <body>
+        <div id="content">
+        </div>
+        <script src="https://cdn.jsdelivr.net/remarkable/2.0.0/remarkable.min.js"></script>
+        <script>
+            let files = [
+                "src/BankService/README.md"
+            ]
+        
+            let concatFiles = ""
+        
+            files.forEach( (file) =>{
+                fetch(file)
+                    .then(response => {
+                        concatFiles += response
+                    })
             })
-    })
-    let md = new Remarkable({typographer: true})
-    let doc = md.render('# Remarkable rulezz!')
-    document.getElementById("content").innerHTML = doc;
-</script>
+            let md = new Remarkable({typographer: true})
+            let doc = md.render('# Remarkable rulezz!')
+            document.getElementById("content").innerHTML = doc;
+        </script>
+    </body>
+</html>
