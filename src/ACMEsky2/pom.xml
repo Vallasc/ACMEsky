@@ -81,6 +81,7 @@
         <groupId>org.jboss.resteasy</groupId>
         <artifactId>resteasy-jackson-provider</artifactId>
         <version>${resteasy.version}</version>
+        <scope>provided</scope>
       </dependency>
   
     </dependencies>
@@ -95,7 +96,6 @@
             <failOnMissingWebXml>false</failOnMissingWebXml>
           </configuration>
         </plugin>
-
       </plugins>
     </build>
   
