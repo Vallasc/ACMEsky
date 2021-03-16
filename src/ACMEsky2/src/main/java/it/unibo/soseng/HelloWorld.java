@@ -7,7 +7,7 @@ public class HelloWorld
 {
 
     @GET
-    @Path("helloworld")
+    @Path("hello")
     public String helloworld() {
         return "Hello World!";
     }
