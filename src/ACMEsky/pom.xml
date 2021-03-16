@@ -45,12 +45,12 @@
   
     <dependencies>
       
-      <!--<dependency>
+      <dependency>
         <groupId>org.camunda.bpm</groupId>
         <artifactId>camunda-engine</artifactId>
         <scope>provided</scope>
       </dependency>
-      <dependency>
+      <!--<dependency>
         <groupId>org.jboss.spec.javax.ws.rs</groupId>
         <artifactId>jboss-jaxrs-api_2.1_spec</artifactId>
         <scope>provided</scope>
