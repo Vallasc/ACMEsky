@@ -50,6 +50,12 @@
         <artifactId>camunda-engine</artifactId>
         <scope>provided</scope>
       </dependency>
+      <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>javax.servlet-api</artifactId>
+        <version>3.0.1</version>
+        <scope>provided</scope>
+      </dependency>
       <!--<dependency>
         <groupId>org.jboss.spec.javax.ws.rs</groupId>
         <artifactId>jboss-jaxrs-api_2.1_spec</artifactId>

@@ -12,7 +12,7 @@ public class HelloWorld {
     @Path("hello")
     public String helloworld() {
         RuntimeService runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();
-        runtimeService.startProcessInstanceByMessage("StartSaveoffer");
+        runtimeService.startProcessInstanceByMessage("StartSaveOffer");
         return "Hello World!";
     }
 }
