@@ -10,8 +10,7 @@
   <packaging>war</packaging>
 
   <name>ACMEsky</name>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
+  <url>https://vallasc.github.io/ACMEsky/index.html</url>
 
   <properties>
     <camunda.version>7.14.0</camunda.version>
@@ -57,21 +56,6 @@
         <scope>provided</scope>
       </dependency>
       <!--<dependency>
-        <groupId>org.jboss.spec.javax.ws.rs</groupId>
-        <artifactId>jboss-jaxrs-api_2.1_spec</artifactId>
-        <scope>provided</scope>
-      </dependency>
-      <dependency>
-        <groupId>jakarta.enterprise</groupId>
-        <artifactId>jakarta.enterprise.cdi-api</artifactId>
-        <scope>provided</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.jboss.spec.javax.xml.bind</groupId>
-        <artifactId>jboss-jaxb-api_2.3_spec</artifactId>
-        <scope>provided</scope>
-      </dependency>-->
-      <dependency>
           <groupId>org.jboss.resteasy</groupId>
           <artifactId>resteasy-servlet-initializer</artifactId>
           <version>${resteasy.version}</version>
@@ -88,7 +72,7 @@
         <artifactId>resteasy-jackson-provider</artifactId>
         <version>${resteasy.version}</version>
         <scope>provided</scope>
-      </dependency>
+      </dependency>-->
   
     </dependencies>
   
