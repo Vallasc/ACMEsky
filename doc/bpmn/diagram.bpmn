@@ -372,7 +372,7 @@
         <bpmn:outgoing>Flow_1x7tklv</bpmn:outgoing>
         <bpmn:messageEventDefinition id="MessageEventDefinition_04qonjl" />
       </bpmn:intermediateCatchEvent>
-      <bpmn:sendTask id="Activity_1h9nw8m" name="Search flights">
+      <bpmn:sendTask id="Activity_1h9nw8m" name="Search flights" camunda:class="">
         <bpmn:incoming>Flow_1cwqda4</bpmn:incoming>
         <bpmn:outgoing>Flow_18uxu57</bpmn:outgoing>
       </bpmn:sendTask>
@@ -1012,10 +1012,10 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_18uxu57_di" bpmnElement="Flow_18uxu57">
         <di:waypoint x="760" y="1230" />
-        <di:waypoint x="942" y="1230" />
+        <di:waypoint x="922" y="1230" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1x7tklv_di" bpmnElement="Flow_1x7tklv">
-        <di:waypoint x="978" y="1230" />
+        <di:waypoint x="958" y="1230" />
         <di:waypoint x="1050" y="1230" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_05k55tj_di" bpmnElement="Flow_05k55tj">
@@ -1028,9 +1028,6 @@
       <bpmndi:BPMNShape id="Event_0hkoxc1_di" bpmnElement="Event_0hkoxc1">
         <dc:Bounds x="1222" y="1212" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1hrw0xt_di" bpmnElement="Event_1hrw0xt">
-        <dc:Bounds x="942" y="1212" width="36" height="36" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1h9nw8m_di" bpmnElement="Activity_1h9nw8m">
         <dc:Bounds x="660" y="1190" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -1039,6 +1036,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1fysxbq_di" bpmnElement="Activity_1pz7j2b">
         <dc:Bounds x="1050" y="1190" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1hrw0xt_di" bpmnElement="Event_1hrw0xt">
+        <dc:Bounds x="922" y="1212" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1v2qevx_di" bpmnElement="Event_1v2qevx">
         <dc:Bounds x="262" y="1212" width="36" height="36" />
@@ -1730,8 +1730,8 @@
         <di:waypoint x="710" y="1500" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1i76psu_di" bpmnElement="Flow_1i76psu">
-        <di:waypoint x="960" y="1500" />
-        <di:waypoint x="960" y="1248" />
+        <di:waypoint x="940" y="1500" />
+        <di:waypoint x="940" y="1248" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0beo755_di" bpmnElement="Flow_0beo755">
         <di:waypoint x="4932" y="770" />
