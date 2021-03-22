@@ -1,4 +1,4 @@
-package it.unibo.soseng.gateway;
+package it.unibo.soseng.gateway.bank;
 
 import javax.ws.rs.Path;
 
@@ -13,8 +13,8 @@ import javax.inject.Inject;
 
 import it.unibo.soseng.logic.Prova;
 
-@Path("user")
-public class HelloWorld {
+@Path("bank")
+public class BankWS {
     private final static Logger LOGGER = Logger.getLogger("REST API");
 
     @Inject

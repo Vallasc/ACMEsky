@@ -1,4 +1,4 @@
-package it.unibo.soseng.camunda;
+package it.unibo.soseng.camunda.flights_manager;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;

@@ -4,6 +4,7 @@ import javax.inject.Singleton;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 
+@ApplicationScoped
 public class Prova {
     private int n = 99;
 
