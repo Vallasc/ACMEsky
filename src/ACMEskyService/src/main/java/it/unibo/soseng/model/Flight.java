@@ -2,8 +2,6 @@ package it.unibo.soseng.model;
 
 import java.io.Serializable;
 
-import javax.persistence.Entity;
-
 public class Flight implements Serializable {
     
     private static final long serialVersionUID = 1L;
@@ -15,7 +13,7 @@ public class Flight implements Serializable {
     public Flight(String flightId){
         this.flightId = flightId;
     }
-    
+
     public void setFlightId(String flightId) {
         this.flightId = flightId;
     }
