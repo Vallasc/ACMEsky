@@ -1,5 +1,6 @@
 package it.soseng.unibo.airlineService.service;
 
+import java.io.File;
 import java.io.IOException;
 
 import java.util.List;
@@ -145,15 +146,12 @@ public class FlightOfferService implements FlightOfferServiceInterface {
      * @param id corrispondente all'offerta in questione
      * @return boolean esito della prenotazione
      */
-    public boolean bookOffer(long id) {
-		FlightOffer o = repo.findById(id).get();
-        if(o.getBookableFlagValue()){
-            o.setBookableFlagFalse();
-            return true;
-        }else{
-            return false;
-        }
+    public File bookOffer(List<FlightOffer> l) {
+		l.stream().forEach(o -> o.setBookableFlagFalse());
+
+        return null;
 	}
 
+    
     
 }
