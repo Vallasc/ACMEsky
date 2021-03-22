@@ -11,23 +11,15 @@ import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
-import it.unibo.soseng.logic.Prova;
 
 @Path("bank")
 public class BankWS {
     private final static Logger LOGGER = Logger.getLogger("REST API");
 
-    @Inject
-    private Prova prova;
-
     @GET
     @Path("hello")
     public String helloworld() {
-        prova.setN(69);
-
-        //RuntimeService runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();
-        //runtimeService.startProcessInstanceByMessage("StartSaveOffer");
         
-        return "Hello World!"+prova.getN();
+        return "Hello World!";
     }
 }
