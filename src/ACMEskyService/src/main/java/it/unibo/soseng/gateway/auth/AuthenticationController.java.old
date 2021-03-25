@@ -1,0 +1,60 @@
+package it.unibo.soseng.gateway.auth;
+
+import javax.inject.Inject;
+import javax.security.enterprise.SecurityContext;
+import javax.security.enterprise.identitystore.CredentialValidationResult;
+import javax.security.enterprise.identitystore.IdentityStoreHandler;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.security.enterprise.credential.Credential;
+import javax.security.enterprise.credential.UsernamePasswordCredential;
+
+import it.unibo.soseng.security.TokenProvider;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+@Path("auth")
+@Consumes({ MediaType.APPLICATION_JSON })
+@Produces({ MediaType.APPLICATION_JSON })
+public class AuthenticationController {
+
+private static final Logger LOG = Logger.getLogger(AuthenticationController.class.getName());
+    @Inject
+    private IdentityStoreHandler identityStoreHandler;
+
+    @Inject
+    private TokenProvider tokenProvider;
+
+    @Inject
+    private SecurityContext securityContext;
+
+    @POST
+    public Response authenticate(String Json) {
+      LOG.log(Level.INFO, "Authenticate user {0}", "prova");
+
+      CredentialValidationResult result = identityStoreHandler.validate(new UsernamePasswordCredential("user", "pass"));
+  
+      if (result.getStatus() == CredentialValidationResult.Status.VALID) {
+        try {
+          AuthorizationToken authorizationToken = tokenProvider.createToken("username", ["user"]);
+          LOG.log(Level.INFO, "Authentication successful {0}", authorizationToken);
+  
+          return Response.status(Status.OK)
+              .entity(authorizationToken)
+              .build();
+        } catch (JWTCreationException | UnsupportedEncodingException e) {
+          LOG.log(Level.SEVERE, "Token creation failed", e);
+          return Response.status(Status.UNAUTHORIZED).build();
+        }
+      } else {
+        LOG.log(Level.WARNING, "Wrong credentials for user {0} or user not found", credentials.getUsername());
+        return Response.status(Status.UNAUTHORIZED).build();
+      }
+    }
+
+}
