@@ -13,7 +13,7 @@ import it.unibo.soseng.model.Flight;
 
 @Stateless
 public class AirlineManager {
-    private final static Logger LOGGER = Logger.getLogger("AirlineManager");
+    private final static Logger LOGGER = Logger.getLogger(AirlineManager.class.getName());
     
     public void saveAirlineOffer(Flight flightOffer){
         RuntimeService runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();

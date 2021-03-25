@@ -14,7 +14,7 @@ import it.unibo.soseng.gateway.web.dao.InterestsRequest;
 
 @Path("web")
 public class WebController {
-    private final static Logger LOGGER = Logger.getLogger("AppWS");
+    private final static Logger LOGGER = Logger.getLogger(WebController.class.getName());
 
     @POST
     @Path("/interests")

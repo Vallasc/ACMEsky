@@ -17,7 +17,7 @@ import it.unibo.soseng.logic.airline.AirlineManager;
 
 @Path("airline")
 public class AirlineController {
-    private final static Logger LOGGER = Logger.getLogger("AirlineWS");
+    private final static Logger LOGGER = Logger.getLogger(AirlineController.class.getName());
 
     @Inject
     AirlineManager airlineManager;

@@ -10,7 +10,7 @@ import javax.inject.Named;
 @Named("saveOfferDelegate")
 public class SaveOfferDelegate implements JavaDelegate {
 
-  private final static Logger LOGGER = Logger.getLogger("SaveOfferDelegate");
+  private final static Logger LOGGER = Logger.getLogger(SaveOfferDelegate.class.getName());
 
   @Override
   public void execute(DelegateExecution execution){

@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 
 @Path("bank")
 public class BankController {
-    private final static Logger LOGGER = Logger.getLogger("REST API");
+    private final static Logger LOGGER = Logger.getLogger(BankController.class.getName());
 
     @GET
     @Path("hello")

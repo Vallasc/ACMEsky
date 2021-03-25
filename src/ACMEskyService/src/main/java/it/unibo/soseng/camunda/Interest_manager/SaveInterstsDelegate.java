@@ -10,7 +10,7 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 @Named
 public class SaveInterstsDelegate implements JavaDelegate {
 
-    private final static Logger LOGGER = Logger.getLogger("SaveInterstsDelegate");
+    private final static Logger LOGGER = Logger.getLogger(SaveInterstsDelegate.class.getName());
 
     @Override
     public void execute(DelegateExecution execution){
