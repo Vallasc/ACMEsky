@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_15yhc1i" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.6.0">
+  <bpmn:process id="SaveOffer" name="SaveOffer" isExecutable="true">
+    <bpmn:startEvent id="Event_08ppmqh">
+      <bpmn:outgoing>Flow_0a5v8jd</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1c335fg" messageRef="Message_081q45f" />
+    </bpmn:startEvent>
+    <bpmn:endEvent id="Event_0gxxnbz">
+      <bpmn:incoming>Flow_00jc05s</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0a5v8jd" sourceRef="Event_08ppmqh" targetRef="Activity_10s9ij7" />
+    <bpmn:sequenceFlow id="Flow_00jc05s" sourceRef="Activity_10s9ij7" targetRef="Event_0gxxnbz" />
+    <bpmn:serviceTask id="Activity_10s9ij7" name="Save offer in DB" camunda:delegateExpression="#{saveOfferDelegate}">
+      <bpmn:incoming>Flow_0a5v8jd</bpmn:incoming>
+      <bpmn:outgoing>Flow_00jc05s</bpmn:outgoing>
+      <bpmn:property id="Property_090nasz" name="__targetRef_placeholder" />
+    </bpmn:serviceTask>
+  </bpmn:process>
+  <bpmn:message id="Message_081q45f" name="StartSaveOffer" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="SaveOffer">
+      <bpmndi:BPMNEdge id="Flow_00jc05s_di" bpmnElement="Flow_00jc05s">
+        <di:waypoint x="360" y="120" />
+        <di:waypoint x="422" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0a5v8jd_di" bpmnElement="Flow_0a5v8jd">
+        <di:waypoint x="188" y="120" />
+        <di:waypoint x="260" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_08ppmqh_di" bpmnElement="Event_08ppmqh">
+        <dc:Bounds x="152" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0gxxnbz_di" bpmnElement="Event_0gxxnbz">
+        <dc:Bounds x="422" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1mpsbo5_di" bpmnElement="Activity_10s9ij7">
+        <dc:Bounds x="260" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
