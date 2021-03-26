@@ -40,6 +40,9 @@ public class FlightOffer {
     @Column(name = "price")
     private double price;
 
+    @Column(name = "expire_offer")
+    private long expiryDate;
+
     @Column(name = "flag")
     private boolean bookableFlag = true;
 
@@ -51,6 +54,7 @@ public class FlightOffer {
         this.destinationTime = destinationTime;
         this.destination = destination;
         this.price = price;
+
     }
 
 
@@ -156,6 +160,14 @@ public class FlightOffer {
      */
     public void setPrice( double price) {
       this.price = price;
+    }
+
+    /** 
+     * imposta il prezzo dell'offerta
+     * @param expiryDate
+     */
+    public void setExpiryDate( long expiryDate) {
+      this.expiryDate = expiryDate;
     }
 
     /** 
