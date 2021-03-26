@@ -1,6 +1,5 @@
 package it.unibo.soseng.model;
 import java.io.Serializable;
-import java.lang.String;
 import javax.persistence.*;
 import org.joda.time.DateTime;
 
