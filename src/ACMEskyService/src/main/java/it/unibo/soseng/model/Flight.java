@@ -1,24 +1,20 @@
 package it.unibo.soseng.model;
 
-import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
-public class Flight implements Serializable {
-    
-    private static final long serialVersionUID = 1L;
+@Entity
+@Table(name="flights")
+public class Flight {
 
-    private String flightId;
+    private long id;
+    private long departure_airport_id;
+    private long arrival_airport_id;
+    private long airline_id;
+    private DateTime departure_date_time;
+    private DateTime arrival_date_time;
+    private float price;
+    private DateTime expire_date;
+    private boolean booked;
 
-    public Flight(){}
-
-    public Flight(String flightId){
-        this.flightId = flightId;
-    }
-
-    public void setFlightId(String flightId) {
-        this.flightId = flightId;
-    }
-
-    public String getFlightId() {
-        return flightId;
-    }
 }

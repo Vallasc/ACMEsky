@@ -8,6 +8,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name="airports")
 public class Airport {
+    
     private long id;
     private String aiportCode;
     private String address;
@@ -27,7 +28,7 @@ public class Airport {
 
     @Id    
 	@Column(name="airport_code", 
-            length=20, 
+            length=15, 
             nullable=false)
     public String getAiportCode() {
         return aiportCode;
@@ -37,7 +38,9 @@ public class Airport {
         this.aiportCode = aiportCode;
     }
 
-    @Column(name="FIRST_NAME", length=20, nullable=false) 
+    @Column(name="address", 
+            length=20, 
+            nullable=false) 
     public String getAddress() {
         return address;
     }
@@ -46,6 +49,9 @@ public class Airport {
         this.address = address;
     }
 
+    @Column(name="name", 
+            length=20, 
+            nullable=false) 
     public String getName() {
         return name;
     }
