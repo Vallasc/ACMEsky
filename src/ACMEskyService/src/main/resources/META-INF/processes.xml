@@ -9,6 +9,7 @@
     <properties>
       <property name="isDeleteUponUndeploy">false</property>
       <property name="isScanForProcessDefinitions">true</property>
+      <property name="jobExecutorActivate">true</property>
     </properties>
   </process-archive>
 </process-application>
