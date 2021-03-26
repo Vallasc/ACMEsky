@@ -1,9 +1,9 @@
+
 |  | airports |
 | - | - |
 | PK | airport_code |
 |  | address |
 |  | name |
-
 
 |  | user_requests |
 | - | - |
@@ -21,7 +21,6 @@
 | FK | arrival_airport_code |
 |  | departure_date_time |
 |  | arrival_date_time |
-
 
 
 |  | flights |
