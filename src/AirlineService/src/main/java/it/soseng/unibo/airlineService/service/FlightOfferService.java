@@ -1,7 +1,8 @@
 package it.soseng.unibo.airlineService.service;
 
+import java.io.File;
 import java.io.IOException;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -111,7 +112,7 @@ public class FlightOfferService implements FlightOfferServiceInterface {
      * @param o l'offerta da inviare sulla route specifica
      */
     public void sendLastMinuteOffer(FlightOffer o) {
-        // String url = "https://jsonplaceholder.typicode.com";
+        String url = "http://localhost:8080/";
     
         // // create headers
         // HttpHeaders headers = new HttpHeaders();
@@ -145,15 +146,23 @@ public class FlightOfferService implements FlightOfferServiceInterface {
      * @param id corrispondente all'offerta in questione
      * @return boolean esito della prenotazione
      */
-    public boolean bookOffer(long id) {
-		FlightOffer o = repo.findById(id).get();
-        if(o.getBookableFlagValue()){
-            o.setBookableFlagFalse();
-            return true;
-        }else{
-            return false;
-        }
+    public File bookOffer(List<FlightOffer> l) {
+		l.stream().forEach(o -> o.setBookableFlagFalse());
+
+        return null;
 	}
 
+
+    public List<FlightOffer> getOffers(long ... l){
+
+        ArrayList<FlightOffer> flights = new ArrayList<>();
+        
+        for( long id : l){
+          flights.add(repo.findById(id).get());
+        }
+          return flights;
+    }
+
+    
     
 }
