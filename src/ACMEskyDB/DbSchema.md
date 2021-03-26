@@ -1,6 +1,7 @@
 |  | airports |
 | - | - |
-| PK | airport_code |
+| PK | id |
+|  | airport_code |
 |  | address |
 |  | name |
 
@@ -17,8 +18,8 @@
 | - | - |
 | PK | id |
 | FK | user_id |
-| FK | departure_airport_code |
-| FK | arrival_airport_code |
+| FK | departure_airport_id |
+| FK | arrival_airport_id |
 |  | departure_date_time |
 |  | arrival_date_time |
 
@@ -27,8 +28,8 @@
 |  | flights |
 | - | - |
 | PK | id |
-| FK | departure_airport_code |
-| FK | arrival_airport_code |
+| FK | departure_airport_id |
+| FK | arrival_airport_id |
 | FK | airline_id |
 |  | departure_date_time |
 |  | arrival_date_time |
