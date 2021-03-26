@@ -4,8 +4,8 @@ import javax.persistence.*;
 import org.joda.time.DateTime;
 
 @Entity
-@Table(name="USER_REQUESTS_TABLE")
-public class userRequest implements Serializable {
+@Table(name="users_request")
+public class UserRequest implements Serializable {
     /**
      *
      */
@@ -17,7 +17,7 @@ public class userRequest implements Serializable {
 	private DateTime expireDate;
 	
 	@Id
-	@Column(name="USER_REQUEST_ID",nullable=false,columnDefinition="integer")
+	@Column(name="user_request_id",nullable=false,columnDefinition="integer")
 	public long getId() {
 		return this.id;
 	}
@@ -25,7 +25,7 @@ public class userRequest implements Serializable {
 		this.id = id;
 	}
 
-	@Column(name="USER_ID",nullable=false,columnDefinition="integer")
+	@Column(name="user_id",nullable=false,columnDefinition="integer")
 	public long getUserId() {
 		return this.userId;
 	}
@@ -33,7 +33,7 @@ public class userRequest implements Serializable {
 		this.userId = userId;
 	}
 
-    @Column(name="OUTBOUND_FLIGHT_INTEREST_ID",nullable=false,columnDefinition="integer")
+    @Column(name="outbound_flight_interest_id",nullable=false,columnDefinition="integer")
 	public long getOutboundFlightInterestId() {
 		return this.outboundFlightInterestId;
 	}
@@ -41,7 +41,7 @@ public class userRequest implements Serializable {
 		this.outboundFlightInterestId = outboundFlightInterestId;
 	}
     
-    @Column(name="FLIGHT_BACK_INTEREST_ID",nullable=true,columnDefinition="integer")
+    @Column(name="flight_back_interest_id",nullable=true,columnDefinition="integer")
 	public long getFlightBackInterestId() {
 		return this.flightBackInterestId;
 	}
@@ -49,7 +49,7 @@ public class userRequest implements Serializable {
 		this.flightBackInterestId = flightBackInterestId;
 	}
     
-    @Column(name="EXPIRE_DATE",nullable=true,columnDefinition="DATETIME")
+    @Column(name="expire_date",nullable=true,columnDefinition="DATETIME")
 	public DateTime getExpireDate() {
 		return this.expireDate;
 	}

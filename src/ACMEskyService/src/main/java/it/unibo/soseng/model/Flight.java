@@ -1,5 +1,4 @@
 package it.unibo.soseng.model;
-
 import java.io.Serializable;
 
 public class Flight implements Serializable {
