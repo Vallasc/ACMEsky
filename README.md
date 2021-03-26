@@ -74,3 +74,17 @@ Queste specifiche possono essere soggette a revisioni per chiarire eventuali amb
 
 V0.9 - versione interna RFC
 
+
+| Service | Port |
+| - | - |
+| ACMEsky | - |
+| web | 80 |
+| api | 8080 |
+| BankService | 8081 |
+| AirlineNationalService | 8082 |
+| AirlineService | 8083 |
+| ProntogramService | 8084 |
+| GeocraphicalService | 8085 |
+| RentService1 | 8086 |
+| RentService2 | 8087 |
+| RentService3 | 8088 |
