@@ -1,8 +1,7 @@
 package it.unibo.soseng.model;
 import java.io.Serializable;
 import javax.persistence.*;
-import org.joda.time.DateTime;
-
+import java.time.LocalDateTime;
 @Entity
 @Table(name="users_request")
 public class UserRequest implements Serializable {
@@ -14,10 +13,10 @@ public class UserRequest implements Serializable {
     private long userId;
 	private long outboundFlightInterestId;
     private long flightBackInterestId;
-	private DateTime expireDate;
+	private LocalDateTime expireDate;
 	
 	@Id
-	@Column(name="user_request_id",nullable=false,columnDefinition="integer")
+	@Column(name="id",nullable=false,columnDefinition="integer")
 	public long getId() {
 		return this.id;
 	}
@@ -50,10 +49,10 @@ public class UserRequest implements Serializable {
 	}
     
     @Column(name="expire_date",nullable=true,columnDefinition="DATETIME")
-	public DateTime getExpireDate() {
+	public LocalDateTime getExpireDate() {
 		return this.expireDate;
 	}
-	public void setgetExpireDate(DateTime expireDate) {
+	public void setgetExpireDate(LocalDateTime expireDate) {
 		this.expireDate = expireDate;
 	}
 }

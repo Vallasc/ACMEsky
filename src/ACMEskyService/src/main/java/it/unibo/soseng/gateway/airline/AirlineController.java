@@ -27,7 +27,7 @@ public class AirlineController {
     @Consumes( MediaType.APPLICATION_JSON )
     public Response saveOffer(OfferRequest offer, @Context UriInfo uriInfo) {
         LOGGER.info("POST offers");
-        airlineManager.saveAirlineOffer(offer.toFlight());
+        //airlineManager.saveAirlineOffer(offer.toFlight());
         return Response.status(Response.Status.CREATED.getStatusCode())
                         .header("Location", String.format("%s/%s", uriInfo.getAbsolutePath().toString(), offer.getFlightId()))
                         .build();

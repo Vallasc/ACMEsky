@@ -13,7 +13,7 @@ public class OfferRequest {
         return flightId;
     }
 
-    public Flight toFlight(){
+    /*public Flight toFlight(){
         return new Flight(this.flightId);
-    }
+    }*/
 }

@@ -18,7 +18,7 @@ public class User implements Serializable {
     private String address;
 	
 	@Id
-	@Column(name="user_id",nullable=false,columnDefinition="integer")
+	@Column(name="id",nullable=false,columnDefinition="integer")
 	public long getId() {
 		return this.id;
 	}

@@ -19,7 +19,7 @@ public class AirlineManager {
         RuntimeService runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();
         
         Map<String,Object> processVariables = new HashMap<String,Object>();
-        processVariables.put("flightId", flightOffer.getFlightId());
+        processVariables.put("flightId", flightOffer.getId());
         runtimeService.startProcessInstanceByMessage("StartSaveOffer", processVariables);
     }
 }
