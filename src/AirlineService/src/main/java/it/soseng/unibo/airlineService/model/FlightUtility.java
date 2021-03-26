@@ -3,12 +3,15 @@ package it.soseng.unibo.airlineService.model;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Random;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 
 /**
@@ -66,7 +69,6 @@ public class FlightUtility {
      */
     public JsonNode GetRandomJsonObject(File file) throws JsonProcessingException, IOException {
             
-            
         ObjectMapper mapper = new ObjectMapper();
         JsonNode root = mapper.readTree(file);
         JsonNode offers = root.get("OFFERS");
@@ -92,8 +94,17 @@ public class FlightUtility {
             o.setDepartureTime(n.get("departureTime").textValue());
             o.setDestinationTime(n.get("destinationTime").textValue());
             o.setPrice(n.get("price").asDouble());
+            o.setExpiryDate(getExpiryDate(o.getDepartureTime()));
 
             return o;
+    }
+
+
+    private long getExpiryDate(LocalDateTime departureTime) {
+
+        LocalDateTime period = departureTime.minusDays(7);
+        ZonedDateTime zdt = ZonedDateTime.of(period, ZoneId.systemDefault());
+        return zdt.toInstant().toEpochMilli();
     }
 
     
