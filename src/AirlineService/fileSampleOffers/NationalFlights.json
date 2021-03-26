@@ -8,9 +8,11 @@
             "price": 130.00
         },
         {
-            "departure": "Aereoporto internazionale Leonardo Da Vinci, Via dell' Aeroporto di Fiumicino - 00054 Fiumicino (ROMA) ",
+            "departure_airport_id": "FCO",
+            "departure_airport": "Aereoporto internazionale Leonardo Da Vinci, Via dell' Aeroporto di Fiumicino - 00054 Fiumicino (ROMA) ",
+            "destination_airport": "TRN",
             "destination": "Torino Airport, Strada Aeroporto - 10072 Caselle Torinese (TO)",
-            "departureTime": "2021-02-27 20:00:00",
+            "departure_time": "2021-02-27 20:00:00",
             "destinationTime": "2021-02-27 21:00:00",
             "price": 170.00
         },

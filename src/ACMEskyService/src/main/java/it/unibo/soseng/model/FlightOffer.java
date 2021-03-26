@@ -1,4 +1,4 @@
-package it.soseng.unibo.airlineService.model;
+package it.unibo.soseng.model;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -17,33 +17,21 @@ import javax.persistence.Table;
  * @author Andrea Di Ubaldo
  * andrea.diubaldo@studio.unibo.it
  */
-@Entity
-@Table(name = "flightOffers")
 public class FlightOffer {
     
-    @Id 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long id;
 
-    @Column(name = "departure")
     private String departure;
 
-    @Column(name = "departureTime")
     private LocalDateTime  departureTime;
 
-    @Column(name = "destinationTime")
     private LocalDateTime destinationTime;
 
-    @Column(name = "destination")
     private String destination;
 
-    @Column(name = "price")
     private double price;
 
-    @Column(name = "expire_offer")
-    private long expiryDate;
-
-    @Column(name = "flag")
     private boolean bookableFlag = true;
 
     public FlightOffer(){}
@@ -54,7 +42,6 @@ public class FlightOffer {
         this.destinationTime = destinationTime;
         this.destination = destination;
         this.price = price;
-
     }
 
 
@@ -163,14 +150,6 @@ public class FlightOffer {
     }
 
     /** 
-     * imposta il prezzo dell'offerta
-     * @param expiryDate
-     */
-    public void setExpiryDate( long expiryDate) {
-      this.expiryDate = expiryDate;
-    }
-
-    /** 
      * imposta il flag della prenotabilità a false
      */
     public void setBookableFlagFalse(){
@@ -178,4 +157,5 @@ public class FlightOffer {
     }
 
 }
+
 
