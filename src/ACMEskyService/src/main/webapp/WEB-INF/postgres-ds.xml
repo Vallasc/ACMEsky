@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datasources>
+    <datasource jndi-name="java:jboss/datasources/postgresacmesky" pool-name="postgresacmesky" enabled="true" use-java-context="true">
+        <connection-url>jdbc:postgresql://34.105.52.182:5432/acmesky</connection-url>
+        <driver>postgresql-42.2.19.jar</driver>
+        <security>
+            <user-name>soseng</user-name>
+            <password>adminadmin</password>
+        </security>
+    </datasource>
+</datasources>
