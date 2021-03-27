@@ -1,23 +1,35 @@
 package it.unibo.soseng.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="airports")
-public class Airport {
+public class Airport implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", nullable = false)
     private long id;
+
+    @Column(name = "airport_code", nullable = false)
     private String aiportCode;
+
+    @Column(name = "address", nullable = false) 
     private String address;
+
+    @Column(name = "name", nullable = false) 
     private String name;
 
-    @Id    
-	@Column(name="id", 
-            nullable=false, 
-            columnDefinition="integer")
+
     public long getId() {
         return id;
     }
@@ -26,10 +38,6 @@ public class Airport {
         this.id = aiportId;
     }
 
-    @Id    
-	@Column(name="airport_code", 
-            length=15, 
-            nullable=false)
     public String getAiportCode() {
         return aiportCode;
     }
@@ -38,9 +46,6 @@ public class Airport {
         this.aiportCode = aiportCode;
     }
 
-    @Column(name="address", 
-            length=20, 
-            nullable=false) 
     public String getAddress() {
         return address;
     }
@@ -49,9 +54,6 @@ public class Airport {
         this.address = address;
     }
 
-    @Column(name="name", 
-            length=20, 
-            nullable=false) 
     public String getName() {
         return name;
     }

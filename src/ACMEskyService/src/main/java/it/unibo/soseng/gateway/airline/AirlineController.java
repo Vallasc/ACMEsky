@@ -6,6 +6,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 
 import java.util.logging.Logger;
@@ -31,5 +32,13 @@ public class AirlineController {
         return Response.status(Response.Status.CREATED.getStatusCode())
                         .header("Location", String.format("%s/%s", uriInfo.getAbsolutePath().toString(), offer.getFlightId()))
                         .build();
+    }
+
+    @GET
+    public Response createAirport() {
+        LOGGER.info("GET airport");
+        //airlineManager.saveAirlineOffer(offer.toFlight());
+        airlineManager.createAirport();
+        return Response.status(Response.Status.OK.getStatusCode()).build();
     }
 }

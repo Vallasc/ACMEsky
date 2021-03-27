@@ -1,6 +1,6 @@
 package it.unibo.soseng.gateway.airline.dao;
 
-import it.unibo.soseng.model.Flight;
+//import it.unibo.soseng.model.Flight;
 
 public class OfferRequest {
     private String flightId;

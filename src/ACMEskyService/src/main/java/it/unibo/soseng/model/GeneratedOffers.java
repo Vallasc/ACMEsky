@@ -1,28 +1,42 @@
 package it.unibo.soseng.model;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "generated_offers")
 public class GeneratedOffers implements Serializable {
-    /**
-    
-    */
+
     private static final long serialVersionUID = 1L;
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private long id;
+
+    @Column(name = "outbound_flight_id", nullable = false)
     private long outboundFlightId;
+
+    @Column(name = "flight_back_id", nullable = true)
     private long flightBackId;
-    private LocalDateTime expireDate;
+
+    @Column(name = "expire_date", nullable = false)
+    private ZonedDateTime expireDate;
+
+    @Column(name = "total_price", nullable = true)
     private double totalPrice;
+
+    @Column(name = "booked", nullable = true)
     private boolean booked;
 
-    @Id
-    @Column(name = "id", 
-            nullable = false,
-             columnDefinition = "integer")
+
     public long getId() {
         return this.id;
     }
@@ -31,9 +45,6 @@ public class GeneratedOffers implements Serializable {
         this.id = id;
     }
 
-    @Column(name = "outbound_flight_id", 
-            nullable = false, 
-            columnDefinition = "integer")
     public long getOutboundFlightId() {
         return this.outboundFlightId;
     }
@@ -42,9 +53,6 @@ public class GeneratedOffers implements Serializable {
         this.outboundFlightId = outboundFlightId;
     }
 
-    @Column(name = "flight_back_id", 
-            nullable = true, 
-            columnDefinition = "integer")
     public long getFlightBackId() {
         return this.flightBackId;
     }
@@ -53,20 +61,14 @@ public class GeneratedOffers implements Serializable {
         this.flightBackId = flightBackId;
     }
 
-    @Column(name = "expire_date", 
-            nullable = false, 
-            columnDefinition = "DATETIME")
-    public LocalDateTime getExpireDate() {
+    public ZonedDateTime getExpireDate() {
         return this.expireDate;
     }
 
-    public void setExpireDate(LocalDateTime expireDate) {
+    public void setExpireDate(ZonedDateTime expireDate) {
         this.expireDate = expireDate;
     }
 
-    @Column(name = "total_price", 
-            nullable = true, 
-            columnDefinition = "Decimal(10,2)")
     public double getTotalPrice() {
         return this.totalPrice;
     }
@@ -75,9 +77,6 @@ public class GeneratedOffers implements Serializable {
         this.totalPrice = totalPrice;
     }
 
-    @Column(name = "booked", 
-            nullable = true, 
-            columnDefinition = "boolean default false")
     public boolean getBooked() {
         return this.booked;
     }

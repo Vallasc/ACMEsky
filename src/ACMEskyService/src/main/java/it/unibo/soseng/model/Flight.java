@@ -1,31 +1,51 @@
 package it.unibo.soseng.model;
 
-import java.time.LocalDateTime;
+import java.io.Serializable;
+import java.time.ZonedDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="flights")
-public class Flight {
+public class Flight implements Serializable {
 
-    private long id;
-    private long departureAirportId;
-    private long arrivalAirportId;
-    private long airlineId;
-    /*
-    private LocalDateTime departure_date_time;
-    private LocalDateTime arrival_date_time;
-    private float price;
-    private LocalDateTime expire_date;
-    private boolean booked;*/
-
+    private static final long serialVersionUID = 1L;
+    
     @Id
-    @Column(name = "id", 
-            nullable = false, 
-            columnDefinition = "integer")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private long id;
+
+    @Column(name = "departure_airport_id", nullable = false)
+    private long departureAirportId;
+
+    @Column(name = "arrival_airport_id", nullable = false)
+    private long arrivalAirportId;
+
+    @Column(name = "airline_id", nullable = false)
+    private long airlineId;
+
+    @Column(name = "departure_date_time", nullable = false)
+    private ZonedDateTime departureDateTime;
+    
+    @Column(name = "arrival_date_time",  nullable = false)
+    private ZonedDateTime arrivalDateTime;
+
+    @Column(name = "expire_date", nullable = false)
+    private ZonedDateTime expireDate;
+
+    @Column(name = "price", nullable = false)
+    private float price;
+
+    @Column(name = "booked", nullable = false)
+    private boolean booked;
+
+
     public long getId() {
         return id;
     }
@@ -57,6 +77,44 @@ public class Flight {
     public void setAirlineId(long airlineId) {
         this.airlineId = airlineId;
     }
-
     
+    public ZonedDateTime getDepartureDateTime() {
+        return departureDateTime;
+    }
+
+    public void setDepartureDateTime(ZonedDateTime departureDateTime) {
+        this.departureDateTime = departureDateTime;
+    }
+    
+    public ZonedDateTime getArrivalDateTime() {
+        return arrivalDateTime;
+    }
+
+    public void setArrivalDateTime(ZonedDateTime arrivalDateTime) {
+        this.arrivalDateTime = arrivalDateTime;
+    }
+
+    public float getPrice() {
+        return price;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
+    }
+
+    public ZonedDateTime getExpireDate() {
+        return expireDate;
+    }
+
+    public void setExpireDate(ZonedDateTime expireDate) {
+        this.expireDate = expireDate;
+    }
+
+    public boolean getBooked() {
+        return booked;
+    }
+
+    public void setBooked(boolean booked) {
+        this.booked = booked;
+    }
 }

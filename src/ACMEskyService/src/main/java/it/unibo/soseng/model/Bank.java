@@ -1,24 +1,35 @@
 package it.unibo.soseng.model;
 
 import java.io.Serializable;
-import javax.persistence.*;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "banks")
 public class Bank implements Serializable {
-    /**
-    
-    */
+
     private static final long serialVersionUID = 1L;
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private long id;
+
+    @Column(name = "username", nullable = false)
     private String username;
+
+    @Column(name = "password", nullable = false)
     private String password;
+
+    @Column(name = "ws_address", nullable = false)
     private String wsAddress;
 
-    @Id
-    @Column(name = "id", 
-            nullable = false, 
-            columnDefinition = "integer")
+
     public long getId() {
         return this.id;
     }
@@ -27,9 +38,6 @@ public class Bank implements Serializable {
         this.id = id;
     }
 
-    @Column(name = "username", 
-            nullable = false, 
-            columnDefinition = "varchar(255)")
     public String getUsername() {
         return this.username;
     }
@@ -38,9 +46,6 @@ public class Bank implements Serializable {
         this.username = username;
     }
 
-    @Column(name = "password", 
-            nullable = false, 
-            columnDefinition = "varchar(255)")
     public String getPassword() {
         return this.password;
     }
@@ -49,9 +54,6 @@ public class Bank implements Serializable {
         this.password = password;
     }
 
-    @Column(name = "ws_address", 
-            nullable = false, 
-            columnDefinition = "varchar(255)")
     public String getWsAddress() {
         return this.wsAddress;
     }

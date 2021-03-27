@@ -1,75 +1,96 @@
 package it.unibo.soseng.model;
+
 import java.io.Serializable;
-import javax.persistence.*;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Table(name="users")
 public class User implements Serializable {
-    /**
 
-     */
     private static final long serialVersionUID = 1L;
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private long id;
+
+	@Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "surname", nullable = false)
 	private String surname;
+
+    @Column(name = "email", nullable = false)
     private String email;
+
+    @Column(name = "password", nullable = false)
 	private String password;
+
+    @Column(name = "prontogram_token", nullable = false)
     private String prontogramToken;
+
+    @Column(name = "address", nullable = false)
     private String address;
 	
-	@Id
-	@Column(name="id",nullable=false,columnDefinition="integer")
+
 	public long getId() {
 		return this.id;
 	}
+
 	public void setId(long id) {
 		this.id = id;
 	}
 
-	@Column(name="name",nullable=false,columnDefinition="varchar(255)")
 	public String getName() {
 		return this.name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
 
-    @Column(name="surname",nullable=false,columnDefinition="varchar(255)")
 	public String getSurname() {
 		return this.surname;
 	}
+
 	public void setSurname(String surname) {
 		this.surname = surname;
 	}
 
-    @Column(name="email",nullable=false,columnDefinition="varchar(255)")
 	public String getEmail() {
 		return this.email;
 	}
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
 
-    @Column(name="password",nullable=false,columnDefinition="varchar(255)")
 	public String getPassword() {
 		return this.password;
 	}
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
  
-    @Column(name="prontogram_token",nullable=false,columnDefinition="varchar(255)")
 	public String getProntogramToken() {
 		return this.prontogramToken;
 	}
+
 	public void setProntogramToken(String prontogramToken) {
 		this.prontogramToken = prontogramToken;
 	}
 
-    @Column(name="address",nullable=false,columnDefinition="varchar(255)")
 	public String getAddress() {
 		return this.address;
 	}
+
 	public void setAddress(String address) {
 		this.address = address;
 	}

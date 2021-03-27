@@ -1,23 +1,39 @@
 package it.unibo.soseng.model;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import org.joda.time.DateTime;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "airlines")
 public class Airline implements Serializable {
-    /**
-    
-    */
+
     private static final long serialVersionUID = 1L;
-    private long id;
-    private String username;
-    private String password;
-    private String wsAddress;
 
     @Id
-    @Column(name = "airline_id", nullable = false, columnDefinition = "integer")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", 
+            nullable = false)
+    private long id;
+
+    @Column(name = "username",
+            nullable = false)
+    private String username;
+
+    @Column(name = "password",
+            nullable = false)
+    private String password;
+
+    @Column(name = "ws_address", 
+            nullable = false)
+    private String wsAddress;
+
+
     public long getId() {
         return this.id;
     }
@@ -26,7 +42,6 @@ public class Airline implements Serializable {
         this.id = id;
     }
 
-    @Column(name = "username", nullable = false, columnDefinition = "varchar(255)")
     public String getUsername() {
         return this.username;
     }
@@ -35,7 +50,6 @@ public class Airline implements Serializable {
         this.username = username;
     }
 
-    @Column(name = "password", nullable = false, columnDefinition = "varchar(255)")
     public String getPassword() {
         return this.password;
     }
@@ -44,7 +58,6 @@ public class Airline implements Serializable {
         this.password = password;
     }
 
-    @Column(name = "ws_address", nullable = false, columnDefinition = "varchar(255)")
     public String getWsAddress() {
         return this.wsAddress;
     }
@@ -52,5 +65,4 @@ public class Airline implements Serializable {
     public void setWsAddress(String wsAddress) {
         this.wsAddress = wsAddress;
     }
-
 }
