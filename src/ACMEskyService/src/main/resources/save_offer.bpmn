@@ -10,13 +10,13 @@
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_0a5v8jd" sourceRef="Event_08ppmqh" targetRef="Activity_10s9ij7" />
     <bpmn:sequenceFlow id="Flow_00jc05s" sourceRef="Activity_10s9ij7" targetRef="Event_0gxxnbz" />
-    <bpmn:serviceTask id="Activity_10s9ij7" name="Save offer in DB" camunda:delegateExpression="#{saveOfferDelegate}">
+    <bpmn:serviceTask id="Activity_10s9ij7" name="Save last-minute in DB" camunda:delegateExpression="#{saveLastMinuteDelegate}">
       <bpmn:incoming>Flow_0a5v8jd</bpmn:incoming>
       <bpmn:outgoing>Flow_00jc05s</bpmn:outgoing>
       <bpmn:property id="Property_090nasz" name="__targetRef_placeholder" />
     </bpmn:serviceTask>
   </bpmn:process>
-  <bpmn:message id="Message_081q45f" name="StartSaveOffer" />
+  <bpmn:message id="Message_081q45f" name="StartSaveLastMinute" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="SaveOffer">
       <bpmndi:BPMNEdge id="Flow_00jc05s_di" bpmnElement="Flow_00jc05s">
