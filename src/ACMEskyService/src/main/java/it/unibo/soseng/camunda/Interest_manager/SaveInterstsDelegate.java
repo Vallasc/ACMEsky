@@ -1,4 +1,4 @@
-package it.unibo.soseng.camunda.Interest_manager;
+package it.unibo.soseng.camunda.interest_manager;
 
 import java.util.logging.Logger;
 

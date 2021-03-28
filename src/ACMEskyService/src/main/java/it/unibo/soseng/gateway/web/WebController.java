@@ -2,7 +2,9 @@ package it.unibo.soseng.gateway.web;
 
 import java.util.logging.Logger;
 
+import javax.annotation.security.PermitAll;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
@@ -10,7 +12,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import it.unibo.soseng.gateway.web.dao.InterestsRequest;
+import it.unibo.soseng.gateway.web.dto.InterestsRequest;
 
 @Path("web")
 public class WebController {
@@ -26,4 +28,20 @@ public class WebController {
                         .build();
     }
 
+    @GET
+    @Path("/provauth")
+    @Consumes( MediaType.APPLICATION_JSON )
+    public Response saveProva1() {
+        LOGGER.info("GET auth1");
+        return Response.status(Response.Status.OK.getStatusCode()).build();
+    }
+
+    @GET
+    @PermitAll
+    @Path("/provauth2")
+    @Consumes( MediaType.APPLICATION_JSON )
+    public Response saveProva2() {
+        LOGGER.info("GET auth2");
+        return Response.status(Response.Status.OK.getStatusCode()).build();
+    }
 }
