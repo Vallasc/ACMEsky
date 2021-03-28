@@ -1,4 +1,4 @@
-package it.unibo.soseng.gateway.auth.dao;
+package it.unibo.soseng.gateway.auth.dto;
 
 public class AuthRequest {
 

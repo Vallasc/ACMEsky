@@ -15,7 +15,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.security.enterprise.credential.UsernamePasswordCredential;
 
-import it.unibo.soseng.gateway.auth.dao.AuthRequest;
+import it.unibo.soseng.gateway.auth.dto.AuthRequest;
 import it.unibo.soseng.security.TokenProvider;
 
 import java.util.logging.Level;
