@@ -21,6 +21,9 @@ public class Flight implements Serializable {
     @Column(name = "id", nullable = false)
     private long id;
 
+    @Column(name = "flight_code", nullable = false)
+    private String flightCode;
+
     @Column(name = "departure_airport_id", nullable = false)
     private long departureAirportId;
 
@@ -52,6 +55,14 @@ public class Flight implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getFlightCode() {
+        return flightCode;
+    }
+
+    public void setFlightCode(String flightCode) {
+        this.flightCode = flightCode;
     }
 
     public long getDepartureAirportId() {
