@@ -3,4 +3,24 @@
         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 
   <display-name>ACMEsky Web Application</display-name>
+  <!-- Security constraints  -->
+  <!-- <security-constraint>
+      <web-resource-collection>
+          <web-resource-name>Protected to airlines</web-resource-name>
+          <url-pattern>/airlines/*</url-pattern>
+      </web-resource-collection>
+      <auth-constraint>
+          <role-name>ROLE_AIRLINE</role-name>
+      </auth-constraint>
+  </security-constraint>
+  <security-role>
+      <role-name>ROLE_AIRLINE</role-name>
+  </security-role>
+  <security-role>
+      <role-name>ROLE_BANK</role-name>
+  </security-role> -->
+  <context-param>
+    <param-name>resteasy.role.based.security</param-name>
+    <param-value>true</param-value>
+  </context-param>
 </web-app>
