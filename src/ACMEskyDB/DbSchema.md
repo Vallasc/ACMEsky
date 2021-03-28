@@ -30,6 +30,7 @@
 | FK | departure_airport_id |
 | FK | arrival_airport_id |
 | FK | airline_id |
+|  | flight_code |
 |  | departure_date_time |
 |  | arrival_date_time |
 |  | price |
