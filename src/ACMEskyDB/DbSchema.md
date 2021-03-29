@@ -46,36 +46,40 @@
 |  | expire_date |
 |  | total_price |
 |  | booked |
-|  |  |
+
+|  | domain_entities |
+| - | - |
+| PK | id |
+|  | username |
+|  | password |
+|  | salt |
+|  | role |
 
 |  | users |
 | - | - |
 | PK | id |
+| FK | entity_id |
 |  | name |
 |  | surname |
 |  | email |
-|  | password |
 |  | prontogram_token |
 |  | address |
 
 |  | airlines |
 | - | - |
 | PK | id |
-|  | username |
-|  | password |
+| FK | entity_id |
 |  | ws_address |
 
 |  | banks |
 | - | - |
 | PK | id |
-|  | username |
-|  | password |
+| FK | entity_id |
 |  | ws_address |
 
 |  | rent_services |
 | - | - |
 | PK | id |
-|  | username |
-|  | password |
+| FK | entity_id |
 |  | address |
 |  | ws_address |
