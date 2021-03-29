@@ -1,41 +1,34 @@
 package it.unibo.soseng.logic.database;
 
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-
-import org.camunda.bpm.engine.delegate.DelegateExecution;
 
 import it.unibo.soseng.model.FlightInterest;
 
-
+@Stateless
+@TransactionManagement(value = TransactionManagementType.CONTAINER)
 public class DatabaseManager {
     
-    /*private final static Logger LOGGER = Logger.getLogger(DatabaseManager.class.getName());
+    private final static Logger LOGGER = Logger.getLogger(DatabaseManager.class.getName());
 
     
+    @PersistenceContext(unitName = "primary")
+    private EntityManager entityManager;
 
-    public static EntityManagerFactory emf = Persistence.createEntityManagerFactory("java:jboss/datasources/postgresacmesky");
-
-    public static EntityManager getEntityManager() {
-        return emf.createEntityManager();
-    }
 
     public List<FlightInterest> retrieveFlightInterests(){
-
-        EntityManager em = getEntityManager();
+        @SuppressWarnings("unchecked")
         List<FlightInterest> interests = 
-                                em.createQuery("SELECT flight.departure_airport_id, flight.departure arrival_airport_id,"+
+        entityManager.createQuery("SELECT flight.departure_airport_id, flight.departure arrival_airport_id,"+
                                                             "flight.departure_date_time, flight.arrival_date_time " +
                                                             "FROM flights_interest flight")
                                             .getResultList();
-            return interests;
-    }*/
+        return interests;
+    }
 }
