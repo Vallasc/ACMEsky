@@ -27,21 +27,4 @@ public class WebController {
                         .header("Location", String.format("%s/%s", uriInfo.getAbsolutePath().toString(), "######ID"))
                         .build();
     }
-
-    @GET
-    @Path("/provauth")
-    @Consumes( MediaType.APPLICATION_JSON )
-    public Response saveProva1() {
-        LOGGER.info("GET auth1");
-        return Response.status(Response.Status.OK.getStatusCode()).build();
-    }
-
-    @GET
-    @PermitAll
-    @Path("/provauth2")
-    @Consumes( MediaType.APPLICATION_JSON )
-    public Response saveProva2() {
-        LOGGER.info("GET auth2");
-        return Response.status(Response.Status.OK.getStatusCode()).build();
-    }
 }
