@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1nq8jaa" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.3.0">
+  <bpmn:process id="searchFlightOfInterest" isExecutable="true">
+    <bpmn:startEvent id="Event_19zmvta" name="Every  12 hours">
+      <bpmn:outgoing>Flow_0jlofv2</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_1m30ot0">
+        <bpmn:timeCycle xsi:type="bpmn:tFormalExpression">R5/PT1M</bpmn:timeCycle>
+      </bpmn:timerEventDefinition>
+    </bpmn:startEvent>
+    <bpmn:subProcess id="Activity_149z3gf" name="For each airline company">
+      <bpmn:incoming>Flow_0jlofv2</bpmn:incoming>
+      <bpmn:outgoing>Flow_0urtvtm</bpmn:outgoing>
+      <bpmn:multiInstanceLoopCharacteristics>
+        <bpmn:loopCardinality xsi:type="bpmn:tFormalExpression">1</bpmn:loopCardinality>
+      </bpmn:multiInstanceLoopCharacteristics>
+      <bpmn:startEvent id="Event_02jt74y">
+        <bpmn:outgoing>Flow_17bn0li</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:endEvent id="Event_0bjv0jv">
+        <bpmn:incoming>Flow_0zgu3yq</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:intermediateCatchEvent id="Event_1djz0p8">
+        <bpmn:incoming>Flow_0l1w4b0</bpmn:incoming>
+        <bpmn:outgoing>Flow_1258dtm</bpmn:outgoing>
+        <bpmn:messageEventDefinition id="MessageEventDefinition_126ru8f" messageRef="Message_0vekc9d" />
+      </bpmn:intermediateCatchEvent>
+      <bpmn:sendTask id="Activity_0sfafy7" name="Search flights" camunda:delegateExpression="#{SearchFlightsDelegate}">
+        <bpmn:incoming>Flow_1osyp3v</bpmn:incoming>
+        <bpmn:outgoing>Flow_0l1w4b0</bpmn:outgoing>
+      </bpmn:sendTask>
+      <bpmn:serviceTask id="Activity_1ikmutb" name="Retrieve flights of interest from DB" camunda:delegateExpression="#{RetrieveFlightsOfInterestDelegate}">
+        <bpmn:incoming>Flow_17bn0li</bpmn:incoming>
+        <bpmn:outgoing>Flow_1osyp3v</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:serviceTask id="Activity_1ni7uz9" name="Save flights info in DB" camunda:delegateExpression="#{SaveFlightsOfInterestDelegate}">
+        <bpmn:incoming>Flow_1258dtm</bpmn:incoming>
+        <bpmn:outgoing>Flow_0zgu3yq</bpmn:outgoing>
+        <bpmn:property id="Property_0lvbr89" name="__targetRef_placeholder" />
+      </bpmn:serviceTask>
+      <bpmn:sequenceFlow id="Flow_17bn0li" sourceRef="Event_02jt74y" targetRef="Activity_1ikmutb" />
+      <bpmn:sequenceFlow id="Flow_1osyp3v" sourceRef="Activity_1ikmutb" targetRef="Activity_0sfafy7" />
+      <bpmn:sequenceFlow id="Flow_0l1w4b0" sourceRef="Activity_0sfafy7" targetRef="Event_1djz0p8" />
+      <bpmn:sequenceFlow id="Flow_1258dtm" sourceRef="Event_1djz0p8" targetRef="Activity_1ni7uz9" />
+      <bpmn:sequenceFlow id="Flow_0zgu3yq" sourceRef="Activity_1ni7uz9" targetRef="Event_0bjv0jv" />
+    </bpmn:subProcess>
+    <bpmn:endEvent id="Event_0acnmqv">
+      <bpmn:incoming>Flow_0urtvtm</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0jlofv2" sourceRef="Event_19zmvta" targetRef="Activity_149z3gf" />
+    <bpmn:sequenceFlow id="Flow_0urtvtm" sourceRef="Activity_149z3gf" targetRef="Event_0acnmqv" />
+  </bpmn:process>
+  <bpmn:message id="Message_0vekc9d" name="StartSaveFlights" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="searchFlightOfInterest">
+      <bpmndi:BPMNEdge id="Flow_0urtvtm_di" bpmnElement="Flow_0urtvtm">
+        <di:waypoint x="1190" y="200" />
+        <di:waypoint x="1262" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0jlofv2_di" bpmnElement="Flow_0jlofv2">
+        <di:waypoint x="188" y="200" />
+        <di:waypoint x="260" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_19zmvta_di" bpmnElement="Event_19zmvta">
+        <dc:Bounds x="152" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="132" y="225" width="78" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_149z3gf_di" bpmnElement="Activity_149z3gf" isExpanded="true">
+        <dc:Bounds x="260" y="120" width="930" height="170" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0zgu3yq_di" bpmnElement="Flow_0zgu3yq">
+        <di:waypoint x="1040" y="200" />
+        <di:waypoint x="1112" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1258dtm_di" bpmnElement="Flow_1258dtm">
+        <di:waypoint x="848" y="200" />
+        <di:waypoint x="940" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0l1w4b0_di" bpmnElement="Flow_0l1w4b0">
+        <di:waypoint x="650" y="200" />
+        <di:waypoint x="812" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1osyp3v_di" bpmnElement="Flow_1osyp3v">
+        <di:waypoint x="490" y="200" />
+        <di:waypoint x="550" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_17bn0li_di" bpmnElement="Flow_17bn0li">
+        <di:waypoint x="328" y="200" />
+        <di:waypoint x="390" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_02jt74y_di" bpmnElement="Event_02jt74y">
+        <dc:Bounds x="292" y="182" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0bjv0jv_di" bpmnElement="Event_0bjv0jv">
+        <dc:Bounds x="1112" y="182" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1djz0p8_di" bpmnElement="Event_1djz0p8">
+        <dc:Bounds x="812" y="182" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0sfafy7_di" bpmnElement="Activity_0sfafy7">
+        <dc:Bounds x="550" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ikmutb_di" bpmnElement="Activity_1ikmutb">
+        <dc:Bounds x="390" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ni7uz9_di" bpmnElement="Activity_1ni7uz9">
+        <dc:Bounds x="940" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0acnmqv_di" bpmnElement="Event_0acnmqv">
+        <dc:Bounds x="1262" y="182" width="36" height="36" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

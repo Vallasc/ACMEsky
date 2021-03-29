@@ -1,0 +1,25 @@
+version: "3"
+services:
+    national:
+        container_name: national-diubi
+        build: "."
+        # lista delle variabili di environment
+        env_file: default.env
+        volumes: 
+            - ./db:/db
+            - ./fileSampleOffers/NationalFlights.json:/list/list.json
+             # espongo le porte (come -p su docker)
+        ports:
+            - 8081:8082
+    # uguale per tutti gli altri servizi
+    international:
+        container_name: international-diubi
+        build: "."
+        env_file: default.env
+        volumes:
+        # riferimento della cartella db nell'host
+        # all'interno della cartella "/db" nel container
+            - ./db:/db
+            - ./fileSampleOffers/InternationalFlights.json:/list/list.json
+        ports:
+            - 8082:8082

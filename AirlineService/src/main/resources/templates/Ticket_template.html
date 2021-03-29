@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Flights</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+</head>
+
+<body>
+  <span class="titles-style" th:text="|Flights purchased ${#lists.size(flights)}|"></span>
+
+<!-- Students Table -->
+<div id="flights">
+  <div th:if="${not #lists.isEmpty(flights)}">
+    <table class="flights_table paginate-table">
+            <thead>
+            <tr>
+                <th>Departure</th>
+                <th>Departure Time</th>
+                <th>Destination Time</th>
+                <th>Destination</th>
+                <th>Price</th>
+            </tr>
+            </thead>
+            <tbody>
+              <tr th:each="flight : ${flights}"> 
+                <td th:text="${flight.departure}"></td>
+                <td th:text="${#temporals.format(flight.departureTime, 'dd-MM-yyyy HH:mm:ss')}"></td>
+                <td th:text="${#temporals.format(flight.arrivalTime, 'dd-MM-yyyy HH:mm:ss')}"></td>
+                <td th:text="${flight.arrival}"></td>
+                <td th:text="${flight.price}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

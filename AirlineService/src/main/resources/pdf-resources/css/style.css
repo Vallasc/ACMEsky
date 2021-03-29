@@ -1,0 +1,32 @@
+@page {
+    size: letter;
+}
+
+body {
+    font-family: Calibri, Candara, Segoe, Optima, Arial, sans-serif;
+    font-size: 12px;
+}
+
+.titles-style {
+    color: #030000;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.flights_table {
+    padding-top: 0px;
+    width: 100%;
+    font-size: 10px;
+    color: black;
+    font-style: normal;
+    border-spacing: 0px;
+}
+
+.flights_table th {
+    background-color: rgb(223, 186, 186);
+}
+
+.flights_table td {
+    background-color: rgb(224, 214, 214);
+}
+
