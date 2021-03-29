@@ -11,11 +11,13 @@ import javax.ws.rs.POST;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.security.enterprise.SecurityContext;
 
 import it.unibo.soseng.gateway.airline.dto.AirlineFlightOffer;
 import it.unibo.soseng.logic.airline.AirlineManager;
+import static it.unibo.soseng.security.Constants.AIRLINE;
 
 @Path("airlines")
 public class AirlineController {
@@ -29,6 +31,7 @@ public class AirlineController {
 
     @POST
     @Path("/last_minute")
+    @RolesAllowed({AIRLINE})
     @Consumes( MediaType.APPLICATION_JSON )
     public Response saveLastMinute(List<AirlineFlightOffer> offers) {
         String name = securityContext.getCallerPrincipal().getName();
