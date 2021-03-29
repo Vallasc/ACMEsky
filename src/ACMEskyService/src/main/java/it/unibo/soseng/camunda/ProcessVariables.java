@@ -8,4 +8,5 @@ public final class ProcessVariables {
     // Interest manager
 
     // Offers manager
+    
 }
