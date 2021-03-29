@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -21,14 +23,17 @@ public class FlightInterest implements Serializable {
 	@Column(name = "id", nullable = false)
     private long id;
 
-	@Column(name = "user_id", nullable = false)
-    private long userId;
+	@ManyToOne
+	@JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-	@Column(name = "departure_airport_id", nullable = false)
-	private long departureAirportId ;
+    @ManyToOne
+    @JoinColumn(name = "departure_airport_id", nullable = false)
+    private Airport departureAirport;
 
-	@Column(name = "arrival_airport_id", nullable = false)
-    private long arrivalAirportId;
+    @ManyToOne
+    @JoinColumn(name = "arrival_airport_id", nullable = false)
+    private Airport arrivalAirport;
 
 	@Column(name = "departure_date_time", nullable = false)
     private ZonedDateTime departureDateTime;
@@ -44,29 +49,29 @@ public class FlightInterest implements Serializable {
 		this.id = id;
 	}
 
-	public long getUserId() {
-		return this.userId;
+	public User getUser() {
+		return this.user;
 	}
 
-	public void setUserId(long userId) {
-		this.userId = userId;
+	public void setUserId(User user) {
+		this.user = user;
 	}
 
-	public long getDepartureAirportId() {
-		return this.departureAirportId;
-	}
+    public Airport getDepartureAirport() {
+        return departureAirport;
+    }
 
-	public void setDepartureAirportId(long departureAirportId) {
-		this.departureAirportId = departureAirportId;
-	}
+    public void setDepartureAirport(Airport departureAirport) {
+        this.departureAirport = departureAirport;
+    }
 
-	public long getArrivalAirportId() {
-		return this.arrivalAirportId;
-	}
+    public Airport getArrivalAirport() {
+        return arrivalAirport;
+    }
 
-	public void setArrivalAirportId(long arrivalAirportId) {
-		this.arrivalAirportId = arrivalAirportId;
-	}
+    public void setArrivalAirport(Airport arrivalAirport) {
+        this.arrivalAirport = arrivalAirport;
+    }
     
 	public ZonedDateTime getDepartureDateTime() {
 		return this.departureDateTime;

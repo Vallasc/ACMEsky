@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -21,11 +23,13 @@ public class GeneratedOffers implements Serializable {
     @Column(name = "id", nullable = false)
     private long id;
 
-    @Column(name = "outbound_flight_id", nullable = false)
-    private long outboundFlightId;
+    @OneToOne
+    @JoinColumn(name = "outbound_flight_id", nullable = false)
+    private Flight outboundFlight;
 
-    @Column(name = "flight_back_id", nullable = true)
-    private long flightBackId;
+    @OneToOne
+    @JoinColumn(name = "flight_back_id", nullable = true)
+    private Flight flightBack;
 
     @Column(name = "expire_date", nullable = false)
     private ZonedDateTime expireDate;
@@ -45,20 +49,20 @@ public class GeneratedOffers implements Serializable {
         this.id = id;
     }
 
-    public long getOutboundFlightId() {
-        return this.outboundFlightId;
+    public Flight getOutboundFlightId() {
+        return this.outboundFlight;
     }
 
-    public void setOutboundFlightId(long outboundFlightId) {
-        this.outboundFlightId = outboundFlightId;
+    public void setOutboundFlightId(Flight outboundFlight) {
+        this.outboundFlight = outboundFlight;
     }
 
-    public long getFlightBackId() {
-        return this.flightBackId;
+    public Flight getFlightBackId() {
+        return this.flightBack;
     }
 
-    public void setFlightBackId(long flightBackId) {
-        this.flightBackId = flightBackId;
+    public void setFlightBackId(Flight flightBack) {
+        this.flightBack = flightBack;
     }
 
     public ZonedDateTime getExpireDate() {

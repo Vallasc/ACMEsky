@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -20,6 +22,10 @@ public class User implements Serializable {
     @Column(name = "id", nullable = false)
     private long id;
 
+    @OneToOne
+    @JoinColumn(name = "entity_id", nullable = false)
+    private DomainEntity entity;
+
 	@Column(name = "name", nullable = false)
     private String name;
 
@@ -28,9 +34,6 @@ public class User implements Serializable {
 
     @Column(name = "email", nullable = false)
     private String email;
-
-    @Column(name = "password", nullable = false)
-	private String password;
 
     @Column(name = "prontogram_token", nullable = false)
     private String prontogramToken;
@@ -45,6 +48,14 @@ public class User implements Serializable {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public DomainEntity getEntity() {
+		return this.entity;
+	}
+
+	public void setEntity(DomainEntity entity) {
+		this.entity = entity;
 	}
 
 	public String getName() {
@@ -69,14 +80,6 @@ public class User implements Serializable {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public String getPassword() {
-		return this.password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
 	}
  
 	public String getProntogramToken() {

@@ -8,6 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -21,14 +24,17 @@ public class UserRequest implements Serializable {
     @Column(name = "id", nullable = false)
     private long id;
 
-	@Column(name = "user_id", nullable = false)
-    private long userId;
+	@ManyToOne
+	@JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @Column(name = "outbound_flight_interest_id", nullable = false)
-	private long outboundFlightInterestId;
+	@OneToOne
+    @JoinColumn(name = "outbound_flight_interest_id", nullable = false)
+	private FlightInterest outboundFlightInterest;
 
-    @Column(name = "flight_back_interest_id", nullable = true)
-    private long flightBackInterestId;
+	@OneToOne
+    @JoinColumn(name = "flight_back_interest_id", nullable = true)
+    private FlightInterest flightBackInterest;
 
     @Column(name = "expire_date", nullable = true)
 	private ZonedDateTime expireDate;
@@ -42,28 +48,28 @@ public class UserRequest implements Serializable {
 		this.id = id;
 	}
 
-	public long getUserId() {
-		return this.userId;
+	public User getUser() {
+		return this.user;
 	}
 
-	public void setUserId(long userId) {
-		this.userId = userId;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
-	public long getOutboundFlightInterestId() {
-		return this.outboundFlightInterestId;
+	public FlightInterest getOutboundFlightInterest() {
+		return this.outboundFlightInterest;
 	}
 
-	public void setOutboundFlightInterestId(long outboundFlightInterestId) {
-		this.outboundFlightInterestId = outboundFlightInterestId;
+	public void setOutboundFlightInterest(FlightInterest outboundFlightInterest) {
+		this.outboundFlightInterest = outboundFlightInterest;
 	}
     
-	public long getFlightBackInterestId() {
-		return this.flightBackInterestId;
+	public FlightInterest getFlightBackInterest() {
+		return this.flightBackInterest;
 	}
 
-	public void setFlightBackInterestId(long flightBackInterestId) {
-		this.flightBackInterestId = flightBackInterestId;
+	public void setFlightBackInterest(FlightInterest flightBackInterest) {
+		this.flightBackInterest = flightBackInterest;
 	}
     
 	public ZonedDateTime getExpireDate() {
