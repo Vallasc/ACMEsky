@@ -25,8 +25,8 @@
               <tr th:each="flight : ${flights}"> 
                 <td th:text="${flight.departure}"></td>
                 <td th:text="${#temporals.format(flight.departureTime, 'dd-MM-yyyy HH:mm:ss')}"></td>
-                <td th:text="${#temporals.format(flight.destinationTime, 'dd-MM-yyyy HH:mm:ss')}"></td>
-                <td th:text="${flight.destination}"></td>
+                <td th:text="${#temporals.format(flight.arrivalTime, 'dd-MM-yyyy HH:mm:ss')}"></td>
+                <td th:text="${flight.arrival}"></td>
                 <td th:text="${flight.price}"></td>
             </tr>
             </tbody>

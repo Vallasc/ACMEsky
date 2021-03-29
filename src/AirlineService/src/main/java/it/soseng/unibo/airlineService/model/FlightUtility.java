@@ -89,23 +89,20 @@ public class FlightUtility {
      */
     public FlightOffer createOffer(JsonNode n){
         FlightOffer o = new FlightOffer();
-            o.setDeparture(n.get("departure").textValue());
-            o.setDestination(n.get("destination").textValue());
-            o.setDepartureTime(n.get("departureTime").textValue());
-            o.setDestinationTime(n.get("destinationTime").textValue());
+            o.setDeparture(n.get("departure_airport").textValue());
+            o.setDepartureId(n.get("departure_airport_id").textValue());
+            o.setDepartureTime(n.get("departure_date_time").textValue());
+            o.setArrival(n.get("arrival_airport").textValue());
+            o.setArrivalId(n.get("arrival_airport_id").textValue());
+            o.setArrivalTime(n.get("arrival_date_time").textValue());
+            o.setAirline_id(n.get("airline_id").textValue());
             o.setPrice(n.get("price").asDouble());
-            o.setExpiryDate(getExpiryDate(o.getDepartureTime()));
+            o.setExpiryDate(o.getExpiryDate(o.getDepartureTime()));
 
             return o;
     }
 
 
-    private long getExpiryDate(LocalDateTime departureTime) {
-
-        LocalDateTime period = departureTime.minusDays(7);
-        ZonedDateTime zdt = ZonedDateTime.of(period, ZoneId.systemDefault());
-        return zdt.toInstant().toEpochMilli();
-    }
 
     
 

@@ -3,6 +3,7 @@ package it.soseng.unibo.airlineService.service;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,8 +11,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import it.soseng.unibo.airlineService.model.FlightUtility;
 import it.soseng.unibo.airlineService.model.FlightOffer;
@@ -26,7 +32,7 @@ import it.soseng.unibo.airlineService.repository.FlightOfferRepository;
  */
 @Service
 @Transactional
-public class FlightOfferService implements FlightOfferServiceInterface {
+public class FlightOfferService {
 
     @Autowired
     private FlightOfferRepository repo;
@@ -46,7 +52,7 @@ public class FlightOfferService implements FlightOfferServiceInterface {
         JsonNode n = u.GetRandomJsonObject(u.GetFile(s));
         FlightOffer o = u.createOffer(n);
         if(u.LastMinuteCheck(o)){
-            sendLastMinuteOffer(o);
+            // sendLastMinuteOffer(o);
         }else{}
 
         return repo.save(o);
@@ -95,7 +101,6 @@ public class FlightOfferService implements FlightOfferServiceInterface {
      * @return List<FlightOffer> la lista delle offerte di volo escludendo le offerte last-minute
      * già inviate ad ACMEsky al momento della loro generazione e le offerte già prenotate
      */
-    @Override
     public List<FlightOffer> searchFlightOffers(UserRequest r){
 
         return repo.searchFlightOffers(r.departureCity, r.destinationCity, r.departureDate, r.destinationDate)
@@ -112,22 +117,20 @@ public class FlightOfferService implements FlightOfferServiceInterface {
      * @param o l'offerta da inviare sulla route specifica
      */
     public void sendLastMinuteOffer(FlightOffer o) {
-        String url = "http://localhost:8080/";
+
+        String url = "http://localhost:8080/airline/offers";
     
         // // create headers
-        // HttpHeaders headers = new HttpHeaders();
+        HttpHeaders headers = new HttpHeaders();
         // // set `content-type` header
-        // headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setContentType(MediaType.APPLICATION_JSON);
         // // set `accept` header
-        // headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-    
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         // // build the request
-        // HttpEntity<FlightOffer> entity = new HttpEntity<>(o, headers);
-    
+        HttpEntity<FlightOffer> entity = new HttpEntity<>(o, headers);
         // // send POST request
-        // ResponseEntity<FlightOffer> result = restTemplate.postForEntity(url, entity, FlightOffer.class);
-        // return result;
-    
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<FlightOffer> result = restTemplate.postForEntity(url, entity, FlightOffer.class);    
     }
 
 	

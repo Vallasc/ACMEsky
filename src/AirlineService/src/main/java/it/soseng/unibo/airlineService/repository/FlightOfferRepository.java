@@ -15,9 +15,9 @@ import it.soseng.unibo.airlineService.model.FlightOffer;
  */
 public interface FlightOfferRepository extends JpaRepository<FlightOffer, Long> {
 
-    @Query(value = "SELECT * FROM FLIGHT_OFFERS o WHERE o.DEPARTURE = ?1 AND O.DESTINATION = ?2 AND o.DEPARTURE_TIME = ?3 " +
-                        "AND o.DESTINATION_TIME = ?4", nativeQuery = true)
-    public ArrayList<FlightOffer> searchFlightOffers(String departure, String destination, LocalDateTime departureDate, 
-                                                        LocalDateTime destinationDate);
+    @Query(value = "SELECT * FROM FLIGHT_OFFERS o WHERE o.DEPARTURE = ?1 AND O.ARRIVAL = ?2 AND o.DEPARTURE_DATE_TIME = ?3 " +
+                        "AND o.ARRIVAL_DATE_TIME = ?4", nativeQuery = true)
+    public ArrayList<FlightOffer> searchFlightOffers(String departure, String arrival, LocalDateTime departureDate, 
+                                                        LocalDateTime arrivalDate);
 
 }

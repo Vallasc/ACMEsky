@@ -1,33 +1,43 @@
 {
     "OFFERS": [
         {
-            "departure": "Milano Malpensa, Via Malpensa - 21010 Ferno (VA)",
-            "destination": "Aereoporto D'Abruzzo, Via Tiburtina - 65131 Pescara (PE)",
-            "departureTime": "2021-08-27 20:00:00",
-            "destinationTime": "2021-08-27 21:00:00",
+            "departure_airport_id": "FCO",
+            "departure_airport": "Milano Malpensa, Via Malpensa - 21010 Ferno (VA)",
+            "arrival_airport_id": "TRN",
+            "arrival_airport": "Aereoporto D'Abruzzo, Via Tiburtina - 65131 Pescara (PE)",
+            "airline_id": "1",
+            "departure_date_time": "2021-08-27 20:00:00",
+            "arrival_date_time": "2021-08-27 21:00:00",
             "price": 130.00
         },
         {
             "departure_airport_id": "FCO",
             "departure_airport": "Aereoporto internazionale Leonardo Da Vinci, Via dell' Aeroporto di Fiumicino - 00054 Fiumicino (ROMA) ",
-            "destination_airport": "TRN",
-            "destination": "Torino Airport, Strada Aeroporto - 10072 Caselle Torinese (TO)",
-            "departure_time": "2021-02-27 20:00:00",
-            "destinationTime": "2021-02-27 21:00:00",
+            "arrival_airport_id": "TRN",
+            "arrival_airport": "Torino Airport, Strada Aeroporto - 10072 Caselle Torinese (TO)",
+            "airline_id": "1",
+            "departure_date_time": "2021-02-27 20:00:00",
+            "arrival_date_time": "2021-02-27 21:00:00",
             "price": 170.00
         },
         {
-            "departure": "Aereoporto D'Abruzzo, Via Tiburtina - 65131 Pescara (PE)",
-            "destination": "Aereoporto di Palermo Falcone e Borsellino, Via Paolo Borsellino - 90045 Cinisi (PA)",
-            "departureTime": "2021-03-03 20:00:00",
-            "destinationTime": "2021-03-03 21:00:00",
+            "departure_airport_id": "FCO",
+            "departure_airport": "Aereoporto D'Abruzzo, Via Tiburtina - 65131 Pescara (PE)",
+            "arrival_airport_id": "TRN",
+            "arrival_airport": "Aereoporto di Palermo Falcone e Borsellino, Via Paolo Borsellino - 90045 Cinisi (PA)",
+            "airline_id": "1",
+            "departure_date_time": "2021-03-03 20:00:00",
+            "arrival_date_time": "2021-03-03 21:00:00",
             "price": 25.00
         },
         {
-            "departure": "Aereoporto di Bologna, Via del Triumvirato - 40132 Bologna (BO)",
-            "destination": "Aereoporto Internazionale di Napoli, Viale F. Ruffo di Calabria - 80144 Napoli (NA)",
-            "departureTime": "2021-03-02 20:00:00",
-            "destinationTime": "2021-03-02 21:00:00",
+            "departure_airport_id": "FCO",
+            "departure_airport": "Aereoporto di Bologna, Via del Triumvirato - 40132 Bologna (BO)",
+            "arrival_airport_id": "TRN",
+            "arrival_airport": "Aereoporto Internazionale di Napoli, Viale F. Ruffo di Calabria - 80144 Napoli (NA)",
+            "airline_id": "1",
+            "departure_date_time": "2021-03-02 20:00:00",
+            "arrival_date_time": "2021-03-02 21:00:00",
             "price": 25.00
         }
     ]

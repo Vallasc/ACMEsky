@@ -1,6 +1,8 @@
 package it.soseng.unibo.airlineService.model;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 import javax.persistence.Column;
@@ -25,17 +27,26 @@ public class FlightOffer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "departure_airport_id")
+    private String departureId;
+
     @Column(name = "departure")
     private String departure;
 
-    @Column(name = "departureTime")
+    @Column(name = "departure_date_time")
     private LocalDateTime  departureTime;
 
-    @Column(name = "destinationTime")
-    private LocalDateTime destinationTime;
+    @Column(name = "arrival_date_time")
+    private LocalDateTime arrivalTime;
 
-    @Column(name = "destination")
-    private String destination;
+    @Column(name = "arrival")
+    private String arrival;
+
+    @Column(name = "arrival_airport_id")
+    private String arrivalId;
+
+    @Column(name = "airline_id")
+    private String airline_id;
 
     @Column(name = "price")
     private double price;
@@ -48,14 +59,14 @@ public class FlightOffer {
 
     public FlightOffer(){}
 
-    public FlightOffer(String departure, LocalDateTime departureTime, LocalDateTime destinationTime, String destination, double price ) {
-        this.departure = departure;
-        this.departureTime = departureTime;
-        this.destinationTime = destinationTime;
-        this.destination = destination;
-        this.price = price;
+    // public FlightOffer(String departure, LocalDateTime departureTime, LocalDateTime arrivalTime, String arrival, double price ) {
+    //     this.departure = departure;
+    //     this.departureTime = departureTime;
+    //     this.arrivalTime = arrivalTime;
+    //     this.arrival = arrival;
+    //     this.price = price;
 
-    }
+    // }
 
 
 	
@@ -64,6 +75,10 @@ public class FlightOffer {
    */
   public Long getId() {
       return this.id;
+    }
+
+    public String getArrivalId() {
+      return arrivalId;
     }
 
     
@@ -78,8 +93,8 @@ public class FlightOffer {
     /** 
      * @return String la città di destinazione
      */
-    public String getDestination() {
-      return this.destination;
+    public String getArrival() {
+      return this.arrival;
     }
 
     
@@ -94,9 +109,15 @@ public class FlightOffer {
     /** 
      * @return LocalDateTime il giorno e l'ora di arrivo
      */
-    public LocalDateTime getDestinationTime() {
-      return this.destinationTime;
+    public LocalDateTime getArrivalTime() {
+      return this.arrivalTime;
     }
+
+    public String getDepartureId() {
+      return departureId;
+    }
+
+    
 
     
     /** 
@@ -105,6 +126,13 @@ public class FlightOffer {
     public double getPrice() {
       return this.price;
     }
+
+    public long getExpiryDate(LocalDateTime departureTime) {
+
+      LocalDateTime period = departureTime.minusDays(7);
+      ZonedDateTime zdt = ZonedDateTime.of(period, ZoneId.systemDefault());
+      return zdt.toInstant().toEpochMilli();
+  }
 
     
     /** 
@@ -115,6 +143,11 @@ public class FlightOffer {
     }
 
     
+    public void setArrivalId(String arrivalId) {
+      this.arrivalId = arrivalId;
+    }
+
+
     /** 
      * imposta il luogo della partenza
      * @param departure 
@@ -126,10 +159,10 @@ public class FlightOffer {
     
     /** 
      * imposta il luogo della destinazione
-     * @param destination
+     * @param arrival
      */
-    public void setDestination(String destination) {
-      this.destination = destination;
+    public void setArrival(String arrival) {
+      this.arrival = arrival;
     }
     
     /** 
@@ -145,15 +178,19 @@ public class FlightOffer {
     
     /** 
      * imposta il giorno e l'ora dell'arrivo
-     * @param destinationTime
+     * @param arrivalTime
      */
-    public void setDestinationTime(String destinationTime) {
+    public void setArrivalTime(String arrivalTime) {
       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-      LocalDateTime destTime = LocalDateTime.parse(destinationTime, formatter);
-      this.destinationTime = destTime;
+      LocalDateTime arrTime = LocalDateTime.parse(arrivalTime, formatter);
+      this.arrivalTime = arrTime;
     }
 
-    
+
+    public void setDepartureId(String departureId) {
+      this.departureId = departureId;
+    }
+
     /** 
      * imposta il prezzo dell'offerta
      * @param price
@@ -176,6 +213,20 @@ public class FlightOffer {
     public void setBookableFlagFalse(){
       this.bookableFlag = false;
     }
+
+    public String getAirline_id() {
+      return airline_id;
+    }
+
+    public void setAirline_id(String airline_id) {
+      this.airline_id = airline_id;
+    }
+
+    
+
+    
+
+    
 
 }
 

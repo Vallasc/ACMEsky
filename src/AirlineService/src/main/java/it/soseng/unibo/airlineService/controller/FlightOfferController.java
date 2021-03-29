@@ -1,6 +1,5 @@
 package it.soseng.unibo.airlineService.controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,14 +13,11 @@ import com.lowagie.text.DocumentException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -62,7 +58,7 @@ public class FlightOfferController {
      * @throws JsonProcessingException
      * @throws IOException
      */
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 6000)
     @PostMapping("/createOffer")
     private void autoCreateOffer() throws JsonProcessingException, IOException {
         s.createFlightOffer(FILE);
@@ -94,7 +90,7 @@ public class FlightOfferController {
      * correttamente(viene chiamata quando si è verificato il pagamento dell'utente)
      * @param id che viene passato per identificare l'offerta da eliminare
      */
-    @DeleteMapping("/OfferPurchased")
+    @DeleteMapping("/DeleteOffer")
     public void OfferPurchasedCorrectly(@RequestParam(name = "id") long id) {
         s.deleteFlightOffer(id);
     }
@@ -118,9 +114,9 @@ public class FlightOfferController {
      * @throws IOException
      */
     @GetMapping("/download-pdf")
-    public void downloadPDFResource( HttpServletResponse response) {
+    public void downloadPDFResource( HttpServletResponse response, @RequestParam(name = "id") long ... id) {
         try {
-            Path file = Paths.get(p.generatePdf().getAbsolutePath());
+            Path file = Paths.get(p.generatePdf(id).getAbsolutePath());
             if (Files.exists(file)) {
                 response.setContentType("application/pdf");
                 response.addHeader("Content-Disposition",
