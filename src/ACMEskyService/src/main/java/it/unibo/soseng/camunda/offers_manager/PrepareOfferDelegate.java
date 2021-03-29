@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 import javax.inject.Named;
 
 @Named("prepareOfferDelegate")
-public class prepareOfferDelegate implements JavaDelegate{
+public class PrepareOfferDelegate implements JavaDelegate{
     private final static Logger LOGGER = Logger.getLogger("prepareOfferDelegate"); 
     //@Inject
     // DatabaseManager dbManager; 

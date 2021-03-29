@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 import javax.inject.Named;
 
 @Named("sendOfferDelegate")
-public class sendOfferDelegate implements JavaDelegate{
+public class SendOfferDelegate implements JavaDelegate{
     private final static Logger LOGGER = Logger.getLogger("sendOfferDelegate"); 
 
   @Override
