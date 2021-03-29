@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -20,11 +22,9 @@ public class Bank implements Serializable {
     @Column(name = "id", nullable = false)
     private long id;
 
-    @Column(name = "username", nullable = false)
-    private String username;
-
-    @Column(name = "password", nullable = false)
-    private String password;
+    @OneToOne
+    @JoinColumn(name = "entity_id", nullable = false)
+    private DomainEntity entity;
 
     @Column(name = "ws_address", nullable = false)
     private String wsAddress;
@@ -38,21 +38,13 @@ public class Bank implements Serializable {
         this.id = id;
     }
 
-    public String getUsername() {
-        return this.username;
-    }
+	public DomainEntity getEntity() {
+		return this.entity;
+	}
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return this.password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	public void setEntity(DomainEntity entity) {
+		this.entity = entity;
+	}
 
     public String getWsAddress() {
         return this.wsAddress;
