@@ -9,6 +9,6 @@ import javax.ws.rs.core.Application;
 
 @DeclareRoles({BANK, AIRLINE})
 @ApplicationPath("/")
-public class JaxRsActivator extends Application {
+public class JaxRsApplication extends Application {
     
 }
