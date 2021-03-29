@@ -1,16 +1,13 @@
 package it.unibo.soseng.security;
 
-import static it.unibo.soseng.security.Constants.BANK;
-import static it.unibo.soseng.security.Constants.AIRLINE;
-
 import static java.util.Collections.emptySet;
 import static java.util.Collections.singleton;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.security.enterprise.identitystore.CredentialValidationResult;
 import javax.security.enterprise.identitystore.IdentityStore;
 import static javax.security.enterprise.identitystore.IdentityStore.ValidationType.PROVIDE_GROUPS;
@@ -18,18 +15,12 @@ import static javax.security.enterprise.identitystore.IdentityStore.ValidationTy
 @RequestScoped
 public class AuthorizationIdentityStore implements IdentityStore {
 
-    private Map<String, Set<String>> groupsPerCaller;
-
-    @PostConstruct
-    public void init() {
-        groupsPerCaller = new HashMap<>();
-        groupsPerCaller.put("airline", singleton(AIRLINE));
-        groupsPerCaller.put("bank", singleton(BANK));
-    }
+    @PersistenceContext(unitName = "primary")
+    private EntityManager entityManager;
 
     @Override
     public Set<String> getCallerGroups(CredentialValidationResult validationResult) {
-        Set<String> result = groupsPerCaller.get(validationResult.getCallerPrincipal().getName());
+        Set<String> result = getRoleCredential(validationResult.getCallerPrincipal().getName());
         if (result == null) {
             result = emptySet();
         }
@@ -41,4 +32,16 @@ public class AuthorizationIdentityStore implements IdentityStore {
         return singleton(PROVIDE_GROUPS);
     }
 
+    public Set<String> getRoleCredential(String username) {
+        @SuppressWarnings("unchecked")
+        List<String> result = (List<String>) entityManager.createQuery(
+                            "SELECT d.role FROM DomainEntity d WHERE d.username = :username")
+                            .setParameter("username", username)
+                            .setMaxResults(10)
+                            .getResultList();
+        if( result.size() == 1 ){
+            return singleton(result.get(0));
+        }
+        return null;
+    }
 }
