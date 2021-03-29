@@ -7,7 +7,7 @@ import javax.inject.Named;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 
-@Named
+@Named("saveInterstsDelegate")
 public class SaveInterstsDelegate implements JavaDelegate {
 
     private final static Logger LOGGER = Logger.getLogger(SaveInterstsDelegate.class.getName());

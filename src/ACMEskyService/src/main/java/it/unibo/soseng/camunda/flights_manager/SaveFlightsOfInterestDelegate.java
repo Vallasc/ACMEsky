@@ -5,7 +5,7 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 import java.util.logging.Logger;
 import javax.inject.Named;
 
-@Named("SaveFlightsOfInterestDelegate")
+@Named("saveFlightsOfInterestDelegate")
 public class SaveFlightsOfInterestDelegate implements JavaDelegate{
     private final static Logger LOGGER = Logger.getLogger("SaveFlightsOfInterestDelegate"); 
 

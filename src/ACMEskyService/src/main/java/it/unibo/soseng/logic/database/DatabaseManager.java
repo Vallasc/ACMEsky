@@ -18,7 +18,7 @@ import it.unibo.soseng.model.FlightInterest;
 
 public class DatabaseManager {
     
-    private final static Logger LOGGER = Logger.getLogger(DatabaseManager.class.getName());
+    /*private final static Logger LOGGER = Logger.getLogger(DatabaseManager.class.getName());
 
     
 
@@ -37,5 +37,5 @@ public class DatabaseManager {
                                                             "FROM flights_interest flight")
                                             .getResultList();
             return interests;
-    }
+    }*/
 }
