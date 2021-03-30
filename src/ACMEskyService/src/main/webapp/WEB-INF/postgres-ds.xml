@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <datasources>
     <datasource jndi-name="java:jboss/datasources/postgresacmesky" pool-name="postgresacmesky" enabled="true" use-java-context="true">
-        <connection-url>jdbc:postgresql://34.82.240.94/acmesky</connection-url>
+        <connection-url>jdbc:postgresql://acmesky.duckdns.org/acmesky</connection-url>
         <driver>postgresql-42.2.19.jar</driver>
         <security>
             <user-name>soseng</user-name>
