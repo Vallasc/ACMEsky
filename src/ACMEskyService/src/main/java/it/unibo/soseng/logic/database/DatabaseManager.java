@@ -1,6 +1,7 @@
 package it.unibo.soseng.logic.database;
 
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.ejb.TransactionManagement;
@@ -10,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import it.unibo.soseng.model.FlightInterest;
+import it.unibo.soseng.model.User;
 
 @RequestScoped
 @TransactionManagement(value = TransactionManagementType.CONTAINER)
@@ -30,5 +32,28 @@ public class DatabaseManager {
                                                             "FROM flights_interest flight")
                                             .getResultList();
         return interests;
+    }
+
+
+    public User getUser(String username) throws UserNotFoundException{
+        @SuppressWarnings("unchecked")
+        List<User> result = (List<User>) entityManager.createQuery(
+                            "SELECT u FROM User u, DomainEntity e WHERE e.username = :username AND u.entity = e.id")
+                            .setParameter("username", username)
+                            .setMaxResults(10)
+                            .getResultList();
+        if( result.size() == 1 ){
+            return result.get(0);
+        }
+        throw new UserNotFoundException();
+    }
+
+    public void createUser(User user){
+        //find
+        this.entityManager.persist(user);
+    }
+
+    public class UserNotFoundException extends Exception{
+        private static final long serialVersionUID = 1L;
     }
 }
