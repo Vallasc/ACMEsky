@@ -3,15 +3,15 @@ package it.unibo.soseng.logic.database;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import it.unibo.soseng.model.FlightInterest;
 
-@Stateless
+@RequestScoped
 @TransactionManagement(value = TransactionManagementType.CONTAINER)
 public class DatabaseManager {
     
