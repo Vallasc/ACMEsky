@@ -24,10 +24,12 @@ public class UserInterest implements Serializable {
     private static final long serialVersionUID = 1L;
 
 	@Id
-    @GeneratedValue(generator = "UUID")
-	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    //@GeneratedValue(generator = "UUID") TODO
+	//@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private UUID id;
+    //private UUID id;
+	private long id;
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id")
@@ -45,11 +47,11 @@ public class UserInterest implements Serializable {
 	private ZonedDateTime expireDate;
 	
 
-	public UUID getId() {
+	public long getId() {
 		return this.id;
 	}
 
-	public void setId(UUID id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
