@@ -8,6 +8,7 @@ public final class ProcessVariables {
     // Interest manager
     public static final String USER_INTERESTS_REQUEST = "userInterestsRequest";
     public static final String USERNAME = "username";
+    public static final String PROCESS_ERROR = "processError";
 
     // Offers manager
     

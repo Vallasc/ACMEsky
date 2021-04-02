@@ -8,10 +8,13 @@ import javax.inject.Inject;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 
+import it.unibo.soseng.logic.database.DatabaseManager.AirportNotFoundException;
+import it.unibo.soseng.logic.database.DatabaseManager.UserNotFoundException;
 import it.unibo.soseng.logic.airline.AirlineManager;
 import it.unibo.soseng.gateway.user.dto.InterestsRequest;
 import static it.unibo.soseng.camunda.ProcessVariables.USER_INTERESTS_REQUEST;
 import static it.unibo.soseng.camunda.ProcessVariables.USERNAME;
+import static it.unibo.soseng.camunda.ProcessVariables.PROCESS_ERROR;
 
 @Named("saveInterstsDelegate")
 public class SaveInterstsDelegate implements JavaDelegate {
@@ -28,8 +31,11 @@ public class SaveInterstsDelegate implements JavaDelegate {
         String username = (String) execution.getVariable(USERNAME);
         try {
             airlineManager.saveUserInterests(interest, username);
-        } catch (Exception e) {
-            //TODO: handle exception
+            execution.setVariable(PROCESS_ERROR, null);
+        } catch (AirportNotFoundException e) {
+            execution.setVariable(PROCESS_ERROR, "airport not found");
+        } catch (UserNotFoundException e) {
+            execution.setVariable(PROCESS_ERROR, "user not found");
         }
     }
   
