@@ -17,6 +17,7 @@ import org.camunda.bpm.engine.ProcessEngines;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
+import org.camunda.bpm.engine.runtime.ProcessInstanceWithVariables;
 import org.camunda.bpm.engine.task.Task;
 
 import it.unibo.soseng.gateway.airline.dto.AirlineFlightOffer;
@@ -65,28 +66,20 @@ public class AirlineManager {
         LOGGER.info("StartSaveUserInterests");
 
         String loginName = securityContext.getCallerPrincipal().getName();
-        if(username.equals(loginName))
+        if(!username.equals(loginName))
             throw new UserNotAllowedException();
 
         final RuntimeService runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();
-        final TaskService taskService = ProcessEngines.getDefaultProcessEngine().getTaskService();
         
         Map<String,Object> processVariables = new HashMap<String,Object>();
         processVariables.put(USER_INTERESTS_REQUEST, userInterestsRequest);
         processVariables.put(USERNAME, username);
-
+  
         // Start the process instance
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByMessage(SAVE_INTERESTS, processVariables);
-
-        Task waitStateBefore = taskService.createTaskQuery()
-          .taskDefinitionKey("saveFlightsInterest")
-          .processInstanceId(processInstance.getId())
-          .singleResult();
-
-        // Aspetto il completamento del task
-        taskService.complete(waitStateBefore.getId());
-
-        processVariables = runtimeService.getVariables(processInstance.getId());
+        ProcessInstanceWithVariables instance = runtimeService.createProcessInstanceByKey(SAVE_INTERESTS)
+                                                            .setVariables(processVariables)
+                                                            .executeWithVariablesInReturn();
+        processVariables = instance.getVariables();
         String error = (String) processVariables.get(PROCESS_ERROR);
         if(error != null)
             throw new BadRequestException();
