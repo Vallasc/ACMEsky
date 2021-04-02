@@ -10,15 +10,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.security.enterprise.SecurityContext;
 
 import org.camunda.bpm.engine.ProcessEngines;
 import org.camunda.bpm.engine.RuntimeService;
+import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.runtime.ProcessInstance;
+import org.camunda.bpm.engine.task.Task;
 
 import it.unibo.soseng.gateway.airline.dto.AirlineFlightOffer;
 import it.unibo.soseng.gateway.user.dto.InterestsRequest;
@@ -32,10 +31,13 @@ import it.unibo.soseng.model.UserInterest;
 
 import static it.unibo.soseng.camunda.StartEvents.SAVE_LAST_MINUTE;
 import static it.unibo.soseng.camunda.StartEvents.SAVE_INTERESTS;
+
 import static it.unibo.soseng.camunda.ProcessVariables.AIRLINE_FLIGHT_OFFERS;
 import static it.unibo.soseng.camunda.ProcessVariables.AIRLINE_NAME;
+
 import static it.unibo.soseng.camunda.ProcessVariables.USER_INTERESTS_REQUEST;
 import static it.unibo.soseng.camunda.ProcessVariables.USERNAME;
+import static it.unibo.soseng.camunda.ProcessVariables.PROCESS_ERROR;
 
 @Stateless
 public class AirlineManager {
@@ -50,26 +52,44 @@ public class AirlineManager {
     // Camunda
     public void startSaveLastMinuteProcess(List<AirlineFlightOffer> airlineLastMinuteOffers, String airlineName){
         LOGGER.info("StartSaveLastMinuteProcess");
-        RuntimeService runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();
+        final RuntimeService runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();
         Map<String,Object> processVariables = new HashMap<String,Object>();
         processVariables.put(AIRLINE_FLIGHT_OFFERS, airlineLastMinuteOffers);
         processVariables.put(AIRLINE_NAME, airlineName);
         runtimeService.startProcessInstanceByMessage(SAVE_LAST_MINUTE, processVariables);
     }
 
+    //Camunda
     public void startSaveUserInterests(InterestsRequest userInterestsRequest, String username) 
-                                                                throws UserNotAllowedException{
+                                                                throws UserNotAllowedException, BadRequestException{
         LOGGER.info("StartSaveUserInterests");
 
         String loginName = securityContext.getCallerPrincipal().getName();
         if(username.equals(loginName))
             throw new UserNotAllowedException();
 
-        RuntimeService runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();
+        final RuntimeService runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();
+        final TaskService taskService = ProcessEngines.getDefaultProcessEngine().getTaskService();
+        
         Map<String,Object> processVariables = new HashMap<String,Object>();
         processVariables.put(USER_INTERESTS_REQUEST, userInterestsRequest);
         processVariables.put(USERNAME, username);
-        runtimeService.startProcessInstanceByMessage(SAVE_INTERESTS, processVariables);
+
+        // Start the process instance
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByMessage(SAVE_INTERESTS, processVariables);
+
+        Task waitStateBefore = taskService.createTaskQuery()
+          .taskDefinitionKey("saveFlightsInterest")
+          .processInstanceId(processInstance.getId())
+          .singleResult();
+
+        // Aspetto il completamento del task
+        taskService.complete(waitStateBefore.getId());
+
+        processVariables = runtimeService.getVariables(processInstance.getId());
+        String error = (String) processVariables.get(PROCESS_ERROR);
+        if(error != null)
+            throw new BadRequestException();
     }
 
     public void saveAirlineOffers(List<AirlineFlightOffer> airlineLastMinuteOffers, String airlineName){
@@ -128,5 +148,10 @@ public class AirlineManager {
     }
 
     public class UserNotAllowedException extends Exception {
-        private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;
+    }
+
+    public class BadRequestException extends Exception {
+        private static final long serialVersionUID = 1L;
+    }
 }
