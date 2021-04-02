@@ -9,9 +9,9 @@ import javax.inject.Named;
 public class SaveFlightsOfInterestDelegate implements JavaDelegate{
     private final static Logger LOGGER = Logger.getLogger("SaveFlightsOfInterestDelegate"); 
 
-  @Override
-  public void execute(DelegateExecution execution){
-    LOGGER.info ("SaveFlightsOfInterestDelegate in esecuzione");
-  }
+    @Override
+    public void execute(DelegateExecution execution){
+        LOGGER.info ("SaveFlightsOfInterestDelegate in esecuzione");
+    }
 }
 
