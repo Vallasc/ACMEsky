@@ -54,7 +54,7 @@ public class FlightInterest implements Serializable {
 		return this.user;
 	}
 
-	public void setUserId(User user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 
