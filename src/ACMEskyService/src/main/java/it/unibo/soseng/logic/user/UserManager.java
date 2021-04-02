@@ -4,9 +4,10 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.security.enterprise.SecurityContext;
 
-import it.unibo.soseng.gateway.web.dto.UserResponse;
-import it.unibo.soseng.gateway.web.dto.UserSignInRequest;
+import it.unibo.soseng.gateway.user.dto.UserResponse;
+import it.unibo.soseng.gateway.user.dto.UserSignInRequest;
 import it.unibo.soseng.logic.database.DatabaseManager;
+import it.unibo.soseng.logic.database.DatabaseManager.UserAlreadyInException;
 import it.unibo.soseng.logic.database.DatabaseManager.UserNotFoundException;
 import it.unibo.soseng.model.DomainEntity;
 import it.unibo.soseng.model.User;
@@ -25,7 +26,7 @@ public class UserManager {
     @Inject
     private SecurityContext securityContext;
 
-    public void createUser(UserSignInRequest request){
+    public void createUser(UserSignInRequest request) throws UserAlreadyInException{
         User user = new User();
         user.setName(request.getName());
         user.setSurname(request.getSurname());
@@ -38,6 +39,7 @@ public class UserManager {
         entity.setRole(USER);
         entity.setSalt("aaaa");
         user.setEntity(entity);
+        
         databaseManager.createUser(user);
     }
 
