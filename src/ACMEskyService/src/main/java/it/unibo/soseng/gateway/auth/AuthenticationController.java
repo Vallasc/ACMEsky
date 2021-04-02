@@ -6,6 +6,7 @@ import static it.unibo.soseng.security.Constants.BEARER;
 import javax.inject.Inject;
 import javax.security.enterprise.identitystore.CredentialValidationResult;
 import javax.security.enterprise.identitystore.IdentityStoreHandler;
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -34,7 +35,7 @@ private static final Logger LOG = Logger.getLogger(AuthenticationController.clas
     private TokenProvider tokenProvider;
 
     @POST
-    public Response authenticate(AuthRequest request) {
+    public Response authenticate(@Valid AuthRequest request) {
       LOG.log(Level.INFO, "Authenticate user {0}", request.getUsername());
 
       CredentialValidationResult result = identityStoreHandler.validate(new UsernamePasswordCredential(request.getUsername(), request.getPassword()));
