@@ -20,14 +20,26 @@ public class Airport implements Serializable {
 	@Column(name = "id", nullable = false)
     private long id;
 
-    @Column(name = "airport_code", nullable = false)
-    private String aiportCode;
-
-    @Column(name = "address", nullable = false) 
-    private String address;
+    @Column(name = "code", nullable = false, unique = true)
+    private String code;
 
     @Column(name = "name", nullable = false) 
     private String name;
+
+    @Column(name = "city_name", nullable = false) 
+    private String cityName;
+
+    @Column(name = "country_code", nullable = false) 
+    private String countryCode;
+
+    @Column(name = "timezone", nullable = false) 
+    private int timezone;
+
+    @Column(name = "latitude", nullable = false) 
+    private float latitude;
+
+    @Column(name = "longitude", nullable = false) 
+    private float longitude;
 
 
     public long getId() {
@@ -38,20 +50,44 @@ public class Airport implements Serializable {
         this.id = aiportId;
     }
 
+    public float getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(float longitude) {
+        this.longitude = longitude;
+    }
+
+    public float getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(float latitude) {
+        this.latitude = latitude;
+    }
+
+    public int getTimezone() {
+        return timezone;
+    }
+
+    public void setTimezone(int timezone) {
+        this.timezone = timezone;
+    }
+
+    public String getCountryCode() {
+        return countryCode;
+    }
+
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
+
     public String getAiportCode() {
-        return aiportCode;
+        return code;
     }
 
     public void setAiportCode(String aiportCode) {
-        this.aiportCode = aiportCode;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-    
-    public void setAddress(String address) {
-        this.address = address;
+        this.code = aiportCode;
     }
 
     public String getName() {
@@ -60,5 +96,13 @@ public class Airport implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
     }
 }
