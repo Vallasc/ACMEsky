@@ -2,13 +2,17 @@ INSERT INTO public.domain_entities VALUES (1, 'airline1', 'ROLE_AIRLINE', 'a', '
 INSERT INTO public.domain_entities VALUES (2, 'airline2', 'ROLE_AIRLINE', 'b', 'airline2');
 INSERT INTO public.domain_entities VALUES (3, 'bank', 'ROLE_BANK', 'c', 'bank');
 INSERT INTO public.domain_entities VALUES (4, 'soseng', 'ROLE_USER', 'd', 'soseng');
+ALTER SEQUENCE domain_entities_id_seq RESTART WITH 5;
 
 INSERT INTO public.airlines VALUES (1, 'localhost:1234', 1);
 INSERT INTO public.airlines VALUES (2, 'localhost:1234', 2);
+ALTER SEQUENCE airlines_id_seq RESTART WITH 3;
 
 INSERT INTO public.banks VALUES (1, 'localhost:1234', 3);
+ALTER SEQUENCE banks_id_seq RESTART WITH 4;
 
 INSERT INTO public.users VALUES (1, 'Piazza verdi 14, Bologna', 'soseng@unibo.it', 'Sandro', 'adssfae323dqw', 'Alessi', 4);
+ALTER SEQUENCE users_id_seq RESTART WITH 2;
 
 INSERT INTO public.airports VALUES (1, 'Ainsworth', 'ANW', 'US', 42.58, -99.9933, 'Ainsworth Minicipal Arpt', -100);
 INSERT INTO public.airports VALUES (2, 'Antigua', 'ANU', 'AG', 17.13675, -61.792667, 'V C Bird Intl Arpt', -4);
@@ -4410,3 +4414,5 @@ INSERT INTO public.airports VALUES (4397, 'Vegarshei', 'ZYV', 'NO', 0, 0, 'Vegar
 INSERT INTO public.airports VALUES (4398, 'Sandvika', 'ZYW', 'NO', 0, 0, 'Sandvika Rail Station', -100);
 INSERT INTO public.airports VALUES (4399, 'Marnardal', 'ZYY', 'NO', 0, 0, 'Marnardal Rail Station', -100);
 INSERT INTO public.airports VALUES (4400, 'Zanesville', 'ZZV', 'US', 39.9445, -81.8921, 'Zanesville Arpt', -100);
+
+ALTER SEQUENCE airports_id_seq RESTART WITH 4401;
