@@ -2,10 +2,14 @@ package it.soseng.unibo.airlineService.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -101,13 +105,23 @@ public class FlightOfferService {
      * @return List<FlightOffer> la lista delle offerte di volo escludendo le offerte last-minute
      * già inviate ad ACMEsky al momento della loro generazione e le offerte già prenotate
      */
-    public List<FlightOffer> searchFlightOffers(UserRequest r){
+    public List<FlightOffer> searchFlightOffers(List<UserRequest> r){
 
-        return repo.searchFlightOffers(r.departureCity, r.destinationCity, r.departureDate, r.destinationDate)
-                    .stream()
-                    .filter(w -> u.LastMinuteCheck(w) == false && w.getBookableFlagValue() == true)
-                    .collect(Collectors.toList());
-                    
+            
+        return repo.searchFlightOffers(r.iterator().next().departureCity, 
+                                        r.iterator().next().destinationCity, 
+                                        r.iterator().next().departureDate, 
+                                        r.iterator().next().destinationDate)
+                                            .stream()
+                                            .filter(w -> u.LastMinuteCheck(w) == false && w.getBookableFlagValue() == true)
+                                            .collect(Collectors.toList());
+                                            
+    }
+
+    private LocalDateTime convertLocalDateTime (String date){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime arrTime = LocalDateTime.parse(date, formatter);
+        return arrTime;
     }
 
 

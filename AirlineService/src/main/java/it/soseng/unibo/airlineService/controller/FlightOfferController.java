@@ -71,8 +71,8 @@ public class FlightOfferController {
      * @param r che contiene i parametri del volo che l'utente cerca
      * @return List<FlightOffer> che contiene tutte le offerte di lavoro prenotabili
      */
-    @PostMapping("/searchFlight")
-    public List<FlightOffer> getOffers(@RequestBody UserRequest r) {
+    @PostMapping("/searchFlights")
+    public List<FlightOffer> getOffers(@RequestBody List<UserRequest> r) {
         return s.searchFlightOffers(r);
     }
 
