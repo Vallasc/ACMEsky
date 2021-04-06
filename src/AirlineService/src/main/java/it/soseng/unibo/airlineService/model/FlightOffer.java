@@ -30,17 +30,23 @@ public class FlightOffer {
     @Column(name = "departure_airport_id")
     private String departureId;
 
-    @Column(name = "departure")
+    @Column(name = "departure_airport_name")
+    private String departureAirportName;
+
+    @Column(name = "departure_airport_address")
     private String departure;
 
     @Column(name = "departure_date_time")
-    private LocalDateTime  departureTime;
+    private ZonedDateTime  departureTime;
 
     @Column(name = "arrival_date_time")
-    private LocalDateTime arrivalTime;
+    private ZonedDateTime arrivalTime;
 
-    @Column(name = "arrival")
+    @Column(name = "arrival_airport_address")
     private String arrival;
+
+    @Column(name = "arrival_airport_name")
+    private String arrivalAirportName;
 
     @Column(name = "arrival_airport_id")
     private String arrivalId;
@@ -58,15 +64,6 @@ public class FlightOffer {
     private boolean bookableFlag = true;
 
     public FlightOffer(){}
-
-    // public FlightOffer(String departure, LocalDateTime departureTime, LocalDateTime arrivalTime, String arrival, double price ) {
-    //     this.departure = departure;
-    //     this.departureTime = departureTime;
-    //     this.arrivalTime = arrivalTime;
-    //     this.arrival = arrival;
-    //     this.price = price;
-
-    // }
 
 
 	
@@ -101,7 +98,7 @@ public class FlightOffer {
     /** 
      * @return LocalDateTime il giorno e l'ora della partenza
      */
-    public LocalDateTime getDepartureTime() {
+    public ZonedDateTime getDepartureTime() {
       return this.departureTime;
     }
 
@@ -109,7 +106,7 @@ public class FlightOffer {
     /** 
      * @return LocalDateTime il giorno e l'ora di arrivo
      */
-    public LocalDateTime getArrivalTime() {
+    public ZonedDateTime getArrivalTime() {
       return this.arrivalTime;
     }
 
@@ -127,11 +124,11 @@ public class FlightOffer {
       return this.price;
     }
 
-    public long getExpiryDate(LocalDateTime departureTime) {
+    public long getExpiryDate(ZonedDateTime departureTime) {
 
-      LocalDateTime period = departureTime.minusDays(7);
-      ZonedDateTime zdt = ZonedDateTime.of(period, ZoneId.systemDefault());
-      return zdt.toInstant().toEpochMilli();
+      //LocalDateTime period = departureTime.minusDays(7);
+      ZonedDateTime period = departureTime.minusDays(7);      
+      return period.toInstant().toEpochMilli();
   }
 
     
@@ -170,9 +167,9 @@ public class FlightOffer {
      * @param departureTime
      */
     public void setDepartureTime(String departureTime) {
-      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-      LocalDateTime depTime = LocalDateTime.parse(departureTime, formatter);
-      this.departureTime = depTime;
+      // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+      ZonedDateTime zonedDateTime = ZonedDateTime.parse(departureTime);
+      this.departureTime = zonedDateTime;
     }
 
     
@@ -181,9 +178,8 @@ public class FlightOffer {
      * @param arrivalTime
      */
     public void setArrivalTime(String arrivalTime) {
-      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-      LocalDateTime arrTime = LocalDateTime.parse(arrivalTime, formatter);
-      this.arrivalTime = arrTime;
+      ZonedDateTime zonedDateTime = ZonedDateTime.parse(arrivalTime);      
+      this.arrivalTime = zonedDateTime;
     }
 
 
@@ -220,6 +216,30 @@ public class FlightOffer {
 
     public void setAirline_id(String airline_id) {
       this.airline_id = airline_id;
+    }
+
+
+
+    public String getDepartureAirportName() {
+      return departureAirportName;
+    }
+
+
+
+    public void setDepartureAirportName(String departureAirportName) {
+      this.departureAirportName = departureAirportName;
+    }
+
+
+
+    public String getArrivalAirportName() {
+      return arrivalAirportName;
+    }
+
+
+
+    public void setArrivalAirportName(String arrivalAirportName) {
+      this.arrivalAirportName = arrivalAirportName;
     }
 
     

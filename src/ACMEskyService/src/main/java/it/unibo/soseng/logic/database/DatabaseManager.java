@@ -1,9 +1,11 @@
 package it.unibo.soseng.logic.database;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.enterprise.context.RequestScoped;
@@ -17,7 +19,7 @@ import it.unibo.soseng.model.FlightInterest;
 import it.unibo.soseng.model.User;
 import it.unibo.soseng.model.UserInterest;
 
-@RequestScoped
+@Stateless
 @TransactionManagement(value = TransactionManagementType.CONTAINER)
 public class DatabaseManager {
 
@@ -26,14 +28,14 @@ public class DatabaseManager {
     @PersistenceContext(unitName = "primary")
     private EntityManager entityManager;
 
-    public List<FlightInterest> retrieveFlightInterests() {
-        @SuppressWarnings("unchecked")
-        List<FlightInterest> interests = entityManager
-                .createQuery("SELECT flight.departure_airport_id, flight.departure arrival_airport_id,"
-                        + "flight.departure_date_time, flight.arrival_date_time " + "FROM flights_interest flight")
-                .getResultList();
-        return interests;
-    }
+    // public List<FlightInterest> retrieveFlightInterests() {
+    //     @SuppressWarnings("unchecked")
+    //     List<FlightInterest> interests = entityManager
+    //             .createQuery("SELECT flight.departure_airport_id, flight.departure arrival_airport_id,"
+    //                     + "flight.departure_date_time, flight.arrival_date_time " + "FROM flights_interest flight")
+    //             .getResultList();
+    //     return interests;
+    // }
 
     public List<Flight> availableFlights(Long id) {
         @SuppressWarnings("unchecked")
@@ -92,6 +94,24 @@ public class DatabaseManager {
             return result.get(0);
         }
         throw new AirportNotFoundException();
+    }
+
+    public List<FlightInterest> retrieveFlightInterests(){
+        @SuppressWarnings("unchecked")
+        List<FlightInterest> interests = (List<FlightInterest>)
+        entityManager.createQuery("SELECT f FROM FlightInterest f")
+                        .getResultList();
+        return interests;
+    }
+
+    public void insertFlightOffer(List<Flight> list){
+
+        Iterator<Flight> i = list.iterator();
+
+        while(i.hasNext()){
+            entityManager.persist(i.next());
+        }
+
     }
 
     public void saveUserInterest(UserInterest interest) {

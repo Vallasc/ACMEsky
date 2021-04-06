@@ -1,9 +1,12 @@
 package it.unibo.soseng.logic.airline;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.List;
 import java.util.logging.Level;
@@ -20,12 +23,15 @@ import javax.security.enterprise.SecurityContext;
 import org.camunda.bpm.engine.ProcessEngines;
 import org.camunda.bpm.engine.RuntimeService;
 
+import it.unibo.soseng.gateway.airline.AirlineAPI;
 import it.unibo.soseng.gateway.airline.dto.AirlineFlightOffer;
+import it.unibo.soseng.gateway.airline.dto.InterestDTO;
 import it.unibo.soseng.gateway.user.dto.InterestsRequest;
 import it.unibo.soseng.logic.database.DatabaseManager;
 import it.unibo.soseng.logic.database.DatabaseManager.AirportNotFoundException;
 import it.unibo.soseng.logic.database.DatabaseManager.UserNotFoundException;
 import it.unibo.soseng.model.Airport;
+import it.unibo.soseng.model.Flight;
 import it.unibo.soseng.model.FlightInterest;
 import it.unibo.soseng.model.User;
 import it.unibo.soseng.model.UserInterest;
@@ -46,6 +52,9 @@ public class AirlineManager {
     
     @Inject
     private SecurityContext securityContext;
+
+    @Inject
+    AirlineAPI api;
 
     // Camunda
     public void startSaveLastMinuteProcess(List<AirlineFlightOffer> airlineLastMinuteOffers, String airlineName){
@@ -129,4 +138,27 @@ public class AirlineManager {
 
     public class UserNotAllowedException extends Exception {
         private static final long serialVersionUID = 1L;}
+
+        public List<InterestDTO> convertInterestList(List<FlightInterest> l){
+
+            Iterator<FlightInterest> i = l.iterator();
+            List<InterestDTO> result = new ArrayList<>();
+    
+            while (i.hasNext()){
+    
+                // result.iterator().next().setDeparture(l.iterator().next().getDepartureAirport().getAddress());
+                // result.iterator().next().setDepDateTime(l.iterator().next().getDepartureDateTime());
+                // result.iterator().next().setArrDateTime(l.iterator().next().getArrivalDateTime());
+                // result.iterator().next().setArrival(l.iterator().next().getArrivalAirport().getAddress());
+    
+            }
+            return result;
+        }
+    
+        public List<Flight> retrieveFlightsList(List<FlightInterest> list) throws IOException, InterruptedException{
+    
+            return api.getFlightList(convertInterestList(list));
+        }
+    
+    
 }

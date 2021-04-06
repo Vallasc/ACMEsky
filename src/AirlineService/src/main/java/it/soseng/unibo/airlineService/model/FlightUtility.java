@@ -91,8 +91,10 @@ public class FlightUtility {
         FlightOffer o = new FlightOffer();
             o.setDeparture(n.get("departure_airport").textValue());
             o.setDepartureId(n.get("departure_airport_id").textValue());
+            o.setDepartureAirportName(n.get("departure_airport_name").textValue());
             o.setDepartureTime(n.get("departure_date_time").textValue());
             o.setArrival(n.get("arrival_airport").textValue());
+            o.setArrivalAirportName(n.get("arrival_airport_name").textValue());
             o.setArrivalId(n.get("arrival_airport_id").textValue());
             o.setArrivalTime(n.get("arrival_date_time").textValue());
             o.setAirline_id(n.get("airline_id").textValue());
@@ -102,55 +104,5 @@ public class FlightUtility {
             return o;
     }
 
-
-
-    
-
-
-
-    
-
-
-        
 }
     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

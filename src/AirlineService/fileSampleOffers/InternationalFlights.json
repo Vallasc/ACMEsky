@@ -2,12 +2,14 @@
     "OFFERS": [
         {
             "departure_airport_id": "JFK",
+            "departure_airport_name": "John F. Kennedy International Airport",
             "departure_airport": "John F. Kennedy International Airport, Queens, NY 11430, USA",
             "arrival_airport_id": "BOS",
+            "arrival_airport_name": "Boston Logan International Airport(BOS)",
             "arrival_airport": "Boston Logan International Airport (BOS), MA 02128, USA",
             "airline_id": "2",
-            "departure_date_time": "2021-08-27 20:00:00",
-            "arrival_date_time": "2021-08-27 21:00:00",
+            "departure_date_time": "2021-08-27T20:00:00+01:00",
+            "arrival_date_time": "2021-08-27T21:00:00+01:00",
             "price": 130.00
         }
     ]
