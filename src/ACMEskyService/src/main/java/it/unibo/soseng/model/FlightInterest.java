@@ -28,6 +28,8 @@ public class FlightInterest implements Serializable {
 	@JoinColumn(name = "user_id")
     private User user;
 
+	
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "departure_airport_id")
     private Airport departureAirport;

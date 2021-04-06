@@ -12,6 +12,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 
 import it.unibo.soseng.model.Airport;
+import it.unibo.soseng.model.Flight;
 import it.unibo.soseng.model.FlightInterest;
 import it.unibo.soseng.model.User;
 import it.unibo.soseng.model.UserInterest;
@@ -34,6 +35,28 @@ public class DatabaseManager {
         return interests;
     }
 
+    public List<Flight> availableFlights(Long id) {
+        @SuppressWarnings("unchecked")
+        List<Flight> availableFlight = entityManager
+                .createQuery(
+                "SELECT f FROM flights f, flights_interest fi, users_interests ui WHERE ui.id = "+id+ 
+                "AND ui.outbound_flight_interest_id = fi.id" + 
+                "AND fi.departure_airport_id = f.departure_airport_id"+ 
+                "AND fi.arrival_airport_id = f.arrival_airport_id"+
+                "AND fi.departure_date_time = f.departure_date_time")
+                .getResultList();
+        return availableFlight;
+    }
+
+    public List<UserInterest> retrieveUserInterests() {
+        @SuppressWarnings("unchecked")
+        List<UserInterest> interests = entityManager
+                .createQuery("SELECT *" + "FROM users_interests")
+                .getResultList();
+        return interests;
+    }
+
+
     public User getUser(String username) throws UserNotFoundException {
         @SuppressWarnings("unchecked")
         List<User> result = (List<User>) entityManager
@@ -50,6 +73,13 @@ public class DatabaseManager {
             this.entityManager.persist(user);
         } catch (PersistenceException e) {
             throw new UserAlreadyInException();
+        }
+    }
+    public void createOffer (Flight flight) throws OfferAlreadyInException { 
+        try {
+            this.entityManager.persist(flight);
+        } catch (PersistenceException e) {
+            throw new OfferAlreadyInException();
         }
     }
 
@@ -79,4 +109,9 @@ public class DatabaseManager {
     public class AirportNotFoundException extends Exception {
         private static final long serialVersionUID = 1L;
     }
+
+    public class OfferAlreadyInException extends Exception {
+        private static final long serialVersionUID = 1L;
+    }
+
 }

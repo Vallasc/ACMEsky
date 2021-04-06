@@ -10,5 +10,7 @@ public final class ProcessVariables {
     public static final String USERNAME = "username";
 
     // Offers manager
+    public static final String AVAILABLE_FLIGHTS = "availableFlight";
+    
     
 }
