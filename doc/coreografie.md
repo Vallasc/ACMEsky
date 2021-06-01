@@ -1,6 +1,6 @@
-#Coreografie
+# Coreografie
 
-###Generale
+### Generale
 
 | Nome | Sigla | Commento |
 |-|-| -|
@@ -62,7 +62,7 @@
     1
 )*
 ```
-###Correttezza
+### Correttezza
 ```fsharp
 (( query: ACME -> AIR ; response: AIR -> ACME)* | (sendLastMinute: AIR -> ACME )* ) |
 
