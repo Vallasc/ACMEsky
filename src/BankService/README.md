@@ -1,4 +1,22 @@
 # ACMEbank
+Drescrizione
+
+### How to build
+
+### How to run
+#### docker
+
+### How tobuild
+
+### API
+
+
+
+
+
+
+
+
 A useless bank service
 ### Run:
 ```sh
