@@ -2,7 +2,9 @@ package it.unibo.soseng.model;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,27 +15,32 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+
 @Entity
-@Table(name="users_request")
-public class UserRequest implements Serializable {
+@Table(name="users_interests")
+public class UserInterest implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(generator = "UUID") TODO
+	//@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private long id;
+    //private UUID id;
+	private long id;
 
-	@ManyToOne
-	@JoinColumn(name = "user_id", nullable = false)
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "user_id")
     private User user;
 
-	@OneToOne
-    @JoinColumn(name = "outbound_flight_interest_id", nullable = false)
+	@OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "outbound_flight_interest_id")
 	private FlightInterest outboundFlightInterest;
 
-	@OneToOne
-    @JoinColumn(name = "flight_back_interest_id", nullable = true)
+	@OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "flight_back_interest_id")
     private FlightInterest flightBackInterest;
 
     @Column(name = "expire_date", nullable = true)

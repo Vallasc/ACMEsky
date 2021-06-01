@@ -3,6 +3,7 @@ package it.unibo.soseng.model;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,7 +15,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "generated_offers")
-public class GeneratedOffers implements Serializable {
+public class GeneratedOffer implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
@@ -23,12 +24,12 @@ public class GeneratedOffers implements Serializable {
     @Column(name = "id", nullable = false)
     private long id;
 
-    @OneToOne
-    @JoinColumn(name = "outbound_flight_id", nullable = false)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "outbound_flight_id")
     private Flight outboundFlight;
 
-    @OneToOne
-    @JoinColumn(name = "flight_back_id", nullable = true)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "flight_back_id")
     private Flight flightBack;
 
     @Column(name = "expire_date", nullable = false)

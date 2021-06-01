@@ -3,6 +3,7 @@ package it.unibo.soseng.model;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,16 +27,16 @@ public class Flight implements Serializable {
     @Column(name = "flight_code", nullable = false)
     private String flightCode;
 
-    @ManyToOne
-    @JoinColumn(name = "departure_airport_id", nullable = false)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "departure_airport_id")
     private Airport departureAirport;
 
-    @ManyToOne
-    @JoinColumn(name = "arrival_airport_id", nullable = false)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "arrival_airport_id")
     private Airport arrivalAirport;
 
-    @ManyToOne
-    @JoinColumn(name = "airline_id", nullable = false)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "airline_id")
     private Airline airline;
 
     @Column(name = "departure_date_time", nullable = false)

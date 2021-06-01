@@ -23,7 +23,7 @@ public class RentService implements Serializable {
     private long id;
 
     @OneToOne
-    @JoinColumn(name = "entity_id", nullable = false)
+    @JoinColumn(name = "entity_id")
     private DomainEntity entity;
 
     @Column(name = "address", nullable = false)
