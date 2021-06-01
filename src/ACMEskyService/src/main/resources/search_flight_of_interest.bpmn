@@ -28,7 +28,7 @@
         <bpmn:incoming>Flow_1osyp3v</bpmn:incoming>
         <bpmn:outgoing>Flow_0l1w4b0</bpmn:outgoing>
       </bpmn:sendTask>
-      <bpmn:serviceTask id="Activity_1ikmutb" name="Retrieve flights of interest from DB" camunda:delegateExpression="#{RetrieveFlightsOfInterestDelegate}">
+      <bpmn:serviceTask id="Activity_1ikmutb" name="Retrieve flights of interest from DB" camunda:delegateExpression="#{retrieveFlightsOfInterestDelegate}">
         <bpmn:incoming>Flow_17bn0li</bpmn:incoming>
         <bpmn:outgoing>Flow_1osyp3v</bpmn:outgoing>
       </bpmn:serviceTask>

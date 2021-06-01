@@ -18,18 +18,19 @@ import static it.unibo.soseng.camunda.ProcessVariables.AIRLINE_NAME;
 @Named("saveLastMinuteDelegate")
 public class SaveLastMinuteDelegate implements JavaDelegate {
 
-  private final static Logger LOGGER = Logger.getLogger(SaveLastMinuteDelegate.class.getName());
+    private final static Logger LOGGER = Logger.getLogger(SaveLastMinuteDelegate.class.getName());
 
-  @Inject
-  AirlineManager airlineManager;
+    @Inject
+    AirlineManager airlineManager;
 
-  @Override
-  public void execute(DelegateExecution execution){
-    String airlineName = (String) execution.getVariable(AIRLINE_NAME);
-    @SuppressWarnings (value="unchecked")
-    List<AirlineFlightOffer> airlineOffers = (List<AirlineFlightOffer>) execution.getVariable(AIRLINE_FLIGHT_OFFERS);
+    @Override
+    public void execute(DelegateExecution execution){
+        String airlineName = (String) execution.getVariable(AIRLINE_NAME);
+        @SuppressWarnings (value="unchecked")
+        List<AirlineFlightOffer> airlineOffers = 
+            (List<AirlineFlightOffer>) execution.getVariable(AIRLINE_FLIGHT_OFFERS);
 
-    airlineManager.saveAirlineOffers(airlineOffers, airlineName);
-  }
+        airlineManager.saveAirlineOffers(airlineOffers, airlineName);
+    }
 
 }

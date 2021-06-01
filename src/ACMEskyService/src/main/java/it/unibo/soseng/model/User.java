@@ -2,6 +2,7 @@ package it.unibo.soseng.model;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,8 +23,8 @@ public class User implements Serializable {
     @Column(name = "id", nullable = false)
     private long id;
 
-    @OneToOne
-    @JoinColumn(name = "entity_id", nullable = false)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "entity_id")
     private DomainEntity entity;
 
 	@Column(name = "name", nullable = false)

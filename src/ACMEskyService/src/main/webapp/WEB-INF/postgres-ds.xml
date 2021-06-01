@@ -1,11 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <datasources>
-    <datasource jndi-name="java:jboss/datasources/postgresacmesky" pool-name="postgresacmesky" enabled="true" use-java-context="true">
-        <connection-url>jdbc:postgresql://34.82.240.94/acmesky</connection-url>
+    <!--<datasource jndi-name="java:jboss/datasources/postgresacmesky" pool-name="postgresacmesky" enabled="true" use-java-context="true">
+        <connection-url>jdbc:postgresql://acmesky.duckdns.org/acmesky</connection-url>
         <driver>postgresql-42.2.19.jar</driver>
         <security>
             <user-name>soseng</user-name>
             <password>adminadmin</password>
         </security>
-    </datasource>
+    </datasource>-->
+
+    <xa-datasource jndi-name="java:jboss/datasources/postgresacmesky" pool-name="postgresacmesky" enabled="true" use-ccm="false">
+        <driver>postgresql-42.2.19.jar</driver>
+        <xa-datasource-class>org.postgresql.xa.PGXADataSource</xa-datasource-class> 
+        <xa-datasource-property name="ServerName">acmesky.duckdns.org</xa-datasource-property>
+        <xa-datasource-property name="PortNumber">5432</xa-datasource-property>
+        <xa-datasource-property name="DatabaseName">acmesky</xa-datasource-property>
+        <xa-datasource-property name="User">soseng</xa-datasource-property>
+        <xa-datasource-property name="Password">adminadmin</xa-datasource-property>
+        <xa-pool>
+            <min-pool-size>1</min-pool-size>
+            <max-pool-size>60</max-pool-size>
+            <prefill>false</prefill>
+            <use-strict-min>false</use-strict-min>
+            <flush-strategy>FailingConnectionOnly</flush-strategy>
+        </xa-pool>
+        <transaction-isolation>TRANSACTION_READ_COMMITTED</transaction-isolation>
+        <validation>
+            <exception-sorter class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLExceptionSorter" />
+            <valid-connection-checker class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLValidConnectionChecker" />
+            <validate-on-match>false</validate-on-match>
+            <background-validation>false</background-validation>
+        </validation>
+    </xa-datasource>
 </datasources>
