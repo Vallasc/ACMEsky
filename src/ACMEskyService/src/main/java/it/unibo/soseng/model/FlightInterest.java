@@ -1,5 +1,6 @@
 package it.unibo.soseng.model;
 
+import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.io.Serializable;
 
@@ -28,8 +29,6 @@ public class FlightInterest implements Serializable {
 	@JoinColumn(name = "user_id")
     private User user;
 
-	
-
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "departure_airport_id")
     private Airport departureAirport;
@@ -38,11 +37,11 @@ public class FlightInterest implements Serializable {
     @JoinColumn(name = "arrival_airport_id")
     private Airport arrivalAirport;
 
-	@Column(name = "departure_date_time", nullable = false)
-    private ZonedDateTime departureDateTime;
+	@Column(name = "departure_date_time", columnDefinition= "TIMESTAMP WITH TIME ZONE", nullable = false)
+    private OffsetDateTime departureDateTime;
 
-	@Column(name = "arrival_date_time", nullable = false)
-    private ZonedDateTime arrivalDateTime;
+	@Column(name = "arrival_date_time", columnDefinition= "TIMESTAMP WITH TIME ZONE", nullable = false)
+    private OffsetDateTime arrivalDateTime;
 
 
 	public long getId() {
@@ -76,19 +75,19 @@ public class FlightInterest implements Serializable {
         this.arrivalAirport = arrivalAirport;
     }
     
-	public ZonedDateTime getDepartureDateTime() {
+	public OffsetDateTime getDepartureDateTime() {
 		return this.departureDateTime;
 	}
 
-	public void setDepartureDateTime(ZonedDateTime departureDateTime) {
+	public void setDepartureDateTime(OffsetDateTime departureDateTime) {
 		this.departureDateTime = departureDateTime;
 	}
     
-	public ZonedDateTime getArrivalDateTime() {
+	public OffsetDateTime getArrivalDateTime() {
 		return this.arrivalDateTime;
 	}
 
-	public void setArrivalDateTime(ZonedDateTime arrivalDateTime) {
+	public void setArrivalDateTime(OffsetDateTime arrivalDateTime) {
 		this.arrivalDateTime = arrivalDateTime;
 	}
 }

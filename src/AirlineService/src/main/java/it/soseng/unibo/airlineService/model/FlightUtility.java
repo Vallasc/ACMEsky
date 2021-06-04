@@ -3,14 +3,19 @@ package it.soseng.unibo.airlineService.model;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import it.soseng.unibo.airlineService.repository.FlightOfferRepository;
 
 
 
@@ -23,6 +28,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class FlightUtility {
 
+    @Autowired
+    private FlightOfferRepository repo;
     
 
     public FlightUtility() {
@@ -61,7 +68,7 @@ public class FlightUtility {
     
     /**
      * restituisce un oggetto JsonNode che fa parte dell'array di oggetti json,
-     * rappresentante un offerta di volo 
+     * rappresentante una lista di offerte per lo stesso volo (biglietti) 
      * @param file il file json 
      * @return JsonNode il risultato della funzione
      * @throws JsonProcessingException
@@ -87,22 +94,39 @@ public class FlightUtility {
      * @param n oggetto JsonNode
      * @return FlightOffer corrispondente al parametro n
      */
-    public FlightOffer createOffer(JsonNode n){
-        FlightOffer o = new FlightOffer();
-            o.setDeparture(n.get("departure_airport").textValue());
-            o.setDepartureId(n.get("departure_airport_id").textValue());
-            o.setDepartureAirportName(n.get("departure_airport_name").textValue());
-            o.setDepartureTime(n.get("departure_date_time").textValue());
-            o.setArrival(n.get("arrival_airport").textValue());
-            o.setArrivalAirportName(n.get("arrival_airport_name").textValue());
-            o.setArrivalId(n.get("arrival_airport_id").textValue());
-            o.setArrivalTime(n.get("arrival_date_time").textValue());
-            o.setAirline_id(n.get("airline_id").textValue());
-            o.setPrice(n.get("price").asDouble());
-            o.setExpiryDate(o.getExpiryDate(o.getDepartureTime()));
-
-            return o;
+    public List<FlightOffer> createOffer(JsonNode n){
+        
+        ArrayList<FlightOffer> a = new ArrayList<>();
+        JsonNode list = n.get("list");
+        for(JsonNode i: list){
+            FlightOffer o = new FlightOffer();
+                o.setDepartureId(i.get("departure_airport_id").textValue());
+                o.setDepartureTime(i.get("departure_date_time").textValue());
+                o.setArrivalId(i.get("arrival_airport_id").textValue());
+                o.setArrivalTime(i.get("arrival_date_time").textValue());
+                o.setAirline_id(i.get("airline_id").textValue());
+                o.setPrice(i.get("price").asDouble());
+                o.setPlace(i.get("place").textValue());
+                o.setExpiryDate();
+                a.add(o);
+        }
+            return a;
     }
+
+    /**
+     * imposta il flag della prenotazione a true(nessuno potrà prenotare più quell'offerta finchè non scadrà
+     * il tempo per acquistare l'offerta)
+     * @param o l'offerta in questione
+     */
+    public void getOfferExpiry(FlightOffer o){
+
+        o.setBookedFlag(true);
+        OffsetDateTime obj = OffsetDateTime.now();
+        o.setExpiryBooking(obj); 
+    }
+
+
+
 
 }
     

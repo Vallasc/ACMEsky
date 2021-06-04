@@ -28,6 +28,25 @@ public class DatabaseManager {
     @PersistenceContext(unitName = "primary")
     private EntityManager entityManager;
 
+    public List<FlightInterest> retrieveFlightInterests(){
+        @SuppressWarnings("unchecked")
+        List<FlightInterest> interests =
+        entityManager.createQuery("SELECT f FROM FlightInterest f")
+                        .getResultList();
+        return interests;
+    }
+
+    public void insertFlightOffer(List<Flight> list){
+
+        Iterator<Flight> i = list.iterator();
+
+        while(i.hasNext()){
+            entityManager.persist(i.next());
+        }
+
+    }
+    
+    
     // public List<FlightInterest> retrieveFlightInterests() {
     //     @SuppressWarnings("unchecked")
     //     List<FlightInterest> interests = entityManager
@@ -37,23 +56,23 @@ public class DatabaseManager {
     //     return interests;
     // }
 
-    public List<Flight> availableFlights(Long id) {
-        @SuppressWarnings("unchecked")
-        List<Flight> availableFlight = entityManager
-                .createQuery(
-                "SELECT f FROM flights f, flights_interest fi, users_interests ui WHERE ui.id = "+id+ 
-                "AND ui.outbound_flight_interest_id = fi.id" + 
-                "AND fi.departure_airport_id = f.departure_airport_id"+ 
-                "AND fi.arrival_airport_id = f.arrival_airport_id"+
-                "AND fi.departure_date_time = f.departure_date_time")
-                .getResultList();
-        return availableFlight;
-    }
+    // public List<Flight> availableFlights(Long id) {
+    //     @SuppressWarnings("unchecked")
+    //     List<Flight> availableFlight = entityManager
+    //             .createQuery(
+    //             "SELECT f FROM Flight f, FlightInterest fi, UserInterest ui WHERE ui.id = "+id+ 
+    //             "AND ui.outbound_flight_interest_id = fi.id" + 
+    //             "AND fi.departure_airport_id = f.departure_airport_id"+ 
+    //             "AND fi.arrival_airport_id = f.arrival_airport_id"+
+    //             "AND fi.departure_date_time = f.departure_date_time")
+    //             .getResultList();
+    //     return availableFlight;
+    // }
 
     public List<UserInterest> retrieveUserInterests() {
         @SuppressWarnings("unchecked")
         List<UserInterest> interests = entityManager
-                .createQuery("SELECT *" + "FROM users_interests")
+                .createQuery("SELECT interest FROM UserInterest interest")
                 .getResultList();
         return interests;
     }
@@ -96,23 +115,7 @@ public class DatabaseManager {
         throw new AirportNotFoundException();
     }
 
-    public List<FlightInterest> retrieveFlightInterests(){
-        @SuppressWarnings("unchecked")
-        List<FlightInterest> interests = (List<FlightInterest>)
-        entityManager.createQuery("SELECT f FROM FlightInterest f")
-                        .getResultList();
-        return interests;
-    }
-
-    public void insertFlightOffer(List<Flight> list){
-
-        Iterator<Flight> i = list.iterator();
-
-        while(i.hasNext()){
-            entityManager.persist(i.next());
-        }
-
-    }
+    
 
     public void saveUserInterest(UserInterest interest) {
         this.entityManager.persist(interest);

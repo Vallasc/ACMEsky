@@ -1,10 +1,6 @@
 package it.soseng.unibo.airlineService.model;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-
+import java.time.OffsetDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,23 +26,11 @@ public class FlightOffer {
     @Column(name = "departure_airport_id")
     private String departureId;
 
-    @Column(name = "departure_airport_name")
-    private String departureAirportName;
-
-    @Column(name = "departure_airport_address")
-    private String departure;
-
     @Column(name = "departure_date_time")
-    private ZonedDateTime  departureTime;
+    private OffsetDateTime  departureTime;
 
     @Column(name = "arrival_date_time")
-    private ZonedDateTime arrivalTime;
-
-    @Column(name = "arrival_airport_address")
-    private String arrival;
-
-    @Column(name = "arrival_airport_name")
-    private String arrivalAirportName;
+    private OffsetDateTime arrivalTime;
 
     @Column(name = "arrival_airport_id")
     private String arrivalId;
@@ -57,66 +41,57 @@ public class FlightOffer {
     @Column(name = "price")
     private double price;
 
+    @Column(name = "place")
+    private String place;
+
     @Column(name = "expire_offer")
-    private long expiryDate;
+    private OffsetDateTime expiryDate;
+
+    @Column(name = "expire_booking")
+    private OffsetDateTime expiryBooking;
 
     @Column(name = "flag")
-    private boolean bookableFlag = true;
+    private boolean bookedFlag = false;
 
     public FlightOffer(){}
 
 
 	
-  /** 
-   * @return Long id dell'offerta
-   */
-  public Long getId() {
-      return this.id;
-    }
+    /** 
+     * @return Long id dell'offerta
+     */
+    public Long getId() {
+        return this.id;
+      }
 
+    /** 
+     * @return String id dell'aereoporto di arrivo
+     */
     public String getArrivalId() {
       return arrivalId;
     }
 
-    
-    /** 
-     * @return String la città di partenza del volo
-     */
-    public String getDeparture() {
-      return this.departure;
-    }
-
-    
-    /** 
-     * @return String la città di destinazione
-     */
-    public String getArrival() {
-      return this.arrival;
-    }
-
-    
     /** 
      * @return LocalDateTime il giorno e l'ora della partenza
      */
-    public ZonedDateTime getDepartureTime() {
+    public OffsetDateTime getDepartureTime() {
       return this.departureTime;
     }
 
-    
     /** 
      * @return LocalDateTime il giorno e l'ora di arrivo
      */
-    public ZonedDateTime getArrivalTime() {
+    public OffsetDateTime getArrivalTime() {
       return this.arrivalTime;
     }
 
+    /** 
+     * @return String id dell'aereoporto di partenza
+     */
     public String getDepartureId() {
       return departureId;
     }
 
-    
-
-    
     /** 
      * @return double il prezzo dell'offerta
      */
@@ -124,51 +99,58 @@ public class FlightOffer {
       return this.price;
     }
 
-    public long getExpiryDate(ZonedDateTime departureTime) {
+    /** 
+     * @return String il posto del viaggiatore sull'aereo
+     */
+    public String getPlace() {
+      return this.place;
+    }
 
-      //LocalDateTime period = departureTime.minusDays(7);
-      ZonedDateTime period = departureTime.minusDays(7);      
-      return period.toInstant().toEpochMilli();
+
+    /** 
+     * @return long la data di scadenza dell'offerta espressa in forma numerica 
+     */
+    public OffsetDateTime getExpiryDate() {
+      return this.expiryDate;
+    }
+
+    /** 
+     * @return OffsetDateTime la data e l'ora di scadenza della prenotazione
+     */
+    public OffsetDateTime getExpiryBooking() {
+      return this.expiryBooking;
   }
 
-    
     /** 
-     * @return boolean il valore del campo bookableFlag che indica se il volo è prenotabile o no
+     * @return boolean il valore del campo bookedFlag che indica se il volo è già stato prenotato o no
      */
-    public boolean getBookableFlagValue(){
-      return this.bookableFlag;
+    public boolean getBookedFlagValue(){
+      return this.bookedFlag;
+    }
+
+    /**
+     * @return String la compagnia aerea che offre l'offerta
+     */
+    public String getAirline_id() {
+      return airline_id;
     }
 
     
+
+    /** 
+     * imposta l'id dell'aereoporto di arrivo
+     */
     public void setArrivalId(String arrivalId) {
       this.arrivalId = arrivalId;
     }
 
-
-    /** 
-     * imposta il luogo della partenza
-     * @param departure 
-     */
-    public void setDeparture(String departure) {
-      this.departure = departure;
-    }
-
-    
-    /** 
-     * imposta il luogo della destinazione
-     * @param arrival
-     */
-    public void setArrival(String arrival) {
-      this.arrival = arrival;
-    }
     
     /** 
      * imposta il giorno e l'ora della partenza
      * @param departureTime
      */
     public void setDepartureTime(String departureTime) {
-      // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-      ZonedDateTime zonedDateTime = ZonedDateTime.parse(departureTime);
+      OffsetDateTime zonedDateTime = OffsetDateTime.parse(departureTime);
       this.departureTime = zonedDateTime;
     }
 
@@ -178,11 +160,14 @@ public class FlightOffer {
      * @param arrivalTime
      */
     public void setArrivalTime(String arrivalTime) {
-      ZonedDateTime zonedDateTime = ZonedDateTime.parse(arrivalTime);      
+      OffsetDateTime zonedDateTime = OffsetDateTime.parse(arrivalTime);      
       this.arrivalTime = zonedDateTime;
     }
 
 
+    /** 
+     * imposta l'id dell'aereoporto di partenza
+     */
     public void setDepartureId(String departureId) {
       this.departureId = departureId;
     }
@@ -196,51 +181,47 @@ public class FlightOffer {
     }
 
     /** 
-     * imposta il prezzo dell'offerta
-     * @param expiryDate
+     * imposta il numero di posto del passeggero sul treno
+     * @param place
      */
-    public void setExpiryDate( long expiryDate) {
-      this.expiryDate = expiryDate;
+    public void setPlace(String place) {
+       this.place=place;
     }
 
     /** 
-     * imposta il flag della prenotabilità a false
+     * imposta la data di scadenza dell'offerta
+     * @param expiryDate
      */
-    public void setBookableFlagFalse(){
-      this.bookableFlag = false;
+    public void setExpiryDate() {
+      OffsetDateTime expiryDate = departureTime.minusDays(7);      
+      this.expiryDate=expiryDate;
     }
 
-    public String getAirline_id() {
-      return airline_id;
+    /** 
+     * imposta la scadenza della prenotazione
+     * @param date
+     */
+    public void setExpiryBooking( OffsetDateTime date) {
+      this.expiryBooking = date;
     }
 
+    /** 
+     * imposta il flag dell'offerta 
+     */
+    public void setBookedFlag(boolean value){
+      this.bookedFlag = value;
+    }
+
+    /**
+     * imposta la compagnia aerea che offre l'offerta
+     * @param airline_id
+     */
     public void setAirline_id(String airline_id) {
       this.airline_id = airline_id;
     }
 
 
 
-    public String getDepartureAirportName() {
-      return departureAirportName;
-    }
-
-
-
-    public void setDepartureAirportName(String departureAirportName) {
-      this.departureAirportName = departureAirportName;
-    }
-
-
-
-    public String getArrivalAirportName() {
-      return arrivalAirportName;
-    }
-
-
-
-    public void setArrivalAirportName(String arrivalAirportName) {
-      this.arrivalAirportName = arrivalAirportName;
-    }
 
     
 

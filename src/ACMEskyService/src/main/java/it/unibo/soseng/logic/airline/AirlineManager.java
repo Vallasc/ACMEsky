@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
@@ -19,6 +20,8 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.security.enterprise.SecurityContext;
+
+import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import org.camunda.bpm.engine.ProcessEngines;
 import org.camunda.bpm.engine.RuntimeService;
@@ -110,10 +113,10 @@ public class AirlineManager {
 
         flightOutInterest.setDepartureDateTime(
             ZonedDateTime.ofInstant(Instant.ofEpochMilli(request.getOutboundFlight().getDepartureTimestamp()), 
-            ZoneId.systemDefault()));
+            ZoneId.systemDefault()).toOffsetDateTime());
         flightOutInterest.setArrivalDateTime(
             ZonedDateTime.ofInstant(Instant.ofEpochMilli(request.getOutboundFlight().getArrivalTimestamp()), 
-            ZoneId.systemDefault()));
+            ZoneId.systemDefault()).toOffsetDateTime());
         
         interest.setFlightBackInterest(flightOutInterest);
 
@@ -125,10 +128,10 @@ public class AirlineManager {
     
             flightBackInterest.setDepartureDateTime(
                 ZonedDateTime.ofInstant(Instant.ofEpochMilli(request.getFlightBack().getDepartureTimestamp()), 
-                ZoneId.systemDefault()));
+                ZoneId.systemDefault()).toOffsetDateTime());
                 flightBackInterest.setArrivalDateTime(
                 ZonedDateTime.ofInstant(Instant.ofEpochMilli(request.getFlightBack().getArrivalTimestamp()), 
-                ZoneId.systemDefault()));
+                ZoneId.systemDefault()).toOffsetDateTime());
 
             interest.setFlightBackInterest(flightBackInterest);
         }
@@ -141,23 +144,40 @@ public class AirlineManager {
 
         public List<InterestDTO> convertInterestList(List<FlightInterest> l){
 
-            Iterator<FlightInterest> i = l.iterator();
-            List<InterestDTO> result = new ArrayList<>();
-    
-            while (i.hasNext()){
-    
-                // result.iterator().next().setDeparture(l.iterator().next().getDepartureAirport().getAddress());
-                // result.iterator().next().setDepDateTime(l.iterator().next().getDepartureDateTime());
-                // result.iterator().next().setArrDateTime(l.iterator().next().getArrivalDateTime());
-                // result.iterator().next().setArrival(l.iterator().next().getArrivalAirport().getAddress());
-    
-            }
+
+            List<InterestDTO> result = l.stream()
+                    .map(interest -> new InterestDTO(interest.getDepartureAirport().getCityName(),
+                                                        interest.getArrivalAirport().getCityName(),
+                                                         interest.getDepartureDateTime(),
+                                                        interest.getArrivalDateTime()))
+                    .collect(Collectors.toList());
+
             return result;
         }
     
         public List<Flight> retrieveFlightsList(List<FlightInterest> list) throws IOException, InterruptedException{
     
-            return api.getFlightList(convertInterestList(list));
+            
+            ArrayNode a = api.getFlightList(convertInterestList(list));
+
+            // da risolvere!!
+            // for(int i: a.elements()){
+
+
+            //}
+            //.forEach(o -> new Flight(o.get("departure_airport_id").textValue(),
+            //                                                             o.get("departure_airport_id").textValue(), 
+            //                                                             o.get("arrival_airport_id").textValue(), 
+            //                                                             o.get("airline_id").textValue(), 
+            //                                                             o.get("departure_date_time").textValue(), 
+            //                                                             o.get("arrival_date_time").textValue(), 
+            //                                                         expireDate, 
+            //                                                         n.get("price").asDouble(), 
+            //                                                         booked))
+
+            //                             .collect(Collectors.toList());
+
+            return null;
         }
     
     

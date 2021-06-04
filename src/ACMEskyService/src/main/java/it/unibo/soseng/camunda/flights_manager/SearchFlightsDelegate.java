@@ -29,6 +29,7 @@ public class SearchFlightsDelegate implements JavaDelegate{
       LOGGER.info ("searchFlightsDelegate in esecuzione");
       @SuppressWarnings (value="unchecked")
       List<Flight> listToSave = manager.retrieveFlightsList((List<FlightInterest>) execution.getVariable(INTEREST_FLIGHTS_LIST));
+      LOGGER.info(listToSave.toString());
       execution.setVariable(FLIGHTS_TO_SAVE, listToSave);
 
     }

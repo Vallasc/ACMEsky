@@ -1,15 +1,12 @@
 package it.soseng.unibo.airlineService.service;
 
-import java.io.File;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -52,15 +49,15 @@ public class FlightOfferService {
      * @throws JsonProcessingException
      * @throws IOException
      */
-    public FlightOffer createFlightOffer(String s) throws JsonProcessingException, IOException {
+    public void createFlightOffer(String s) throws JsonProcessingException, IOException {
         JsonNode n = u.GetRandomJsonObject(u.GetFile(s));
-        FlightOffer o = u.createOffer(n);
-        if(u.LastMinuteCheck(o)){
-            // sendLastMinuteOffer(o);
-        }else{}
-
-        return repo.save(o);
-
+        List<FlightOffer> o = u.createOffer(n);
+        for(FlightOffer i : o ){
+            if(u.LastMinuteCheck(i)){
+                // sendLastMinuteOffer(o);
+            }else{}
+            repo.save(i);
+        }
         
     }
 
@@ -103,26 +100,19 @@ public class FlightOfferService {
      * i cui parametri sono specificati dalla userRequest
      * @param r richiesta dell'utente
      * @return List<FlightOffer> la lista delle offerte di volo escludendo le offerte last-minute
-     * già inviate ad ACMEsky al momento della loro generazione e le offerte già prenotate
+     * (già inviate ad ACMEsky al momento della loro generazione) e le offerte già prenotate
      */
     public List<FlightOffer> searchFlightOffers(List<UserRequest> r){
 
-            
-        return repo.searchFlightOffers(r.iterator().next().departureCity, 
-                                        r.iterator().next().destinationCity, 
-                                        r.iterator().next().departureDate, 
-                                        r.iterator().next().destinationDate)
-                                            .stream()
-                                            .filter(w -> u.LastMinuteCheck(w) == false && w.getBookableFlagValue() == true)
-                                            .collect(Collectors.toList());
-                                            
-    }
-
-    private LocalDateTime convertLocalDateTime (String date){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime arrTime = LocalDateTime.parse(date, formatter);
-        return arrTime;
-    }
+        ArrayList<FlightOffer> list = new ArrayList<>();
+        
+            for(UserRequest req : r){
+                list.addAll(repo.searchFlightOffers(req.departureCity, req.destinationCity, req.departureDate, req.destinationDate)
+                .stream().filter(w -> u.LastMinuteCheck(w) == false && w.getBookedFlagValue() == false).collect(Collectors.toList()));
+            }
+            return list;
+        }
+        
 
 
     
@@ -149,25 +139,55 @@ public class FlightOfferService {
 
 	
     /** 
-     * recupera lo stato di un'offerta di volo (stato di prenotabilità)
+     * prenota un'offerta di volo(se non è già stata prenotata)
      * @param id corrispondente all'offerta di cui si vuole conoscere lo stato
      * @return boolean lo stato dell'offerta
      */
-    public boolean getOfferState(long id) {
-        return repo.findById(id).get().getBookableFlagValue(); 
+    public boolean bookOffer(long id) {
+        FlightOffer o = repo.findById(id).get();
+        if(o.getBookedFlagValue() == false){
+            u.getOfferExpiry(o);
+            return true;
+        }else{
+            return false;
+        }        
 	}
+
+    /** 
+     * cancella la prenotazione delle offerte che non sono state acquistate entro il tempo della scadenza(10 min)
+     */
+    public void DeleteExpiredBooking(){
+        OffsetDateTime now = OffsetDateTime.now();
+        ListIterator<FlightOffer> iterator= repo.findAll().listIterator();
+
+        while(iterator.hasNext()){
+            FlightOffer o = iterator.next();
+            if(o.getBookedFlagValue()==true){
+                OffsetDateTime expiryBookingOffer = o.getExpiryBooking().plusMinutes(1);
+                if(now.equals(expiryBookingOffer) || now.isAfter(expiryBookingOffer)){
+                    o.setBookedFlag(false);
+                    o.setExpiryBooking(null);
+                }
+            }else{}
+        }
+    }
+
+    /** 
+     * cancella le offerte di volo scadute
+     */
+    public void DeleteExpiredOffers() {
+        OffsetDateTime now = OffsetDateTime.now();
+        ListIterator<FlightOffer> iterator= repo.findAll().listIterator();
+
+        while(iterator.hasNext()){
+            FlightOffer o = iterator.next();
+            if(now.equals(o.getExpiryDate()) || now.isAfter(o.getExpiryDate())){
+                repo.deleteById(o.getId());
+            }
+        }
+    }
 
     
-    /** 
-     * prenota l'offerta corrispondente all'id passato come parametro se prenotabile
-     * @param id corrispondente all'offerta in questione
-     * @return boolean esito della prenotazione
-     */
-    public File bookOffer(List<FlightOffer> l) {
-		l.stream().forEach(o -> o.setBookableFlagFalse());
-
-        return null;
-	}
 
 
     public List<FlightOffer> getOffers(long ... l){
@@ -179,6 +199,9 @@ public class FlightOfferService {
         }
           return flights;
     }
+
+
+    
 
     
     

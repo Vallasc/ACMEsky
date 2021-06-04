@@ -9,7 +9,14 @@ import com.lowagie.text.DocumentException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
 import org.thymeleaf.spring5.SpringTemplateEngine;
@@ -64,6 +71,31 @@ public class PdfService {
 
   private String loadAndFillTemplate(Context context) {
       return templateEngine.process("Ticket_template", context);
+  }
+
+  public void sendPdfs(long...id){
+
+    MultiValueMap<String, Object> body  = new LinkedMultiValueMap<>();
+    for(long i : id){
+      try {
+        body.add("files", generatePdf(i));
+      } catch (IOException e) {
+        e.printStackTrace();
+      } catch (DocumentException e) {
+        e.printStackTrace();
+      }
+    }
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+    HttpEntity<MultiValueMap<String, Object>> requestEntity= new HttpEntity<>(body, headers);
+
+    String serverUrl = "http://localhost:8080/OfferPdfFiles";
+
+    RestTemplate restTemplate = new RestTemplate();
+    ResponseEntity<String> response = restTemplate
+      .postForEntity(serverUrl, requestEntity, String.class);
   }
 
 

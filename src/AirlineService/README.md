@@ -1,19 +1,15 @@
 # AirlineService
-A very simple AirlineService
-### Run:
-```sh
-mvnw spring-boot:run
-```
+Servizi AirlineService per generare voli da file json, 
 
 ### Build fat Jar:
 ```sh
 mvn package
 ```
 
-### Create and run on Docker container
+### Create and run on Docker container using docker-compose(the only way to run the project)
 ```sh
-docker build -t airline-service .
-docker run --rm -d  -p 8080:8080/tcp airline-service
+docker-compose build
+docker-compose up
 ```
 
 ### API:
@@ -23,4 +19,6 @@ http://localhost:8080/swagger-ui.html
 http://localhost:8080/h2
 URL: jdbc:h2:file:./db/db
 user: sa
-passw: 
+passw:
+
+
