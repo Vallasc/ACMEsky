@@ -23,6 +23,7 @@ import org.springframework.web.client.RestTemplate;
 import it.soseng.unibo.airlineService.model.FlightUtility;
 import it.soseng.unibo.airlineService.model.FlightOffer;
 import it.soseng.unibo.airlineService.model.Iban;
+import it.soseng.unibo.airlineService.DTO.FlightDTO;
 import it.soseng.unibo.airlineService.DTO.UserRequest;
 import it.soseng.unibo.airlineService.repository.FlightOfferRepository;
 
@@ -46,7 +47,7 @@ public class FlightOfferService {
      * sendLastMinuteOffer se risulta essere un'offerta last-minute
      * rispetto alla data in cui l'offerta viene creata
      * @return FlightOffer che viene salvata nella rispettiva tabella del db
-     * @throws JsonProcessingException
+     * @throws JsonProcessingException 
      * @throws IOException
      */
     public void createFlightOffer(String s) throws JsonProcessingException, IOException {
@@ -54,7 +55,9 @@ public class FlightOfferService {
         List<FlightOffer> o = u.createOffer(n);
         for(FlightOffer i : o ){
             if(u.LastMinuteCheck(i)){
-                // sendLastMinuteOffer(o);
+                FlightDTO f = new FlightDTO(i.getId(), i.getDepartureId(), i.getArrivalId(), i.getDepartureTime(), 
+                                                i.getArrivalTime(), i.getAirline_id(), i.getPrice(),i.getExpiryDate());
+                // sendLastMinuteOffer(f);
             }else{}
             repo.save(i);
         }
@@ -66,9 +69,16 @@ public class FlightOfferService {
      * cancella l'offerta di volo corrispondente all'id fornito come parametro
      * @param id
      */
-    public void deleteFlightOffer(long id) {
-        repo.deleteById(id);
+    public String deleteFlightOffer(long id) {
         
+        if(repo.existsById(id)){
+            repo.deleteById(id);
+            return "Offer deleted";
+        }else{
+            return "Error or offer not exist";
+        }
+        
+
     }
 
 
@@ -102,15 +112,22 @@ public class FlightOfferService {
      * @return List<FlightOffer> la lista delle offerte di volo escludendo le offerte last-minute
      * (già inviate ad ACMEsky al momento della loro generazione) e le offerte già prenotate
      */
-    public List<FlightOffer> searchFlightOffers(List<UserRequest> r){
+    public List<FlightDTO> searchFlightOffers(List<UserRequest> r){
 
         ArrayList<FlightOffer> list = new ArrayList<>();
-        
+        ArrayList<FlightDTO> flights = new ArrayList<>();
+
             for(UserRequest req : r){
                 list.addAll(repo.searchFlightOffers(req.departureCity, req.destinationCity, req.departureDate, req.destinationDate)
                 .stream().filter(w -> u.LastMinuteCheck(w) == false && w.getBookedFlagValue() == false).collect(Collectors.toList()));
             }
-            return list;
+
+            for(FlightOffer o: list){
+                FlightDTO f = new FlightDTO(o.getId(), o.getDepartureId(), o.getArrivalId(), o.getDepartureTime(), 
+                                                o.getArrivalTime(), o.getAirline_id(), o.getPrice(),o.getExpiryDate());
+                flights.add(f);
+            }
+            return flights;
         }
         
 
@@ -120,7 +137,7 @@ public class FlightOfferService {
      * invia le offerte last-minute generate precedentemente ad ACMEsky
      * @param o l'offerta da inviare sulla route specifica
      */
-    public void sendLastMinuteOffer(FlightOffer o) {
+    public void sendLastMinuteOffer(FlightDTO f) {
 
         String url = "http://localhost:8080/airline/offers";
     
@@ -131,7 +148,7 @@ public class FlightOfferService {
         // // set `accept` header
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         // // build the request
-        HttpEntity<FlightOffer> entity = new HttpEntity<>(o, headers);
+        HttpEntity<FlightDTO> entity = new HttpEntity<>(f, headers);
         // // send POST request
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<FlightOffer> result = restTemplate.postForEntity(url, entity, FlightOffer.class);    

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import it.soseng.unibo.airlineService.DTO.FlightDTO;
 import it.soseng.unibo.airlineService.DTO.UserRequest;
 import it.soseng.unibo.airlineService.model.FlightOffer;
 import it.soseng.unibo.airlineService.model.Iban;
@@ -69,7 +70,7 @@ public class FlightOfferController {
      * @return List<FlightOffer> che contiene tutte le offerte di lavoro prenotabili
      */
     @PostMapping("/searchFlights")
-    public List<FlightOffer> getOffers(@RequestBody List<UserRequest> r) {
+    public List<FlightDTO> getOffers(@RequestBody List<UserRequest> r) {
         return s.searchFlightOffers(r);
     }
 
@@ -88,8 +89,8 @@ public class FlightOfferController {
      * @param id che viene passato per identificare l'offerta da eliminare
      */
     @DeleteMapping("/PurchasedOffer")
-    public void deleteOffer(@RequestParam(name = "id") long id) {
-        s.deleteFlightOffer(id);
+    public String deleteOffer(@RequestParam(name = "id") long id) {
+        return s.deleteFlightOffer(id);
     }
 
     
@@ -107,7 +108,7 @@ public class FlightOfferController {
      * @return boolean il cui valore true indica che l'offerta è prenotabile(viceversa false se non lo è)
      */
     @Scheduled(fixedRate = 6000)
-    @PostMapping("/deleteBooking")
+    @DeleteMapping("/deleteBooking")
     private void checkUnsoldBooking(){
         s.DeleteExpiredBooking();
     }
@@ -117,7 +118,7 @@ public class FlightOfferController {
      * @return boolean il cui valore true indica che l'offerta è prenotabile(viceversa false se non lo è)
      */
     @Scheduled(fixedRate = 6000)
-    @PostMapping("/deleteExpiredOffer")
+    @DeleteMapping("/deleteExpiredOffer")
     private void deleteExpiredOffer(){
         s.DeleteExpiredOffers();
     }
@@ -157,7 +158,7 @@ public class FlightOfferController {
      * @param sendIban iban preso dal paramtro server.iban presente in application.properties in resources
      * @return Iban del servizio
      */
-    @GetMapping("/iban")
+    @GetMapping("/getIban")
     public Iban sendIban(@Value("${server.iban}") String iban) {
         return s.sendIban(iban);
     }

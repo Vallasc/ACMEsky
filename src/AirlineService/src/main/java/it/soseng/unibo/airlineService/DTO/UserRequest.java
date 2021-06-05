@@ -1,8 +1,6 @@
 package it.soseng.unibo.airlineService.DTO;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.time.ZonedDateTime;
 
 import javax.validation.constraints.NotBlank;
 
