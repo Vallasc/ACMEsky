@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import it.soseng.unibo.airlineService.DTO.FlightDTO;
+import it.soseng.unibo.airlineService.DTO.Flight;
 import it.soseng.unibo.airlineService.DTO.UserRequest;
 import it.soseng.unibo.airlineService.model.FlightOffer;
 import it.soseng.unibo.airlineService.model.Iban;
@@ -69,9 +69,9 @@ public class FlightOfferController {
      * @param r che contiene i parametri del volo che l'utente cerca
      * @return List<FlightOffer> che contiene tutte le offerte di lavoro prenotabili
      */
-    @PostMapping("/searchFlights")
-    public List<FlightDTO> getOffers(@RequestBody List<UserRequest> r) {
-        return s.searchFlightOffers(r);
+    @PostMapping("/getFlights")
+    public List<Flight> getOffers(@RequestBody List<UserRequest> r) {
+        return s.getFlights(r);
     }
 
     
@@ -88,7 +88,7 @@ public class FlightOfferController {
      * correttamente(viene chiamata quando si è verificato il pagamento dell'utente)
      * @param id che viene passato per identificare l'offerta da eliminare
      */
-    @DeleteMapping("/PurchasedOffer")
+    @DeleteMapping("/purchasedOffer")
     public String deleteOffer(@RequestParam(name = "id") long id) {
         return s.deleteFlightOffer(id);
     }

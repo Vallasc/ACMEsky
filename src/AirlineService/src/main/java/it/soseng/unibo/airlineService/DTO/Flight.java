@@ -4,7 +4,7 @@ import java.time.OffsetDateTime;
 
 import javax.validation.constraints.NotBlank;
 
-public class FlightDTO {
+public class Flight {
 
     @NotBlank(message = "id is mandatory")
     public long id;
@@ -33,7 +33,7 @@ public class FlightDTO {
     @NotBlank(message = "expire_offer")
     private OffsetDateTime expiryDate;
 
-    public FlightDTO(long id, String departureId, String destinationId, OffsetDateTime departureDate, 
+    public Flight(long id, String departureId, String destinationId, OffsetDateTime departureDate, 
                             OffsetDateTime destinationDate, String airline_id, double price, OffsetDateTime expTime){
         
                                 this.id=id;

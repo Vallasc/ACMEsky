@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import it.soseng.unibo.airlineService.DTO.Flight;
 import it.soseng.unibo.airlineService.repository.FlightOfferRepository;
 
 
@@ -118,13 +119,19 @@ public class FlightUtility {
      * il tempo per acquistare l'offerta)
      * @param o l'offerta in questione
      */
-    public void getOfferExpiry(FlightOffer o){
+    public void setBooking(FlightOffer o){
 
         o.setBookedFlag(true);
         OffsetDateTime obj = OffsetDateTime.now();
         o.setExpiryBooking(obj); 
     }
 
+    public Flight createFlight(FlightOffer o){
+
+        Flight f = new Flight(o.getId(), o.getDepartureId(), o.getArrivalId(), o.getDepartureTime(), 
+                                        o.getArrivalTime(), o.getAirline_id(), o.getPrice(),o.getExpiryDate());
+        return f;
+    }
 
 
 
