@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0a01wgm" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.3.0">
+  <bpmn:message id="Message_0ep6um1" name="OfferFromServiceMessage" />
+  <bpmn:collaboration id="Collaboration_1stvrvj">
+    <bpmn:participant id="Participant_0xw9x6j" name="AcmeSky_FlightsManager" processRef="Process_0p4vc5n" />
+    <bpmn:participant id="Participant_0snmrqs" name="AirlineService" />
+    <bpmn:messageFlow id="Flow_112l8do" sourceRef="Participant_0snmrqs" targetRef="Event_1u8hzc6" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_0p4vc5n" isExecutable="true">
+    <bpmn:sequenceFlow id="Flow_16n8q06" sourceRef="Event_1u8hzc6" targetRef="Activity_0z25vbb" />
+    <bpmn:sequenceFlow id="Flow_0nz23sg" sourceRef="Activity_0z25vbb" targetRef="Event_00e40m5" />
+    <bpmn:serviceTask id="Activity_0z25vbb" name="Save offer in DB" camunda:class="">
+      <bpmn:incoming>Flow_16n8q06</bpmn:incoming>
+      <bpmn:outgoing>Flow_0nz23sg</bpmn:outgoing>
+      <bpmn:property id="Property_0uxc2oz" name="__targetRef_placeholder" />
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="Event_00e40m5">
+      <bpmn:incoming>Flow_0nz23sg</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:startEvent id="Event_1u8hzc6">
+      <bpmn:outgoing>Flow_16n8q06</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0u7evl4" messageRef="Message_0ep6um1" />
+    </bpmn:startEvent>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1stvrvj">
+      <bpmndi:BPMNShape id="Participant_0xw9x6j_di" bpmnElement="Participant_0xw9x6j" isHorizontal="true">
+        <dc:Bounds x="190" y="70" width="600" height="150" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_16n8q06_di" bpmnElement="Flow_16n8q06">
+        <di:waypoint x="338" y="140" />
+        <di:waypoint x="410" y="140" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0nz23sg_di" bpmnElement="Flow_0nz23sg">
+        <di:waypoint x="510" y="140" />
+        <di:waypoint x="572" y="140" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Activity_0z25vbb_di" bpmnElement="Activity_0z25vbb">
+        <dc:Bounds x="410" y="100" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_00e40m5_di" bpmnElement="Event_00e40m5">
+        <dc:Bounds x="572" y="122" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1u8hzc6_di" bpmnElement="Event_1u8hzc6">
+        <dc:Bounds x="302" y="122" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Participant_0hxfsep_di" bpmnElement="Participant_0snmrqs" isHorizontal="true">
+        <dc:Bounds x="190" y="250" width="600" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_112l8do_di" bpmnElement="Flow_112l8do">
+        <di:waypoint x="320" y="250" />
+        <di:waypoint x="320" y="158" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

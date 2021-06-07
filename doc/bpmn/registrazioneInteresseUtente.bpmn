@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1lqrzsp" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.3.0">
+  <bpmn:category id="Category_0wvbkws">
+    <bpmn:categoryValue id="CategoryValue_097e2mi" value="Request flights of intest" />
+  </bpmn:category>
+  <bpmn:collaboration id="Collaboration_10xt7kc">
+    <bpmn:participant id="Participant_05w6zpn" name="User" processRef="Process_0g6z86j" />
+    <bpmn:participant id="Participant_0ss1rru" name="ACMEsky" processRef="Process_0fwnhb7" />
+    <bpmn:messageFlow id="Flow_1o5mvcz" sourceRef="Activity_1i0yv30" targetRef="Event_0b7vl2j" />
+    <bpmn:group id="Group_1vy7ljz" categoryValueRef="CategoryValue_05ev9cb" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_0g6z86j" isExecutable="true">
+    <bpmn:userTask id="Activity_1i0yv30" name="Set flights interest">
+      <bpmn:incoming>Flow_0dfe18k</bpmn:incoming>
+      <bpmn:outgoing>Flow_13owtx5</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="Event_1ttp8u3">
+      <bpmn:incoming>Flow_13owtx5</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:startEvent id="Event_0j4jz5k">
+      <bpmn:outgoing>Flow_0dfe18k</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_0dfe18k" sourceRef="Event_0j4jz5k" targetRef="Activity_1i0yv30" />
+    <bpmn:sequenceFlow id="Flow_13owtx5" sourceRef="Activity_1i0yv30" targetRef="Event_1ttp8u3" />
+  </bpmn:process>
+  <bpmn:process id="Process_0fwnhb7" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_1847gss" />
+    <bpmn:dataStoreReference id="DataStoreReference_05eak7e" name="Flights of users interest" />
+    <bpmn:startEvent id="Event_0b7vl2j">
+      <bpmn:outgoing>Flow_0jofla6</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0smdsux" />
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="Activity_0s5fa49" name="Save flights of interest in DB">
+      <bpmn:incoming>Flow_0jofla6</bpmn:incoming>
+      <bpmn:outgoing>Flow_1fjx5yw</bpmn:outgoing>
+      <bpmn:property id="Property_1ki7hgp" name="__targetRef_placeholder" />
+      <bpmn:dataInputAssociation id="DataInputAssociation_10nqwdz">
+        <bpmn:sourceRef>DataStoreReference_05eak7e</bpmn:sourceRef>
+        <bpmn:targetRef>Property_1ki7hgp</bpmn:targetRef>
+      </bpmn:dataInputAssociation>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="Event_002pix6">
+      <bpmn:incoming>Flow_1fjx5yw</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1fjx5yw" sourceRef="Activity_0s5fa49" targetRef="Event_002pix6" />
+    <bpmn:sequenceFlow id="Flow_0jofla6" sourceRef="Event_0b7vl2j" targetRef="Activity_0s5fa49" />
+  </bpmn:process>
+  <bpmn:category id="Category_1moslyj">
+    <bpmn:categoryValue id="CategoryValue_1n2tr5i" value="Request flights of intest" />
+  </bpmn:category>
+  <bpmn:category id="Category_0vznui6">
+    <bpmn:categoryValue id="CategoryValue_08flqwu" value="Request flights of intest" />
+  </bpmn:category>
+  <bpmn:category id="Category_07ja6ht">
+    <bpmn:categoryValue id="CategoryValue_0r455hg" value="Request flights of intest" />
+  </bpmn:category>
+  <bpmn:category id="Category_1mjcd85">
+    <bpmn:categoryValue id="CategoryValue_13lx6y9" value="Request flights of intest" />
+  </bpmn:category>
+  <bpmn:category id="Category_0sqwgza">
+    <bpmn:categoryValue id="CategoryValue_1u5towc" value="Request flights of intest" />
+  </bpmn:category>
+  <bpmn:category id="Category_1ahkkv6">
+    <bpmn:categoryValue id="CategoryValue_1u4jnqx" value="Request flights of intest" />
+  </bpmn:category>
+  <bpmn:category id="Category_14ma2cq">
+    <bpmn:categoryValue id="CategoryValue_1yktua3" value="Request flights of intest" />
+  </bpmn:category>
+  <bpmn:category id="Category_1clj1ck">
+    <bpmn:categoryValue id="CategoryValue_0cuvff7" value="Request flights of intest" />
+  </bpmn:category>
+  <bpmn:category id="Category_0qjs0j1">
+    <bpmn:categoryValue id="CategoryValue_05ev9cb" value="Request flights of intest" />
+  </bpmn:category>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_10xt7kc">
+      <bpmndi:BPMNShape id="Participant_05w6zpn_di" bpmnElement="Participant_05w6zpn" isHorizontal="true">
+        <dc:Bounds x="155" y="80" width="570" height="120" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0dfe18k_di" bpmnElement="Flow_0dfe18k">
+        <di:waypoint x="298" y="140" />
+        <di:waypoint x="415" y="140" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_13owtx5_di" bpmnElement="Flow_13owtx5">
+        <di:waypoint x="515" y="140" />
+        <di:waypoint x="597" y="140" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Activity_1i0yv30_di" bpmnElement="Activity_1i0yv30">
+        <dc:Bounds x="415" y="100" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1ttp8u3_di" bpmnElement="Event_1ttp8u3">
+        <dc:Bounds x="597" y="122" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0j4jz5k_di" bpmnElement="Event_0j4jz5k">
+        <dc:Bounds x="262" y="122" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Participant_0ss1rru_di" bpmnElement="Participant_0ss1rru" isHorizontal="true">
+        <dc:Bounds x="155" y="260" width="575" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1fjx5yw_di" bpmnElement="Flow_1fjx5yw">
+        <di:waypoint x="430" y="380" />
+        <di:waypoint x="462" y="380" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0jofla6_di" bpmnElement="Flow_0jofla6">
+        <di:waypoint x="288" y="380" />
+        <di:waypoint x="330" y="380" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="DataStoreReference_05eak7e_di" bpmnElement="DataStoreReference_05eak7e">
+        <dc:Bounds x="655" y="325" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="644" y="294" width="76" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0b7vl2j_di" bpmnElement="Event_0b7vl2j">
+        <dc:Bounds x="252" y="362" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0s5fa49_di" bpmnElement="Activity_0s5fa49">
+        <dc:Bounds x="330" y="340" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_002pix6_di" bpmnElement="Event_002pix6">
+        <dc:Bounds x="462" y="362" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1o5mvcz_di" bpmnElement="Flow_1o5mvcz">
+        <di:waypoint x="465" y="180" />
+        <di:waypoint x="465" y="230" />
+        <di:waypoint x="270" y="230" />
+        <di:waypoint x="270" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataInputAssociation_10nqwdz_di" bpmnElement="DataInputAssociation_10nqwdz">
+        <di:waypoint x="655" y="345" />
+        <di:waypoint x="426" y="342" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Group_1vy7ljz_di" bpmnElement="Group_1vy7ljz">
+        <dc:Bounds x="206" y="280" width="408" height="160" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="368" y="287" width="86" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
