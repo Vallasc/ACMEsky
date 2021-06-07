@@ -1,110 +1,137 @@
-import { ApplicationRef, Component, OnInit} from '@angular/core';
+import { Component, OnDestroy, OnInit} from '@angular/core';
 import { Notification } from '../_models';
 import { NotificationService } from '../_services';
-import { first } from 'rxjs/operators';
-import {SwPush, SwUpdate} from '@angular/service-worker'
-import { interval } from 'rxjs';
+import { first, take, takeUntil } from 'rxjs/operators';
+import {SwPush} from '@angular/service-worker'
+import { Observable, Subject } from 'rxjs';
 
 @Component({ templateUrl: './notification.component.html' })
 
-export class NotificationComponent implements OnInit {
-    notifications: Notification[] = [];
+export class NotificationComponent implements  OnDestroy,OnInit{
+    notifications: Notification [];
     sub: PushSubscription;
-    readonly VAPID_PUBLIC_KEY = "BMKtc1sW54C54akN2A0T_2g0DcCYVQqgmzW3Mx7um85HY28Vj4nmImOfx6KMzD807WABeeqAifOZgwnfkNU7erY";
-    constructor(
-        private swPush: SwPush,       
-        private notificationService: NotificationService,
-        private update: SwUpdate,
-        private appRef: ApplicationRef,
-    
-        ) {    
-           
-        }
+    private ngUnsubscribe = new Subject();
 
-    ngOnInit() {
-        this.pushSubscription();
-        this.updateClient();
-        this.checkUpdate();
-        this.swPush.messages.subscribe((message) => console.log(message));
-    
-        this.swPush.notificationClicks.subscribe(({ action, notification }) => {
-          window.open(notification.data.url);
-        });
-        this.notificationService.getAll().subscribe (notification => this.notifications = notification);
-    
+    readonly VAPID_PUBLIC_KEY = "BA161ZnkX9G6CwYOZifUyGpOxslxcANly0PfMtti7y1rDO9NZlPNI1yepdaTodQXX0gVHqXHVApmArL1MUNsBoM";
+    constructor(
+        private swPush: SwPush,
+        private notificationService: NotificationService      
+        ) {   
+          }
+          
+    ngOnInit(){
+      if(navigator.serviceWorker){
+      // First, do a one-off check if there's currently a service worker in control.
+
+        if (navigator.serviceWorker.controller) {
+          console.log(`This page is currently controlled by: ${navigator.serviceWorker.controller}`);
+          navigator.serviceWorker.controller.onstatechange=function(){
+          console.log('state'+ navigator.serviceWorker.controller.state);
+        }
+        } else {
+          //This happens on ctrl+f5(force refresh)
+          console.log('This page is not currently controlled by a service worker.');
+          navigator.serviceWorker.register('./ngsw-worker.js').then(function(registration) {
+          console.log('Service worker registration succeeded:', registration);
+          window.location.reload();
+          })
+          , function(error) {
+                console.log('Service worker registration failed:', error);
+              };
+            }
+            // Then, register a handler to detect when a new or
+            // updated service worker takes control.
+            navigator.serviceWorker.oncontrollerchange = function() {
+              console.log('This page is now controlled by:', navigator.serviceWorker.controller);
+            };
+      }
+      else {
+        console.log('Service workers are not supported.');
+      }
+      //load all notifications
+      this.getAllNotifications ();
+
+       //add new notification to notifications
+      this.swPush.messages
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(message => {
+        //Create new Notification
+        let notification = message['notification']
+        let notify = new Notification ();
+        notify.flyNumber = notification['data']['flyNumber'];
+        notify.flyCompany = notification['data']['flyCompany'];
+        notify.flyToken = notification['data']['flyToken'];
+        this.addNotification (notify);
+      });
+       //notification's actions
+      this.swPush.notificationClicks.subscribe(({ action, notification }) => {
+      window.open(notification.data.url);
+      });
+      
     }
 
-   /* basicDetails(notification) {
-        const { _id, flyNumber, flyCompany, flyToken} = notification;
-        return { _id, flyNumber, flyCompany, flyToken};
-    }*/
-    
     deleteNotification(id: string) {
-        const user = this.notifications.find(x => x._id === id);
-        this.notificationService.delete(id)
-           .pipe(first())
-           .subscribe(() => this.notifications = this.notifications.filter(x => x._id !== id));
+      this.notificationService.delete(id)
+      .pipe(first())
+      .subscribe(() => this.notifications = this.notifications.filter(x => x._id !== id));
     }
 
     pushSubscription () {
-        
-        if (!this.swPush.isEnabled) {
-            console.log('Notification is not enabled');
-            return;
-          }
-        this.swPush.requestSubscription({
-            serverPublicKey: this.VAPID_PUBLIC_KEY
-        })
-        .then(sub => {
+      if(this.swPush.isEnabled){
+      this.swPush.requestSubscription({
+      serverPublicKey: this.VAPID_PUBLIC_KEY
+      })
+      .then(sub =>{this.notificationService.sendSubscriptionToTheServer(sub).subscribe(x=>console.log(x),err=>console.log(err))})
+      .catch(err => console.error("Could not subscribe to notifications", err));
+      }
 
-            this.sub = sub;
-
-
-            console.log("Notification Subscription: ", sub);
-
-            this.notificationService.addPushSubscriber(sub).subscribe(
-                () => console.log('Sent push subscription object to server.'),
-                err =>  console.log('Could not send subscription object to server, reason: ', err)
+    }
+    unsubscribeNotifications(){
+      this.swPush.subscription.pipe(take(1)).subscribe(subscriptionValue=>{
+        if (subscriptionValue) {
+            this.notificationService.unsubscribeToNotification (subscriptionValue)
+            .subscribe(
+              res => {
+                // Unsubscribe current client (browser)
+                subscriptionValue.unsubscribe()
+                  .then(success => {
+                    console.log('[App] Unsubscription successful', success)
+                  })
+                  .catch(err => {
+                    console.log('[App] Unsubscription failed', err)
+                  })
+              },
+              err => {
+                console.log('[App] Delete subscription request failed', err)
+              }
             );
-
-        })
-        .catch(err => console.error("Could not subscribe to notifications", err));
-    }
-
-    sendNewsletter() {
-        console.log("Sending Newsletter to all Subscribers ...");
-        this.notificationService.send().subscribe();
-    }
-
-    updateClient() {
-        if (!this.update.isEnabled) {
-          console.log('Not Enabled');
-          return;
         }
-        console.log(`UPDATE`+ "in UPDATE" );
-        this.update.available.subscribe((event) => {
-          console.log(`current`, event.current, `available `, event.available);
-          if (confirm('update available for the app please conform')) {
-            this.update.activateUpdate().then(() => location.reload());
-          }
-        });
-    
-        this.update.activated.subscribe((event) => {
-          console.log(`current`, event.previous, `available `, event.current);
-        });
-      }
-    
-      checkUpdate() {
-        this.appRef.isStable.subscribe((isStable) => {
-          if (isStable) {
-            const timeInterval = interval(8 * 60 * 60 * 1000);
-    
-            timeInterval.subscribe(() => {
-              this.update.checkForUpdate().then(() => console.log('checked'));
-              console.log('update checked');
-            });
-          }
-        });
-      }
+        else {
+          console.log("Prima di fare unsubscribe devi fare subscribe!");
+        }
+        
+    });
+  }
+
+    getAllNotifications () {
+      this.notificationService.getAll().subscribe(
+        (res : Notification []) => {
+          this.notifications = res;
+        },
+        (err) => {
+          console.error(err);
+        }
+      );
+    }
+
+    addNotification (notification: Notification) {
+      this.notifications.push(notification);
+    }
+
+    ngOnDestroy() {
+      this.ngUnsubscribe.next();
+      this.ngUnsubscribe.complete();
+    }
+
 }
 

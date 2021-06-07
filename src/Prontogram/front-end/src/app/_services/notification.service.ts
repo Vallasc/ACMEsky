@@ -13,10 +13,8 @@ export class NotificationService {
         private http: HttpClient,
         
     ) {
-    
         this.notificationSubject = new BehaviorSubject<Notification>(JSON.parse(localStorage.getItem('notification')));
         this.notification = this.notificationSubject.asObservable();
-   
     }
 
     public get notificationValue(): Notification {
@@ -24,34 +22,38 @@ export class NotificationService {
     }
 
     createNotification(notification: Notification) {
-        return this.http.post(`${environment.apiUrl}/posts/notification`, notification);
+        return this.http.post(`${environment.apiUrl}/notification/posts/new`, notification);
     }
 
     getAll() {
-        return this.http.get<Notification[]>(`${environment.apiUrl}/gets/find/notification`); 
+        return this.http.get<Notification[]>(`${environment.apiUrl}/notification/gets/all`); 
     }
 
     getById(id: string) {
-        return  this.http.get<Notification>(`${environment.apiUrl}/gets/notification/${id}`);
+        return  this.http.get<Notification>(`${environment.apiUrl}/notification/gets/${id}`);
     }
 
     update(id, params) {
-        return this.http.patch(`${environment.apiUrl}/posts/notificication/${id}`, params);
+        return this.http.patch(`${environment.apiUrl}/notification/posts/notification/${id}`, params);
     }
 
     delete(id: string) {
-        return this.http.delete(`${environment.apiUrl}/posts/notification/${id}`)
+        return this.http.delete(`${environment.apiUrl}/notification/posts/notification/${id}`)
             .pipe(map(x => {
                 return x;
             }));
     }
 
-    addPushSubscriber (sub:any) {
-        return  this.http.post(`${environment.apiUrl}/posts/sub`,sub);
+    sendSubscriptionToTheServer (subscription: PushSubscription) {
+        return  this.http.post(`${environment.apiUrl}/notification/posts/sub`,subscription);
+    }
+
+    unsubscribeToNotification (subscription: PushSubscription) {
+        return  this.http.delete(`${environment.apiUrl}/notification/posts/${subscription.toJSON()}`);
     }
 
     send() {
-        return this.http.post(`${environment.apiUrl}/posts/news`,null);
+        return this.http.post(`${environment.apiUrl}/notification/posts/news`,null);
     }
 
 }

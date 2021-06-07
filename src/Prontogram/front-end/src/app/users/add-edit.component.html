@@ -23,6 +23,7 @@
             <input type="text" formControlName="username" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
             <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
                 <div *ngIf="f.username.errors.required">Username obbligatorio</div>
+                <div *ngIf="f.username.errors.minlength">L'username deve essere almeno di 6 caratteri</div>
             </div>
         </div>
         <div class="form-group col">

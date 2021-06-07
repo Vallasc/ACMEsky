@@ -25,8 +25,9 @@ export class AddEditComponent implements OnInit {
         this.id = this.route.snapshot.params['id'];
         this.isAddMode = !this.id;
         
-        // password not required in edit mode
+        // Vincoli sui field password e username
         const passwordValidators = [Validators.minLength(6)];
+
         if (this.isAddMode) {
             passwordValidators.push(Validators.required);
         }
@@ -34,7 +35,7 @@ export class AddEditComponent implements OnInit {
         this.form = this.formBuilder.group({
             name: ['', Validators.required],
             secondName: ['', Validators.required],
-            username: ['', Validators.required],
+            username: ['',[Validators.required, Validators.minLength(6)]],
             password: ['', passwordValidators]
         });
 
@@ -72,11 +73,11 @@ export class AddEditComponent implements OnInit {
             .pipe(first())
             .subscribe({
                 next: () => {
-                    this.alertService.success('User added successfully', { keepAfterRouteChange: true });
+                    this.alertService.success('Utente aggiunto con successo', { keepAfterRouteChange: true });
                     this.router.navigate(['../'], { relativeTo: this.route });
                 },
                 error: error => {
-                    this.alertService.error(error);
+                    this.alertService.error("Username già esistente");
                     this.loading = false;
                 }
             });
@@ -87,7 +88,7 @@ export class AddEditComponent implements OnInit {
             .pipe(first())
             .subscribe({
                 next: () => {
-                    this.alertService.success('Update successful', { keepAfterRouteChange: true });
+                    this.alertService.success('Utente aggiornato con successo', { keepAfterRouteChange: true });
                     this.router.navigate(['../../'], { relativeTo: this.route });
                 },
                 error: error => {

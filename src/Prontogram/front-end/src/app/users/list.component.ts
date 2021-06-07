@@ -6,24 +6,25 @@ import { AccountService } from '../_services';
 
 @Component({ templateUrl: 'list.component.html' })
 export class ListComponent implements OnInit {
-    users: User[] = [];
-
+    //users: User[] = [];
+    user: User 
     constructor(private accountService: AccountService) {}
 
     ngOnInit() {
-        this.accountService.getAll().subscribe (user => this.users= user)  
+        //this.accountService.getAll().subscribe (user => this.users = user)  
+        this.user = this.accountService.userValue;
     }
-    basicDetails(user) {
+    /*basicDetails(user) {
   
-        const { _id, email, name, password, secondName, username, token} = user;
-        return { _id, email, name, password, secondName, username, token };
+        const { _id, name, password, secondName, username, token} = user;
+        return { _id, name, password, secondName, username, token };
 
-    }
+    }*/
     deleteUser(id: string) {
-       
-        const user = this.users.find(x => x._id === id);
+        
+        //const user = this.users.find(x => x._id === id);
         this.accountService.delete(id)
-           .pipe(first())
-           .subscribe(() => this.users = this.users.filter(x => x._id !== id));
+           .pipe(first()).subscribe();
+           //.subscribe(() => this.user = this.user.filter(x => x._id !== id));
     }
 }
