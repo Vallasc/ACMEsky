@@ -1,22 +1,26 @@
 import { Component, OnDestroy, OnInit} from '@angular/core';
 import { Notification } from '../_models';
-import { NotificationService } from '../_services';
+import { AccountService, NotificationService } from '../_services';
 import { first, take, takeUntil } from 'rxjs/operators';
 import {SwPush} from '@angular/service-worker'
 import { Observable, Subject } from 'rxjs';
+import { User } from '../../../../../../../../../ACMEsky/src/app/_models';
 
 @Component({ templateUrl: './notification.component.html' })
 
 export class NotificationComponent implements  OnDestroy,OnInit{
     notifications: Notification [];
     sub: PushSubscription;
+    user: User;
     private ngUnsubscribe = new Subject();
 
     readonly VAPID_PUBLIC_KEY = "BA161ZnkX9G6CwYOZifUyGpOxslxcANly0PfMtti7y1rDO9NZlPNI1yepdaTodQXX0gVHqXHVApmArL1MUNsBoM";
     constructor(
         private swPush: SwPush,
-        private notificationService: NotificationService      
+        private notificationService: NotificationService,
+        private accountService: AccountService        
         ) {   
+           this.user= this.accountService.userValue;
           }
           
     ngOnInit(){
@@ -61,6 +65,7 @@ export class NotificationComponent implements  OnDestroy,OnInit{
         notify.flyNumber = notification['data']['flyNumber'];
         notify.flyCompany = notification['data']['flyCompany'];
         notify.flyToken = notification['data']['flyToken'];
+        notify.user_id = notification['data']['user_id']
         this.addNotification (notify);
       });
        //notification's actions
@@ -81,7 +86,7 @@ export class NotificationComponent implements  OnDestroy,OnInit{
       this.swPush.requestSubscription({
       serverPublicKey: this.VAPID_PUBLIC_KEY
       })
-      .then(sub =>{this.notificationService.sendSubscriptionToTheServer(sub).subscribe(x=>console.log(x),err=>console.log(err))})
+      .then(sub =>{this.notificationService.sendSubscriptionToTheServer(sub,this.user).subscribe(x=>console.log(x),err=>console.log(err))})
       .catch(err => console.error("Could not subscribe to notifications", err));
       }
 
@@ -114,7 +119,7 @@ export class NotificationComponent implements  OnDestroy,OnInit{
   }
 
     getAllNotifications () {
-      this.notificationService.getAll().subscribe(
+      this.notificationService.getAll(this.user._id).subscribe(
         (res : Notification []) => {
           this.notifications = res;
         },
@@ -125,7 +130,9 @@ export class NotificationComponent implements  OnDestroy,OnInit{
     }
 
     addNotification (notification: Notification) {
-      this.notifications.push(notification);
+      if (notification.user_id == this.user._id) {
+        this.notifications.push(notification);
+      } 
     }
 
     ngOnDestroy() {

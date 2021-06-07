@@ -3,4 +3,5 @@ export class Notification {
     flyNumber: string;
     flyCompany: string;
     flyToken: string;
+    user_id:string;
 }

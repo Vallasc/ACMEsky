@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
-import { Notification } from '../_models';
+import { Notification, Subscription, User } from '../_models';
 
 @Injectable({ providedIn: 'root' })
 export class NotificationService {
@@ -25,8 +25,8 @@ export class NotificationService {
         return this.http.post(`${environment.apiUrl}/notification/posts/new`, notification);
     }
 
-    getAll() {
-        return this.http.get<Notification[]>(`${environment.apiUrl}/notification/gets/all`); 
+    getAll(id: string) {
+        return this.http.get<Notification[]>(`${environment.apiUrl}/notification/gets/all/${id}`); 
     }
 
     getById(id: string) {
@@ -44,8 +44,11 @@ export class NotificationService {
             }));
     }
 
-    sendSubscriptionToTheServer (subscription: PushSubscription) {
-        return  this.http.post(`${environment.apiUrl}/notification/posts/sub`,subscription);
+    sendSubscriptionToTheServer (subscription: PushSubscription, user: User) {
+        const sub = new Subscription ();
+        sub.subscription = subscription;
+        sub.user_id = user._id;
+        return  this.http.post(`${environment.apiUrl}/notification/posts/sub`,sub);
     }
 
     unsubscribeToNotification (subscription: PushSubscription) {

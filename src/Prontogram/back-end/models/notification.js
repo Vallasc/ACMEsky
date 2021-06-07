@@ -11,6 +11,10 @@ const notificationSchema = new mongoose.Schema ({
     flyToken: {
         type: String,
         require: true,
+    },
+    user_id: {
+        type: String,
+        require: true,
     }
 });
 

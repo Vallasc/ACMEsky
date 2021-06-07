@@ -3,9 +3,7 @@ const verify = require ('../verifyToken');
 const Notification = require('../../models/Notification');
 const Subscription = require ('../../models/Subscription')
 const webpush = require('web-push');
-const http = require('http');
 
-//TODO NOTIFICATION
 const vapidKeys = {
     "publicKey":"BA161ZnkX9G6CwYOZifUyGpOxslxcANly0PfMtti7y1rDO9NZlPNI1yepdaTodQXX0gVHqXHVApmArL1MUNsBoM",
     "privateKey":"tazdVUkOukWUSxJKfGLBQhEnghj0tLvq6VNKqJEdOc8"
@@ -17,29 +15,33 @@ webpush.setVapidDetails(
     vapidKeys.privateKey
     );
 
-//Create a new notification
+//Create new notification
 
 router.post('/new', async (req, res) => {
-
     const notification = new Notification ({
         flyNumber: req.body.flyNumber, 
         flyCompany: req.body.flyCompany, 
-        flyToken: req.body.flyToken, 
+        flyToken: req.body.flyToken,
+        user_id: req.body.user_id 
     });
     try {
-        sendNotification (notification)
-        const saveNotification= await notification.save ();
-        res.json (saveNotification); 
+        const userToSendNotification = await Subscription.find ({user_id: notification.user_id})
+        console.log ("userToSendNotification", userToSendNotification)
+        if (userToSendNotification.length) {
+            sendNotification (notification, userToSendNotification)
+            const saveNotification= await notification.save ();
+            res.json (saveNotification); 
+        } else {
+            res.json ({ message: "There is no user to sent notification"});
+        }
     } catch (err) {
         res.json ({ message: err});
     }
        
 });
 
-async function sendNotification (notification) {
-
-        const userSub = await Subscription.find();
-
+//Send notification to user
+async function sendNotification (notification, userSub) {
         if (userSub) {
             const notificationPayload = {
                 "notification": {
@@ -68,7 +70,8 @@ async function sendNotification (notification) {
                       "created_at": Date.now (),
                       "flyNumber": notification.flyNumber,
                       "flyCompany": notification.flyCompany,
-                      "flyToken": notification.flyToken
+                      "flyToken": notification.flyToken,
+                      "user_id": notification.user_id
                     }
                 }
             };
@@ -84,15 +87,23 @@ async function sendNotification (notification) {
         }
     
 }
+
 //Subscribe user
 router.post('/sub', async (req, res) => {
-
     const userSub = new Subscription ({
-        info: req.body
+        info: req.body.subscription,
+        user_id: req.body.user_id
     });
     try {
-        const saveSubscription= await userSub.save ();
-        res.json({message: "Subscription success" + saveSubscription});
+        const alreadySub= await Subscription.findOne({user_id:req.body.user_id})
+        if(alreadySub) {
+            console.log ("User already subscribed!")
+        }
+        else {
+            const saveSubscription= await userSub.save ();
+            res.json({message: "Subscription success" + saveSubscription});
+        }
+        
     } catch (err) {
         res.json ({ message: err});
     }
@@ -101,7 +112,6 @@ router.post('/sub', async (req, res) => {
 
 //Unsubscribe user
 router.delete('/:subendpoint', async (req, res) => {
-    
     try {
         const removeNotification = await Subscription.remove ({endpoint: req.params.subendpoint.endpoint})
         res.json ({message: "Unsubscription success" + removeNotification});
@@ -109,59 +119,6 @@ router.delete('/:subendpoint', async (req, res) => {
         res.json ({ message: err});
     }
 });
-
-//Send notification to user
-/*router.post('/news',async (req, res) => {
-    
-    try{
-        const userSub = await Subscription.find();
-
-        if (userSub) {
-            const notificationPayload = {
-                "notification": {
-                    "title": "Notifica Volo",
-                    "actions": [
-                      {
-                        "action": "openNotification",
-                        "title": "Apri notifica"
-                      }
-                    ],
-                    "body": "Accedi a Prontogram per vedere i dettagli del volo",
-                    "dir": "auto",
-                    "icon": "",
-                    "badge": "",
-                    "lang": "en",
-                    "renotify": true,
-                    "requireInteraction": true,
-                    "tag": 926796012340920300,
-                    "vibrate": [
-                      300,
-                      100,
-                      400
-                    ],
-                    "data": {
-                      "url": "http://127.0.0.1:8080/notification",
-                      "created_at": Date.now (),
-                      "flyNumber": req.body.flyNumber,
-                      "flyCompany":  req.body.flyCompany,
-                      "flyToken":  req.body.flyToken
-                    }
-                }
-            };
-
-            Promise.all(userSub.map(sub => webpush.sendNotification(
-                sub.info, JSON.stringify(notificationPayload) )))
-                .then(() => res.status(200).json({message: 'Newsletter sent successfully.'}))
-                .catch(err => {
-                    console.error("Error sending notification, reason: ", err);
-                    res.sendStatus(500);
-                });
-        }
-    
-    }catch(err) {
-        res.json ({ message: err});
-    }
-})*/
 
 //Delete Notification
 router.delete ('/notification/:notificationId', async (req, res) => {

@@ -15,12 +15,11 @@ router.get ('/notification/:id', async (req, res) => {
 });
 
 //Get all notifications
-router.get ('/all', async (req, res) => {
+router.get ('/all/:user_id', async (req, res) => {
 
     try {
-        const notification = await Notification.find ();
-        res.json (notification); 
-
+        const notifications = await Notification.find ({user_id: req.params.user_id});
+        res.json (notifications); 
     } catch (err) {
         res.json ({ message: err});
     }
