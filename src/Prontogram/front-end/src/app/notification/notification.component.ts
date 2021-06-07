@@ -70,7 +70,7 @@ export class NotificationComponent implements  OnDestroy,OnInit{
       });
        //notification's actions
       this.swPush.notificationClicks.subscribe(({ action, notification }) => {
-      window.open(notification.data.url);
+      //window.open(notification.data.url);
       });
       
     }
