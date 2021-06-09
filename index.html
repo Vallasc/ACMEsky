@@ -64,20 +64,6 @@
         ]
         })
 
-
-
-        const targetNode = document.getElementById('docute')
-        const config = { attributes: true, childList: true, subtree: true }
-        const callback = function(mutationsList, observer) {
-            if(targetNode.innerHTML.includes("<!--api")){
-                console.log(targetNode.innerHTML)
-                targetNode.innerHTML = targetNode.innerHTML.replaceAll("<!--api", "").replaceAll("ipa-->", "")
-            }
-        }
-
-        const observer = new MutationObserver(callback)
-        observer.observe(targetNode, config)
-        //observer.disconnect()
     </script>
   </body>
 </html>
