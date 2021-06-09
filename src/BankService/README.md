@@ -9,8 +9,9 @@ Drescrizione
 ### How tobuild
 
 ### API
-
-<div>
+<a src="https://vallasc.github.io/ACMEsky/docs/swagger-ui/index.html?src=https://vallasc.github.io/ACMEsky/src/BankService/swagger.json">Link to API</a>
+<!--
+<div position="center">
   <iframe title="API"
       width="900"
       height="900"
@@ -19,8 +20,7 @@ Drescrizione
       src="https://vallasc.github.io/ACMEsky/docs/swagger-ui/index.html?src=https://vallasc.github.io/ACMEsky/src/BankService/swagger.json">
   </iframe>
 </div>
-
-<img src="https://vallasc.github.io/ACMEsky/src/BankService/swagger.svg"/>
+-->
 
 A useless bank service
 ### Run:
