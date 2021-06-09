@@ -20,19 +20,7 @@ Drescrizione
   </iframe>
 </div>
 
-<svg width="900" height="900">
-  <g>
-    <foreignObject width="900" height="900">
-      <body xmlns="http://www.w3.org/1999/xhtml">
-        <iframe src="https://vallasc.github.io/ACMEsky/docs/swagger-ui/index.html?src=https://vallasc.github.io/ACMEsky/src/BankService/swagger.json"
-        width="900"
-        height="900"></iframe>
-      </body>
-    </foreignObject>
-  </g>
-</svg>
-
-
+<img src="https://vallasc.github.io/ACMEsky/src/BankService/swagger.svg"/>
 
 A useless bank service
 ### Run:
