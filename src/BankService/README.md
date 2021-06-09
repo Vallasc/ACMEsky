@@ -9,7 +9,7 @@ Drescrizione
 ### How tobuild
 
 ### API
-<a src="https://vallasc.github.io/ACMEsky/docs/swagger-ui/index.html?src=https://vallasc.github.io/ACMEsky/src/BankService/swagger.json">Link to API</a>
+[API link](https://vallasc.github.io/ACMEsky/docs/swagger-ui/index.html?src=https://vallasc.github.io/ACMEsky/src/BankService/swagger.json)
 <!--
 <div position="center">
   <iframe title="API"
