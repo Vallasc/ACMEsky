@@ -66,15 +66,16 @@
 
 
 
-        const targetNode = document.getElementById('docute');
-        const config = { attributes: true, childList: true, subtree: true };
+        const targetNode = document.getElementById('docute')
+        const config = { attributes: true, childList: true, subtree: true }
         const callback = function(mutationsList, observer) {
-            targetNode.innerHTML = targetNode.innerHTML.replaceAll("<!--", "").replaceAll("-->", "");
-        };
+            if(targetNode.innerHTML.includes("<!--"))
+                targetNode.innerHTML = targetNode.innerHTML.replaceAll("<!--", "").replaceAll("-->", "")
+        }
 
-        const observer = new MutationObserver(callback);
-        observer.observe(targetNode, config);
-        //observer.disconnect();
+        const observer = new MutationObserver(callback)
+        observer.observe(targetNode, config)
+        //observer.disconnect()
     </script>
   </body>
 </html>
