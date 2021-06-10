@@ -1,5 +1,5 @@
 # Coreografie
-## Nomenclatura
+
 ### Nomenclatura
 
 | Nome | Sigla | Commento |
@@ -16,28 +16,30 @@
 
 ### Coreografia complessiva del sistema
 ```fsharp
-
 // Query dei voli (ripetuta per tutte le compagnie aeree)
 // Viene ripetuta per ogni compagnia aerea collegata ad ACMEsky
 // queryFlights: Richesta di voli d'interesse per l'utente
 // responseFlights: Voli disponibili dell'Airline company
 ( queryFlights: ACME -> AIRₖ ; responseFlights: AIRₖ -> ACME )* 
 | 
+
 // Ricezione offerte last minute (ripetuta per tutte le compagnie aeree)
 // Viene ripetuta per ogni compagnia aerea collegata ad ACMEsky
-// sendLastMinute: Voli last minute
+// sendLastMinute: invia le offerte last minute
 ( sendLastMinute: AIRₖ -> ACME )*
 |
+
 // Registrazione interesse dell'utente (ripetuta per tutti gli  utenti)
 // requestInterest: messaggio di richiesta con A/R o solo A
-// responseInterest: messaggio di conferma
-( requestInterest: USERₓ -> ACME ; responseInterest: USERₓ -> ACME )* 
+( requestInterest: USERₓ -> ACME )* 
 |   
+
 // Notifica dell'offerta all'utente
 // offerToken: mesaagio di offerta A/R o A
 // notifyUser: messaggio di notifica di Prontogram
 ( offerToken: ACME -> PTG ; notifyUser: PTG -> USERₓ )*
 |
+
 // Conferma dell'offerta e pagamento
 // confirmOffer: messaggio di conferma offerta e pagamento
 // responseOffer: messaggio di conferma offerta
@@ -118,18 +120,39 @@
     )
 )
 ```
-### Correttezza
+## Correttezza
+<!--Analizzando la coreografia si nota che essa fa parte del caso asincrono. -->
 Per stabilire la correttezza, e anche per una migliore lettura, la coreografia è stata divisa in 5 blocchi:
-1. **Query dei voli**
-2. **Ricezione offerte last-minute**
-3. **Registrazione interesse dell'utente**
-4. **Notifica dell'offerta all'utente**
-5. **Conferma dell'offerta e pagamento**
+1. __Query dei voli__
+2. __Ricezione offerte last-minute__
+3. __Registrazione interesse dell'utente__
+4. __Notifica dell'offerta all'utente__
+5. __Conferma dell'offerta e pagamento__
 
 Essendo queste sotto-coreografie eseguite in parallelo non ci sono condizioni da rispettare, pertanto, si è passati a valutare la corretteza di ogni singolo blocco.
+#### 1. Query dei voli
+```fsharp
+( queryFlights: ACME -> AIRₖ ; responseFlights: AIRₖ -> ACME )* 
+```
+E' connessa in quanto il ricevente in ___queryFlights___ è il mittente di ___responseFlights___.
 
+#### 2. Ricezione offerte last-minute
+```fsharp
+( sendLastMinute: AIRₖ -> ACME )*
+```
+Non è connessa, ma non è un problema in quanto ACME per scelta implementativa rimane in attesa di una richiesta.
 
-La coreografia progettata rientra nel caso asincrono. 
+#### 3. Registrazione interesse dell'utente
+```fsharp
+( requestInterest: USERₓ -> ACME )* 
+```
+Non è connessa, ma non è un problema in quanto ACME per scelta implementativa rimane in attesa di una richiesta.
+
+#### 4. Notifica dell'offerta all'utente
+```fsharp
+( offerToken: ACME -> PTG ; notifyUser: PTG -> USERₓ )*
+```
+E' connessa in quanto il ricevente in ___requestInterest___ è il mittente di ___responseInterest___
 
 
 \
