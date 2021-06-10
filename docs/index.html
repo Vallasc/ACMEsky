@@ -1,69 +1,27 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>ACMEsky Doc</title>
-    <link rel="stylesheet" href="https://unpkg.com/docute@4/dist/docute.css">
-  </head>
-  <body>
-    <div id="docute"></div>
-    <script src="https://unpkg.com/docute@4/dist/docute.js"></script>
-    <script>
-      new Docute({
-        target: '#docute',
-        title: 'ACMEsky Doc',
-        nav: [
-            {
-            title: 'Home',
-            link: './../'
-            },
-            {
-            title: 'GitHub',
-            link: 'https://github.com/Vallasc/ACMEsky'
-            }
-        ],
-        sidebar: [
-            {
-                title: 'Home',
-                link: 'https://vallasc.github.io/ACMEsky/'
-            },
-            {
-                title: 'Coreografie',
-                link: './../docs/coreografie'
-            },
-            {
-                title: 'Diagramma BPMN',
-                link: '../docs/BPMN'
-            },
-            {
-                title: 'Diagramma coreografie BPMN',
-                link: '../docs/coreografieBPMN'
-            },
-            {
-                title: 'Diagramma UML',
-                link: '../docs/UML'
-            },
-            {
-                title: 'Diagramma di struttura',
-                link: '../docs/struttura'
-            },
-            {
-                title: 'Servizi',
-                children: [
-                    {
-                    title: 'Bank service',
-                    link: '../src/BankService/'
-                    },
-                    {
-                    title: 'Airline service',
-                    link: '../src/airlineService/'
-                    }
-                ]
-            }
-        ]
-        })
-
-    </script>
-  </body>
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/themes/vue.css" />
+</head>
+<body>
+  <div id="main"></div>
+  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-fsharp.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-copy-code"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-pagination/dist/docsify-pagination.min.js"></script>
+  <script>
+    window.$docsify = {
+        el: '#main',
+        repo: 'https://github.com/Vallasc/ACMEsky',
+        basePath: 'https://vallasc.github.io/ACMEsky/',
+        loadSidebar: 'docs/sidebar.md',
+        name: 'ACMEsky',
+        auto2top: true,
+    }
+  </script>
+</body>
 </html>
