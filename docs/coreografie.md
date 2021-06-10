@@ -1,119 +1,150 @@
 # Coreografie
-
-### Generale
+## Nomenclatura
+### Nomenclatura
 
 | Nome | Sigla | Commento |
 |-|-| -|
 | ACME | ACME | |
-| Airline company | AIR | Indica tutte le possibili compagnie aeree |
-| Rent company | RENT | Indica tutte le possibili compagnie di noleggio |
-|PTG | PTG | |
+| Airline company | AIR<sub>k</sub> | Indica la k-esima compagnia aerea |
+| Rent company | RENT<sub>t</sub> | Indica la t-esima compagnia di noleggio |
+|Prontogram | PTG | |
 |Bank | BANK | |
 |Geodistance service | GEO | |
-|USER | USER | |
+|USER | USER<sub>x</sub> | Indica l'x-esimo utente |
 
+&nbsp;
+
+### Coreografia complessiva del sistema
 ```fsharp
 
-// Richiesta voli alla compagnia aerea
-// Viene ripetura per ogni compagnia aerea collegata ad ACMEsky
+// Query dei voli (ripetuta per tutte le compagnie aeree)
+// Viene ripetuta per ogni compagnia aerea collegata ad ACMEsky
 // queryFlights: Richesta di voli d'interesse per l'utente
-// responseFlights: Voli disponibili dell'airline company
-( queryFlights: ACME -> AIR ; responseFlights: AIR -> ACME )* 
+// responseFlights: Voli disponibili dell'Airline company
+( queryFlights: ACME -> AIRₖ ; responseFlights: AIRₖ -> ACME )* 
 | 
-// Ricezione offerte last minute 
-// Viene ripetura per ogni compagnia aerea collegata ad ACMEsky
+// Ricezione offerte last minute (ripetuta per tutte le compagnie aeree)
+// Viene ripetuta per ogni compagnia aerea collegata ad ACMEsky
 // sendLastMinute: Voli last minute
-( sendLastMinute: AIR -> ACME )* 
+( sendLastMinute: AIRₖ -> ACME )*
 |
-// Richiesta interesse per un volo
-// requestInterest: messaggio di richiesta con A/R o solo A 
-( requestInterest: USER -> ACME )* 
+// Registrazione interesse dell'utente (ripetuta per tutti gli  utenti)
+// requestInterest: messaggio di richiesta con A/R o solo A
+// responseInterest: messaggio di conferma
+( requestInterest: USERₓ -> ACME ; responseInterest: USERₓ -> ACME )* 
 |   
-// Trovata offerta adatta all'utente
-// foundOffer: mesaagio di offerta A/R o A
-// notifyUSER: messaggio di notifica di Prontogram
-(
-    foundOffer: ACME -> PTG ; notifyUSER: PTG -> USER ; 
+// Notifica dell'offerta all'utente
+// offerToken: mesaagio di offerta A/R o A
+// notifyUser: messaggio di notifica di Prontogram
+( offerToken: ACME -> PTG ; notifyUser: PTG -> USERₓ )*
+|
+// Conferma dell'offerta e pagamento
+// confirmOffer: messaggio di conferma offerta e pagamento
+// responseOffer: messaggio di conferma offerta
+( 
+    confirmOffer: USERₓ -> ACME ; 
+    responseOffer: ACME -> USERₓ ;
     (
-        // L'utente conferma l'offerta
-        // confirmOffer: messaggio di conferma offerta e pagamento
-        ( 
-            confirmOffer: USER -> ACME ; 
-            (
-                // ACMEsky conferma che l'offerta è disponibile
-                // successOffer: messaggio di conferma offerta
-                // requestBankLink: richiesta creazione link di pagamento
-                // responselink: link di pagamento generato dalla banca
-                // paymentLink: link di pagamento generato dalla banca
-                // payment: pagamento attraverso il link generato
-                (   
-                    successOffer: ACME -> USER ;
+        // ACMEsky conferma che l'offerta è disponibile
+        // requestPaymentLink: richiesta di pagamento da parte dell'utente
+
+        // bookTickets: prenota e riceve i biglietti 
+        // tickets: biglietti prenotati
+
+        // requestBankLink: richiesta creazione link di pagamento
+        // responselink: link di pagamento generato dalla banca
+        // paymentLink: link di pagamento generato dalla banca
+        // payment: pagamento attraverso il link generato
+        // responsePayment: stato del pagamento
+        // responsePaymentBank: esito pagamento
+        (   
+            requestPaymentLink: USERₓ -> ACME ; // REQUEST1
+
+            bookTickets: ACME -> AIRₖ ;
+            tickets: AIRₖ -> ACME ;
+            (   
+                // Tickets ok
+                (
                     requestBankLink: ACME -> BANK ; 
                     responselink: BANK -> ACME ;
-                    paymentLink: ACME -> USER ;
-                    payment: USER -> BANK ;
+                    paymentLink: ACME -> USERₓ ; // RESPONSE1
+                    payment: USERₓ -> BANK ;
+                    responsePayment: BANK -> USERₓ ;
+                    responsePaymentBank: BANK -> ACME ;
                     (
-                        // successPayment: pagamento avvenuto con successo
-                        // bookTickets: prenota e riceve i biglietti 
-                        // tickets: biglietti prenotati
-                        (
-                            successPayment: BANK -> ACME ;
-                            bookTickets: ACME -> AIR ;
-                            tickets: AIR -> ACME ;
+                        // Pagamento avvenuto con successo
+                        (   // Controllo Premium service
+                            // Richiesta a Geodistance se costo > 1000
+                            1 
+                            + 
+                            // requestDistance: richiesta calcolo della distanza
+                            // responseDistance: distanza calcolata
                             (
-                                (   // Controllo Premium service
-                                    (   // Richiesta a Geodistance se costo > 1000
-                                        1 
-                                        + 
-                                        // requestDistance: richiesta calcolo della distanza
-                                        // responseDistance: distanza calcolata
-                                        (
-                                            requestDistance: ACME -> GEO ; 
-                                            responseDistance: GEO -> ACME ; 
-                                            (   // Richiesta alla compagnia di noleggio
-                                                1 
-                                                +  
-                                                // askForRent: richiesta noleggio veicoli
-                                                // responseRent: risposta nolleggio
-                                                (
-                                                    askForRent: ACME -> RENT ; 
-                                                    responseRent: RENT-> ACME 
-                                                )
-                                            )
-                                        )
-                                    ) ; 
-                                    ticketSummary : ACME -> USER 
+                                requestDistance: ACME -> GEO ; 
+                                responseDistance: GEO -> ACME ; 
+                                (   // Richiesta alla compagnia di noleggio
+                                    1 
+                                    +  
+                                    // requestRent: richiesta noleggio veicoli
+                                    // responseRent: risposta nolleggio
+                                    (
+                                        requestRent: ACME -> RENTₜ ; 
+                                        responseRent: RENTₜ-> ACME 
+                                    )
                                 )
-                                +
-                                errorTickets: ACME -> USER
                             )
                         )
                         +
                         // Errore nel pagamento
-                        // failPayment: pagamento fallito
-                        // errorPayment: messaggio di errore
-                        (   
-                            failPayment: BANK -> ACME ;
-                            errorPayment: ACME -> USER
-                        )
-                    )
+                        // unbookTickets: cancella la prenotazione dei biglietti
+                        unbookTickets: ACME -> AIRₖ
+                    ) ;
+                    // L'utente richiede i biglietti
+                    // tickets: l'utente richiede i biglietti
+                    // ticketSummary: summary tickets o errore
+                    tickets : USERₓ -> ACME ; // REQUEST2
+                    ticketSummary : ACME -> USERₓ // RESPONSE2
+
                 )
+                // Errore nella prenotazione dei biglietti
+                // errorTickets: errore volo non disponibile
                 +
-                // ACMEsky controlla l'offerta e non è più disponibile
-                // errorOffer: messaggio di errore dell'offerta
-                errorOffer: ACME -> USER
+                errorTickets: ACME -> USERₓ // RESPONSE1
             )
         )
         +
-        // L'utente non conferma l'offerta
+        // ACMEsky controlla l'offerta e non è più disponibile
         1
     )
-)*
-
+)
 ```
 ### Correttezza
+Per stabilire la correttezza, e anche per una migliore lettura, la coreografia è stata divisa in 5 blocchi:
+1. **Query dei voli**
+2. **Ricezione offerte last-minute**
+3. **Registrazione interesse dell'utente**
+4. **Notifica dell'offerta all'utente**
+5. **Conferma dell'offerta e pagamento**
+
+Essendo queste sotto-coreografie eseguite in parallelo non ci sono condizioni da rispettare, pertanto, si è passati a valutare la corretteza di ogni singolo blocco.
+
+
+La coreografia progettata rientra nel caso asincrono. 
+
+
+\
+\
+\
+&nbsp;
+
+### Corr
 ```fsharp
-(( query: ACME -> AIR ; response: AIR -> ACME)* | (sendLastMinute: AIR -> ACME )* ) |
+
+
+
+
+
+(( query: ACME -> AIRₖ ; response: AIRₖ -> ACME)* | (sendLastMinute: AIRₖ -> ACME )* ) |
 
 // sequenza query: b-> a; response: a-> b
 // sincrono corretto perchè prima riceve poi invia 
@@ -124,25 +155,25 @@
 // sequenza corretta poiché atomica, pertanto anche iteration è corretta.
 |
 ( 
-    request: USER -> ACME 
+    request: USERₓ -> ACME 
     // sequenza (request: c -> b)* | (..)*
 )*
 | 
 ( 
-    (foundOffer: ACME -> PTG ; notifyUSER: PTG -> USER ; 
-     // sequenza (foundOffer: b -> d ; notifyUSER: d -> c ; (..)) + 1
+    (foundOffer: ACME -> PTG ; notifyUSERₓ: PTG -> USERₓ ; 
+     // sequenza (foundOffer: b -> d ; notifyUSERₓ: d -> c ; (..)) + 1
     ( 
-        (confirmOffer: USER -> ACME ; 
+        (confirmOffer: USERₓ -> ACME ; 
          //sequenza confirmOffer: c -> b; (..) 
-            (successResponse: ACME -> USER ; informAIR: ACME -> AIR;
-            // sequenza (successResponse: b -> c; informAIR: b -> a; (..))  + failResponse: b -> c;
+            (successResponse: ACME -> USERₓ ; informAIRₖ: ACME -> AIRₖ;
+            // sequenza (successResponse: b -> c; informAIRₖ: b -> a; (..))  + failResponse: b -> c;
             ( 
-                (confirmAvailableFlight: AIR -> ACME; confirmFlightToUSER: ACME -> USER;
-                // sequenza confirmAvailableFlight: a -> b; confirmFlightToUSER: b -> c; 
-                askBankLink: ACME -> BANK ; responseLink: BANK -> ACME ; sendBANK: ACME -> USER ; payment: USER -> BANK ;  
+                (confirmAvailableFlight: AIRₖ -> ACME; confirmFlightToUSERₓ: ACME -> USERₓ;
+                // sequenza confirmAvailableFlight: a -> b; confirmFlightToUSERₓ: b -> c; 
+                askBankLink: ACME -> BANK ; responseLink: BANK -> ACME ; sendBANK: ACME -> USERₓ ; payment: USERₓ -> BANK ;  
                 // sequenza askBankLink: b -> e ; responseLink: e -> b ; sendBANK: b -> c ; payment: c -> e ; (..) + (flightNotAvailable: a -> b; FlightNotAvailableError: b -> c)
                     (
-                        (successPayment: BANK -> ACME; confirmSuccessPayment: ACME -> USER ; payTickets: ACME -> BANK ; receiveTickets: AIR -> ACME ;
+                        (successPayment: BANK -> ACME; confirmSuccessPayment: ACME -> USERₓ ; payTickets: ACME -> BANK ; receiveTickets: AIRₖ -> ACME ;
                         // sequenza (successPayment: e -> b ; confirmSuccessPayment: b -> c ; payTickets: b -> c ; receiveTickets: a -> b ; (..)); successOrder: b -> c ;  +  
                         // (failPayment: e -> b; failOrder: b -> c )
                             ( 
@@ -150,21 +181,21 @@
                                 (askForDistance: ACME -> GEO ; distanceResponse: GEO -> ACME; 
                                 // sequenza 1 + (askForDistance: b -> f ; distanceResponse: f -> b;(..)) 
                                     ( 
-                                        1 +  (askForRent: ACME -> RENT; responseForRent: RENT-> ACME )
+                                        1 +  (askForRent: ACME -> RENTₜ; responseForRent: RENTₜ-> ACME )
                                         // sequenza 1 + (askForRent: b -> g; responseForRent: g-> b )
                                     )
                                 )
                             )
-                        ); successOrder: ACME -> USER; 
+                        ); successOrder: ACME -> USERₓ; 
                     )
                     +
-                    (failPayment: BANK -> ACME; failOrder: ACME -> USER )
+                    (failPayment: BANK -> ACME; failOrder: ACME -> USERₓ )
                 )
                 + 
-                (flightNotAvailable: AIR -> ACME; FlightNotAvailableError: ACME -> USER)
+                (flightNotAvailable: AIRₖ -> ACME; FlightNotAvailableError: ACME -> USERₓ)
             )
             +
-            failResponse: ACME -> USER 
+            failResponse: ACME -> USERₓ 
         )
     )) 
     + 
