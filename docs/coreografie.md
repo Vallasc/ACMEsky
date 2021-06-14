@@ -120,9 +120,9 @@
     )
 )
 ```
-## Correttezza
+## Verifica condizioni connectedness delle coreografie
 <!--Analizzando la coreografia si nota che essa fa parte del caso asincrono. -->
-Per stabilire la correttezza, e anche per una migliore lettura, la coreografia è stata divisa in 5 blocchi:
+Per stabilire la connectedness, e anche per una migliore lettura, la coreografia è stata divisa in 5 blocchi:
 1. __Query dei voli__
 2. __Ricezione offerte last-minute__
 3. __Registrazione interesse dell'utente__
@@ -130,25 +130,25 @@ Per stabilire la correttezza, e anche per una migliore lettura, la coreografia �
 5. __Conferma dell'offerta e pagamento__
 
 Essendo queste sotto-coreografie eseguite in parallelo non ci sono condizioni da rispettare, pertanto, si è passati a valutare la corretteza di ogni singolo blocco.
-#### 1. Query dei voli
+#### Query dei voli
 ```fsharp
 ( queryFlights: ACME -> AIRₖ ; responseFlights: AIRₖ -> ACME )* 
 ```
 E' connessa in quanto il ricevente in ___queryFlights___ è il mittente di ___responseFlights___.
 
-#### 2. Ricezione offerte last-minute
+#### Ricezione offerte last-minute
 ```fsharp
 ( sendLastMinute: AIRₖ -> ACME )*
 ```
 Non è connessa, ma non è un problema in quanto ACME per scelta implementativa rimane in attesa di una richiesta.
 
-#### 3. Registrazione interesse dell'utente
+#### Registrazione interesse dell'utente
 ```fsharp
 ( requestInterest: USERₓ -> ACME )* 
 ```
 Non è connessa, ma non è un problema in quanto ACME per scelta implementativa rimane in attesa di una richiesta.
 
-#### 4. Notifica dell'offerta all'utente
+#### Notifica dell'offerta all'utente
 ```fsharp
 ( offerToken: ACME -> PTG ; notifyUser: PTG -> USERₓ )*
 ```
@@ -159,6 +159,9 @@ E' connessa in quanto il ricevente in ___requestInterest___ è il mittente di __
 \
 \
 &nbsp;
+
+
+Semantica sincrona
 
 ### Corr
 ```fsharp
