@@ -54,9 +54,9 @@ async function sendNotification (notification, userSub) {
                     ],
                     "body": "Accedi a Prontogram per vedere i dettagli del volo",
                     "dir": "auto",
-                    "icon": "",
-                    "badge": "",
-                    "lang": "en",
+                    "icon": "back-end/assets/icon/prontogram.jpg",
+                    "badge": "back-end/assets/icon/prontogram.png",
+                    "lang": "it",
                     "renotify": true,
                     "requireInteraction": true,
                     "tag": 926796012340920300,
@@ -94,6 +94,7 @@ router.post('/sub', async (req, res) => {
         info: req.body.subscription,
         user_id: req.body.user_id
     });
+    console.log (req.body.subscription)
     try {
         const alreadySub= await Subscription.findOne({user_id:req.body.user_id})
         if(alreadySub) {
