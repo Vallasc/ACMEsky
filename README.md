@@ -88,3 +88,8 @@ V0.9 - versione interna RFC
 | RentService1 | 8086 |
 | RentService2 | 8087 |
 | RentService3 | 8088 |
+
+Vincoli al problema (Assunzioni):
+- Le offerte generate provengono dalla stessa compagnia aerea
+- I dati del viaggiatore vengono presi dall'account
+- Non viene gestito lo scambio di denaro dalla banca alla compagnia aerea 
