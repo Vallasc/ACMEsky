@@ -56,7 +56,7 @@ public class FlightOfferService {
         list.forEach( i-> repo.save(i));
         for(FlightOffer i : list ){
             if(u.LastMinuteCheck(i)){
-                
+                u.convertOffertToFlight(i);
                 // sendLastMinuteOffer(u.createFlight(i));
                 
             }else{}
@@ -112,36 +112,24 @@ public class FlightOfferService {
      * @return List<FlightOffer> la lista delle offerte di volo escludendo le offerte last-minute
      * (già inviate ad ACMEsky al momento della loro generazione) e le offerte già prenotate
      */
-    public List<FlightOffer> searchFlightOffers(List<UserRequest> r){
+    public List<Flight> getMatchingFlights(List<UserRequest> r){
 
-        ArrayList<FlightOffer> list = new ArrayList<>();
+        List<FlightOffer> offers = u.getMatchingOffers(r, this.repo);
+        List<Flight> l = new ArrayList<>();
 
-            for(UserRequest req : r){
-                list.addAll(repo.searchFlightOffers(req.departureCity, req.destinationCity, req.departureDate, req.destinationDate)
-                .stream().filter(w -> u.LastMinuteCheck(w) == false && w.getBookedFlagValue() == false).collect(Collectors.toList()));
-            }
-
-            return list;
+        for(FlightOffer o : offers){
+            l.add(u.convertOffertToFlight(o));
         }
         
-
-
-    public List<Flight> getFlights(List<UserRequest> r){
-        
-        List<FlightOffer> l = searchFlightOffers(r);
-        ArrayList<Flight> flightsList= new ArrayList<>(); 
-        for(FlightOffer f : l){
-            flightsList.add(u.createFlight(f));
-
-        }
-        return flightsList;
+        return l;
     }
+        
     
     /** 
      * invia le offerte last-minute generate precedentemente ad ACMEsky
      * @param o l'offerta da inviare sulla route specifica
      */
-    public void sendLastMinuteOffer(Flight f) {
+    public void sendLastMinuteOffer(FlightOffer f) {
 
         String url = "http://localhost:8080/airline/offers";
     
@@ -152,46 +140,12 @@ public class FlightOfferService {
         // // set `accept` header
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         // // build the request
-        HttpEntity<Flight> entity = new HttpEntity<>(f, headers);
+        HttpEntity<FlightOffer> entity = new HttpEntity<>(f, headers);
         // // send POST request
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<FlightOffer> result = restTemplate.postForEntity(url, entity, FlightOffer.class);    
     }
 
-	
-    /** 
-     * prenota un'offerta di volo(se non è già stata prenotata)
-     * @param id corrispondente all'offerta di cui si vuole conoscere lo stato
-     * @return boolean lo stato dell'offerta
-     */
-    public boolean bookOffer(long id) {
-        FlightOffer o = repo.findById(id).get();
-        if(o.getBookedFlagValue() == false){
-            u.setBooking(o);
-            return true;
-        }else{
-            return false;
-        }        
-	}
-
-    /** 
-     * cancella la prenotazione delle offerte che non sono state acquistate entro il tempo della scadenza(10 min)
-     */
-    public void DeleteExpiredBooking(){
-        OffsetDateTime now = OffsetDateTime.now();
-        ListIterator<FlightOffer> iterator= repo.findAll().listIterator();
-
-        while(iterator.hasNext()){
-            FlightOffer o = iterator.next();
-            if(o.getBookedFlagValue()==true){
-                OffsetDateTime expiryBookingOffer = o.getExpiryBooking().plusMinutes(1);
-                if(now.equals(expiryBookingOffer) || now.isAfter(expiryBookingOffer)){
-                    o.setBookedFlag(false);
-                    o.setExpiryBooking(null);
-                }
-            }else{}
-        }
-    }
 
     /** 
      * cancella le offerte di volo scadute

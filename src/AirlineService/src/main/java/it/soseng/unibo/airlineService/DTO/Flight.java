@@ -2,47 +2,168 @@ package it.soseng.unibo.airlineService.DTO;
 
 import java.time.OffsetDateTime;
 
-import javax.validation.constraints.NotBlank;
+/**
+ * Questa classe definisce le caratteristiche delle offerte di volo
+ * definendo per ogni attributo un campo della tabella FLIGHT_OFFERS che verrà generata
+ * quando verrà creata la prima istanza di flightOffer
+ * @author Andrea Di Ubaldo
+ * andrea.diubaldo@studio.unibo.it
+ */
 
 public class Flight {
-
-    @NotBlank(message = "id is mandatory")
-    public long id;
     
-    @NotBlank(message = "departureCity is mandatory")
-    public String departureId;
+    private Long id;
 
-    @NotBlank(message = "destinationCity is mandatory")
-    public String destinationId;
+    private String departureId;
 
-    @NotBlank(message = "departureDate is mandatory")
-    public OffsetDateTime departureDate;    
+    private OffsetDateTime  departureTime;
+
+    private OffsetDateTime arrivalTime;
+
+    private String arrivalId;
+
+    private String airline_id;
+
+    private double price;
+
+    private String place;
+
+
+
+
+	
+    /** 
+     * @return Long id dell'offerta
+     */
+    public Long getId() {
+        return this.id;
+      }
+
+    /** 
+     * @return String id dell'aereoporto di arrivo
+     */
+    public String getArrivalId() {
+      return arrivalId;
+    }
+
+    /** 
+     * @return LocalDateTime il giorno e l'ora della partenza
+     */
+    public OffsetDateTime getDepartureTime() {
+      return this.departureTime;
+    }
+
+    /** 
+     * @return LocalDateTime il giorno e l'ora di arrivo
+     */
+    public OffsetDateTime getArrivalTime() {
+      return this.arrivalTime;
+    }
+
+    /** 
+     * @return String id dell'aereoporto di partenza
+     */
+    public String getDepartureId() {
+      return departureId;
+    }
+
+    /** 
+     * @return double il prezzo dell'offerta
+     */
+    public double getPrice() {
+      return this.price;
+    }
+
+    /** 
+     * @return String il posto del viaggiatore sull'aereo
+     */
+    public String getPlace() {
+      return this.place;
+    }
+
+
     
-    @NotBlank(message = "destinationDate is mandatory")
-    public OffsetDateTime destinationDate;
 
-    @NotBlank(message  = "airline_id")
-    public String airline_id;
 
-    @NotBlank(message = "price")
-    public double price;
+    /**
+     * @return String la compagnia aerea che offre l'offerta
+     */
+    public String getAirline_id() {
+      return airline_id;
+    }
 
-    @NotBlank(message = "flag")
-    private boolean bookedFlag = false;
+    
+    public void setId(long id){
+        this.id=id;
+    }
 
-    @NotBlank(message = "expire_offer")
-    private OffsetDateTime expiryDate;
+    /** 
+     * imposta l'id dell'aereoporto di arrivo
+     */
+    public void setArrivalId(String arrivalId) {
+      this.arrivalId = arrivalId;
+    }
 
-    public Flight(long id, String departureId, String destinationId, OffsetDateTime departureDate, 
-                            OffsetDateTime destinationDate, String airline_id, double price, OffsetDateTime expTime){
-        
-                                this.id=id;
-                                this.departureId=departureId;
-                                this.destinationId=destinationId;
-                                this.departureDate=departureDate;
-                                this.destinationDate=destinationDate;
-                                this.airline_id=airline_id;
-                                this.price=price;
-                                this.expiryDate=expTime;
-                            }
+    
+    /** 
+     * imposta il giorno e l'ora della partenza
+     * @param departureTime
+     */
+    public void setDepartureTime(OffsetDateTime departureTime) {
+      this.departureTime = departureTime;
+    }
+
+    
+    /** 
+     * imposta il giorno e l'ora dell'arrivo
+     * @param arrivalTime
+     */
+    public void setArrivalTime(OffsetDateTime arrivalTime) {     
+      this.arrivalTime = arrivalTime;
+    }
+
+
+    /** 
+     * imposta l'id dell'aereoporto di partenza
+     */
+    public void setDepartureId(String departureId) {
+      this.departureId = departureId;
+    }
+
+    /** 
+     * imposta il prezzo dell'offerta
+     * @param price
+     */
+    public void setPrice( double price) {
+      this.price = price;
+    }
+
+    /** 
+     * imposta il numero di posto del passeggero sul treno
+     * @param place
+     */
+    public void setPlace(String place) {
+       this.place=place;
+    }
+
+
+    /**
+     * imposta la compagnia aerea che offre l'offerta
+     * @param airline_id
+     */
+    public void setAirline_id(String airline_id) {
+      this.airline_id = airline_id;
+    }
+
+
+
+
+    
+
+    
+
+    
+
 }
+
+

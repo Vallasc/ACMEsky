@@ -8,6 +8,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -16,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import it.soseng.unibo.airlineService.DTO.Flight;
+import it.soseng.unibo.airlineService.DTO.UserRequest;
 import it.soseng.unibo.airlineService.repository.FlightOfferRepository;
 
 
@@ -28,9 +30,6 @@ import it.soseng.unibo.airlineService.repository.FlightOfferRepository;
  */
 
 public class FlightUtility {
-
-    @Autowired
-    private FlightOfferRepository repo;
     
 
     public FlightUtility() {
@@ -114,23 +113,30 @@ public class FlightUtility {
             return a;
     }
 
-    /**
-     * imposta il flag della prenotazione a true(nessuno potrà prenotare più quell'offerta finchè non scadrà
-     * il tempo per acquistare l'offerta)
-     * @param o l'offerta in questione
-     */
-    public void setBooking(FlightOffer o){
 
-        o.setBookedFlag(true);
-        OffsetDateTime obj = OffsetDateTime.now();
-        o.setExpiryBooking(obj); 
+    public Flight convertOffertToFlight(FlightOffer i) {
+        Flight f = new Flight();
+        f.setId(i.getId());
+        f.setAirline_id(i.getAirline_id());
+        f.setArrivalId(i.getAirline_id());
+        f.setDepartureId(i.getDepartureId());
+        f.setDepartureTime(i.getDepartureTime());
+        f.setArrivalTime(i.getArrivalTime());
+        f.setPlace(i.getPlace());
+        f.setPrice(i.getPrice());
+
+        return f;
     }
 
-    public Flight createFlight(FlightOffer o){
+    public List<FlightOffer> getMatchingOffers(List<UserRequest> requests, FlightOfferRepository repo){
 
-        Flight f = new Flight(o.getId(), o.getDepartureId(), o.getArrivalId(), o.getDepartureTime(), 
-                                        o.getArrivalTime(), o.getAirline_id(), o.getPrice(),o.getExpiryDate());
-        return f;
+        ArrayList<FlightOffer> list = new ArrayList<>();
+
+        for(UserRequest req : requests){
+            list.addAll(repo.searchFlightOffers(req.departureCity, req.destinationCity, req.departureDate, req.destinationDate)
+            .stream().filter(w -> LastMinuteCheck(w) == false).collect(Collectors.toList()));
+        }
+        return list;
     }
 
 

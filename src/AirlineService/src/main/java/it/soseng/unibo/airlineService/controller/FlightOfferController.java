@@ -71,7 +71,7 @@ public class FlightOfferController {
      */
     @PostMapping("/getFlights")
     public List<Flight> getOffers(@RequestBody List<UserRequest> r) {
-        return s.getFlights(r);
+        return s.getMatchingFlights(r);
     }
 
     
@@ -93,25 +93,7 @@ public class FlightOfferController {
         return s.deleteFlightOffer(id);
     }
 
-    
-    /** prenota l'offerta (se prenotabile)
-     * @param id dell'offerta di cui si richiede lo stato
-     * @return boolean il cui valore true indica che l'offerta è prenotabile(viceversa false se non lo è)
-     */
-    @GetMapping("/bookOfferById")
-    public boolean bookOffer(@RequestParam(name = "id") long id){
-        return s.bookOffer(id);
-    }
 
-    /** cancella la prenotazione delle offerte che non sono state acquistate entro la scadenza delle prenotazioni
-     * @param id dell'offerta di cui si richiede lo stato
-     * @return boolean il cui valore true indica che l'offerta è prenotabile(viceversa false se non lo è)
-     */
-    @Scheduled(fixedRate = 6000)
-    @DeleteMapping("/deleteBooking")
-    private void checkUnsoldBooking(){
-        s.DeleteExpiredBooking();
-    }
 
     /** cancella la prenotazione delle offerte che non sono state acquistate entro la scadenza delle prenotazioni
      * @param id dell'offerta di cui si richiede lo stato

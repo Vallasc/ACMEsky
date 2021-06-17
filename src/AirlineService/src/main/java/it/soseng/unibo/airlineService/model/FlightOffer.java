@@ -47,11 +47,8 @@ public class FlightOffer {
     @Column(name = "expire_offer")
     private OffsetDateTime expiryDate;
 
-    @Column(name = "expire_booking")
-    private OffsetDateTime expiryBooking;
-
     @Column(name = "flag")
-    private boolean bookedFlag = false;
+    private boolean soldFlag = false;
 
     public FlightOffer(){}
 
@@ -115,17 +112,10 @@ public class FlightOffer {
     }
 
     /** 
-     * @return OffsetDateTime la data e l'ora di scadenza della prenotazione
+     * @return boolean il valore del campo soldFlag che indica se il volo è già stato venduto o no
      */
-    public OffsetDateTime getExpiryBooking() {
-      return this.expiryBooking;
-  }
-
-    /** 
-     * @return boolean il valore del campo bookedFlag che indica se il volo è già stato prenotato o no
-     */
-    public boolean getBookedFlagValue(){
-      return this.bookedFlag;
+    public boolean getSoldFlag(){
+      return this.soldFlag;
     }
 
     /**
@@ -197,19 +187,12 @@ public class FlightOffer {
       this.expiryDate=expiryDate;
     }
 
-    /** 
-     * imposta la scadenza della prenotazione
-     * @param date
-     */
-    public void setExpiryBooking( OffsetDateTime date) {
-      this.expiryBooking = date;
-    }
 
     /** 
-     * imposta il flag dell'offerta 
+     * imposta il flag relativo all'acquisto o meno dell'offerta
      */
-    public void setBookedFlag(boolean value){
-      this.bookedFlag = value;
+    public void setSoldFlag(boolean value){
+      this.soldFlag = value;
     }
 
     /**
