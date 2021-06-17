@@ -9,6 +9,8 @@ import java.util.logging.Logger;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import static it.unibo.soseng.camunda.ProcessVariables.INTEREST_FLIGHTS_LIST;
+
 
 @Named("retrieveFlightsOfInterestDelegate")
 public class RetrieveFlightsOfInterestDelegate implements JavaDelegate{
@@ -21,6 +23,6 @@ public class RetrieveFlightsOfInterestDelegate implements JavaDelegate{
     public void execute(DelegateExecution execution){
 
         LOGGER.info ("retrieveFlightsOfInterestDelegate in esecuzione");
-        execution.setVariable("InterestList", dbManager.retrieveFlightInterests());
+        execution.setVariable(INTEREST_FLIGHTS_LIST, dbManager.retrieveFlightInterests());
     }
 }

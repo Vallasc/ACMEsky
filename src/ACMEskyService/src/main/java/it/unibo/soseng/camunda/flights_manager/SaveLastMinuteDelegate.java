@@ -25,12 +25,12 @@ public class SaveLastMinuteDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution){
-        String airlineName = (String) execution.getVariable(AIRLINE_NAME);
-        @SuppressWarnings (value="unchecked")
-        List<AirlineFlightOffer> airlineOffers = 
-            (List<AirlineFlightOffer>) execution.getVariable(AIRLINE_FLIGHT_OFFERS);
+        // String airlineName = (String) execution.getVariable(AIRLINE_NAME);
+        // @SuppressWarnings (value="unchecked")
+        // List<AirlineFlightOffer> airlineOffers = 
+        //     (List<AirlineFlightOffer>) execution.getVariable(AIRLINE_FLIGHT_OFFERS);
 
-        airlineManager.saveAirlineOffers(airlineOffers, airlineName);
+        // airlineManager.saveAirlineOffers(airlineOffers, airlineName);
     }
 
 }

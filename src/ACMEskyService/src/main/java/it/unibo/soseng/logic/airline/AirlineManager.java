@@ -1,13 +1,17 @@
 package it.unibo.soseng.logic.airline;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
@@ -17,15 +21,20 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.security.enterprise.SecurityContext;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
+
 import org.camunda.bpm.engine.ProcessEngines;
 import org.camunda.bpm.engine.RuntimeService;
 
+import it.unibo.soseng.gateway.airline.AirlineAPI;
 import it.unibo.soseng.gateway.airline.dto.AirlineFlightOffer;
+import it.unibo.soseng.gateway.airline.dto.InterestDTO;
 import it.unibo.soseng.gateway.user.dto.InterestsRequest;
 import it.unibo.soseng.logic.database.DatabaseManager;
 import it.unibo.soseng.logic.database.DatabaseManager.AirportNotFoundException;
 import it.unibo.soseng.logic.database.DatabaseManager.UserNotFoundException;
 import it.unibo.soseng.model.Airport;
+import it.unibo.soseng.model.Flight;
 import it.unibo.soseng.model.FlightInterest;
 import it.unibo.soseng.model.User;
 import it.unibo.soseng.model.UserInterest;
@@ -46,6 +55,9 @@ public class AirlineManager {
     
     @Inject
     private SecurityContext securityContext;
+
+    @Inject
+    AirlineAPI api;
 
     // Camunda
     public void startSaveLastMinuteProcess(List<AirlineFlightOffer> airlineLastMinuteOffers, String airlineName){
@@ -101,10 +113,10 @@ public class AirlineManager {
 
         flightOutInterest.setDepartureDateTime(
             ZonedDateTime.ofInstant(Instant.ofEpochMilli(request.getOutboundFlight().getDepartureTimestamp()), 
-            ZoneId.systemDefault()));
+            ZoneId.systemDefault()).toOffsetDateTime());
         flightOutInterest.setArrivalDateTime(
             ZonedDateTime.ofInstant(Instant.ofEpochMilli(request.getOutboundFlight().getArrivalTimestamp()), 
-            ZoneId.systemDefault()));
+            ZoneId.systemDefault()).toOffsetDateTime());
         
         interest.setFlightBackInterest(flightOutInterest);
 
@@ -116,10 +128,10 @@ public class AirlineManager {
     
             flightBackInterest.setDepartureDateTime(
                 ZonedDateTime.ofInstant(Instant.ofEpochMilli(request.getFlightBack().getDepartureTimestamp()), 
-                ZoneId.systemDefault()));
+                ZoneId.systemDefault()).toOffsetDateTime());
                 flightBackInterest.setArrivalDateTime(
                 ZonedDateTime.ofInstant(Instant.ofEpochMilli(request.getFlightBack().getArrivalTimestamp()), 
-                ZoneId.systemDefault()));
+                ZoneId.systemDefault()).toOffsetDateTime());
 
             interest.setFlightBackInterest(flightBackInterest);
         }
@@ -129,4 +141,44 @@ public class AirlineManager {
 
     public class UserNotAllowedException extends Exception {
         private static final long serialVersionUID = 1L;}
+
+        public List<InterestDTO> convertInterestList(List<FlightInterest> l){
+
+
+            List<InterestDTO> result = l.stream()
+                    .map(interest -> new InterestDTO(interest.getDepartureAirport().getCityName(),
+                                                        interest.getArrivalAirport().getCityName(),
+                                                         interest.getDepartureDateTime(),
+                                                        interest.getArrivalDateTime()))
+                    .collect(Collectors.toList());
+
+            return result;
+        }
+    
+        public List<Flight> retrieveFlightsList(List<FlightInterest> list) throws IOException, InterruptedException{
+    
+            
+            ArrayNode a = api.getFlightList(convertInterestList(list));
+
+            // da risolvere!!
+            // for(int i: a.elements()){
+
+
+            //}
+            //.forEach(o -> new Flight(o.get("departure_airport_id").textValue(),
+            //                                                             o.get("departure_airport_id").textValue(), 
+            //                                                             o.get("arrival_airport_id").textValue(), 
+            //                                                             o.get("airline_id").textValue(), 
+            //                                                             o.get("departure_date_time").textValue(), 
+            //                                                             o.get("arrival_date_time").textValue(), 
+            //                                                         expireDate, 
+            //                                                         n.get("price").asDouble(), 
+            //                                                         booked))
+
+            //                             .collect(Collectors.toList());
+
+            return null;
+        }
+    
+    
 }

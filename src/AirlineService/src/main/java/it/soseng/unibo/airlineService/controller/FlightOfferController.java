@@ -1,12 +1,9 @@
 package it.soseng.unibo.airlineService.controller;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
+
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.lowagie.text.DocumentException;
@@ -21,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import it.soseng.unibo.airlineService.DTO.Flight;
 import it.soseng.unibo.airlineService.DTO.UserRequest;
 import it.soseng.unibo.airlineService.model.FlightOffer;
 import it.soseng.unibo.airlineService.model.Iban;
@@ -71,9 +69,9 @@ public class FlightOfferController {
      * @param r che contiene i parametri del volo che l'utente cerca
      * @return List<FlightOffer> che contiene tutte le offerte di lavoro prenotabili
      */
-    @PostMapping("/searchFlight")
-    public List<FlightOffer> getOffers(@RequestBody UserRequest r) {
-        return s.searchFlightOffers(r);
+    @PostMapping("/getFlights")
+    public List<Flight> getOffers(@RequestBody List<UserRequest> r) {
+        return s.getMatchingFlights(r);
     }
 
     
@@ -90,20 +88,23 @@ public class FlightOfferController {
      * correttamente(viene chiamata quando si è verificato il pagamento dell'utente)
      * @param id che viene passato per identificare l'offerta da eliminare
      */
-    @DeleteMapping("/DeleteOffer")
-    public void OfferPurchasedCorrectly(@RequestParam(name = "id") long id) {
-        s.deleteFlightOffer(id);
+    @DeleteMapping("/purchasedOffer")
+    public String deleteOffer(@RequestParam(name = "id") long id) {
+        return s.deleteFlightOffer(id);
     }
 
-    
-    /** restituisce lo stato dell'offerta di volo (se risulta prenotabile o no)
+
+
+    /** cancella la prenotazione delle offerte che non sono state acquistate entro la scadenza delle prenotazioni
      * @param id dell'offerta di cui si richiede lo stato
      * @return boolean il cui valore true indica che l'offerta è prenotabile(viceversa false se non lo è)
      */
-    @GetMapping("/getOfferBookableState")
-    public boolean getOfferState(@RequestParam(name = "id") long id){
-        return s.getOfferState(id);
+    @Scheduled(fixedRate = 6000)
+    @DeleteMapping("/deleteExpiredOffer")
+    private void deleteExpiredOffer(){
+        s.DeleteExpiredOffers();
     }
+    
 
     
     /** 
@@ -113,20 +114,24 @@ public class FlightOfferController {
      * @throws DocumentException
      * @throws IOException
      */
-    @GetMapping("/download-pdf")
-    public void downloadPDFResource( HttpServletResponse response, @RequestParam(name = "id") long ... id) {
-        try {
-            Path file = Paths.get(p.generatePdf(id).getAbsolutePath());
-            if (Files.exists(file)) {
-                response.setContentType("application/pdf");
-                response.addHeader("Content-Disposition",
-                        "attachment; filename=" + file.getFileName());
-                Files.copy(file, response.getOutputStream());
-                response.getOutputStream().flush();
-            }
-        } catch (DocumentException | IOException ex) {
-            ex.printStackTrace();
-        }
+    @GetMapping("/getTickets")
+    public void sendPdfFiles( //HttpServletResponse response, 
+                                        @RequestParam(name = "id") long ... id) {   
+            p.sendPdfs(id);
+        
+            // try {
+            //         Path file = Paths.get(p.generatePdf(id).getAbsolutePath());
+            //         if (Files.exists(file)) {
+            //             response.setContentType("application/pdf");
+            //             response.addHeader("Content-Disposition",
+            //                     "attachment; filename=" + file.getFileName());
+            //             Files.copy(file, response.getOutputStream());
+            //             response.getOutputStream().flush();
+            //     }
+            // } catch (DocumentException | IOException ex) {
+            //     ex.printStackTrace();
+            // }
+        
     }
 
     
@@ -135,7 +140,7 @@ public class FlightOfferController {
      * @param sendIban iban preso dal paramtro server.iban presente in application.properties in resources
      * @return Iban del servizio
      */
-    @GetMapping("/iban")
+    @GetMapping("/getIban")
     public Iban sendIban(@Value("${server.iban}") String iban) {
         return s.sendIban(iban);
     }

@@ -23,14 +23,14 @@ public class SaveInterstsDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution){
-        LOGGER.info("Execute");
-        InterestsRequest interest = (InterestsRequest) execution.getVariable(USER_INTERESTS_REQUEST);
-        String username = (String) execution.getVariable(USERNAME);
-        try {
-            airlineManager.saveUserInterests(interest, username);
-        } catch (Exception e) {
-            //TODO: handle exception
-        }
+        // LOGGER.info("Execute");
+        // InterestsRequest interest = (InterestsRequest) execution.getVariable(USER_INTERESTS_REQUEST);
+        // String username = (String) execution.getVariable(USERNAME);
+        // try {
+        //     airlineManager.saveUserInterests(interest, username);
+        // } catch (Exception e) {
+        //     //TODO: handle exception
+        // }
     }
   
 }

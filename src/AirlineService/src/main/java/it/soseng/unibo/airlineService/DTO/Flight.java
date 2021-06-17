@@ -1,12 +1,6 @@
-package it.soseng.unibo.airlineService.model;
+package it.soseng.unibo.airlineService.DTO;
 
 import java.time.OffsetDateTime;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
 /**
  * Questa classe definisce le caratteristiche delle offerte di volo
@@ -15,42 +9,26 @@ import javax.persistence.Table;
  * @author Andrea Di Ubaldo
  * andrea.diubaldo@studio.unibo.it
  */
-@Entity
-@Table(name = "flightOffers")
-public class FlightOffer {
+
+public class Flight {
     
-    @Id 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "departure_airport_id")
     private String departureId;
 
-    @Column(name = "departure_date_time")
     private OffsetDateTime  departureTime;
 
-    @Column(name = "arrival_date_time")
     private OffsetDateTime arrivalTime;
 
-    @Column(name = "arrival_airport_id")
     private String arrivalId;
 
-    @Column(name = "airline_id")
     private String airline_id;
 
-    @Column(name = "price")
     private double price;
 
-    @Column(name = "place")
     private String place;
 
-    @Column(name = "expire_offer")
-    private OffsetDateTime expiryDate;
 
-    @Column(name = "flag")
-    private boolean soldFlag = false;
-
-    public FlightOffer(){}
 
 
 	
@@ -104,19 +82,8 @@ public class FlightOffer {
     }
 
 
-    /** 
-     * @return long la data di scadenza dell'offerta espressa in forma numerica 
-     */
-    public OffsetDateTime getExpiryDate() {
-      return this.expiryDate;
-    }
+    
 
-    /** 
-     * @return boolean il valore del campo soldFlag che indica se il volo è già stato venduto o no
-     */
-    public boolean getSoldFlag(){
-      return this.soldFlag;
-    }
 
     /**
      * @return String la compagnia aerea che offre l'offerta
@@ -126,6 +93,9 @@ public class FlightOffer {
     }
 
     
+    public void setId(long id){
+        this.id=id;
+    }
 
     /** 
      * imposta l'id dell'aereoporto di arrivo
@@ -139,9 +109,8 @@ public class FlightOffer {
      * imposta il giorno e l'ora della partenza
      * @param departureTime
      */
-    public void setDepartureTime(String departureTime) {
-      OffsetDateTime zonedDateTime = OffsetDateTime.parse(departureTime);
-      this.departureTime = zonedDateTime;
+    public void setDepartureTime(OffsetDateTime departureTime) {
+      this.departureTime = departureTime;
     }
 
     
@@ -149,9 +118,8 @@ public class FlightOffer {
      * imposta il giorno e l'ora dell'arrivo
      * @param arrivalTime
      */
-    public void setArrivalTime(String arrivalTime) {
-      OffsetDateTime zonedDateTime = OffsetDateTime.parse(arrivalTime);      
-      this.arrivalTime = zonedDateTime;
+    public void setArrivalTime(OffsetDateTime arrivalTime) {     
+      this.arrivalTime = arrivalTime;
     }
 
 
@@ -178,22 +146,6 @@ public class FlightOffer {
        this.place=place;
     }
 
-    /** 
-     * imposta la data di scadenza dell'offerta
-     * @param expiryDate
-     */
-    public void setExpiryDate() {
-      OffsetDateTime expiryDate = departureTime.minusDays(7);      
-      this.expiryDate=expiryDate;
-    }
-
-
-    /** 
-     * imposta il flag relativo all'acquisto o meno dell'offerta
-     */
-    public void setSoldFlag(boolean value){
-      this.soldFlag = value;
-    }
 
     /**
      * imposta la compagnia aerea che offre l'offerta
@@ -213,4 +165,5 @@ public class FlightOffer {
     
 
 }
+
 

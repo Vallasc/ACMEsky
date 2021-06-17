@@ -1,44 +1,97 @@
 {
     "OFFERS": [
         {
-            "departure_airport_id": "FCO",
-            "departure_airport": "Milano Malpensa, Via Malpensa - 21010 Ferno (VA)",
-            "arrival_airport_id": "TRN",
-            "arrival_airport": "Aereoporto D'Abruzzo, Via Tiburtina - 65131 Pescara (PE)",
-            "airline_id": "1",
-            "departure_date_time": "2021-08-27 20:00:00",
-            "arrival_date_time": "2021-08-27 21:00:00",
-            "price": 130.00
+            "list":[
+                {
+                    "departure_airport_id": "2218",
+                    "arrival_airport_id": "2890",
+                    "airline_id": "1",
+                    "departure_date_time": "2021-08-27T20:00:00+01:00",
+                    "arrival_date_time": "2021-08-27T21:00:00+01:00",
+                    "place": "25",
+                    "price": 130.00
+                },
+                {
+                    "departure_airport_id": "2218",
+                    "arrival_airport_id": "2890",
+                    "airline_id": "1",
+                    "departure_date_time": "2021-08-27T20:00:00+01:00",
+                    "arrival_date_time": "2021-08-27T21:00:00+01:00",
+                    "place": "26",
+                    "price": 130.00
+                }
+                
+            ]
+            
         },
         {
-            "departure_airport_id": "FCO",
-            "departure_airport": "Aereoporto internazionale Leonardo Da Vinci, Via dell' Aeroporto di Fiumicino - 00054 Fiumicino (ROMA) ",
-            "arrival_airport_id": "TRN",
-            "arrival_airport": "Torino Airport, Strada Aeroporto - 10072 Caselle Torinese (TO)",
-            "airline_id": "1",
-            "departure_date_time": "2021-02-27 20:00:00",
-            "arrival_date_time": "2021-02-27 21:00:00",
-            "price": 170.00
+            "list":[
+                {
+                    "departure_airport_id": "3062",
+                    "arrival_airport_id": "3609",
+                    "airline_id": "1",
+                    "departure_date_time": "2021-02-27T20:00:00+01:00",
+                    "arrival_date_time": "2021-02-27T21:00:00+01:00",
+                    "place": "47",
+                    "price": 170.00
+                },
+                {
+                    "departure_airport_id": "3062",
+                    "arrival_airport_id": "3609",
+                    "airline_id": "1",
+                    "departure_date_time": "2021-02-27T20:00:00+01:00",
+                    "arrival_date_time": "2021-02-27T21:00:00+01:00",
+                    "place": "74",
+                    "price": 170.00
+                }
+            ]
+            
         },
         {
-            "departure_airport_id": "FCO",
-            "departure_airport": "Aereoporto D'Abruzzo, Via Tiburtina - 65131 Pescara (PE)",
-            "arrival_airport_id": "TRN",
-            "arrival_airport": "Aereoporto di Palermo Falcone e Borsellino, Via Paolo Borsellino - 90045 Cinisi (PA)",
-            "airline_id": "1",
-            "departure_date_time": "2021-03-03 20:00:00",
-            "arrival_date_time": "2021-03-03 21:00:00",
-            "price": 25.00
+            "list":[
+                {
+                    "departure_airport_id": "2890",
+                    "arrival_airport_id": "2813",
+                    "airline_id": "1",
+                    "departure_date_time": "2021-03-03T20:00:00+01:00",
+                    "arrival_date_time": "2021-03-03T21:00:00+01:00",
+                    "place":"28",
+                    "price": 25.00
+                },
+                {
+                    "departure_airport_id": "2890",
+                    "arrival_airport_id": "2813",
+                    "airline_id": "1",
+                    "departure_date_time": "2021-03-03T20:00:00+01:00",
+                    "arrival_date_time": "2021-03-03T21:00:00+01:00",
+                    "place": "51",
+                    "price": 25.00
+                }
+            ]
+            
         },
         {
-            "departure_airport_id": "FCO",
-            "departure_airport": "Aereoporto di Bologna, Via del Triumvirato - 40132 Bologna (BO)",
-            "arrival_airport_id": "TRN",
-            "arrival_airport": "Aereoporto Internazionale di Napoli, Viale F. Ruffo di Calabria - 80144 Napoli (NA)",
-            "airline_id": "1",
-            "departure_date_time": "2021-03-02 20:00:00",
-            "arrival_date_time": "2021-03-02 21:00:00",
-            "price": 25.00
+            "list":[
+                {
+                    "departure_airport_id": "391",
+                    "arrival_airport_id": "2435",
+                    "airline_id": "1",
+                    "departure_date_time": "2021-03-02T20:00:00+01:00",
+                    "arrival_date_time": "2021-03-02T21:00:00+01:00",
+                    "place":"61",
+                    "price": 25.00
+                },
+                {
+                    "departure_airport_id": "391",
+                    "arrival_airport_id": "2435",
+                    "airline_id": "1",
+                    "departure_date_time": "2021-03-02T20:00:00+01:00",
+                    "arrival_date_time": "2021-03-02T21:00:00+01:00",
+                    "place":"39",
+                    "price": 25.00
+                }
+            ]
+            
         }
     ]
 }

@@ -1,6 +1,7 @@
 package it.unibo.soseng.model;
 
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 
 import javax.persistence.CascadeType;
@@ -39,14 +40,14 @@ public class Flight implements Serializable {
     @JoinColumn(name = "airline_id")
     private Airline airline;
 
-    @Column(name = "departure_date_time", nullable = false)
-    private ZonedDateTime departureDateTime;
+    @Column(name = "departure_date_time", columnDefinition= "TIMESTAMP WITH TIME ZONE", nullable = false)
+    private OffsetDateTime departureDateTime;
     
-    @Column(name = "arrival_date_time",  nullable = false)
-    private ZonedDateTime arrivalDateTime;
+    @Column(name = "arrival_date_time", columnDefinition= "TIMESTAMP WITH TIME ZONE",  nullable = false)
+    private OffsetDateTime arrivalDateTime;
 
-    @Column(name = "expire_date", nullable = false)
-    private ZonedDateTime expireDate;
+    @Column(name = "expire_date", columnDefinition= "TIMESTAMP WITH TIME ZONE", nullable = false)
+    private OffsetDateTime expireDate;
 
     @Column(name = "price", nullable = false)
     private float price;
@@ -95,19 +96,19 @@ public class Flight implements Serializable {
         this.airline = airline;
     }
     
-    public ZonedDateTime getDepartureDateTime() {
+    public OffsetDateTime getDepartureDateTime() {
         return departureDateTime;
     }
 
-    public void setDepartureDateTime(ZonedDateTime departureDateTime) {
+    public void setDepartureDateTime(OffsetDateTime departureDateTime) {
         this.departureDateTime = departureDateTime;
     }
     
-    public ZonedDateTime getArrivalDateTime() {
+    public OffsetDateTime getArrivalDateTime() {
         return arrivalDateTime;
     }
 
-    public void setArrivalDateTime(ZonedDateTime arrivalDateTime) {
+    public void setArrivalDateTime(OffsetDateTime arrivalDateTime) {
         this.arrivalDateTime = arrivalDateTime;
     }
 
@@ -119,11 +120,11 @@ public class Flight implements Serializable {
         this.price = price;
     }
 
-    public ZonedDateTime getExpireDate() {
+    public OffsetDateTime getExpireDate() {
         return expireDate;
     }
 
-    public void setExpireDate(ZonedDateTime expireDate) {
+    public void setExpireDate(OffsetDateTime expireDate) {
         this.expireDate = expireDate;
     }
 
@@ -132,6 +133,20 @@ public class Flight implements Serializable {
     }
 
     public void setBooked(boolean booked) {
+        this.booked = booked;
+    }
+
+    public Flight(String flightCode, Airport departureAirport, Airport arrivalAirport, Airline airline,
+            OffsetDateTime departureDateTime, OffsetDateTime arrivalDateTime, OffsetDateTime expireDate, float price,
+            boolean booked) {
+        this.flightCode = flightCode;
+        this.departureAirport = departureAirport;
+        this.arrivalAirport = arrivalAirport;
+        this.airline = airline;
+        this.departureDateTime = departureDateTime;
+        this.arrivalDateTime = arrivalDateTime;
+        this.expireDate = expireDate;
+        this.price = price;
         this.booked = booked;
     }
 }

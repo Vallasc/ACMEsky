@@ -1,10 +1,11 @@
 package it.soseng.unibo.airlineService.service;
 
-import java.io.File;
 import java.io.IOException;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -22,6 +23,7 @@ import org.springframework.web.client.RestTemplate;
 import it.soseng.unibo.airlineService.model.FlightUtility;
 import it.soseng.unibo.airlineService.model.FlightOffer;
 import it.soseng.unibo.airlineService.model.Iban;
+import it.soseng.unibo.airlineService.DTO.Flight;
 import it.soseng.unibo.airlineService.DTO.UserRequest;
 import it.soseng.unibo.airlineService.repository.FlightOfferRepository;
 
@@ -41,22 +43,24 @@ public class FlightOfferService {
 
     
     /** 
-     * genera un offerta di volo randomicamente e manda l'offerta attraverso
-     * sendLastMinuteOffer se risulta essere un'offerta last-minute
+     * genera un offerta di volo randomicamente e converte l'offerta in volo e
+     * lo manda attraverso sendLastMinuteOffer se risulta l'offerta risulta essere last-minute
      * rispetto alla data in cui l'offerta viene creata
      * @return FlightOffer che viene salvata nella rispettiva tabella del db
-     * @throws JsonProcessingException
+     * @throws JsonProcessingException 
      * @throws IOException
      */
-    public FlightOffer createFlightOffer(String s) throws JsonProcessingException, IOException {
+    public void createFlightOffer(String s) throws JsonProcessingException, IOException {
         JsonNode n = u.GetRandomJsonObject(u.GetFile(s));
-        FlightOffer o = u.createOffer(n);
-        if(u.LastMinuteCheck(o)){
-            // sendLastMinuteOffer(o);
-        }else{}
-
-        return repo.save(o);
-
+        List<FlightOffer> list = u.createOffer(n);
+        list.forEach( i-> repo.save(i));
+        for(FlightOffer i : list ){
+            if(u.LastMinuteCheck(i)){
+                u.convertOffertToFlight(i);
+                // sendLastMinuteOffer(u.createFlight(i));
+                
+            }else{}
+        }
         
     }
 
@@ -65,9 +69,16 @@ public class FlightOfferService {
      * cancella l'offerta di volo corrispondente all'id fornito come parametro
      * @param id
      */
-    public void deleteFlightOffer(long id) {
-        repo.deleteById(id);
+    public String deleteFlightOffer(long id) {
         
+        if(repo.existsById(id)){
+            repo.deleteById(id);
+            return "Offer deleted";
+        }else{
+            return "Error or offer not exist";
+        }
+        
+
     }
 
 
@@ -99,24 +110,26 @@ public class FlightOfferService {
      * i cui parametri sono specificati dalla userRequest
      * @param r richiesta dell'utente
      * @return List<FlightOffer> la lista delle offerte di volo escludendo le offerte last-minute
-     * già inviate ad ACMEsky al momento della loro generazione e le offerte già prenotate
+     * (già inviate ad ACMEsky al momento della loro generazione) e le offerte già prenotate
      */
-    public List<FlightOffer> searchFlightOffers(UserRequest r){
+    public List<Flight> getMatchingFlights(List<UserRequest> r){
 
-        return repo.searchFlightOffers(r.departureCity, r.destinationCity, r.departureDate, r.destinationDate)
-                    .stream()
-                    .filter(w -> u.LastMinuteCheck(w) == false && w.getBookableFlagValue() == true)
-                    .collect(Collectors.toList());
-                    
+        List<FlightOffer> offers = u.getMatchingOffers(r, this.repo);
+        List<Flight> l = new ArrayList<>();
+
+        for(FlightOffer o : offers){
+            l.add(u.convertOffertToFlight(o));
+        }
+        
+        return l;
     }
-
-
+        
     
     /** 
      * invia le offerte last-minute generate precedentemente ad ACMEsky
      * @param o l'offerta da inviare sulla route specifica
      */
-    public void sendLastMinuteOffer(FlightOffer o) {
+    public void sendLastMinuteOffer(FlightOffer f) {
 
         String url = "http://localhost:8080/airline/offers";
     
@@ -127,33 +140,29 @@ public class FlightOfferService {
         // // set `accept` header
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         // // build the request
-        HttpEntity<FlightOffer> entity = new HttpEntity<>(o, headers);
+        HttpEntity<FlightOffer> entity = new HttpEntity<>(f, headers);
         // // send POST request
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<FlightOffer> result = restTemplate.postForEntity(url, entity, FlightOffer.class);    
     }
 
-	
+
     /** 
-     * recupera lo stato di un'offerta di volo (stato di prenotabilità)
-     * @param id corrispondente all'offerta di cui si vuole conoscere lo stato
-     * @return boolean lo stato dell'offerta
+     * cancella le offerte di volo scadute
      */
-    public boolean getOfferState(long id) {
-        return repo.findById(id).get().getBookableFlagValue(); 
-	}
+    public void DeleteExpiredOffers() {
+        OffsetDateTime now = OffsetDateTime.now();
+        ListIterator<FlightOffer> iterator= repo.findAll().listIterator();
+
+        while(iterator.hasNext()){
+            FlightOffer o = iterator.next();
+            if(now.equals(o.getExpiryDate()) || now.isAfter(o.getExpiryDate())){
+                repo.deleteById(o.getId());
+            }
+        }
+    }
 
     
-    /** 
-     * prenota l'offerta corrispondente all'id passato come parametro se prenotabile
-     * @param id corrispondente all'offerta in questione
-     * @return boolean esito della prenotazione
-     */
-    public File bookOffer(List<FlightOffer> l) {
-		l.stream().forEach(o -> o.setBookableFlagFalse());
-
-        return null;
-	}
 
 
     public List<FlightOffer> getOffers(long ... l){
@@ -165,6 +174,9 @@ public class FlightOfferService {
         }
           return flights;
     }
+
+
+    
 
     
     
