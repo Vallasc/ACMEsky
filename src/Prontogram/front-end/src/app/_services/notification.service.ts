@@ -22,23 +22,23 @@ export class NotificationService {
     }
 
     createNotification(notification: Notification) {
-        return this.http.post(`${environment.apiUrl}/notification/posts/new`, notification);
+        return this.http.post(`${environment.apiUrl}/notification/new`, notification);
     }
 
     getAll(id: string) {
-        return this.http.get<Notification[]>(`${environment.apiUrl}/notification/gets/all/${id}`); 
+        return this.http.get<Notification[]>(`${environment.apiUrl}/notification/findOne/${id}`); 
     }
 
     getById(id: string) {
-        return  this.http.get<Notification>(`${environment.apiUrl}/notification/gets/${id}`);
+        return  this.http.get<Notification>(`${environment.apiUrl}/notification/${id}`);
     }
 
     update(id, params) {
-        return this.http.patch(`${environment.apiUrl}/notification/posts/notification/${id}`, params);
+        return this.http.put(`${environment.apiUrl}/notification/${id}`, params);
     }
 
     delete(id: string) {
-        return this.http.delete(`${environment.apiUrl}/notification/posts/notification/${id}`)
+        return this.http.delete(`${environment.apiUrl}/notification/${id}`)
             .pipe(map(x => {
                 return x;
             }));
@@ -48,15 +48,15 @@ export class NotificationService {
         const sub = new Subscription ();
         sub.subscription = subscription;
         sub.user_id = user._id;
-        return  this.http.post(`${environment.apiUrl}/notification/posts/sub`,sub);
+        return  this.http.post(`${environment.apiUrl}/subscription/new`,sub);
     }
 
     unsubscribeToNotification (subscription: PushSubscription) {
-        return  this.http.delete(`${environment.apiUrl}/notification/posts/${subscription.toJSON()}`);
+        return  this.http.delete(`${environment.apiUrl}/subscription/${subscription.toJSON()}`);
     }
 
     send() {
-        return this.http.post(`${environment.apiUrl}/notification/posts/news`,null);
+        return this.http.post(`${environment.apiUrl}/notification/news`,null);
     }
 
 }

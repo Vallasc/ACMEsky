@@ -55,19 +55,19 @@ export class AccountService {
     }
 
     createUser(user: User) {
-        return this.http.post(`${environment.apiUrl}/user/posts/new`, user, {headers: this.getheader ()});
+        return this.http.post(`${environment.apiUrl}/user/new`, user, {headers: this.getheader ()});
     }
 
     getAll() {
-        return this.http.get<User[]>(`${environment.apiUrl}/user/gets/`, {headers: this.getheader ()}); 
+        return this.http.get<User[]>(`${environment.apiUrl}/user/all`, {headers: this.getheader ()}); 
     }
 
     getById(id: string) {
-        return  this.http.get<User>(`${environment.apiUrl}/user/gets/${id}`, {headers: this.getheader ()});
+        return  this.http.get<User>(`${environment.apiUrl}/user/${id}`, {headers: this.getheader ()});
     }
 
     update(id, params) {
-        return this.http.patch(`${environment.apiUrl}/user/posts/${id}`, params, {headers: this.getheader ()})
+        return this.http.put(`${environment.apiUrl}/user/${id}`, params, {headers: this.getheader ()})
             .pipe(map(x => {
                 // update stored user if the logged in user updated their own record
                 if (id == this.userValue._id) {
@@ -83,7 +83,7 @@ export class AccountService {
     }
 
     delete(id: string) {
-        return this.http.delete(`${environment.apiUrl}/user/posts/${id}`, {headers: this.getheader ()})
+        return this.http.delete(`${environment.apiUrl}/user/${id}`, {headers: this.getheader ()})
             .pipe(map(x => {
                 // auto logout if the logged in user deleted their own record
                 if (id == this.userValue._id) {

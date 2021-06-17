@@ -3,10 +3,10 @@ const Notification = require('../../models/Notification');
 const verify = require ('../verifyToken');
 
 //Get notification by Id
-router.get ('/notification/:id', async (req, res) => {
+router.get ('/findOne/:notificationId', async (req, res) => {
     
     try {
-        const notification = await Notification.findById (req.params.id);
+        const notification = await Notification.findById (req.params.notificationId);
         res.json (notification); 
     } catch (err) {
         res.json ({ message: err});
@@ -15,10 +15,10 @@ router.get ('/notification/:id', async (req, res) => {
 });
 
 //Get all notifications
-router.get ('/all/:user_id', async (req, res) => {
+router.get ('/notificationByUserId', async (req, res) => {
 
     try {
-        const notifications = await Notification.find ({user_id: req.params.user_id});
+        const notifications = await Notification.find ({user_id: req.params.notificationByUserId});
         res.json (notifications); 
     } catch (err) {
         res.json ({ message: err});
