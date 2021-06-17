@@ -42,69 +42,74 @@
 
 // Conferma dell'offerta e pagamento
 // confirmOffer: messaggio di conferma offerta e pagamento
-// responseOffer: messaggio di conferma offerta
 ( 
     confirmOffer: USERₓ -> ACME ; 
-    responseOffer: ACME -> USERₓ ;
     (
         // ACMEsky conferma che l'offerta è disponibile
+        // responseOfferOk: messaggio di conferma offerta
         // requestPaymentLink: richiesta di pagamento da parte dell'utente
-
         // bookTickets: prenota e riceve i biglietti 
-        // tickets: biglietti prenotati
-
-        // requestBankLink: richiesta creazione link di pagamento
-        // responselink: link di pagamento generato dalla banca
-        // paymentLink: link di pagamento generato dalla banca
-        // payment: pagamento attraverso il link generato
-        // responsePayment: stato del pagamento
-        // responsePaymentBank: esito pagamento
         (   
+            responseOfferOk: ACME -> USERₓ ;
             requestPaymentLink: USERₓ -> ACME ; // REQUEST1
-
             bookTickets: ACME -> AIRₖ ;
-            tickets: AIRₖ -> ACME ;
             (   
                 // Tickets ok
+                // responseTickets: biglietti prenotati
+                // requestBankLink: richiesta creazione link di pagamento
+                // responselink: link di pagamento generato dalla banca
+                // paymentLink: link di pagamento generato dalla banca
+                // payment: pagamento attraverso il link generato
+                // responsePayment: stato del pagamento
                 (
+                    responseTickets: AIRₖ -> ACME ;
                     requestBankLink: ACME -> BANK ; 
                     responselink: BANK -> ACME ;
                     paymentLink: ACME -> USERₓ ; // RESPONSE1
                     payment: USERₓ -> BANK ;
                     responsePayment: BANK -> USERₓ ;
-                    responsePaymentBank: BANK -> ACME ;
                     (
                         // Pagamento avvenuto con successo
-                        (   // Controllo Premium service
-                            // Richiesta a Geodistance se costo > 1000
-                            1 
-                            + 
-                            // requestDistance: richiesta calcolo della distanza
-                            // responseDistance: distanza calcolata
+                        // successPaymentBank: esito pagamento
+                        (
+                            successPaymentBank: BANK -> ACME ;
+
+                            // Controllo Premium service
                             (
-                                requestDistance: ACME -> GEO ; 
-                                responseDistance: GEO -> ACME ; 
-                                (   // Richiesta alla compagnia di noleggio
-                                    1 
-                                    +  
-                                    // requestRent: richiesta noleggio veicoli
-                                    // responseRent: risposta nolleggio
-                                    (
-                                        requestRent: ACME -> RENTₜ ; 
-                                        responseRent: RENTₜ-> ACME 
+                                // Richiesta a Geodistance se costo > 1000
+                                1 
+                                + 
+                                // requestDistance: richiesta calcolo della distanza
+                                // responseDistance: distanza calcolata
+                                (
+                                    requestDistance: ACME -> GEO ; 
+                                    responseDistance: GEO -> ACME ; 
+                                    (   // Richiesta alla compagnia di noleggio
+                                        1 
+                                        +  
+                                        // requestRent: richiesta noleggio veicoli
+                                        // responseRent: risposta nolleggio
+                                        (
+                                            requestRent: ACME -> RENTₜ ; 
+                                            responseRent: RENTₜ-> ACME 
+                                        )
                                     )
                                 )
                             )
                         )
                         +
+                        (
                         // Errore nel pagamento
+                        // failedPaymentBank: pagamento fallito
                         // unbookTickets: cancella la prenotazione dei biglietti
+                        failedPaymentBank: BANK -> ACME ;
                         unbookTickets: ACME -> AIRₖ
+                        )
                     ) ;
                     // L'utente richiede i biglietti
-                    // tickets: l'utente richiede i biglietti
+                    // requestTickets: l'utente richiede i biglietti
                     // ticketSummary: summary tickets o errore
-                    tickets : USERₓ -> ACME ; // REQUEST2
+                    requestTickets : USERₓ -> ACME ; // REQUEST2
                     ticketSummary : ACME -> USERₓ // RESPONSE2
 
                 )
@@ -116,7 +121,8 @@
         )
         +
         // ACMEsky controlla l'offerta e non è più disponibile
-        1
+        // responseOfferError: errore offerta
+        responseOfferError: ACME -> USERₓ
     )
 )
 ```
@@ -140,28 +146,74 @@ E' connessa in quanto il ricevente in ___queryFlights___ è il mittente di ___re
 ```fsharp
 ( sendLastMinute: AIRₖ -> ACME )*
 ```
-Non è connessa, ma non è un problema in quanto ACME per scelta implementativa rimane in attesa di una richiesta.
+Non è connessa, ma non è un problema in quanto ACME per scelta implementativa rimane in attesa di una richiesta.SBAGLIATO
 
 #### Registrazione interesse dell'utente
 ```fsharp
 ( requestInterest: USERₓ -> ACME )* 
 ```
-Non è connessa, ma non è un problema in quanto ACME per scelta implementativa rimane in attesa di una richiesta.
+Non è connessa, ma non è un problema in quanto ACME per scelta implementativa rimane in attesa di una richiesta. SBAGLIATO
 
 #### Notifica dell'offerta all'utente
 ```fsharp
 ( offerToken: ACME -> PTG ; notifyUser: PTG -> USERₓ )*
 ```
-E' connessa in quanto il ricevente in ___requestInterest___ è il mittente di ___responseInterest___
+Non è connessa, ma non è un problema in quanto PTG  e USERₓ per scelta implementativa rimangono sempre in attesa di richieste.SBAGLIATO
 
-
+#### Conferma dell'offerta e pagamento
+```fsharp
+( offerToken: ACME -> PTG ; notifyUser: PTG -> USERₓ )*
+```
 \
 \
 \
 &nbsp;
 
 
+### Proiezioni
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Semantica sincrona
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ### Corr
 ```fsharp
