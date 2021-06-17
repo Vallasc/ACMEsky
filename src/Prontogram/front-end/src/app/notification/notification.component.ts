@@ -81,7 +81,7 @@ export class NotificationComponent implements  OnDestroy,OnInit{
       .subscribe(() => this.notifications = this.notifications.filter(x => x._id !== id));
     }
 
-    pushSubscription () {
+    /*pushSubscription () {
       if(this.swPush.isEnabled){
       this.swPush.requestSubscription({
       serverPublicKey: this.VAPID_PUBLIC_KEY
@@ -89,9 +89,9 @@ export class NotificationComponent implements  OnDestroy,OnInit{
       .then(sub =>{this.notificationService.sendSubscriptionToTheServer(sub,this.user).subscribe(x=>console.log(x),err=>console.log(err))})
       .catch(err => console.error("Could not subscribe to notifications", err));
       }
+    }*/
 
-    }
-    unsubscribeNotifications(){
+    /*unsubscribeNotifications(){
       this.swPush.subscription.pipe(take(1)).subscribe(subscriptionValue=>{
         if (subscriptionValue) {
             this.notificationService.unsubscribeToNotification (subscriptionValue)
@@ -116,7 +116,7 @@ export class NotificationComponent implements  OnDestroy,OnInit{
         }
         
     });
-  }
+  }*/
 
     getAllNotifications () {
       this.notificationService.getAll(this.user._id).subscribe(

@@ -15,7 +15,7 @@ router.get ('/:id', async (req, res) => {
 });
 
 //Get all users TOLGO VERIFY ('/',verify, async (req, res) ==> ('/', async (req, res)
-router.get ('all', async (req, res) => {
+router.get ('/all', async (req, res) => {
     try {
         const user = await User.find();
         res.json (user); 

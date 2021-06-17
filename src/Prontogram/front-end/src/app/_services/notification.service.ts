@@ -25,12 +25,12 @@ export class NotificationService {
         return this.http.post(`${environment.apiUrl}/notification/new`, notification);
     }
 
-    getAll(id: string) {
-        return this.http.get<Notification[]>(`${environment.apiUrl}/notification/findOne/${id}`); 
+    getAll(user_id: string) {
+        return this.http.get<Notification[]>(`${environment.apiUrl}/notification/all/${user_id}`); 
     }
 
     getById(id: string) {
-        return  this.http.get<Notification>(`${environment.apiUrl}/notification/${id}`);
+        return  this.http.get<Notification>(`${environment.apiUrl}/notification/findOne/${id}`);
     }
 
     update(id, params) {
