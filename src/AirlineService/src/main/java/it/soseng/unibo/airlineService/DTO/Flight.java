@@ -3,9 +3,7 @@ package it.soseng.unibo.airlineService.DTO;
 import java.time.OffsetDateTime;
 
 /**
- * Questa classe definisce le caratteristiche delle offerte di volo
- * definendo per ogni attributo un campo della tabella FLIGHT_OFFERS che verrà generata
- * quando verrà creata la prima istanza di flightOffer
+ * Questa classe definisce le caratteristiche dei voli che verranno inviati ad ACMEsky
  * @author Andrea Di Ubaldo
  * andrea.diubaldo@studio.unibo.it
  */
@@ -33,7 +31,7 @@ public class Flight {
 
 	
     /** 
-     * @return Long id dell'offerta
+     * @return Long id del volo
      */
     public Long getId() {
         return this.id;
@@ -82,9 +80,6 @@ public class Flight {
     }
 
 
-    
-
-
     /**
      * @return String la compagnia aerea che offre l'offerta
      */
@@ -92,10 +87,14 @@ public class Flight {
       return airline_id;
     }
 
-    
+    /**
+     * imposta l'id del volo a partire da quello dell'offerta di volo generata
+     * @param id
+     */
     public void setId(long id){
         this.id=id;
     }
+
 
     /** 
      * imposta l'id dell'aereoporto di arrivo
@@ -131,7 +130,7 @@ public class Flight {
     }
 
     /** 
-     * imposta il prezzo dell'offerta
+     * imposta il prezzo del volo
      * @param price
      */
     public void setPrice( double price) {
@@ -139,7 +138,7 @@ public class Flight {
     }
 
     /** 
-     * imposta il numero di posto del passeggero sul treno
+     * imposta il numero di posto del passeggero sull'aereo
      * @param place
      */
     public void setPlace(String place) {
@@ -148,7 +147,7 @@ public class Flight {
 
 
     /**
-     * imposta la compagnia aerea che offre l'offerta
+     * imposta la compagnia aerea che offre il volo
      * @param airline_id
      */
     public void setAirline_id(String airline_id) {

@@ -171,7 +171,7 @@ public class FlightOffer {
     }
 
     /** 
-     * imposta il numero di posto del passeggero sul treno
+     * imposta il numero di posto del passeggero sull'aereo
      * @param place
      */
     public void setPlace(String place) {

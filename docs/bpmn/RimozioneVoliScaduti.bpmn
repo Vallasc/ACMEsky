@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_15lv7mx" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.3.0">
+  <bpmn:collaboration id="Collaboration_0ntsbcn">
+    <bpmn:participant id="Participant_05la8wo" name="ACMEsky_Flights_Manager" processRef="Process_023lgc7" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_023lgc7" isExecutable="true">
+    <bpmn:dataStoreReference id="DataStoreReference_1f8bqbo" />
+    <bpmn:intermediateCatchEvent id="Event_1cprto0" name="Every 12 hours">
+      <bpmn:outgoing>Flow_1oiyhl0</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_1fuxbmj">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression" />
+      </bpmn:timerEventDefinition>
+    </bpmn:intermediateCatchEvent>
+    <bpmn:endEvent id="Event_1tq52t5">
+      <bpmn:incoming>Flow_0d97jtv</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="Activity_18j4roj" name="Remove expired flights">
+      <bpmn:incoming>Flow_1oiyhl0</bpmn:incoming>
+      <bpmn:outgoing>Flow_0d97jtv</bpmn:outgoing>
+      <bpmn:property id="Property_00rhp71" name="__targetRef_placeholder" />
+      <bpmn:dataInputAssociation id="DataInputAssociation_1igicsv">
+        <bpmn:sourceRef>DataStoreReference_1f8bqbo</bpmn:sourceRef>
+        <bpmn:targetRef>Property_00rhp71</bpmn:targetRef>
+      </bpmn:dataInputAssociation>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1oiyhl0" sourceRef="Event_1cprto0" targetRef="Activity_18j4roj" />
+    <bpmn:sequenceFlow id="Flow_0d97jtv" sourceRef="Activity_18j4roj" targetRef="Event_1tq52t5" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0ntsbcn">
+      <bpmndi:BPMNShape id="Participant_05la8wo_di" bpmnElement="Participant_05la8wo" isHorizontal="true">
+        <dc:Bounds x="190" y="80" width="608" height="170" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1oiyhl0_di" bpmnElement="Flow_1oiyhl0">
+        <di:waypoint x="458" y="190" />
+        <di:waypoint x="550" y="190" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0d97jtv_di" bpmnElement="Flow_0d97jtv">
+        <di:waypoint x="650" y="190" />
+        <di:waypoint x="742" y="190" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="DataStoreReference_1f8bqbo_di" bpmnElement="DataStoreReference_1f8bqbo">
+        <dc:Bounds x="285" y="115" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1cprto0_di" bpmnElement="Event_1cprto0">
+        <dc:Bounds x="422" y="172" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="402" y="213" width="75" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1tq52t5_di" bpmnElement="Event_1tq52t5">
+        <dc:Bounds x="742" y="172" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_18j4roj_di" bpmnElement="Activity_18j4roj">
+        <dc:Bounds x="550" y="150" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="DataInputAssociation_1igicsv_di" bpmnElement="DataInputAssociation_1igicsv">
+        <di:waypoint x="335" y="142" />
+        <di:waypoint x="551" y="157" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

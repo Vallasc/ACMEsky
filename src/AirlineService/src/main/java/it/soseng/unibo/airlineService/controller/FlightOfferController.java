@@ -6,7 +6,6 @@ import java.util.List;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.lowagie.text.DocumentException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -64,7 +63,7 @@ public class FlightOfferController {
 
     
     /** 
-     * si occupa di restituire le offerte di volo che hanno un match con una specifica
+     * si occupa di restituire i voli che hanno un match con una specifica
      * richiesta dell'utente 
      * @param r che contiene i parametri del volo che l'utente cerca
      * @return List<FlightOffer> che contiene tutte le offerte di lavoro prenotabili
@@ -84,35 +83,33 @@ public class FlightOfferController {
     }
 
     
-    /** si occupa di cancellare l'offerta di volo quando risulta che l'offerta sia stata acquistata 
-     * correttamente(viene chiamata quando si è verificato il pagamento dell'utente)
+    /** si occupa di impostare il soldFlag con il valore false dell'offerta di volo quando risulta 
+     * che l'offerta non sia stata acquistata per un eventuale errore (viene chiamata dopo il tentativo di pagamento dell'utente)
      * @param id che viene passato per identificare l'offerta da eliminare
      */
-    @DeleteMapping("/purchasedOffer")
-    public String deleteOffer(@RequestParam(name = "id") long id) {
-        return s.deleteFlightOffer(id);
+    @PostMapping("/notPurchasedOffer")
+    public void unsoldFlight(@RequestParam(name = "id") long id) {
+        s.unsoldFlight(id);
     }
 
 
 
-    /** cancella la prenotazione delle offerte che non sono state acquistate entro la scadenza delle prenotazioni
+    /** cancella le offerte scadute ogni 6 secondi
      * @param id dell'offerta di cui si richiede lo stato
      * @return boolean il cui valore true indica che l'offerta è prenotabile(viceversa false se non lo è)
      */
     @Scheduled(fixedRate = 6000)
     @DeleteMapping("/deleteExpiredOffer")
     private void deleteExpiredOffer(){
-        s.DeleteExpiredOffers();
+        s.DeleteExpiredOffersFromDB();
     }
     
 
     
     /** 
-     * restituisce l'esito della prenotazione dell'offerta di volo
-     * @param id dell'offerta oggetto di interesse
-     * @return boolean che indica true se l'offerta viene prenotata(false viceversa)
-     * @throws DocumentException
-     * @throws IOException
+     * invia i biglietti in formato pdf relativi a quelle offerte che hanno il valore degli id corrispondenti
+     * a quelli passati attraverso i parametri
+     * @param id dei voli che si vuole acquistare
      */
     @GetMapping("/getTickets")
     public void sendPdfFiles( //HttpServletResponse response, 

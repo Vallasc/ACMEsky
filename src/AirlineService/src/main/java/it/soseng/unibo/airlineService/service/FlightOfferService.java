@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -43,8 +42,8 @@ public class FlightOfferService {
 
     
     /** 
-     * genera un offerta di volo randomicamente e converte l'offerta in volo e
-     * lo manda attraverso sendLastMinuteOffer se risulta l'offerta risulta essere last-minute
+     * genera una lista di offerte di volo randomicamente che viene cancellata se scaduta prima di essere salvata sul DB, 
+     * converte l'offerta in volo e lo manda attraverso sendLastMinuteOffer se l'offerta risulta essere last-minute
      * rispetto alla data in cui l'offerta viene creata
      * @return FlightOffer che viene salvata nella rispettiva tabella del db
      * @throws JsonProcessingException 
@@ -53,15 +52,13 @@ public class FlightOfferService {
     public void createFlightOffer(String s) throws JsonProcessingException, IOException {
         JsonNode n = u.GetRandomJsonObject(u.GetFile(s));
         List<FlightOffer> list = u.createOffer(n);
-        list.forEach( i-> repo.save(i));
+        list.stream().filter(i-> u.DeleteExpiredOffers(i, repo) == true).forEach(i->repo.save(i));
         for(FlightOffer i : list ){
             if(u.LastMinuteCheck(i)){
                 u.convertOffertToFlight(i);
                 // sendLastMinuteOffer(u.createFlight(i));
-                
             }else{}
-        }
-        
+        }  
     }
 
     
@@ -69,16 +66,11 @@ public class FlightOfferService {
      * cancella l'offerta di volo corrispondente all'id fornito come parametro
      * @param id
      */
-    public String deleteFlightOffer(long id) {
+    public void unsoldFlight(long id) {
         
         if(repo.existsById(id)){
-            repo.deleteById(id);
-            return "Offer deleted";
-        }else{
-            return "Error or offer not exist";
+            repo.findById(id).get().setSoldFlag(false);
         }
-        
-
     }
 
 
@@ -150,7 +142,7 @@ public class FlightOfferService {
     /** 
      * cancella le offerte di volo scadute
      */
-    public void DeleteExpiredOffers() {
+    public void DeleteExpiredOffersFromDB() {
         OffsetDateTime now = OffsetDateTime.now();
         ListIterator<FlightOffer> iterator= repo.findAll().listIterator();
 
