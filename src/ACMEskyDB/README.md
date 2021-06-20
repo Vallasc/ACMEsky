@@ -1,3 +1,4 @@
+# DB schema
 
 |  | airports |
 | - | - |

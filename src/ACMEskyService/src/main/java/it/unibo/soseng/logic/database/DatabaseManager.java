@@ -1,5 +1,6 @@
 package it.unibo.soseng.logic.database;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,12 +28,14 @@ public class DatabaseManager {
     private EntityManager entityManager;
 
     public List<FlightInterest> retrieveFlightInterests() {
-        @SuppressWarnings("unchecked")
+        /*@SuppressWarnings("unchecked")
         List<FlightInterest> interests = entityManager
                 .createQuery("SELECT flight.departure_airport_id, flight.departure arrival_airport_id,"
                         + "flight.departure_date_time, flight.arrival_date_time " + "FROM flights_interest flight")
                 .getResultList();
-        return interests;
+        return interests;*/
+
+        return new ArrayList<FlightInterest>();
     }
 
     public List<Flight> availableFlights(Long id) {
@@ -86,7 +89,7 @@ public class DatabaseManager {
     public Airport getAirport(String code) throws AirportNotFoundException {
         @SuppressWarnings("unchecked")
         List<Airport> result = (List<Airport>) entityManager
-                .createQuery("SELECT a FROM Airpot a WHERE a.code = :code")
+                .createQuery("SELECT a FROM Airport a WHERE a.code = :code")
                 .setParameter("code", code).getResultList();
         if (result.size() == 1) {
             return result.get(0);
