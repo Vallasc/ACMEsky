@@ -6,7 +6,7 @@
 * [Struttura SOA](docs/struttura)
 
 * Servizi
-    * [BankService](src/ACMEskyService/)
+    * [ACMEsky](src/ACMEskyService/)
         * [Database](src/ACMEskyDB/)
         * [Web](src/ACMEskyWeb/)
     * [BankService](src/BankService/)
