@@ -24,7 +24,7 @@
         <bpmn:outgoing>Flow_1258dtm</bpmn:outgoing>
         <bpmn:messageEventDefinition id="MessageEventDefinition_126ru8f" messageRef="Message_0vekc9d" />
       </bpmn:intermediateCatchEvent>
-      <bpmn:sendTask id="Activity_0sfafy7" name="Search flights" camunda:delegateExpression="#{SearchFlightsDelegate}">
+      <bpmn:sendTask id="Activity_0sfafy7" name="Search flights" camunda:delegateExpression="#{searchFlightsDelegate}">
         <bpmn:incoming>Flow_1osyp3v</bpmn:incoming>
         <bpmn:outgoing>Flow_0l1w4b0</bpmn:outgoing>
       </bpmn:sendTask>
