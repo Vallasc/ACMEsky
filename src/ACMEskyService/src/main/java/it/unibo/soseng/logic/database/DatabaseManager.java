@@ -52,11 +52,15 @@ public class DatabaseManager {
     }
 
     public List<UserInterest> retrieveUserInterests() {
-        @SuppressWarnings("unchecked")
-        List<UserInterest> interests = entityManager
+        //@SuppressWarnings("unchecked")
+        // TODO Non funziona
+        // java.lang.IllegalArgumentException: org.hibernate.hql.internal.ast.QuerySyntaxException: unexpected token: * near line 1, column 8 [SELECT *FROM users_interests]
+        /*List<UserInterest> interests = entityManager
                 .createQuery("SELECT *" + "FROM users_interests")
                 .getResultList();
         return interests;
+        */
+        return new ArrayList<>();
     }
 
 
@@ -76,6 +80,7 @@ public class DatabaseManager {
             this.entityManager.persist(user);
         } catch (PersistenceException e) {
             throw new UserAlreadyInException();
+            
         }
     }
     public void createOffer (Flight flight) throws OfferAlreadyInException { 

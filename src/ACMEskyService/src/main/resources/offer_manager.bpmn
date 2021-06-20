@@ -41,11 +41,11 @@
       </bpmn:endEvent>
       <bpmn:sequenceFlow id="Flow_1bcnyx6" sourceRef="Activity_0zl9uqb" targetRef="Event_0yh79yp" />
       <bpmn:sequenceFlow id="Flow_0tx03gb" name="Available" sourceRef="Gateway_0vuwhmz" targetRef="Activity_08hnwq9">
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${availableFlight == true}</bpmn:conditionExpression>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${availableFlight.size() > 0}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_168kdep" sourceRef="Activity_08hnwq9" targetRef="Activity_0zl9uqb" />
       <bpmn:sequenceFlow id="Flow_168taax" name="Not available" sourceRef="Gateway_0vuwhmz" targetRef="Event_01699m3">
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${availableFlight == false}</bpmn:conditionExpression>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${availableFlight.size() == 0}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_0ria9lv" sourceRef="AvailableFlights" targetRef="Gateway_0vuwhmz" />
       <bpmn:serviceTask id="Activity_08hnwq9" name="Prepare offer" camunda:delegateExpression="#{prepareOfferDelegate}">
