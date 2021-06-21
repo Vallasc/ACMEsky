@@ -14,17 +14,17 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javax.ejb.Stateless;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.security.enterprise.SecurityContext;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import org.camunda.bpm.engine.ProcessEngines;
 import org.camunda.bpm.engine.RuntimeService;
+import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.runtime.ProcessInstance;
+import org.camunda.bpm.engine.runtime.ProcessInstanceWithVariables;
+import org.camunda.bpm.engine.task.Task;
 
 import it.unibo.soseng.gateway.airline.AirlineAPI;
 import it.unibo.soseng.gateway.airline.dto.AirlineFlightOffer;
@@ -41,10 +41,13 @@ import it.unibo.soseng.model.UserInterest;
 
 import static it.unibo.soseng.camunda.StartEvents.SAVE_LAST_MINUTE;
 import static it.unibo.soseng.camunda.StartEvents.SAVE_INTERESTS;
+
 import static it.unibo.soseng.camunda.ProcessVariables.AIRLINE_FLIGHT_OFFERS;
 import static it.unibo.soseng.camunda.ProcessVariables.AIRLINE_NAME;
+
 import static it.unibo.soseng.camunda.ProcessVariables.USER_INTERESTS_REQUEST;
 import static it.unibo.soseng.camunda.ProcessVariables.USERNAME;
+import static it.unibo.soseng.camunda.ProcessVariables.PROCESS_ERROR;
 
 @Stateless
 public class AirlineManager {
@@ -62,26 +65,36 @@ public class AirlineManager {
     // Camunda
     public void startSaveLastMinuteProcess(List<AirlineFlightOffer> airlineLastMinuteOffers, String airlineName){
         LOGGER.info("StartSaveLastMinuteProcess");
-        RuntimeService runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();
+        final RuntimeService runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();
         Map<String,Object> processVariables = new HashMap<String,Object>();
         processVariables.put(AIRLINE_FLIGHT_OFFERS, airlineLastMinuteOffers);
         processVariables.put(AIRLINE_NAME, airlineName);
         runtimeService.startProcessInstanceByMessage(SAVE_LAST_MINUTE, processVariables);
     }
 
+    //Camunda
     public void startSaveUserInterests(InterestsRequest userInterestsRequest, String username) 
-                                                                throws UserNotAllowedException{
+                                                                throws UserNotAllowedException, BadRequestException{
         LOGGER.info("StartSaveUserInterests");
 
         String loginName = securityContext.getCallerPrincipal().getName();
-        if(username.equals(loginName))
+        if(!username.equals(loginName))
             throw new UserNotAllowedException();
 
-        RuntimeService runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();
+        final RuntimeService runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();
+        
         Map<String,Object> processVariables = new HashMap<String,Object>();
         processVariables.put(USER_INTERESTS_REQUEST, userInterestsRequest);
         processVariables.put(USERNAME, username);
-        runtimeService.startProcessInstanceByMessage(SAVE_INTERESTS, processVariables);
+  
+        // Start the process instance
+        ProcessInstanceWithVariables instance = runtimeService.createProcessInstanceByKey(SAVE_INTERESTS)
+                                                            .setVariables(processVariables)
+                                                            .executeWithVariablesInReturn();
+        processVariables = instance.getVariables();
+        String error = (String) processVariables.get(PROCESS_ERROR);
+        if(error != null)
+            throw new BadRequestException();
     }
 
     public void saveAirlineOffers(List<AirlineFlightOffer> airlineLastMinuteOffers, String airlineName){
@@ -140,45 +153,10 @@ public class AirlineManager {
     }
 
     public class UserNotAllowedException extends Exception {
-        private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;
+    }
 
-        public List<InterestDTO> convertInterestList(List<FlightInterest> l){
-
-
-            List<InterestDTO> result = l.stream()
-                    .map(interest -> new InterestDTO(interest.getDepartureAirport().getCityName(),
-                                                        interest.getArrivalAirport().getCityName(),
-                                                         interest.getDepartureDateTime(),
-                                                        interest.getArrivalDateTime()))
-                    .collect(Collectors.toList());
-
-            return result;
-        }
-    
-        public List<Flight> retrieveFlightsList(List<FlightInterest> list) throws IOException, InterruptedException{
-    
-            
-            ArrayNode a = api.getFlightList(convertInterestList(list));
-
-            // da risolvere!!
-            // for(int i: a.elements()){
-
-
-            //}
-            //.forEach(o -> new Flight(o.get("departure_airport_id").textValue(),
-            //                                                             o.get("departure_airport_id").textValue(), 
-            //                                                             o.get("arrival_airport_id").textValue(), 
-            //                                                             o.get("airline_id").textValue(), 
-            //                                                             o.get("departure_date_time").textValue(), 
-            //                                                             o.get("arrival_date_time").textValue(), 
-            //                                                         expireDate, 
-            //                                                         n.get("price").asDouble(), 
-            //                                                         booked))
-
-            //                             .collect(Collectors.toList());
-
-            return null;
-        }
-    
-    
+    public class BadRequestException extends Exception {
+        private static final long serialVersionUID = 1L;
+    }
 }

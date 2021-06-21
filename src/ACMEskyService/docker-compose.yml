@@ -1,0 +1,19 @@
+version: '3.9'
+
+services:
+    acmesky:
+        container_name: acmesky_container
+        build: ./
+        #volumes:
+            #- acmesky:/camunda/standalone/deployments
+            #- ./container:/camunda/standalone/deployments/acmesky
+        ports:
+            - "8080:8080"
+        networks:
+            - acmesky
+        restart: unless-stopped
+    
+networks:
+    acmesky:
+        external: true
+        name: acmesky-net

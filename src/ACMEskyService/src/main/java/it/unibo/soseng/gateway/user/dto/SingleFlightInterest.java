@@ -1,9 +1,13 @@
 package it.unibo.soseng.gateway.user.dto;
 
+import java.io.Serializable;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-public class SingleFlightInterest {
+public class SingleFlightInterest implements Serializable  {
+
+    private static final long serialVersionUID = 1L;
 
     @NotNull
     private String departureAirportCode;

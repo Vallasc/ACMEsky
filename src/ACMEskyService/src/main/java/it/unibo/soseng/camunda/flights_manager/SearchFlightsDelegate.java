@@ -26,11 +26,11 @@ public class SearchFlightsDelegate implements JavaDelegate{
 
     @Override
     public void execute(DelegateExecution execution) throws IOException, InterruptedException{
-      LOGGER.info ("searchFlightsDelegate in esecuzione");
-      @SuppressWarnings (value="unchecked")
-      List<Flight> listToSave = manager.retrieveFlightsList((List<FlightInterest>) execution.getVariable(INTEREST_FLIGHTS_LIST));
-      LOGGER.info(listToSave.toString());
-      execution.setVariable(FLIGHTS_TO_SAVE, listToSave);
+      // LOGGER.info ("searchFlightsDelegate in esecuzione");
+      // @SuppressWarnings (value="unchecked")
+      // List<Flight> listToSave = manager.retrieveFlightsList((List<FlightInterest>) execution.getVariable(INTEREST_FLIGHTS_LIST));
+      // LOGGER.info(listToSave.toString());
+      // execution.setVariable(FLIGHTS_TO_SAVE, listToSave);
 
     }
 }

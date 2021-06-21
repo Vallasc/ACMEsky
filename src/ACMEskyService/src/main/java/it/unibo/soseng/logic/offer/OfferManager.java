@@ -14,17 +14,17 @@ public class OfferManager {
     @Inject
     private DatabaseManager databaseManager;
 
-    public void generateOffer(Flight request) throws OfferAlreadyInException {
-        Flight flight = new Flight();
-        flight.setFlightCode(request.getFlightCode());
-        flight.setDepartureAirport(request.getDepartureAirport());
-        flight.setArrivalAirport(request.getArrivalAirport());
-        flight.setAirline(request.getAirlineId());
-        flight.setDepartureDateTime(request.getDepartureDateTime());
-        flight.setArrivalDateTime(request.getArrivalDateTime());
-        flight.setExpireDate(request.getExpireDate());
-        flight.setPrice(request.getPrice());
-        flight.setBooked(true);
-        databaseManager.createOffer(flight);
-    }
+    // public void generateOffer(Flight request) throws OfferAlreadyInException {
+    //     Flight flight = new Flight();
+    //     flight.setFlightCode(request.getFlightCode());
+    //     flight.setDepartureAirport(request.getDepartureAirport());
+    //     flight.setArrivalAirport(request.getArrivalAirport());
+    //     flight.setAirline(request.getAirlineId());
+    //     flight.setDepartureDateTime(request.getDepartureDateTime());
+    //     flight.setArrivalDateTime(request.getArrivalDateTime());
+    //     flight.setExpireDate(request.getExpireDate());
+    //     flight.setPrice(request.getPrice());
+    //     flight.setBooked(true);
+    //     databaseManager.createOffer(flight);
+    // }
 }
