@@ -1,6 +1,6 @@
 Write-Host "BUILD BANK SERVICE"
 Write-Host "CREATING JAR"
-mvn package
+mvn clean package
 Write-Host "CREATING DOCKER IMAGE"
 docker build -t bank_service .
 Write-Host "RUNNING DOCKER CONTAINER"

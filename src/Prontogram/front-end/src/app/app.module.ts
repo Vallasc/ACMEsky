@@ -1,7 +1,7 @@
 ﻿import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http'; 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AlertComponent } from './_components';
@@ -9,6 +9,7 @@ import { HomeComponent } from './home';
 import { NotificationComponent } from './notification';;
 import { ServiceWorkerModule } from '@angular/service-worker'; 
 import { environment } from '@environments/environment';
+import { AccountService, NotificationService } from '../../../../../../../../ACMEsky/src/app/_services';
 
 @NgModule({
     imports: [
@@ -21,11 +22,10 @@ import { environment } from '@environments/environment';
     declarations: [
         AppComponent,
         AlertComponent,
-        HomeComponent,
         NotificationComponent
-        
+
     ],
-    providers: [
+    providers: [AccountService, NotificationService
     ],
     bootstrap: [AppComponent]
 })

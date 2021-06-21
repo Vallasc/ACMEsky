@@ -21,6 +21,7 @@ import it.unibo.soseng.gateway.user.dto.InterestsRequest;
 import it.unibo.soseng.gateway.user.dto.UserResponse;
 import it.unibo.soseng.gateway.user.dto.UserSignInRequest;
 import it.unibo.soseng.logic.airline.AirlineManager;
+import it.unibo.soseng.logic.airline.AirlineManager.BadRequestException;
 import it.unibo.soseng.logic.airline.AirlineManager.UserNotAllowedException;
 import it.unibo.soseng.logic.database.DatabaseManager.UserAlreadyInException;
 import it.unibo.soseng.logic.database.DatabaseManager.UserNotFoundException;
@@ -51,8 +52,9 @@ public class UserController {
         try {
             airlineManager.startSaveUserInterests(offer, username);
         } catch (UserNotAllowedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            return Response.status(Response.Status.FORBIDDEN.getStatusCode()).build();
+        } catch (BadRequestException e) {
+            return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).build();
         }
         return Response.status(Response.Status.CREATED.getStatusCode())
                         .header("Location", String.format("%s/%s", uriInfo.getAbsolutePath().toString(), "######ID"))

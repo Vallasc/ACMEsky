@@ -1,8 +1,8 @@
 <div class="p-4">
     <div class="container">
-        <h1>Notifiche V2</h1>
-        <button (click)="pushSubscription()" class="btn btn-sm btn-success mb-2">Subscribe</button>
-        <button (click)="sendNewsletter()" class="btn btn-sm btn-success mb-2">SendNews</button>
+        <h1>Notifiche</h1>
+    <!--<button (click)="pushSubscription()" class="btn btn-sm btn-success mb-2" style="border: 1px solid; margin-left: 4px" >Subscribe</button>
+        <button (click)="unsubscribeNotifications()" class="btn btn-sm btn-success mb-2" style="border: 1px solid; margin-left: 4px">Unsubscribe</button> -->
         <table class="table table-striped">
                 <thead>
                     <tr>
@@ -14,9 +14,9 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let notification of notifications">
-                        <td>{{notification.numeroVolo}}</td>
-                        <td>{{notification.compagniaAerea}}</td>
-                        <td>{{notification.tokenVolo}}</td>
+                        <td>{{notification.flyNumber}}</td>
+                        <td>{{notification.flyCompany}}</td>
+                        <td>{{notification.flyToken}}</td>
                         <td style="white-space: nowrap">
                             <button (click)="deleteNotification(notification._id)" class="btn btn-sm btn-danger btn-delete-user" >
                                 <span *ngIf="notification.isDeleting" class="spinner-border spinner-border-sm"></span>

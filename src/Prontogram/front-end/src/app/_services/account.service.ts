@@ -32,16 +32,15 @@ export class AccountService {
     }
 
     login(username, password) {
-        return this.http.post<User>(`${environment.apiUrl}/user/login`, { username, password })
+        return this.http.post<User>(`${environment.apiUrl}/auth/login`, { username, password })
         .pipe(map(user => {
             this.userSubject.next(user);
-           /* this.header = new HttpHeaders().set(
+            this.header = new HttpHeaders().set(
                 "auth-token",
-                user.token
+                this.userSubject.value.token
               );
-               // store user details and jwt token in local storage to keep user logged in between page refreshes
-            localStorage.setItem('user', JSON.stringify(user));*/
-            console.log ("user token: "+ user.token);
+            // store user details and jwt token in local storage to keep user logged in between page refreshes
+            localStorage.setItem('user', JSON.stringify(user));
             return user;
         }));
     }
@@ -52,24 +51,24 @@ export class AccountService {
     }
 
     register(user: User) {
-        return this.http.post(`${environment.apiUrl}/user/register`, user);
+        return this.http.post(`${environment.apiUrl}/auth/register`, user);
     }
 
     createUser(user: User) {
-        return this.http.post(`${environment.apiUrl}/posts`, user, {headers: this.getheader ()});
+        return this.http.post(`${environment.apiUrl}/user/new`, user, {headers: this.getheader ()});
     }
 
     getAll() {
-        return this.http.get<User[]>(`${environment.apiUrl}/gets`, {headers: this.getheader ()}); 
+        return this.http.get<User[]>(`${environment.apiUrl}/user/all`, {headers: this.getheader ()}); 
     }
 
     getById(id: string) {
-        return  this.http.get<User>(`${environment.apiUrl}/gets/${id}`, {headers: this.getheader ()});
+        return  this.http.get<User>(`${environment.apiUrl}/user/${id}`, {headers: this.getheader ()});
     }
 
     update(id, params) {
-        return this.http.patch(`${environment.apiUrl}/posts/${id}`, params, {headers: this.getheader ()});
-            /*.pipe(map(x => {
+        return this.http.put(`${environment.apiUrl}/user/${id}`, params, {headers: this.getheader ()})
+            .pipe(map(x => {
                 // update stored user if the logged in user updated their own record
                 if (id == this.userValue._id) {
                     // update local storage
@@ -80,11 +79,11 @@ export class AccountService {
                     this.userSubject.next(user);
                 }
                 return x; 
-            }));*/
+            }));
     }
 
     delete(id: string) {
-        return this.http.delete(`${environment.apiUrl}/posts/${id}`, {headers: this.getheader ()})
+        return this.http.delete(`${environment.apiUrl}/user/${id}`, {headers: this.getheader ()})
             .pipe(map(x => {
                 // auto logout if the logged in user deleted their own record
                 if (id == this.userValue._id) {

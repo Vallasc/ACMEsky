@@ -19,6 +19,11 @@
       <bpmn:endEvent id="Event_0bjv0jv">
         <bpmn:incoming>Flow_0zgu3yq</bpmn:incoming>
       </bpmn:endEvent>
+      <bpmn:intermediateCatchEvent id="Event_1djz0p8">
+        <bpmn:incoming>Flow_0l1w4b0</bpmn:incoming>
+        <bpmn:outgoing>Flow_1258dtm</bpmn:outgoing>
+        <bpmn:messageEventDefinition id="MessageEventDefinition_126ru8f" messageRef="Message_0vekc9d" />
+      </bpmn:intermediateCatchEvent>
       <bpmn:sendTask id="Activity_0sfafy7" name="Search flights" camunda:delegateExpression="#{searchFlightsDelegate}">
         <bpmn:incoming>Flow_1osyp3v</bpmn:incoming>
         <bpmn:outgoing>Flow_0l1w4b0</bpmn:outgoing>

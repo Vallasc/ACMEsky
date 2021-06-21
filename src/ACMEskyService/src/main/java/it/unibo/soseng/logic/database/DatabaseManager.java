@@ -94,6 +94,7 @@ public class DatabaseManager {
             this.entityManager.persist(user);
         } catch (PersistenceException e) {
             throw new UserAlreadyInException();
+            
         }
     }
     public void createOffer (Flight flight) throws OfferAlreadyInException { 
@@ -107,7 +108,7 @@ public class DatabaseManager {
     public Airport getAirport(String code) throws AirportNotFoundException {
         @SuppressWarnings("unchecked")
         List<Airport> result = (List<Airport>) entityManager
-                .createQuery("SELECT a FROM Airpot a WHERE a.code = :code")
+                .createQuery("SELECT a FROM Airport a WHERE a.code = :code")
                 .setParameter("code", code).getResultList();
         if (result.size() == 1) {
             return result.get(0);

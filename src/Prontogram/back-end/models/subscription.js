@@ -1,9 +1,11 @@
 const { any } = require('@hapi/joi');
 const mongoose = require ('mongoose');
 const subscriptionSchema = new mongoose.Schema ({
-    info: {
-       
-    }
+  info:{
+  },
+  user_id:{
+    
+  }
 });
 
 module.exports = mongoose.model ('Subscription', subscriptionSchema);
