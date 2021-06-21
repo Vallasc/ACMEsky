@@ -7,6 +7,7 @@ import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -14,7 +15,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.springframework.beans.factory.annotation.Autowired;
 
 import it.soseng.unibo.airlineService.DTO.Flight;
 import it.soseng.unibo.airlineService.DTO.UserRequest;
@@ -113,7 +113,11 @@ public class FlightUtility {
             return a;
     }
 
-
+    /**
+     * converte l'offerta di volo passata come parametro in un volo che rappresenta il volo di interesse dell'utente
+     * @param i
+     * @return
+     */
     public Flight convertOffertToFlight(FlightOffer i) {
         Flight f = new Flight();
         f.setId(i.getId());
@@ -128,6 +132,12 @@ public class FlightUtility {
         return f;
     }
 
+    /**
+     * recupera le offerte di volo corrispondenti ai voli di interesse degli utenti
+     * @param requests
+     * @param repo
+     * @return
+     */
     public List<FlightOffer> getMatchingOffers(List<UserRequest> requests, FlightOfferRepository repo){
 
         ArrayList<FlightOffer> list = new ArrayList<>();
@@ -140,6 +150,18 @@ public class FlightUtility {
     }
 
 
+    /** 
+     * cancella le offerte di volo scadute
+     */
+    public boolean DeleteExpiredOffers(FlightOffer o, FlightOfferRepository repo) {
+        OffsetDateTime now = OffsetDateTime.now();
+            if(now.equals(o.getExpiryDate()) || now.isAfter(o.getExpiryDate())){
+                repo.deleteById(o.getId());
+                return true;
+            }
+        return false;
+    }
+
+
 
 }
-    

@@ -149,4 +149,7 @@ public class Flight implements Serializable {
         this.price = price;
         this.booked = booked;
     }
+
+    public Flight() {
+    }
 }
