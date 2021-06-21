@@ -16,8 +16,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.19.5/swagger-ui-bundle.js"> </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.19.5/swagger-ui-standalone-preset.js"> </script>
     <script>
-      var src = decodeURIComponent(window.location.search.match(/(\?|&)src\=([^&]*)/)[2]);
-      console.log(src);
+      var src = window.location.search.match(/(\?|&)src\=([^&]*)/)
+      if(src != null)
+        src = decodeURIComponent(src[2])
+
+      var token = window.location.search.match(/(\?|&)token\=([^&]*)/)
+      if(token != null)
+        token = decodeURIComponent(token[2])
+      else 
+        token = ""
+
       window.onload = function() {
         const ui = SwaggerUIBundle({
           url: src,
@@ -30,7 +38,11 @@
           plugins: [
             SwaggerUIBundle.plugins.DownloadUrl
           ],
-          layout: "StandaloneLayout"
+          layout: "StandaloneLayout",
+          requestInterceptor: (req) => {
+            req.headers.Authorization = "Bearer " + token
+            return req
+          }
         })
      
         window.ui = ui
