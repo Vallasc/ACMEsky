@@ -1,7 +1,7 @@
 version: '3.9'
 
 services:
-    acmesky:
+    bank:
         container_name: bank_container
         build: ./
         env_file:
@@ -19,4 +19,4 @@ networks:
         name: acmesky-net
 
 volumes:
-    acmesky:
+    bank:
