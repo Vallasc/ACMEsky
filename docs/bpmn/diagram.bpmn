@@ -102,6 +102,7 @@
         <bpmn:flowNodeRef>Event_02y3y93</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_1d0oxu2</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_16zlwb7</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_0sjuddr</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_0ihh9bz</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
@@ -609,19 +610,25 @@
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_07lz24g" name="error" sourceRef="Gateway_1rsw14m" targetRef="Event_02y3y93" />
     <bpmn:boundaryEvent id="Event_1d0oxu2" name="Error" attachedToRef="Activity_0lurac3">
-      <bpmn:outgoing>Flow_0ywu4kx</bpmn:outgoing>
+      <bpmn:outgoing>Flow_16sreaj</bpmn:outgoing>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_1qphtzq" />
     </bpmn:boundaryEvent>
     <bpmn:endEvent id="Event_16zlwb7" name="Exit">
-      <bpmn:incoming>Flow_0ywu4kx</bpmn:incoming>
-      <bpmn:incoming>Flow_1l67f6u</bpmn:incoming>
+      <bpmn:incoming>Flow_0je4u6e</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_0ywu4kx" sourceRef="Event_1d0oxu2" targetRef="Event_16zlwb7" />
+    <bpmn:sequenceFlow id="Flow_16sreaj" sourceRef="Event_1d0oxu2" targetRef="Event_0sjuddr" />
+    <bpmn:sequenceFlow id="Flow_1wwg3kt" sourceRef="Event_0ihh9bz" targetRef="Event_0sjuddr" />
+    <bpmn:sequenceFlow id="Flow_0je4u6e" sourceRef="Event_0sjuddr" targetRef="Event_16zlwb7" />
+    <bpmn:intermediateThrowEvent id="Event_0sjuddr">
+      <bpmn:incoming>Flow_16sreaj</bpmn:incoming>
+      <bpmn:incoming>Flow_1wwg3kt</bpmn:incoming>
+      <bpmn:outgoing>Flow_0je4u6e</bpmn:outgoing>
+      <bpmn:compensateEventDefinition id="CompensateEventDefinition_0zebn42" />
+    </bpmn:intermediateThrowEvent>
     <bpmn:boundaryEvent id="Event_0ihh9bz" name="Timeout" attachedToRef="Activity_0lurac3">
-      <bpmn:outgoing>Flow_1l67f6u</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1wwg3kt</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_1f5wgh3" />
     </bpmn:boundaryEvent>
-    <bpmn:sequenceFlow id="Flow_1l67f6u" sourceRef="Event_0ihh9bz" targetRef="Event_16zlwb7" />
     <bpmn:textAnnotation id="TextAnnotation_1380na7">
       <bpmn:text>Loop per evitare problemi di sincronizzazione</bpmn:text>
     </bpmn:textAnnotation>
@@ -840,14 +847,19 @@
         <di:waypoint x="6330" y="630" />
         <di:waypoint x="6682" y="630" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0ywu4kx_di" bpmnElement="Flow_0ywu4kx">
+      <bpmndi:BPMNEdge id="Flow_16sreaj_di" bpmnElement="Flow_16sreaj">
         <di:waypoint x="3868" y="510" />
-        <di:waypoint x="3930" y="510" />
-        <di:waypoint x="3930" y="542" />
+        <di:waypoint x="3900" y="510" />
+        <di:waypoint x="3917" y="527" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1l67f6u_di" bpmnElement="Flow_1l67f6u">
+      <bpmndi:BPMNEdge id="Flow_1wwg3kt_di" bpmnElement="Flow_1wwg3kt">
         <di:waypoint x="3868" y="560" />
-        <di:waypoint x="3912" y="560" />
+        <di:waypoint x="3900" y="560" />
+        <di:waypoint x="3915" y="550" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0je4u6e_di" bpmnElement="Flow_0je4u6e">
+        <di:waypoint x="3948" y="540" />
+        <di:waypoint x="3982" y="540" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Event_1j88ude_di" bpmnElement="Event_1j88ude">
         <dc:Bounds x="6682" y="612" width="36" height="36" />
@@ -871,10 +883,13 @@
         <dc:Bounds x="560" y="630" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_16zlwb7_di" bpmnElement="Event_16zlwb7">
-        <dc:Bounds x="3912" y="542" width="36" height="36" />
+        <dc:Bounds x="3982" y="522" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3920" y="588" width="20" height="14" />
+          <dc:Bounds x="3990" y="568" width="20" height="14" />
         </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_03edppi_di" bpmnElement="Event_0sjuddr">
+        <dc:Bounds x="3912" y="522" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1lgs15c_di" bpmnElement="Activity_1lgs15c" isExpanded="true">
         <dc:Bounds x="4110" y="480" width="1460" height="320" />
@@ -1561,12 +1576,12 @@
         <di:waypoint x="1390" y="378" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0y0ayy5_di" bpmnElement="Flow_0y0ayy5">
-        <di:waypoint x="4565" y="750" />
-        <di:waypoint x="4565" y="1390" />
+        <di:waypoint x="4530" y="750" />
+        <di:waypoint x="4530" y="1390" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1uu7ei4_di" bpmnElement="Flow_1uu7ei4">
-        <di:waypoint x="4530" y="1390" />
-        <di:waypoint x="4530" y="750" />
+        <di:waypoint x="4560" y="1390" />
+        <di:waypoint x="4560" y="750" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1jy4gsd_di" bpmnElement="Flow_1jy4gsd">
         <di:waypoint x="5058" y="750" />
