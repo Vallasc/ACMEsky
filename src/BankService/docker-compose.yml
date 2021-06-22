@@ -2,52 +2,21 @@ version: '3.9'
 
 services:
     acmesky:
-        container_name: acmesky_container
-        build: ./src/ACMEskyService
-        environment:
-            WAIT_HOSTS: postgres:5432
-        ports:
-            - "8080:8080"
-        networks:
-            - acmesky
-        restart: unless-stopped
-        depends_on:
-            - postgres
-
-    postgres:
-        container_name: postgres_container
-        build: ./src/ACMEskyDB
+        container_name: bank_container
+        build: ./
         env_file:
-            - ./src/ACMEskyDB/.env
-        volumes:
-            - postgres:/data/postgres
+            - .env
         ports:
-            - "5432:5432"
+            - "8070:8080"
         networks:
             - acmesky
         restart: unless-stopped
-    
-    pgadmin:
-        container_name: pgadmin_container
-        image: dpage/pgadmin4:5.4
-        env_file:
-            - ./src/ACMEskyDB/.env
-        volumes:
-            - pgadmin:/root/.pgadmin
-        ports:
-            - "5050:80"
-        networks:
-            - acmesky
-        restart: unless-stopped
-        depends_on:
-            - postgres
     
             
 networks:
     acmesky:
-        driver: bridge
+        external: true
         name: acmesky-net
 
 volumes:
-    postgres:
-    pgadmin:
+    acmesky:
