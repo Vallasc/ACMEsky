@@ -27,7 +27,7 @@
             <div class="col-xl-7 col-lg-8 col-md-9 col-sm-11">
                 <div class="card border-0">
                     <div class="row justify-content-center">
-                        <h3 class="mb-5">ACMEbank Pay</h3>
+                        <h3 class="mb-5">ACMEPay</h3>
                     </div>
                     <div class="row" id="pay-container">
                         <div class="col-sm-7 border-line pb-3">
@@ -74,82 +74,88 @@
     </div>
     <script>
         var payment;
-        var overlayContainer = document.getElementById("overlay-container");
-        var payContainer = document.getElementById("pay-container");
-        var doneContainer = document.getElementById("done-container");
-        var invalidContainer = document.getElementById("invalid-container");
+        var overlayContainer = document.getElementById("overlay-container")
+        var payContainer = document.getElementById("pay-container")
+        var doneContainer = document.getElementById("done-container")
+        var invalidContainer = document.getElementById("invalid-container")
 
         function setView(){
-            document.getElementById("payment_number").innerHTML = payment.paymentToken;
-            document.getElementById("description").innerHTML = payment.description;
-            document.getElementById("payment_amount").innerHTML = payment.amount.toFixed(2);
+            document.getElementById("payment_number").innerHTML = payment.paymentToken
+            document.getElementById("description").innerHTML = payment.description
+            document.getElementById("payment_amount").innerHTML = payment.amount.toFixed(2)
         }
 
         function setLoading(){
-            overlayContainer.style = "display: block";
+            overlayContainer.style = "display: block"
+        }
+
+        function hideLoading(){
+            overlayContainer.style = "display: none !important"
         }
 
         function setPaymentDone(){
-            payContainer.style = "display: none !important";
-            overlayContainer.style = "display: none !important";
-            doneContainer.style = "display: block";
+            payContainer.style = "display: none !important"
+            overlayContainer.style = "display: none !important"
+            doneContainer.style = "display: block"
         }
 
         function setInvalidPayment(){
-            payContainer.style = "display: none !important";
-            overlayContainer.style = "display: none !important";
-            invalidContainer.style = "display: block";
+            payContainer.style = "display: none !important"
+            overlayContainer.style = "display: none !important"
+            invalidContainer.style = "display: block"
         }
 
         function getPayment(){
-            var xhttp = new XMLHttpRequest();
+            var xhttp = new XMLHttpRequest()
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4) {
+                    hideLoading()
                     if(this.status == 200){
-                        payment = JSON.parse(this.responseText);
-                        console.log(payment);
-                        setView();
+                        payment = JSON.parse(this.responseText)
+                        console.log(payment)
+                        setView()
                     } else { //404 or other
-                        setInvalidPayment(); 
+                        setInvalidPayment()
                     }
                 }
             };
-            xhttp.open("GET", "/payments/"+getParameterByName("token"), true);
+            xhttp.open("GET", "/payments/"+getParameterByName("token"), true)
             xhttp.send();
         }
 
         function pay(){
-            var xhttp = new XMLHttpRequest();
+            var xhttp = new XMLHttpRequest()
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4) {
                     if(this.status == 200){
                         setTimeout(()=>{
-                            setPaymentDone();
+                            setPaymentDone()
                         }, 3000)
                     } else { //404 or other
-                        setInvalidPayment(); 
+                        setInvalidPayment()
                     }
                 }
-            };
-            xhttp.open("PUT", "/payments/"+getParameterByName("token"), true);
-            xhttp.send();
+            }
+            xhttp.open("PUT", "/payments/"+getParameterByName("token"), true)
+            xhttp.send()
         }
 
         document.getElementById("pay-btn").onclick = () => {
-            setLoading();
-            pay();
+            setLoading()
+            pay()
         }
 
         function getParameterByName(name, url = window.location.href) {
-            name = name.replace(/[\[\]]/g, '\\$&');
+            name = name.replace(/[\[\]]/g, '\\$&')
             var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-                results = regex.exec(url);
-            if (!results) return null;
-            if (!results[2]) return '';
-            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+                results = regex.exec(url)
+            if (!results) return null
+            if (!results[2]) return ''
+            return decodeURIComponent(results[2].replace(/\+/g, ' '))
         }
 
-        getPayment();
+        setLoading()
+        getPayment()
     </script>
 </body>
 
