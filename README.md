@@ -80,7 +80,7 @@ V0.9 - versione interna RFC
 | ACMEsky | - |
 | web | 80 |
 | api | 8080 |
-| postgres | 5050 |
+| Postgres | 5050 |
 | BankService | 8070 |
 | AirlineNationalService | 8060 |
 | AirlineService | 8061 |
