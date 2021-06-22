@@ -15,6 +15,7 @@ public final class ProcessVariables {
 
     // Offers manager
     public static final String AVAILABLE_FLIGHTS = "availableFlight";
+    public static final String OFFER_SERVICE = "offerService";
     
     
 }
