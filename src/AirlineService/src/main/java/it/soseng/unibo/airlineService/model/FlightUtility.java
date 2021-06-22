@@ -153,10 +153,9 @@ public class FlightUtility {
     /** 
      * cancella le offerte di volo scadute
      */
-    public boolean DeleteExpiredOffers(FlightOffer o, FlightOfferRepository repo) {
+    public boolean DeleteExpiredOffers(FlightOffer o) {
         OffsetDateTime now = OffsetDateTime.now();
             if(now.equals(o.getExpiryDate()) || now.isAfter(o.getExpiryDate())){
-                repo.deleteById(o.getId());
                 return true;
             }
         return false;

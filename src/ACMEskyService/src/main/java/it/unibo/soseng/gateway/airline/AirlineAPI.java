@@ -31,7 +31,7 @@ public class AirlineAPI {
                 .writeValueAsString(list);
         
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://192.168.1.5:8081/searchFlights"))
+                .uri(URI.create("http://192.168.1.5:8082/searchFlights"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                 .build();

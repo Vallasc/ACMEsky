@@ -98,11 +98,11 @@ public class FlightOfferController {
      * @param id dell'offerta di cui si richiede lo stato
      * @return boolean il cui valore true indica che l'offerta è prenotabile(viceversa false se non lo è)
      */
-    @Scheduled(fixedRate = 6000)
-    @DeleteMapping("/deleteExpiredOffer")
-    private void deleteExpiredOffer(){
-        s.DeleteExpiredOffersFromDB();
-    }
+    // @Scheduled(fixedRate = 6000)
+    // @DeleteMapping("/deleteExpiredOffer")
+    // private void deleteExpiredOffer(){
+    //     s.DeleteExpiredOffersFromDB();
+    // }
     
 
     

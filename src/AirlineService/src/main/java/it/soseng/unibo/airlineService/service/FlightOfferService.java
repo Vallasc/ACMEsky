@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -51,8 +52,8 @@ public class FlightOfferService {
      */
     public void createFlightOffer(String s) throws JsonProcessingException, IOException {
         JsonNode n = u.GetRandomJsonObject(u.GetFile(s));
-        List<FlightOffer> list = u.createOffer(n);
-        list.stream().filter(i-> u.DeleteExpiredOffers(i, repo) == true).forEach(i->repo.save(i));
+        List<FlightOffer> list = u.createOffer(n).stream().filter(i-> u.DeleteExpiredOffers(i) == false).collect(Collectors.toList());
+        list.forEach(i->repo.save(i));
         for(FlightOffer i : list ){
             if(u.LastMinuteCheck(i)){
                 u.convertOffertToFlight(i);

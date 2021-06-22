@@ -159,4 +159,9 @@ public class AirlineManager {
     public class BadRequestException extends Exception {
         private static final long serialVersionUID = 1L;
     }
+
+    public List<Flight> retrieveFlightsList(List<FlightInterest> variable) {
+        return null;
+    }
 }
+// docker cp .\target\ACMEsky-1.0-SNAPSHOT.war 28de986359c9:/camunda/standalone/deployments
