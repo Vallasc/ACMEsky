@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_0oof3xz" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.3.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_0oof3xz" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.6.0">
   <bpmn:collaboration id="Collaboration_01wlfa7">
     <bpmn:participant id="Participant_0ig4wp0" name="Prontogram" processRef="Process_0joj3rf" />
     <bpmn:participant id="Participant_1ksbck3" name="ACMEsky" processRef="Process_0cg6ynm" />
@@ -96,11 +96,14 @@
         <bpmn:flowNodeRef>Activity_1gsl530</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_0lurac3</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_1lgs15c</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Event_1qiv1uu</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_1azujvm</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_1fbsxac</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Gateway_1rsw14m</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_02y3y93</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_1d0oxu2</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_16zlwb7</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_0sjuddr</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_0ihh9bz</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
     <bpmn:sequenceFlow id="Flow_1t38ok7" sourceRef="Event_1qiv1uu" targetRef="Event_0a5orej" />
@@ -187,10 +190,6 @@
     <bpmn:boundaryEvent id="Event_1azujvm" name="Error" attachedToRef="Activity_1gsl530">
       <bpmn:outgoing>Flow_0d12qfy</bpmn:outgoing>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_1busc2v" />
-    </bpmn:boundaryEvent>
-    <bpmn:boundaryEvent id="Event_1qiv1uu" attachedToRef="Activity_0lurac3">
-      <bpmn:outgoing>Flow_1t38ok7</bpmn:outgoing>
-      <bpmn:errorEventDefinition id="ErrorEventDefinition_19zo2ns" />
     </bpmn:boundaryEvent>
     <bpmn:endEvent id="Event_1j88ude">
       <bpmn:incoming>Flow_112bq6f</bpmn:incoming>
@@ -610,6 +609,26 @@
       <bpmn:incoming>Flow_07lz24g</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_07lz24g" name="error" sourceRef="Gateway_1rsw14m" targetRef="Event_02y3y93" />
+    <bpmn:boundaryEvent id="Event_1d0oxu2" name="Error" attachedToRef="Activity_0lurac3">
+      <bpmn:outgoing>Flow_16sreaj</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_1qphtzq" />
+    </bpmn:boundaryEvent>
+    <bpmn:endEvent id="Event_16zlwb7" name="Exit">
+      <bpmn:incoming>Flow_0je4u6e</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_16sreaj" sourceRef="Event_1d0oxu2" targetRef="Event_0sjuddr" />
+    <bpmn:sequenceFlow id="Flow_1wwg3kt" sourceRef="Event_0ihh9bz" targetRef="Event_0sjuddr" />
+    <bpmn:sequenceFlow id="Flow_0je4u6e" sourceRef="Event_0sjuddr" targetRef="Event_16zlwb7" />
+    <bpmn:intermediateThrowEvent id="Event_0sjuddr">
+      <bpmn:incoming>Flow_16sreaj</bpmn:incoming>
+      <bpmn:incoming>Flow_1wwg3kt</bpmn:incoming>
+      <bpmn:outgoing>Flow_0je4u6e</bpmn:outgoing>
+      <bpmn:compensateEventDefinition id="CompensateEventDefinition_0zebn42" />
+    </bpmn:intermediateThrowEvent>
+    <bpmn:boundaryEvent id="Event_0ihh9bz" name="Timeout" attachedToRef="Activity_0lurac3">
+      <bpmn:outgoing>Flow_1wwg3kt</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_1f5wgh3" />
+    </bpmn:boundaryEvent>
     <bpmn:textAnnotation id="TextAnnotation_1380na7">
       <bpmn:text>Loop per evitare problemi di sincronizzazione</bpmn:text>
     </bpmn:textAnnotation>
@@ -1532,12 +1551,12 @@
         <di:waypoint x="1390" y="378" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0y0ayy5_di" bpmnElement="Flow_0y0ayy5">
-        <di:waypoint x="4565" y="750" />
-        <di:waypoint x="4565" y="1390" />
+        <di:waypoint x="4530" y="750" />
+        <di:waypoint x="4530" y="1390" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1uu7ei4_di" bpmnElement="Flow_1uu7ei4">
-        <di:waypoint x="4530" y="1390" />
-        <di:waypoint x="4530" y="750" />
+        <di:waypoint x="4560" y="1390" />
+        <di:waypoint x="4560" y="750" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1jy4gsd_di" bpmnElement="Flow_1jy4gsd">
         <di:waypoint x="5058" y="750" />

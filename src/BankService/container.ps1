@@ -1,8 +1,6 @@
 Write-Host "BUILD BANK SERVICE"
 Write-Host "CREATING JAR"
-mvn package
-Write-Host "CREATING DOCKER IMAGE"
-docker build -t bank_service .
+mvn clean package
 Write-Host "RUNNING DOCKER CONTAINER"
-docker run --name=[bank_service] --rm -d  -p 8080:8080/tcp bank_service
+docker-compose up --build
 Write-Host "DONE :)"

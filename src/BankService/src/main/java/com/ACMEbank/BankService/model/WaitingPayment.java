@@ -93,7 +93,8 @@ public class WaitingPayment {
 	}
 
 	public static WaitingPayment fromRequestPaymentDTO(PaymentLinkRequestDTO dto){
-		return new WaitingPayment(dto.expireTime, dto.amount, dto.description, dto.notificationUrl);
+		long expireTime = System.currentTimeMillis() + (1000 * 60 * 15 ); // 15 minuti alla scadenza del link
+		return new WaitingPayment(expireTime, dto.amount, dto.description, dto.notificationUrl);
 	}
 
 }
