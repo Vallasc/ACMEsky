@@ -3,7 +3,7 @@
   "info": {
     "title": "Bank service",
     "version": "v1",
-    "description": "test JwtToken = sdfsfsfsdfs"
+    "description": "Il token jwt di default è precaricato"
   },
   "servers": [
     {
