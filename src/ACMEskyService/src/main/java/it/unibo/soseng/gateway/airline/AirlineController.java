@@ -19,7 +19,7 @@ import it.unibo.soseng.gateway.airline.dto.AirlineFlightOffer;
 import it.unibo.soseng.logic.airline.AirlineManager;
 import static it.unibo.soseng.security.Constants.AIRLINE;
 
-@Path("airlines")
+@Path("airline")
 public class AirlineController {
     private final static Logger LOGGER = Logger.getLogger(AirlineController.class.getName());
     
