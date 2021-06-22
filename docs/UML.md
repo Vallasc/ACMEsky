@@ -47,10 +47,15 @@ offerta dalla base dati di ACMESky.
 ### Gestione dei pagamenti
 ![Gestione dei pagamenti](UML/immagini_doc/parte6.png)
 Nel diagramma riportato qui sopra vengono descritte le capabilty inerenti alla gestione dei pagamenti effettuati dall'utente indirizzati ai vari servizi.
-In particolare per il ruolo di ACMESky vengono esposte le seguenti *capability*: *PaymentResult* e *Bank* le quali vengono esposte da un'unica interfaccia *BankManagement*.
-La capability *BankManagement* si occupa di pagare il biglietto 
-La capability *PaymentResult* gestisce il successo o l'insuccesso di un avvenuto pagamento e 
+In particolare per il ruolo di ACMESky vengono esposte le seguenti *capability*: *BankManagement* e *ArlineCompanyManagement* le quali vengono esposte da un'unica interfaccia *Bank* e *AirlineCompany*.
+La capability *BankManagement* di ACMESky si occupa di ricevere il link di pagamento dalla banca e di inviarlo all'utente. Quest'ultima riceve anche tutte le informazioni relative ad un avvenuto pagamento (successo o insuccesso).
+La capability *ArlineCompanyManagement* si occupa di prenotare il volo di interesse o di eliminare la prenotazione in caso di errori nei sotto-processi.
 
-### Servizi accessori e ricezione tickets
+### Servizi accessori e ricezione tickets 
+![Servizi accessori e ricezione tickets ](UML/immagini_doc/parte7.png)
+Nel diagramma riportato qui sopra vengono descritte le capabilty inerenti servizi accessori e ricezione dei tickets di interesse.
+In particolare per il ruolo di ACMESky vengono esposte le seguenti *capability*: *PremiumServiceManagement* e *OrderManagement* le quali vengono esposte da un'unica interfaccia *PremiumService* e *Order*.
+La capability *PremiumServiceManagement* si occupa di controllare tutte le condizioni per poter attivare il servizio premium, pertanto controlla se il prezzo dei tickets, la distanza dall'aeroporto e l'eventuale prenotazione di un servizio di trasporto.
+Infine la capability  *OrderManagement* ha il compito di inviare i tickets all'utente.
 
 
