@@ -72,7 +72,7 @@ public class PaymentController {
      * Utilizzato dalla pagina web per richiedere il pagamento in base al token
      * @return pagamento
      */
-    @CrossOrigin(origins = "http://localhost:8070")
+    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping("/payments/{payment_token}")
     private ResponseEntity<WaitingPayment> getPayment(@PathVariable("payment_token") String paymentToken) {
         WaitingPayment payment = paymentService.getPaymentByToken(paymentToken);
@@ -88,7 +88,7 @@ public class PaymentController {
      * Utilizzato dalla pagina web per "informare" dell'avvenuto pagamento
      * @param paymentToken token del pagamento
      */
-    @CrossOrigin(origins = "http://localhost:8070")
+    @CrossOrigin(origins = "http://localhost:8080")
     @PutMapping("/payments/{payment_token}")
     private ResponseEntity<Map<String, String>> payLink(@PathVariable("payment_token") String paymentToken) {
         WaitingPayment payment = paymentService.getPaymentByToken(paymentToken);
