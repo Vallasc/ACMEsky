@@ -9,8 +9,5 @@ public class UserRequestDTO {
 	@NotBlank(message = "Password is mandatory")
 	public String password;
 
-	@NotBlank(message = "EntryPoint is mandatory")
-	public String entryPoint;
-
 	public UserRequestDTO(){}
 }

@@ -31,7 +31,7 @@ public class User {
 
 	public User() {}
 	
-	public User(String name, String password, String entryPoint) {
+	public User(String name, String password) {
 		this.name = name;
 		this.password = password;
 	}
@@ -65,7 +65,7 @@ public class User {
 	}
 
 	public static User fromUserRequestDTO(UserRequestDTO dto){
-		return new User(dto.name, dto.password, dto.entryPoint);
+		return new User(dto.name, dto.password);
 	}
 
 }

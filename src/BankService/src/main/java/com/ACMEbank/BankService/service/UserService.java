@@ -2,8 +2,6 @@ package com.ACMEbank.BankService.service;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import com.ACMEbank.BankService.dto.DepositRequestDTO;
-import com.ACMEbank.BankService.dto.PaymentRequestDTO;
 import com.ACMEbank.BankService.dto.UserRequestDTO;
 import com.ACMEbank.BankService.model.User;
 import com.ACMEbank.BankService.repository.UserRepository;
@@ -70,17 +68,8 @@ public class UserService {
      * @param userId identificativo utente
      */
     @Transactional
-    public void deposit(DepositRequestDTO deposit, String userId){
-        userRepository.deposit(deposit.amount, userId);
+    public void deposit(int amount, String userId){
+        userRepository.deposit(amount, userId);
     }
 
-    /**
-     * Invia denaro
-     * @param payment richiesta di pagamento
-     * @param userId identificativo utente
-     */
-    @Transactional
-    public void pay(PaymentRequestDTO payment, String userId){
-        userRepository.pay(payment.amount, userId);
-    }
 }

@@ -79,7 +79,8 @@ public class AuthController {
 								.map(GrantedAuthority::getAuthority)
 								.collect(Collectors.toList()))
 				.setIssuedAt(new Date(System.currentTimeMillis()))
-				.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 10)) // 10 minuti
+				//.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 10    *6*24*365*100))
+				.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 10 )) // 10 minuti
 				.signWith(SignatureAlgorithm.HS512,
 						SECRET.getBytes()).compact();
 

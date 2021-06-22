@@ -1,12 +1,11 @@
 package com.ACMEbank.BankService.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
 import com.ACMEbank.BankService.dto.PaymentLinkRequestDTO;
-import com.ACMEbank.BankService.dto.PaymentRequestDTO;
-import com.ACMEbank.BankService.dto.DepositRequestDTO;
 import com.ACMEbank.BankService.dto.LinkResponseDTO;
 import com.ACMEbank.BankService.model.WaitingPayment;
 import com.ACMEbank.BankService.service.PaymentService;
@@ -68,35 +67,19 @@ public class PaymentController {
         return new ResponseEntity<List<WaitingPayment>>(paymentList, HttpStatus.OK);
     }
 
-    /**
-     * Deposito di denaro sul conto
-     * @param depositRequestDTO oggetto di richiesta deposito
-     */
-    @PostMapping(value = "/deposit", produces = MediaType.APPLICATION_JSON_VALUE)
-    private void deposit(@Valid @RequestBody DepositRequestDTO depositRequestDTO) {
-        String userId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        userService.deposit(depositRequestDTO, userId);
-    }
-
-    /**
-     * Invia un pagamento
-     * @param payment oggetto di richiesta pagamento
-     */
-    @PostMapping(value = "/pay", produces = MediaType.APPLICATION_JSON_VALUE)
-    private void pay(@Valid @RequestBody PaymentRequestDTO payment) {
-        String userId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        userService.pay(payment, userId);
-    }
 
     /**
      * Utilizzato dalla pagina web per richiedere il pagamento in base al token
      * @return pagamento
      */
-    @CrossOrigin(origins = "http://localhost:8080")
+    @CrossOrigin(origins = "http://localhost:8070")
     @GetMapping("/payments/{payment_token}")
     private ResponseEntity<WaitingPayment> getPayment(@PathVariable("payment_token") String paymentToken) {
         WaitingPayment payment = paymentService.getPaymentByToken(paymentToken);
         if(payment == null || payment.getPayed() == true)
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        double time = System.currentTimeMillis();
+        if( time > payment.getExpireTime())
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         return new ResponseEntity<WaitingPayment>(payment, HttpStatus.OK);
     }
@@ -105,14 +88,19 @@ public class PaymentController {
      * Utilizzato dalla pagina web per "informare" dell'avvenuto pagamento
      * @param paymentToken token del pagamento
      */
-    @CrossOrigin(origins = "http://localhost:8080")
+    @CrossOrigin(origins = "http://localhost:8070")
     @PutMapping("/payments/{payment_token}")
-    private void payLink(@PathVariable("payment_token") String paymentToken) {
-        // Non è stata gestita la concorrenza
+    private ResponseEntity<Map<String, String>> payLink(@PathVariable("payment_token") String paymentToken) {
         WaitingPayment payment = paymentService.getPaymentByToken(paymentToken);
+        if(payment == null || payment.getPayed() == true)
+            return new ResponseEntity<>(Map.of("status","already_payed"), HttpStatus.NO_CONTENT);
+        double time = System.currentTimeMillis();
+        if( time > payment.getExpireTime())
+            return new ResponseEntity<>(Map.of("status","expired"), HttpStatus.NO_CONTENT);
         payment.setPayed(true);
         paymentService.updatePayment(payment);
-        userService.deposit(new DepositRequestDTO(payment.getAmount()), payment.getUserId());
+        userService.deposit(payment.getAmount(), payment.getUserId());
         paymentService.sendPaymentNotification(payment.getNotificationUrl(), payment.getPaymentToken());
+        return new ResponseEntity<>(Map.of("status","ok"), HttpStatus.OK);
     }
 }
