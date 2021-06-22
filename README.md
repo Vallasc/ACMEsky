@@ -81,14 +81,14 @@ V0.9 - versione interna RFC
 | web | 80 |
 | api | 8080 |
 | postgres | 5050 |
-| BankService | 8081 |
-| AirlineNationalService | 8082 |
-| AirlineService | 8083 |
-| ProntogramService | 8084 |
-| GeocraphicalService | 8085 |
-| RentService1 | 8086 |
-| RentService2 | 8087 |
-| RentService3 | 8088 |
+| BankService | 8070 |
+| AirlineNationalService | 8060 |
+| AirlineService | 8061 |
+| ProntogramService | 8050 |
+| GeocraphicalService | 8040 |
+| RentService1 | 8030 |
+| RentService2 | 8031 |
+| RentService3 | 8032 |
 
 Vincoli al problema (Assunzioni):
 - Le offerte generate provengono dalla stessa compagnia aerea
