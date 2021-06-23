@@ -1,10 +1,10 @@
 version: "3"
 services:
     national:
-        container_name: national-diubi
+        container_name: national-service
         build: "."
         # lista delle variabili di environment
-        env_file: default.env
+        env_file: ./AirlineCredentialsEnvFiles/CredentialsAirline1.env
         volumes: 
             - ./db:/db
             - ./fileSampleOffers/NationalFlights.json:/list/list.json
@@ -13,9 +13,9 @@ services:
             - 8082:8082
     # uguale per tutti gli altri servizi
     international:
-        container_name: international-diubi
+        container_name: international-service
         build: "."
-        env_file: default.env
+        env_file: ./AirlineCredentialsEnvFiles/CredentialsAirline2.env
         volumes:
         # riferimento della cartella db nell'host
         # all'interno della cartella "/db" nel container
@@ -23,3 +23,8 @@ services:
             - ./fileSampleOffers/InternationalFlights.json:/list/list.json
         ports:
             - 8083:8082
+
+networks:
+    acmesky:
+        external: true
+        name: acmesky-net

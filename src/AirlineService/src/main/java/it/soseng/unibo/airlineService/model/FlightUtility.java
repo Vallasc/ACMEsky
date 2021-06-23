@@ -7,7 +7,6 @@ import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -39,18 +38,18 @@ public class FlightUtility {
     /** 
      * restituisce un boolean che sta ad indicare se l'offerta è last-minute, ovvero se la partenza
      * prevista è entro i 10 giorni successivi alla data della ricerca
-     * @param o FlightOffer da valutare
+     * @param list FlightOffer da valutare
      * @return boolean true che indica che l'offerta è last-minute(false per il viceversa)
      */
     public boolean LastMinuteCheck(FlightOffer o) {
         LocalDateTime now = LocalDateTime.now();
-        long period = ChronoUnit.DAYS.between(now, o.getDepartureTime());
-        if (period < (long) 10) {
+            long period = ChronoUnit.DAYS.between(now, o.getDepartureTime());
+            if (period < (long) 10) {
 
-            return true;
-        } else {
-            return false;
-        }
+                return true;
+            } else {
+                return false;
+            }
     }
 
     
@@ -132,6 +131,14 @@ public class FlightUtility {
         return f;
     }
 
+    public List<Flight> convertOffersToFlights(List<FlightOffer> list) {
+        List<Flight> l = new ArrayList<>(); 
+        for(FlightOffer o : list){
+            l.add(convertOffertToFlight(o));
+        }
+        return l;
+    }
+
     /**
      * recupera le offerte di volo corrispondenti ai voli di interesse degli utenti
      * @param requests
@@ -160,6 +167,8 @@ public class FlightUtility {
             }
         return false;
     }
+
+
 
 
 

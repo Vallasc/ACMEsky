@@ -7,6 +7,7 @@ import java.io.OutputStream;
 
 import javax.transaction.Transactional;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.lowagie.text.DocumentException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
+import it.soseng.unibo.airlineService.auth.Auth;
 import it.soseng.unibo.airlineService.repository.FlightOfferRepository;
 
 
@@ -40,6 +42,8 @@ public class PdfService {
     private SpringTemplateEngine templateEngine;
 
     private FlightOfferService service;
+
+    private Auth auth = new Auth();
 
     private static final String PDF_RESOURCES = "/pdf-resources/";
 
@@ -110,9 +114,13 @@ public class PdfService {
    * si occupa di inviare ad ACMEsky (o chiunque chiami la risorsa) i biglietti che l'utente vuole acquistare attraverso una chiamata 
    * HTTP POST che ha nel suo body i file pdf dei biglietti dopo aver imposta il soldFlag delle offerte relative ai voli oggetto 
    * dell'acquisto 
+   * @param sendLastMinuteOffersRoute
    * @param id
+   * @throws JsonProcessingException
    */
-  public void sendPdfs(long...id){
+  public void sendPdfs(String user, String pass, String ACMEskyRoute, long...id) throws JsonProcessingException{
+
+    String jwt = auth.AuthRequest(ACMEskyRoute, user, pass);
 
     for(long i : id){
       repo.findById(i).get().setSoldFlag(true);
@@ -131,10 +139,11 @@ public class PdfService {
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+    headers.set("Authorization", jwt);
 
     HttpEntity<MultiValueMap<String, Object>> requestEntity= new HttpEntity<>(body, headers);
 
-    String serverUrl = "http://localhost:8080/OfferPdfFiles";
+    String serverUrl = ACMEskyRoute + "/airline/OfferFiles";
 
     RestTemplate restTemplate = new RestTemplate();
     ResponseEntity<String> response = restTemplate

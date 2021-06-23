@@ -25,6 +25,7 @@ import it.soseng.unibo.airlineService.model.FlightOffer;
 import it.soseng.unibo.airlineService.model.Iban;
 import it.soseng.unibo.airlineService.DTO.Flight;
 import it.soseng.unibo.airlineService.DTO.UserRequest;
+import it.soseng.unibo.airlineService.auth.Auth;
 import it.soseng.unibo.airlineService.repository.FlightOfferRepository;
 
 /**
@@ -41,6 +42,8 @@ public class FlightOfferService {
 
     private FlightUtility u = new FlightUtility();
 
+    private Auth auth = new Auth();
+
     
     /** 
      * genera una lista di offerte di volo randomicamente che viene cancellata se scaduta prima di essere salvata sul DB, 
@@ -50,15 +53,17 @@ public class FlightOfferService {
      * @throws JsonProcessingException 
      * @throws IOException
      */
-    public void createFlightOffer(String s) throws JsonProcessingException, IOException {
+    public void createFlightOffer(String s, String route, String user, String pass) throws JsonProcessingException, IOException {
         JsonNode n = u.GetRandomJsonObject(u.GetFile(s));
         List<FlightOffer> list = u.createOffer(n).stream().filter(i-> u.DeleteExpiredOffers(i) == false).collect(Collectors.toList());
         list.forEach(i->repo.save(i));
-        for(FlightOffer i : list ){
-            if(u.LastMinuteCheck(i)){
-                u.convertOffertToFlight(i);
-                // sendLastMinuteOffer(u.createFlight(i));
-            }else{}
+            if(list.stream().allMatch(o-> u.LastMinuteCheck(o) == true)){
+                u.convertOffersToFlights(list);
+                // richiedo il token jwt attraverso una richiesta http e la passo a sendLastMinuteOffer
+                // che lo aggiungerà all'header della chiamata che fa per inviare le offerte last-minute
+                // String jwt = auth.AuthRequest(route, user, pass);
+                // sendLastMinuteOffer(list, route, jwt);
+
         }  
     }
 
@@ -122,18 +127,19 @@ public class FlightOfferService {
      * invia le offerte last-minute generate precedentemente ad ACMEsky
      * @param o l'offerta da inviare sulla route specifica
      */
-    public void sendLastMinuteOffer(FlightOffer f) {
+    public void sendLastMinuteOffer(List<FlightOffer> f, String route, String jwt) {
 
-        String url = "http://localhost:8080/airline/offers";
+        String url = route;
     
         // // create headers
         HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", jwt);
         // // set `content-type` header
         headers.setContentType(MediaType.APPLICATION_JSON);
         // // set `accept` header
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         // // build the request
-        HttpEntity<FlightOffer> entity = new HttpEntity<>(f, headers);
+        HttpEntity<List<FlightOffer>> entity = new HttpEntity<>(f, headers);
         // // send POST request
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<FlightOffer> result = restTemplate.postForEntity(url, entity, FlightOffer.class);    

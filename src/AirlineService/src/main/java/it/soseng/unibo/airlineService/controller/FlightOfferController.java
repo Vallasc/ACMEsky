@@ -46,6 +46,14 @@ public class FlightOfferController {
     @Value("${server.file}") 
     public String FILE;
     
+    @Value("${server.acmesky.route}") 
+    public String ACMEskyRoute;
+
+    @Value("${server.airline.user}") 
+    public String user;
+
+    @Value("${server.airline.pass}") 
+    public String pass;
 
     
     /** 
@@ -58,7 +66,7 @@ public class FlightOfferController {
     @Scheduled(fixedRate = 6000)
     @PostMapping("/createOffer")
     private void autoCreateOffer() throws JsonProcessingException, IOException {
-        s.createFlightOffer(FILE);
+        s.createFlightOffer(FILE,ACMEskyRoute, user, pass);
     }
 
     
@@ -110,11 +118,12 @@ public class FlightOfferController {
      * invia i biglietti in formato pdf relativi a quelle offerte che hanno il valore degli id corrispondenti
      * a quelli passati attraverso i parametri
      * @param id dei voli che si vuole acquistare
+     * @throws JsonProcessingException
      */
     @GetMapping("/getTickets")
     public void sendPdfFiles( //HttpServletResponse response, 
-                                        @RequestParam(name = "id") long ... id) {   
-            p.sendPdfs(id);
+                                String SendLastMinuteOffersRoute, @RequestParam(name = "id") long ... id) throws JsonProcessingException {   
+            p.sendPdfs(user, pass, ACMEskyRoute, id);
         
             // try {
             //         Path file = Paths.get(p.generatePdf(id).getAbsolutePath());

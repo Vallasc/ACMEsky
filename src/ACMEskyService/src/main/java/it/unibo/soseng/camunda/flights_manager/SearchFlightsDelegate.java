@@ -9,6 +9,7 @@ import it.unibo.soseng.model.Flight;
 import it.unibo.soseng.model.FlightInterest;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.util.List;
 import java.util.logging.Logger;
 import static it.unibo.soseng.camunda.ProcessVariables.INTEREST_FLIGHTS_LIST;
@@ -31,6 +32,7 @@ public class SearchFlightsDelegate implements JavaDelegate{
       List<Flight> listToSave = manager.retrieveFlightsList((List<FlightInterest>) execution.getVariable(INTEREST_FLIGHTS_LIST));
       LOGGER.info(listToSave.toString());
       execution.setVariable(FLIGHTS_TO_SAVE, listToSave);
+      
 
     }
 }
