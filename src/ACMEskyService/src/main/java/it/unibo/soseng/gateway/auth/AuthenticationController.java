@@ -14,9 +14,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+
+import camundajar.impl.scala.collection.Map;
+
 import javax.security.enterprise.credential.UsernamePasswordCredential;
 
 import it.unibo.soseng.gateway.auth.dto.AuthRequest;
+import it.unibo.soseng.gateway.auth.dto.AuthResponse;
 import it.unibo.soseng.security.TokenProvider;
 
 import java.util.logging.Level;
@@ -43,9 +47,11 @@ private static final Logger LOG = Logger.getLogger(AuthenticationController.clas
       if (result.getStatus() == CredentialValidationResult.Status.VALID) {
         try{
           String jwt = tokenProvider.createToken(result.getCallerPrincipal().getName(), result.getCallerGroups());
-
+          AuthResponse res = new AuthResponse();
+          res.setToken(jwt);
           return Response.status(Status.OK)
               .header(AUTHORIZATION_HEADER, BEARER + jwt)
+              .entity(res)
               .build();
         } catch (Exception e) {
           LOG.log(Level.INFO, "Token error: {0}", e);

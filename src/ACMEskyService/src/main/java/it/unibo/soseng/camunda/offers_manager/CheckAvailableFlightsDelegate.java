@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.inject.Named;
+import static it.unibo.soseng.camunda.ProcessVariables.AVAILABLE_FLIGHTS;
 
 @Named("checkAvailableFlightsDelegate")
 public class CheckAvailableFlightsDelegate implements JavaDelegate{
@@ -21,12 +22,12 @@ public class CheckAvailableFlightsDelegate implements JavaDelegate{
     public void execute(DelegateExecution execution){
       // LOGGER.info ("checkAvailableFlightsDelegate in esecuzione");
       // List <UserInterest> usersInterests = dbManager.retrieveUserInterests();
-      // List <Flight> availableFlight = new ArrayList <Flight> ();
+      List <Flight> availableFlight = new ArrayList <Flight> ();
       // for (UserInterest ui:usersInterests) {
       //   availableFlight.addAll(dbManager.availableFlights(ui.getId()));
       // }
-      // execution.setVariable(AVAILABLE_FLIGHTS, availableFlight);
-        }
+      execution.setVariable(AVAILABLE_FLIGHTS, availableFlight);
+    }
 }
 
 
