@@ -45,6 +45,15 @@ public class DatabaseManager {
         }
 
     }
+
+    public List<Flight> retrieveFlights(){
+        @SuppressWarnings("unchecked")
+        List<Flight> flights =
+        entityManager.createQuery("SELECT f FROM Flight f")
+                        .getResultList();
+        return flights;
+    }
+
     
     
     // public List<FlightInterest> retrieveFlightInterests() {

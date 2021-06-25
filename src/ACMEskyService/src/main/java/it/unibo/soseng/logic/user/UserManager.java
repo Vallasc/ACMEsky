@@ -12,7 +12,6 @@ import it.unibo.soseng.logic.database.DatabaseManager.UserNotFoundException;
 import it.unibo.soseng.model.DomainEntity;
 import it.unibo.soseng.model.User;
 import static it.unibo.soseng.security.Constants.USER;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

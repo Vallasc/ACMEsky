@@ -15,7 +15,10 @@ public final class ProcessVariables {
 
     // Offers manager
     public static final String AVAILABLE_FLIGHTS = "availableFlight";
-    public static final String OFFER_SERVICE = "offerService";
-    
+    public static final String USER_INTEREST = "offerService";
+    public static final String USER_INTEREST_LEN = "userInterestLen";
+    public static final String USER_INTEREST_INDEX = "UserInterestsIndex";
+
+
     
 }

@@ -11,5 +11,6 @@ public class SendOfferDelegate implements JavaDelegate{
   @Override
   public void execute(DelegateExecution execution){
     LOGGER.info ("sendOfferDelegate in esecuzione");
+    
   }
 }
