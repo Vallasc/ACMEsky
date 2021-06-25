@@ -4,13 +4,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 public class UserSignInRequest {
-    
-    @NotNull(message = "Name cannot be null")
-    private String name;
-
-    @NotNull(message = "Surname cannot be null")
-	private String surname;
-
     @Email(message = "Email should be valid")
     private String email;
 
@@ -19,25 +12,6 @@ public class UserSignInRequest {
 
     @NotNull(message = "ProntogramToken cannot be null")
     private String prontogramToken;
-
-    @NotNull(message = "Address cannot be null")
-    private String address;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
 
     public String getProntogramToken() {
         return prontogramToken;
@@ -61,14 +35,6 @@ public class UserSignInRequest {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
     }
 
 }
