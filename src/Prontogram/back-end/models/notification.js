@@ -1,14 +1,18 @@
 const mongoose = require ('mongoose');
 const notificationSchema = new mongoose.Schema ({
-    numeroVolo: {
+    flyNumber: {
         type: Number,
         require: true,
     },
-    compagniaAerea: {
+    flyCompany: {
         type: String,
         require: true,
     },
-    tokenVolo: {
+    flyToken: {
+        type: String,
+        require: true,
+    },
+    user_id: {
         type: String,
         require: true,
     }

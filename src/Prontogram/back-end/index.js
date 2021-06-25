@@ -1,26 +1,25 @@
 const express = require ('express');
 const mongoose = require ('mongoose');
 const dotenv = require ('dotenv');
-const postRoute = require ('./routes/posts');
-const getRoute = require ('./routes/gets');
 const cors = require ('cors');
 const webpush = require ('web-push');
 const bodyParser = require ('body-parser');
 const path = require("path");
 
-const app = express ();
+const app = express()
+app.use(cors())
+app.use(bodyParser.json())
 
-app.use (bodyParser.json ());
-
-app.listen(9000, () => {
-    console.log('The server started on port 9000 !!!!!!');
+const port = 8000;
+app.listen(port, () => {
+    console.log('The server started on port: '+port );
   });
   
 dotenv.config ();
 
 //connect db 
 mongoose.connect(
-    process.env.DB_CONNECT, 
+  process.env.MONGO_CONNECTION,
     { useNewUrlParser: true },
     () => console.log ('connect to db')
     );
@@ -37,7 +36,6 @@ const getUserRoute = require ('./routes/user/gets');
 
 //Middleware
 app.use (express.json ());
-app.use (cors ());
 
 //Route Middlewares
 app.use ('/api/auth', authRoute);

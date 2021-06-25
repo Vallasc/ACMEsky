@@ -5,10 +5,10 @@ const Joi = require ('@hapi/joi');
 const registerValidation = data => {
 const schema = {
     name: Joi.string ()
-    .min (6)
+    .min (1)
     .required (),
     secondName: Joi.string ()
-    .min (6)
+    .min (1)
     .required (),
     username: Joi.string ()
     .min (6)

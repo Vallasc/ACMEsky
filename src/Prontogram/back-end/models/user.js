@@ -3,23 +3,17 @@ const userSchema = new mongoose.Schema ({
     name: {
         type: String,
         require: true,
-        min:6
+        min:1
     },
     secondName: {
         type: String,
         require: true,
-        min:6
+        min:1
     },
     username: {
         type: String,
         require: true,
         min:6
-    },
-    email: {
-        type: String,
-        require: true,
-        max: 255,
-        min: 6
     },
     password: {
         type: String,
