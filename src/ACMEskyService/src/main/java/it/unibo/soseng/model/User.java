@@ -27,21 +27,11 @@ public class User implements Serializable {
     @JoinColumn(name = "entity_id")
     private DomainEntity entity;
 
-	@Column(name = "name", nullable = false)
-    private String name;
-
-    @Column(name = "surname", nullable = false)
-	private String surname;
-
     @Column(name = "email", nullable = false)
     private String email;
 
     @Column(name = "prontogram_token", nullable = false)
     private String prontogramToken;
-
-    @Column(name = "address", nullable = false)
-    private String address;
-	
 
 	public long getId() {
 		return this.id;
@@ -57,22 +47,6 @@ public class User implements Serializable {
 
 	public void setEntity(DomainEntity entity) {
 		this.entity = entity;
-	}
-
-	public String getName() {
-		return this.name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getSurname() {
-		return this.surname;
-	}
-
-	public void setSurname(String surname) {
-		this.surname = surname;
 	}
 
 	public String getEmail() {
@@ -91,11 +65,4 @@ public class User implements Serializable {
 		this.prontogramToken = prontogramToken;
 	}
 
-	public String getAddress() {
-		return this.address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
 }
