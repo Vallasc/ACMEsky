@@ -27,13 +27,24 @@ mongoose.connect(
 
 //imports routes
 const authRoute = require ('./routes/auth');
+const postNotificationRoute = require ('./routes/notification/posts');
+//const getNotificationRoute = require ('./routes/notification/gets');
+const postSubscriptionRoute = require ('./routes/subscription/posts');
+const getSubscriptionRoute = require ('./routes/subscription/gets');
+
+const postUserRoute = require ('./routes/user/posts');
+const getUserRoute = require ('./routes/user/gets');
 
 //Middleware
 app.use (express.json ());
 app.use (cors ());
 
 //Route Middlewares
-app.use ('/api/user', authRoute);
-app.use ('/api/posts', postRoute);
-app.use ('/api/gets', getRoute );
+app.use ('/api/auth', authRoute);
+app.use ('/api/notification/', postNotificationRoute);
+//app.use ('/api/notification/', getNotificationRoute);
+app.use ('/api/subscription/', postSubscriptionRoute);
+app.use ('/api/subscription/', getSubscriptionRoute);
+app.use ('/api/user/', postUserRoute );
+app.use ('/api/user/', getUserRoute );
 
