@@ -12,8 +12,10 @@ import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import javax.transaction.Transactional;
 
 import it.unibo.soseng.model.Airport;
+import it.unibo.soseng.model.DomainEntity;
 import it.unibo.soseng.model.Flight;
 import it.unibo.soseng.model.FlightInterest;
 import it.unibo.soseng.model.User;
@@ -28,6 +30,46 @@ public class DatabaseManager {
     @PersistenceContext(unitName = "primary")
     private EntityManager entityManager;
 
+
+    /*
+    *  USER
+    */
+    public User getUser(String email) throws UserNotFoundException {
+        @SuppressWarnings("unchecked")
+        List<User> result = (List<User>) entityManager
+                .createQuery("SELECT u FROM User u, DomainEntity e WHERE e.username = :username AND u.entity = e.id")
+                .setParameter("username", email).getResultList();
+        if (result.size() == 1) {
+            return result.get(0);
+        }
+        throw new UserNotFoundException();
+    }
+
+    @Transactional
+    public void createUser(User user) throws UserAlreadyInException {
+        try {
+            this.entityManager.persist(user);
+        } catch (PersistenceException e) {
+            //LOGGER.severe(e.toString());
+            throw new UserAlreadyInException();
+        }
+    }
+
+    @Transactional
+    public void updateUser(User user) {
+        this.entityManager.merge(user);
+    }
+
+    @Transactional
+    public void removeUser(User user) throws PersistenceException {
+        this.entityManager.remove(user);
+    }
+
+
+
+    /*
+    *  AIRLINE
+    */
     public List<FlightInterest> retrieveFlightInterests(){
         @SuppressWarnings("unchecked")
         List<FlightInterest> interests =
@@ -77,26 +119,18 @@ public class DatabaseManager {
         return interests;
     }
 
-
-    public User getUser(String username) throws UserNotFoundException {
+    public DomainEntity getEntity(String username) throws EntityNotFoundException {
         @SuppressWarnings("unchecked")
-        List<User> result = (List<User>) entityManager
-                .createQuery("SELECT u FROM User u, DomainEntity e WHERE e.username = :username AND u.entity = e.id")
+        List<DomainEntity> result = (List<DomainEntity>) entityManager
+                .createQuery("SELECT e FROM DomainEntity e WHERE e.username = :username")
                 .setParameter("username", username).getResultList();
         if (result.size() == 1) {
             return result.get(0);
         }
-        throw new UserNotFoundException();
+        throw new EntityNotFoundException();
     }
 
-    public void createUser(User user) throws UserAlreadyInException {
-        try {
-            this.entityManager.persist(user);
-        } catch (PersistenceException e) {
-            throw new UserAlreadyInException();
-            
-        }
-    }
+
     public void createOffer (Flight flight) throws OfferAlreadyInException { 
         try {
             this.entityManager.persist(flight);
@@ -122,6 +156,9 @@ public class DatabaseManager {
         this.entityManager.persist(interest);
     }
 
+    public class EntityNotFoundException extends Exception {
+        private static final long serialVersionUID = 1L;
+    }
     public class UserNotFoundException extends Exception {
         private static final long serialVersionUID = 1L;
     }
