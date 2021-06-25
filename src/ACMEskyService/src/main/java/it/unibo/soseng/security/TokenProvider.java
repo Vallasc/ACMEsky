@@ -35,7 +35,7 @@ public class TokenProvider {
     public void init() {
         //this.secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
         this.secretKey = Keys.hmacShaKeyFor(JWT_KEY.getBytes(StandardCharsets.UTF_8));
-        this.tokenValidity = TimeUnit.MINUTES.toMillis(10); //  TODO metter in costanti
+        this.tokenValidity = TimeUnit.HOURS.toMillis(24); //  TODO metter in costanti
     }
 
     public String createToken(String username, Set<String> authorities) {
