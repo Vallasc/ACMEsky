@@ -323,11 +323,8 @@ ALTER SEQUENCE public.rent_services_id_seq OWNED BY public.rent_services.id;
 
 CREATE TABLE public.users (
     id bigint NOT NULL,
-    address character varying(255) NOT NULL,
     email character varying(255) NOT NULL,
-    name character varying(255) NOT NULL,
     prontogram_token character varying(255) NOT NULL,
-    surname character varying(255) NOT NULL,
     entity_id bigint
 );
 
@@ -700,7 +697,6 @@ ALTER TABLE ONLY public.flights_interest
 INSERT INTO public.domain_entities VALUES (1, 'airline1', 'ROLE_AIRLINE', 'a', 'airline1');
 INSERT INTO public.domain_entities VALUES (2, 'airline2', 'ROLE_AIRLINE', 'b', 'airline2');
 INSERT INTO public.domain_entities VALUES (3, 'bank', 'ROLE_BANK', 'c', 'bank');
-INSERT INTO public.domain_entities VALUES (4, 'soseng', 'ROLE_USER', 'd', 'soseng');
 ALTER SEQUENCE public.domain_entities_id_seq RESTART WITH 5;
 
 INSERT INTO public.airlines VALUES (1, 'localhost:1234', 1);
@@ -710,8 +706,6 @@ ALTER SEQUENCE public.airlines_id_seq RESTART WITH 3;
 INSERT INTO public.banks VALUES (1, 'localhost:1234', 3);
 ALTER SEQUENCE public.banks_id_seq RESTART WITH 4;
 
-INSERT INTO public.users VALUES (1, 'Piazza verdi 14, Bologna', 'soseng@unibo.it', 'Sandro', 'adssfae323dqw', 'Alessi', 4);
-ALTER SEQUENCE public.users_id_seq RESTART WITH 2;
 
 INSERT INTO public.airports VALUES (1, 'Ainsworth', 'ANW', 'US', 42.58, -99.9933, 'Ainsworth Minicipal Arpt', -100);
 INSERT INTO public.airports VALUES (2, 'Antigua', 'ANU', 'AG', 17.13675, -61.792667, 'V C Bird Intl Arpt', -4);
