@@ -1,5 +1,6 @@
 package it.unibo.soseng.camunda;
 
+// METTERE I NOMI DELLE VARIBILI CON INIZIALE MINUSCOLA
 public final class ProcessVariables {
     // Flights manager
     public static final String AIRLINE_FLIGHT_OFFERS = "airlineFlightOffers";
@@ -17,7 +18,7 @@ public final class ProcessVariables {
     public static final String AVAILABLE_FLIGHTS = "availableFlight";
     public static final String USER_INTEREST = "offerService";
     public static final String USER_INTEREST_LEN = "userInterestLen";
-    public static final String USER_INTEREST_INDEX = "UserInterestsIndex";
+    public static final String USER_INTEREST_INDEX = "userInterestsIndex";
 
 
     
