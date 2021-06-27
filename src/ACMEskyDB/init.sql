@@ -24,6 +24,7 @@ SET default_tablespace = '';
 
 SET default_table_access_method = heap;
 
+ALTER SYSTEM SET max_prepared_transactions = 200;
 --
 -- Name: airlines; Type: TABLE; Schema: public; Owner: soseng
 --
@@ -324,7 +325,7 @@ ALTER SEQUENCE public.rent_services_id_seq OWNED BY public.rent_services.id;
 CREATE TABLE public.users (
     id bigint NOT NULL,
     email character varying(255) NOT NULL,
-    prontogram_token character varying(255) NOT NULL,
+    prontogram_username character varying(255) NOT NULL,
     entity_id bigint
 );
 
