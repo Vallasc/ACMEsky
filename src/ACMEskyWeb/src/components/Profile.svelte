@@ -6,7 +6,7 @@
     let email : string
     let password : string
     let newPassword : string
-    let prontogramToken : string
+    let prontogramUsername : string
 
     let disabled : boolean = true
 
@@ -15,7 +15,7 @@
         if(response != null){
             email = response.email
             //password = response.password
-            prontogramToken = response.prontogramToken
+            prontogramUsername = response.prontogramUsername
             disabled = false
         }
 	})
@@ -32,7 +32,7 @@
 
         const {submitter: submitButton} = event;
         if(submitButton.id == "save") {
-            await updateUser(email, password, newPassword == "" ? null : newPassword, prontogramToken)
+            await updateUser(email, password, newPassword == "" ? null : newPassword, prontogramUsername)
         } else if(submitButton.id == "delete"){
             await deleteUser(email, password)
             navigate("/")
@@ -42,7 +42,7 @@
 </script>
 
 <div class="form" on:submit|preventDefault={handleSubmit}>
-    <img class="mb-3 mt-4" src="profile.png" alt="profile" height="120" />
+    <img class="mb-3 mt-4" src="./imgs/profile.png" alt="profile" height="120" />
     <h1 class="h3 fw-normal">Your profile</h1>
     <form>
         <div class="mb-3">
@@ -58,8 +58,8 @@
             <input bind:value={newPassword} type="password" class="form-control" placeholder="" disabled = {disabled}>
         </div>
         <div class="mb-3">
-            <label for="_" class="form-label">Prontogram token</label>
-            <input bind:value={prontogramToken} type="text" class="form-control" disabled = {disabled}>
+            <label for="_" class="form-label">Prontogram username</label>
+            <input bind:value={prontogramUsername} type="text" class="form-control" disabled = {disabled}>
         </div>
         <button id="save" class="w-100 mb-3 mt-3 btn btn-primary" type="submit" disabled = {disabled}>Save</button>
         <hr class="mb-3 dropdown-divider"/>

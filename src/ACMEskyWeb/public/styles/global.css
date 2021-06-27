@@ -1,0 +1,18 @@
+html, body {
+	position: relative;
+	width: 100%;
+	height: 100%;
+}
+
+  
+*:focus {
+    outline: none;
+}
+
+.toast-header {
+	padding: 15px !important;
+}
+
+.navbar-collapse {
+	justify-content: space-between;
+}

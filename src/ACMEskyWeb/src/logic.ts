@@ -42,6 +42,7 @@ export async function Fetch(path: string, method: string, body: any = null) : Pr
     return Promise.resolve(new Response(new Blob(),{ "status" : 401  }))
 }
 
+// Login
 export async function signin(email: string, password: string, remainSignin: boolean) : Promise<boolean> {
     const response = await fetch(acmesky + "/auth/", 
         {
@@ -57,7 +58,6 @@ export async function signin(email: string, password: string, remainSignin: bool
         })
     console.log(response)
     if (response.status == 200) {
-        showToast("Sei dentro!!!","", true)
         let token : string = (await response.json()).token
         jwtToken.set(token);
         if(remainSignin){
@@ -65,12 +65,13 @@ export async function signin(email: string, password: string, remainSignin: bool
         }
         return true
     } else {
-        showToast("Errore", "Credenziali errate", true)
+        showToast("Credenziali errate", true)
         return false
     }
 }
 
-export async function signup(email: string, password: string, token: string) : Promise<boolean> {
+
+export async function signup(email: string, password: string, prontogramUsername: string) : Promise<boolean> {
     const response = await fetch(acmesky + "/users/", 
         {
             method: 'POST',
@@ -81,15 +82,18 @@ export async function signup(email: string, password: string, token: string) : P
             body: JSON.stringify({
                 email: email,
                 password: password,
-                prontogramToken: token
+                prontogramUsername: prontogramUsername
             })
         })
     console.log(response)
     if (response.status == 201) {
-        showToast("Esito","Registrazione avvenuta con successo", true)
+        showToast("Registrazione avvenuta con successo", true)
         return true
+    } if (response.status == 409) {
+        showToast("Utente non disponibile", true)
+        return false
     } else {
-        showToast("Errore", "Errore nella registrazione", true)
+        showToast("Errore interno", true)
         return false
     }
 }
@@ -120,21 +124,21 @@ export async function getUser() : Promise<any> {
     return null
 }
 
-export async function updateUser(email: string, password: string, newPassword: string, newToken: string) : Promise<any> {
+export async function updateUser(email: string, password: string, newPassword: string, newProntogramUsername: string) : Promise<any> {
     const response = await Fetch(acmesky + "/users/me", "PUT", {
         email: email,
         password: password,
         newPassword: newPassword,
-        newProntogramToken: newToken
+        newProntogramUsername: newProntogramUsername
     })
     if (response.status == 200) {
-        showToast("Esito","Profilo aggiornato", true)
+        showToast("Profilo aggiornato", true)
         return await response.json()
     } else if (response.status == 400) {
-        showToast("Esito","Errore credenziali errate", true)
+        showToast("Credenziali errate", true)
         return null
     }
-    showToast("Esito","Errore "+ response.status, true)
+    showToast("Errore interno"+ response.status, true)
     return null
 }
 
@@ -144,14 +148,14 @@ export async function deleteUser(email: string, password: string) : Promise<bool
         password: password,
     })
     if (response.status == 200) {
-        showToast("Esito","Profilo eliminato", true)
+        showToast("Profilo eliminato", true)
         signout()
         return true
     } else if (response.status == 400) {
-        showToast("Esito","Errore credenziali errate", true)
+        showToast("Credenziali errate", true)
         return false
     }
-    showToast("Esito","Errore "+ response.status, true)
+    showToast("Errore interno"+ response.status, true)
     return false
 }
 

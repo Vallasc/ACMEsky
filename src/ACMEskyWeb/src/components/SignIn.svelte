@@ -14,7 +14,7 @@
 </script>
 
 <div class="form" on:submit|preventDefault={handleSubmit}>
-    <img class="mb-3 mt-4" src="airplane.png" alt="airplane" height="120" />
+    <img class="mb-3 mt-4" src="./imgs/airplane.png" alt="airplane" height="120" />
     <h1 class="h3 fw-normal">Please sign in</h1>
     <form>
         <div class="mb-3 form-floating">

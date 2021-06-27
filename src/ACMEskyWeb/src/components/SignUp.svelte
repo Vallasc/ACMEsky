@@ -7,7 +7,7 @@
     let password : string
     let repeatPassword : string
     let invalidPass : boolean
-    let token : string
+    let prontogramUsername : string
 
     function validate() : boolean {
         if(password.trim().length == 0)
@@ -23,7 +23,7 @@
     async function handleSubmit(): Promise<void> {
         if(!validate())
             return;
-        if( await signup(email, password, token)){
+        if( await signup(email, password, prontogramUsername)){
             navigate("/signin")
         }
     }
@@ -34,19 +34,19 @@
     <h1 class="h3 fw-normal">Please sign up</h1>
     <form class="needs-validation" on:submit|preventDefault={handleSubmit}>
         <div class="mb-3">
-            <label for="cntrolInput1" class="form-label">Email</label>
+            <label for="_" class="form-label">Email</label>
             <input bind:value = {email} type="email" class="form-control" placeholder="Inserisci la tua email" required>
         </div>
         <div class="mb-3">
-            <label for="controlInput1" class="form-label">Password</label>
+            <label for="_" class="form-label">Password</label>
             <input bind:value = {password} type="password" class="form-control" placeholder="Inserisci la tua password" required>
         </div>
         <div class="mb-3">
             <Input bind:value = {repeatPassword} invalid = {invalidPass} type="password" placeholder="Inserisci la tua password" feedback="Le password non combaciano" required />
         </div>
         <div class="mb-3">
-            <label for="controlInput1" class="form-label">Prontogram token</label>
-            <input bind:value = {token} type="text" class="form-control" placeholder="Inserisci il token" required>
+            <label for="_" class="form-label">Prontogram username</label>
+            <input bind:value = {prontogramUsername} type="text" class="form-control" placeholder="Inserisci username Prontogram" required>
         </div>
         <button class="mb-3 mt-3 w-100 btn btn-primary" type="submit" >Sign up</button>
     </form>

@@ -3,8 +3,8 @@
 	import Interest  from "./components/Interest.svelte"
 	import Offer  from "./components/Offer.svelte"
 	import Profile  from "./components/Profile.svelte"
-	import SignIn  from "./components/SignIn.svelte"
 	import SignUp  from "./components/SignUp.svelte"
+	import SignIn  from "./components/SignIn.svelte"
 	import NavBar  from "./components/NavBar.svelte"
 	import {acmeskyHost as acmesky}  from "./stores"
     import { Toast, ToastBody, ToastHeader } from 'sveltestrap'
@@ -24,17 +24,15 @@
 	
 
 	let isOpen : boolean = false
-	let toastTitle : string
-	let toastBody : string
+	let toastMessage : string
 
     function closeToast() {
       isOpen = false
     }
 
 	setContext("toast", {
-		showToast : (title : string, body : string, autohide : boolean) => {
-			toastTitle = title
-			toastBody = body
+		showToast : (message: string, autohide: boolean) => {
+			toastMessage = message
 			isOpen = true
 			if( autohide ) {
 				setTimeout(closeToast, 3000)
@@ -87,10 +85,7 @@
 
 <div class="main-toast ">
 	<Toast {isOpen}>
-		<ToastHeader toggle={closeToast}>{toastTitle}</ToastHeader>
-		<ToastBody>
-			{toastBody}
-		</ToastBody>
+			<ToastHeader toggle={closeToast}>{toastMessage}</ToastHeader>
 	</Toast>
 </div>
 
