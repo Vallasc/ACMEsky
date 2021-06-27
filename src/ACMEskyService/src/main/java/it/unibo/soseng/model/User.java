@@ -30,8 +30,8 @@ public class User implements Serializable {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "prontogram_token", nullable = false)
-    private String prontogramToken;
+    @Column(name = "prontogram_username", nullable = false)
+    private String prontogramUsername;
 
 	public long getId() {
 		return this.id;
@@ -57,12 +57,12 @@ public class User implements Serializable {
 		this.email = email;
 	}
  
-	public String getProntogramToken() {
-		return this.prontogramToken;
+	public String getProntogramUsername() {
+		return this.prontogramUsername;
 	}
 
-	public void setProntogramToken(String prontogramToken) {
-		this.prontogramToken = prontogramToken;
+	public void setProntogramUsername(String prontogramUsername) {
+		this.prontogramUsername = prontogramUsername;
 	}
 
 }
