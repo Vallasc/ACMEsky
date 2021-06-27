@@ -3,22 +3,22 @@ package it.unibo.soseng.gateway.user.dto;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
-public class UserSignInRequest {
+public class UserSignUpRequest {
     @Email(message = "Email should be valid")
     private String email;
 
     @NotNull(message = "Password cannot be null")
     private String password;
 
-    @NotNull(message = "ProntogramToken cannot be null")
-    private String prontogramToken;
+    @NotNull(message = "ProntogramUsername cannot be null")
+    private String prontogramUsername;
 
-    public String getProntogramToken() {
-        return prontogramToken;
+    public String getProntogramUsername() {
+        return prontogramUsername;
     }
 
-    public void setProntogramToken(String prontogramToken) {
-        this.prontogramToken = prontogramToken;
+    public void setProntogramUsername(String prontogramUsername) {
+        this.prontogramUsername = prontogramUsername;
     }
 
     public String getPassword() {
