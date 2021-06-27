@@ -24,7 +24,7 @@ import javax.ws.rs.core.UriInfo;
 import it.unibo.soseng.gateway.user.dto.InterestsRequest;
 import it.unibo.soseng.gateway.user.dto.UserDeleteRequest;
 import it.unibo.soseng.gateway.user.dto.UserResponse;
-import it.unibo.soseng.gateway.user.dto.UserSignInRequest;
+import it.unibo.soseng.gateway.user.dto.UserSignUpRequest;
 import it.unibo.soseng.gateway.user.dto.UserUpdateRequest;
 import it.unibo.soseng.logic.airline.AirlineManager;
 import it.unibo.soseng.logic.airline.AirlineManager.BadRequestException;
@@ -64,8 +64,8 @@ public class UserController {
     @Path("/")
     @PermitAll
     @Consumes( MediaType.APPLICATION_JSON )
-    public Response createUser(@Valid UserSignInRequest request, @Context UriInfo uriInfo) {
-        LOGGER.info("User sign in");
+    public Response createUser(@Valid UserSignUpRequest request, @Context UriInfo uriInfo) {
+        LOGGER.info("User sign up");
         try {
             userManager.createUser(request);
         } catch (UserAlreadyInException e) {

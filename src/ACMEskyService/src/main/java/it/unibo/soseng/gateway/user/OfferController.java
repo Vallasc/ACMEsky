@@ -19,7 +19,7 @@ import javax.ws.rs.core.UriInfo;
 
 import it.unibo.soseng.gateway.user.dto.InterestsRequest;
 import it.unibo.soseng.gateway.user.dto.UserResponse;
-import it.unibo.soseng.gateway.user.dto.UserSignInRequest;
+import it.unibo.soseng.gateway.user.dto.UserSignUpRequest;
 import it.unibo.soseng.logic.airline.AirlineManager;
 import it.unibo.soseng.logic.airline.AirlineManager.BadRequestException;
 import it.unibo.soseng.logic.airline.AirlineManager.UserNotAllowedException;
@@ -93,7 +93,7 @@ public class OfferController {
     @Path("/")
     @PermitAll
     @Consumes( MediaType.APPLICATION_JSON )
-    public Response createUser(@Valid UserSignInRequest request, @Context UriInfo uriInfo) {
+    public Response createUser(@Valid UserSignUpRequest request, @Context UriInfo uriInfo) {
         LOGGER.info("User sign in");
         try {
             userManager.createUser(request);

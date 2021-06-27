@@ -7,7 +7,7 @@ import javax.security.enterprise.SecurityContext;
 
 import it.unibo.soseng.gateway.user.dto.UserDeleteRequest;
 import it.unibo.soseng.gateway.user.dto.UserResponse;
-import it.unibo.soseng.gateway.user.dto.UserSignInRequest;
+import it.unibo.soseng.gateway.user.dto.UserSignUpRequest;
 import it.unibo.soseng.gateway.user.dto.UserUpdateRequest;
 import it.unibo.soseng.logic.database.DatabaseManager;
 import it.unibo.soseng.logic.database.DatabaseManager.UserAlreadyInException;
@@ -28,9 +28,9 @@ public class UserManager {
     @Inject
     private SecurityContext securityContext;
 
-    public void createUser(UserSignInRequest request) throws UserAlreadyInException {
+    public void createUser(UserSignUpRequest request) throws UserAlreadyInException {
         User user = new User();
-        user.setProntogramToken(request.getProntogramToken());
+        user.setProntogramUsername(request.getProntogramUsername());
         user.setEmail(request.getEmail());
         DomainEntity entity = new DomainEntity();
         entity.setUsername(request.getEmail());
@@ -48,7 +48,7 @@ public class UserManager {
         UserResponse response = new UserResponse();
         response.setEmail(user.getEmail());
         response.setPassword(user.getEntity().getPassword());
-        response.setProntogramToken(user.getProntogramToken());
+        response.setProntogramUsername(user.getProntogramUsername());
         return response;
 
     }
@@ -64,14 +64,14 @@ public class UserManager {
             throw new InvalidCredentialsException();
         if(request.getNewPassword() != null)
             user.getEntity().setPassword(request.getNewPassword());
-        if(request.getNewProntogramToken() != null)
-            user.setProntogramToken(request.getNewProntogramToken());
+        if(request.getNewProntogramUsername() != null)
+            user.setProntogramUsername(request.getNewProntogramUsername());
         
         databaseManager.updateUser(user);
         UserResponse response = new UserResponse();
         response.setEmail(user.getEmail());
         response.setPassword(user.getEntity().getPassword());
-        response.setProntogramToken(user.getProntogramToken());
+        response.setProntogramUsername(user.getProntogramUsername());
         return response;
     }
 

@@ -11,10 +11,10 @@ public class UserUpdateRequest {
     private String password;
 
     private String newPassword;
-    private String newProntogramToken;
+    private String newProntogramUsername;
 
-    public String getNewProntogramToken() {
-        return newProntogramToken;
+    public String getNewProntogramUsername() {
+        return newProntogramUsername;
     }
 
     public String getNewPassword() {
@@ -25,8 +25,8 @@ public class UserUpdateRequest {
         this.newPassword = newPassword;
     }
 
-    public void setNewProntogramToken(String newProntogramToken) {
-        this.newProntogramToken = newProntogramToken;
+    public void setNewProntogramUsername(String newProntogramUsername) {
+        this.newProntogramUsername = newProntogramUsername;
     }
 
     public String getPassword() {

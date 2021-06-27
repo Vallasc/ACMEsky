@@ -3,14 +3,14 @@ package it.unibo.soseng.gateway.user.dto;
 public class UserResponse {
     private String email;
     private String password;
-    private String prontogramToken;
+    private String prontogramUsername;
 
-    public String getProntogramToken() {
-        return prontogramToken;
+    public String getProntogramUsername() {
+        return prontogramUsername;
     }
 
-    public void setProntogramToken(String prontogramToken) {
-        this.prontogramToken = prontogramToken;
+    public void setProntogramUsername(String prontogramUsername) {
+        this.prontogramUsername = prontogramUsername;
     }
 
     public String getPassword() {
