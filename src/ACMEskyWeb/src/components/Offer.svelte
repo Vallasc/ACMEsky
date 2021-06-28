@@ -16,7 +16,7 @@
 </script>
 
 <div class="main">
-    <h1 class="h1 fw-normal mb-4">Acquista un'offerta</h1>
+    <h1 class="h1 fw-normal mb-4 mt-4">Acquista un'offerta</h1>
     <Steps selected={step} />
     <div class="mt-4"></div>
     <div class="card mt-4">
@@ -92,7 +92,6 @@
         align-items: center;
         flex-direction: column;
         justify-content: flex-start;
-        padding-top: 40px;
     }
 
     form {
@@ -110,6 +109,6 @@
     }
 
     .card{
-        max-width: 60%;
+        max-width: 70%;
     }
 </style>
