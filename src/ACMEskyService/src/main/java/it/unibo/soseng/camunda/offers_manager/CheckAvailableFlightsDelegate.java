@@ -30,14 +30,11 @@ public class CheckAvailableFlightsDelegate implements JavaDelegate{
       List <UserInterest> userInterests = (List<UserInterest>) execution.getVariable(USER_INTEREST);
       List <Flight> matchedFlight = new ArrayList <Flight> ();
       UserInterest ui = userInterests.get( (int) execution.getVariable(USER_INTEREST_INDEX));
+      matchedFlight.add (offerManager.matchOffer(ui.getOutboundFlightInterest()));
       if (ui.getFlightBackInterest() != null) {
-        matchedFlight.add (offerManager.matchOffer(ui.getOutboundFlightInterest()));
-        matchedFlight.add (offerManager.matchOffer(ui.getFlightBackInterest()));
-        //var che controllo il gateway
-        execution.setVariable(AVAILABLE_FLIGHTS, matchedFlight);
+        matchedFlight.add (offerManager.matchOffer(ui.getFlightBackInterest()));        
       }
-      int index = (int) execution.getVariable(USER_INTEREST_INDEX) + 1;
-      execution.setVariable(USER_INTEREST_INDEX, index);
+      execution.setVariable(AVAILABLE_FLIGHTS, matchedFlight);
     }
 }
 

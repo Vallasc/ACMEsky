@@ -18,7 +18,7 @@ public final class ProcessVariables {
     public static final String USER_INTEREST = "offerService";
     public static final String USER_INTEREST_LEN = "userInterestLen";
     public static final String USER_INTEREST_INDEX = "UserInterestsIndex";
-
+    public static final String GENERATED_OFFER = "generatedOffer";
 
     
 }

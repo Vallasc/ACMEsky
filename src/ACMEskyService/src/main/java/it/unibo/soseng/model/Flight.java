@@ -55,7 +55,6 @@ public class Flight implements Serializable {
     @Column(name = "booked", nullable = false)
     private boolean booked;
 
-
     public long getId() {
         return id;
     }

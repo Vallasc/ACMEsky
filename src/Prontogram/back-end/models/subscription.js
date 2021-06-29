@@ -3,8 +3,7 @@ const mongoose = require ('mongoose');
 const subscriptionSchema = new mongoose.Schema ({
   info:{
   },
-  user_id:{
-    
+  username:{
   }
 });
 

@@ -14,9 +14,13 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let notification of notifications">
-                        <td>{{notification.flyNumber}}</td>
-                        <td>{{notification.flyCompany}}</td>
-                        <td>{{notification.flyToken}}</td>
+                        <td>
+                            <div ng-app>
+                                <p>Hello {{notification.flyBack.flightCode}}</p>
+                            </div>
+                        </td>
+                        <td>{{notification.username}}</td> 
+                        <td>{{notification.offerToken}}</td>
                         <td style="white-space: nowrap">
                             <button (click)="deleteNotification(notification._id)" class="btn btn-sm btn-danger btn-delete-user" >
                                 <span *ngIf="notification.isDeleting" class="spinner-border spinner-border-sm"></span>
