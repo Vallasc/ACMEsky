@@ -1,26 +1,24 @@
 <div class="p-4">
-    <div class="container">
         <h1>Notifiche</h1>
     <!--<button (click)="pushSubscription()" class="btn btn-sm btn-success mb-2" style="border: 1px solid; margin-left: 4px" >Subscribe</button>
         <button (click)="unsubscribeNotifications()" class="btn btn-sm btn-success mb-2" style="border: 1px solid; margin-left: 4px">Unsubscribe</button> -->
-        <table class="table table-striped">
+        <div *ngFor="let notification of notifications">
+            <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th style="width: 30%">Numero volo</th>
-                        <th style="width: 30%">Compagnia aerea</th>
-                        <th style="width: 30%">Token volo</th>
+                        <th style="width: 90%">Notifica Volo</th>
                         <th style="width: 10%"></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let notification of notifications">
+                    <tr>
                         <td>
                             <div ng-app>
-                                <p>Hello {{notification.flyBack.flightCode}}</p>
+                                <p>Inserisci il tuo nome: <input type="text" ng-model="name"></p>
+                                        <p>Hello!</p>
                             </div>
                         </td>
                         <td>{{notification.username}}</td> 
-                        <td>{{notification.offerToken}}</td>
                         <td style="white-space: nowrap">
                             <button (click)="deleteNotification(notification._id)" class="btn btn-sm btn-danger btn-delete-user" >
                                 <span *ngIf="notification.isDeleting" class="spinner-border spinner-border-sm"></span>
@@ -35,6 +33,6 @@
                     </tr>
                 </tbody>
             </table>
-    </div>
+        </div>
 </div>
 
