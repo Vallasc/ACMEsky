@@ -73,6 +73,7 @@ public class Flight implements Serializable {
     }
 
     public Airport getDepartureAirport() {
+        
         return departureAirport;
     }
 
@@ -97,19 +98,22 @@ public class Flight implements Serializable {
     }
     
     public OffsetDateTime getDepartureDateTime() {
+
         return departureDateTime;
     }
 
-    public void setDepartureDateTime(OffsetDateTime departureDateTime) {
-        this.departureDateTime = departureDateTime;
+    public void setDepartureDateTime(String departureTime) {
+        OffsetDateTime zonedDateTime = OffsetDateTime.parse(departureTime);
+        this.departureDateTime = zonedDateTime;
     }
     
     public OffsetDateTime getArrivalDateTime() {
         return arrivalDateTime;
     }
 
-    public void setArrivalDateTime(OffsetDateTime arrivalDateTime) {
-        this.arrivalDateTime = arrivalDateTime;
+    public void setArrivalDateTime(String arrivalTime) {
+        OffsetDateTime zonedDateTime = OffsetDateTime.parse(arrivalTime);
+        this.arrivalDateTime = zonedDateTime;
     }
 
     public float getPrice() {
@@ -124,8 +128,9 @@ public class Flight implements Serializable {
         return expireDate;
     }
 
-    public void setExpireDate(OffsetDateTime expireDate) {
-        this.expireDate = expireDate;
+    public void setExpireDate(String expireDate) {
+        OffsetDateTime zonedDateTime = OffsetDateTime.parse(expireDate);
+        this.expireDate = zonedDateTime;
     }
 
     public boolean getBooked() {

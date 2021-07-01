@@ -20,6 +20,7 @@
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
 		<java.version>11</java.version>
+    <build.output>target</build.output>
   </properties>
 
     <dependencyManagement>
@@ -84,7 +85,9 @@
       </dependency>
     </dependencies>
   
+    
     <build>
+      <directory>${build.output}</directory>
       <plugins>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -96,4 +99,15 @@
         </plugin>
       </plugins>
     </build>
+
+    <profiles>
+      <profile>
+        <activation>
+          <property><name>m2e.version</name></property>
+        </activation>
+        <properties>
+          <build.output>target-ide</build.output>
+        </properties>
+      </profile>
+    </profiles>
 </project>

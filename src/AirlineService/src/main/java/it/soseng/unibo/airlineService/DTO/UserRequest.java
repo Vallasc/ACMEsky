@@ -7,17 +7,17 @@ import javax.validation.constraints.NotBlank;
 
 public class UserRequest {
 
-    @NotBlank(message = "departureCity is mandatory")
-    public String departureCity;
+    @NotBlank(message = "departure is mandatory")
+    public String departure;
 
-    @NotBlank(message = "destinationCity is mandatory")
-    public String destinationCity;
+    @NotBlank(message = "arrival is mandatory")
+    public String arrival;
 
     @NotBlank(message = "departureDate is mandatory")
     public OffsetDateTime departureDate;    
     
-    @NotBlank(message = "destinationDate is mandatory")
-    public OffsetDateTime destinationDate;
+    @NotBlank(message = "arrivalDate is mandatory")
+    public OffsetDateTime arrivalDate;
 
     public UserRequest() {
     }

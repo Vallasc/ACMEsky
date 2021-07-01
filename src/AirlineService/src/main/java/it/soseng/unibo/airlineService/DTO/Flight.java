@@ -18,16 +18,37 @@ public class Flight {
 
     private OffsetDateTime arrivalTime;
 
+    private OffsetDateTime expDate;
+
     private String arrivalId;
 
     private String airline_id;
 
     private double price;
 
-    private String place;
+    private boolean soldFlag;
 
 
 
+public boolean isSoldFlag() {
+      return soldFlag;
+    }
+
+
+
+
+    public void setSoldFlag(boolean soldFlag) {
+      this.soldFlag = soldFlag;
+    }
+
+
+
+
+public OffsetDateTime getExpDate() {
+      return expDate;
+    }
+
+    
 
 	
     /** 
@@ -72,12 +93,7 @@ public class Flight {
       return this.price;
     }
 
-    /** 
-     * @return String il posto del viaggiatore sull'aereo
-     */
-    public String getPlace() {
-      return this.place;
-    }
+
 
 
     /**
@@ -137,13 +153,10 @@ public class Flight {
       this.price = price;
     }
 
-    /** 
-     * imposta il numero di posto del passeggero sull'aereo
-     * @param place
-     */
-    public void setPlace(String place) {
-       this.place=place;
+    public void setExpDate(OffsetDateTime expDate) {
+      this.expDate = expDate;
     }
+
 
 
     /**

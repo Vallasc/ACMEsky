@@ -1,6 +1,7 @@
 package it.unibo.soseng.model;
 
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
@@ -43,8 +44,8 @@ public class UserInterest implements Serializable {
     @JoinColumn(name = "flight_back_interest_id")
     private FlightInterest flightBackInterest;
 
-    @Column(name = "expire_date", nullable = true)
-	private ZonedDateTime expireDate;
+    @Column(name = "expire_date", columnDefinition= "TIMESTAMP WITH TIME ZONE", nullable = true)
+	private OffsetDateTime expireDate;
 	
 
 	public long getId() {
@@ -79,11 +80,11 @@ public class UserInterest implements Serializable {
 		this.flightBackInterest = flightBackInterest;
 	}
     
-	public ZonedDateTime getExpireDate() {
+	public OffsetDateTime getExpireDate() {
 		return this.expireDate;
 	}
 	
-	public void setgetExpireDate(ZonedDateTime expireDate) {
+	public void setgetExpireDate(OffsetDateTime expireDate) {
 		this.expireDate = expireDate;
 	}
 }

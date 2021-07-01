@@ -23,7 +23,7 @@ SET row_security = off;
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
-
+ALTER SYSTEM SET max_prepared_transactions = 100;
 --
 -- Name: airlines; Type: TABLE; Schema: public; Owner: soseng
 --
@@ -173,10 +173,10 @@ ALTER SEQUENCE public.domain_entities_id_seq OWNED BY public.domain_entities.id;
 
 CREATE TABLE public.flights (
     id bigint NOT NULL,
-    arrival_date_time timestamp without time zone NOT NULL,
+    arrival_date_time timestamp with time zone NOT NULL,
     booked boolean NOT NULL,
-    departure_date_time timestamp without time zone NOT NULL,
-    expire_date timestamp without time zone NOT NULL,
+    departure_date_time timestamp with time zone NOT NULL,
+    expire_date timestamp with time zone NOT NULL,
     flight_code character varying(255) NOT NULL,
     price real NOT NULL,
     airline_id bigint,
@@ -214,8 +214,8 @@ ALTER SEQUENCE public.flights_id_seq OWNED BY public.flights.id;
 
 CREATE TABLE public.flights_interest (
     id bigint NOT NULL,
-    arrival_date_time timestamp without time zone NOT NULL,
-    departure_date_time timestamp without time zone NOT NULL,
+    arrival_date_time timestamp with time zone NOT NULL,
+    departure_date_time timestamp with time zone NOT NULL,
     arrival_airport_id bigint,
     departure_airport_id bigint,
     user_id bigint
@@ -252,7 +252,7 @@ ALTER SEQUENCE public.flights_interest_id_seq OWNED BY public.flights_interest.i
 CREATE TABLE public.generated_offers (
     id bigint NOT NULL,
     booked boolean,
-    expire_date timestamp without time zone NOT NULL,
+    expire_date timestamp with time zone NOT NULL,
     total_price double precision,
     flight_back_id bigint,
     outbound_flight_id bigint
@@ -323,11 +323,8 @@ ALTER SEQUENCE public.rent_services_id_seq OWNED BY public.rent_services.id;
 
 CREATE TABLE public.users (
     id bigint NOT NULL,
-    address character varying(255) NOT NULL,
     email character varying(255) NOT NULL,
-    name character varying(255) NOT NULL,
     prontogram_token character varying(255) NOT NULL,
-    surname character varying(255) NOT NULL,
     entity_id bigint
 );
 
@@ -361,7 +358,7 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 CREATE TABLE public.users_interests (
     id bigint NOT NULL,
-    expire_date timestamp without time zone,
+    expire_date timestamp with time zone,
     flight_back_interest_id bigint,
     outbound_flight_interest_id bigint,
     user_id bigint
@@ -684,15 +681,6 @@ ALTER TABLE ONLY public.flights_interest
 
 
 
-
-
-
-
-
-
-
-
-
 --
 -- DB data
 --
@@ -700,18 +688,15 @@ ALTER TABLE ONLY public.flights_interest
 INSERT INTO public.domain_entities VALUES (1, 'airline1', 'ROLE_AIRLINE', 'a', 'airline1');
 INSERT INTO public.domain_entities VALUES (2, 'airline2', 'ROLE_AIRLINE', 'b', 'airline2');
 INSERT INTO public.domain_entities VALUES (3, 'bank', 'ROLE_BANK', 'c', 'bank');
-INSERT INTO public.domain_entities VALUES (4, 'soseng', 'ROLE_USER', 'd', 'soseng');
 ALTER SEQUENCE public.domain_entities_id_seq RESTART WITH 5;
 
-INSERT INTO public.airlines VALUES (1, 'localhost:1234', 1);
-INSERT INTO public.airlines VALUES (2, 'localhost:1234', 2);
+INSERT INTO public.airlines VALUES (1, 'http://localhost:8082', 1);
+INSERT INTO public.airlines VALUES (2, 'http://localhost:8083', 2);
 ALTER SEQUENCE public.airlines_id_seq RESTART WITH 3;
 
 INSERT INTO public.banks VALUES (1, 'localhost:1234', 3);
 ALTER SEQUENCE public.banks_id_seq RESTART WITH 4;
 
-INSERT INTO public.users VALUES (1, 'Piazza verdi 14, Bologna', 'soseng@unibo.it', 'Sandro', 'adssfae323dqw', 'Alessi', 4);
-ALTER SEQUENCE public.users_id_seq RESTART WITH 2;
 
 INSERT INTO public.airports VALUES (1, 'Ainsworth', 'ANW', 'US', 42.58, -99.9933, 'Ainsworth Minicipal Arpt', -100);
 INSERT INTO public.airports VALUES (2, 'Antigua', 'ANU', 'AG', 17.13675, -61.792667, 'V C Bird Intl Arpt', -4);

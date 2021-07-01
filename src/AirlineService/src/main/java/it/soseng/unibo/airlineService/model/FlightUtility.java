@@ -45,7 +45,6 @@ public class FlightUtility {
         LocalDateTime now = LocalDateTime.now();
             long period = ChronoUnit.DAYS.between(now, o.getDepartureTime());
             if (period < (long) 10) {
-
                 return true;
             } else {
                 return false;
@@ -103,7 +102,7 @@ public class FlightUtility {
                 o.setDepartureTime(i.get("departure_date_time").textValue());
                 o.setArrivalId(i.get("arrival_airport_id").textValue());
                 o.setArrivalTime(i.get("arrival_date_time").textValue());
-                o.setAirline_id(i.get("airline_id").textValue());
+                o.setAirline_id(i.get("airline_name").textValue());
                 o.setPrice(i.get("price").asDouble());
                 o.setPlace(i.get("place").textValue());
                 o.setExpiryDate();
@@ -121,12 +120,13 @@ public class FlightUtility {
         Flight f = new Flight();
         f.setId(i.getId());
         f.setAirline_id(i.getAirline_id());
-        f.setArrivalId(i.getAirline_id());
+        f.setArrivalId(i.getArrivalId());
         f.setDepartureId(i.getDepartureId());
         f.setDepartureTime(i.getDepartureTime());
         f.setArrivalTime(i.getArrivalTime());
-        f.setPlace(i.getPlace());
+        f.setExpDate(i.getExpiryDate());
         f.setPrice(i.getPrice());
+        f.setSoldFlag(i.getSoldFlag());
 
         return f;
     }
@@ -150,7 +150,7 @@ public class FlightUtility {
         ArrayList<FlightOffer> list = new ArrayList<>();
 
         for(UserRequest req : requests){
-            list.addAll(repo.searchFlightOffers(req.departureCity, req.destinationCity, req.departureDate, req.destinationDate)
+            list.addAll(repo.searchFlightOffers(req.departure, req.arrival, req.departureDate, req.arrivalDate)
             .stream().filter(w -> LastMinuteCheck(w) == false).collect(Collectors.toList()));
         }
         return list;

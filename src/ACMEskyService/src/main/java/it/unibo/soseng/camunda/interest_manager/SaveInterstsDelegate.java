@@ -27,16 +27,16 @@ public class SaveInterstsDelegate implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution){
         LOGGER.info("Execute");
-        InterestsRequest interest = (InterestsRequest) execution.getVariable(USER_INTERESTS_REQUEST);
-        String username = (String) execution.getVariable(USERNAME);
-        try {
-            airlineManager.saveUserInterests(interest, username);
-            execution.setVariable(PROCESS_ERROR, null);
-        } catch (AirportNotFoundException e) {
-            execution.setVariable(PROCESS_ERROR, "airport not found");
-        } catch (UserNotFoundException e) {
-            execution.setVariable(PROCESS_ERROR, "user not found");
-        }
+        // InterestsRequest interest = (InterestsRequest) execution.getVariable(USER_INTERESTS_REQUEST);
+        // String username = (String) execution.getVariable(USERNAME);
+        // try {
+        //     airlineManager.saveUserInterests(interest, username);
+        //     execution.setVariable(PROCESS_ERROR, null);
+        // } catch (AirportNotFoundException e) {
+        //     execution.setVariable(PROCESS_ERROR, "airport not found");
+        // } catch (UserNotFoundException e) {
+        //     execution.setVariable(PROCESS_ERROR, "user not found");
+        // }
     }
   
 }

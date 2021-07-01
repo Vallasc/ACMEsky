@@ -44,7 +44,16 @@ public class FlightInterest implements Serializable {
     private OffsetDateTime arrivalDateTime;
 
 
-	public long getId() {
+	public FlightInterest(Airport departureAirport, Airport arrivalAirport, OffsetDateTime departureDateTime,
+			OffsetDateTime arrivalDateTime) {
+		this.departureAirport = departureAirport;
+		this.arrivalAirport = arrivalAirport;
+		this.departureDateTime = departureDateTime;
+		this.arrivalDateTime = arrivalDateTime;
+	}
+	public FlightInterest() {
+    }
+    public long getId() {
 		return this.id;
 	}
 	public void setId(long id) {

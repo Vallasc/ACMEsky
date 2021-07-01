@@ -42,6 +42,19 @@ public class Airport implements Serializable {
     private float longitude;
 
 
+    public Airport(String code, String name, String cityName, String countryCode, int timezone, float latitude,
+            float longitude) {
+        this.code = code;
+        this.name = name;
+        this.cityName = cityName;
+        this.countryCode = countryCode;
+        this.timezone = timezone;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+    public Airport(){};
+
     public long getId() {
         return id;
     }
