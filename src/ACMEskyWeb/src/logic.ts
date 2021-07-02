@@ -1,16 +1,12 @@
-import { jwtToken, acmeskyHost } from "./stores"
+import { jwtToken } from "./stores"
+import { ACMESKY_HOST }  from "./env"
+import type { Airport, Interest, User } from "./types"
 
 let showToast : any
 
 let token : string | null = null;
 jwtToken.subscribe(value => {
     token = value;
-})
-
-let acmesky : string
-acmeskyHost.subscribe(value => {
-    acmesky = value;
-    console.log(acmesky)
 })
 
 export function init(context : any) {
@@ -24,6 +20,7 @@ export function init(context : any) {
 }
 
 export async function Fetch(path: string, method: string, body: any = null) : Promise<Response> {
+    console.log(path)
     if(token != null) {
         let response = await fetch(path, {
             method: method,
@@ -44,7 +41,7 @@ export async function Fetch(path: string, method: string, body: any = null) : Pr
 
 // Login
 export async function signin(email: string, password: string, remainSignin: boolean) : Promise<boolean> {
-    const response = await fetch(acmesky + "/auth/", 
+    const response = await fetch(ACMESKY_HOST + "/auth/", 
         {
             method: 'POST',
             cache: 'no-cache',
@@ -70,9 +67,8 @@ export async function signin(email: string, password: string, remainSignin: bool
     }
 }
 
-
 export async function signup(email: string, password: string, prontogramUsername: string) : Promise<boolean> {
-    const response = await fetch(acmesky + "/users/", 
+    const response = await fetch(ACMESKY_HOST + "/users/", 
         {
             method: 'POST',
             cache: 'no-cache',
@@ -105,7 +101,7 @@ export function signout() : void {
 
 export async function refreshToken() : Promise<any> {
     console.log("Refreshing token")
-    const response = await Fetch(acmesky + "/auth/refresh", "PUT")
+    const response = await Fetch(ACMESKY_HOST + "/auth/refresh", "PUT")
     if (response.status == 200) {
         let token  : string = (await response.json()).token
         jwtToken.set(token);
@@ -116,16 +112,17 @@ export async function refreshToken() : Promise<any> {
     return null
 }
 
-export async function getUser() : Promise<any> {
-    const response = await Fetch(acmesky + "/users/me", "GET")
+export async function getUser() : Promise<User | null> {
+    const response = await Fetch(ACMESKY_HOST + "/users/me", "GET")
     if (response.status == 200) {
         return await response.json()
     } 
-    return null
+    return Promise.resolve(null)
 }
 
-export async function updateUser(email: string, password: string, newPassword: string, newProntogramUsername: string) : Promise<any> {
-    const response = await Fetch(acmesky + "/users/me", "PUT", {
+export async function updateUser(email: string, password: string, 
+                    newPassword: string, newProntogramUsername: string) : Promise<User | null> {
+    const response = await Fetch(ACMESKY_HOST + "/users/me", "PUT", {
         email: email,
         password: password,
         newPassword: newPassword,
@@ -136,14 +133,14 @@ export async function updateUser(email: string, password: string, newPassword: s
         return await response.json()
     } else if (response.status == 400) {
         showToast("Credenziali errate", true)
-        return null
+        return Promise.resolve(null)
     }
     showToast("Errore interno"+ response.status, true)
-    return null
+    return Promise.resolve(null)
 }
 
 export async function deleteUser(email: string, password: string) : Promise<boolean> {
-    const response = await Fetch(acmesky + "/users/me", "DELETE", {
+    const response = await Fetch(ACMESKY_HOST + "/users/me", "DELETE", {
         email: email,
         password: password,
     })
@@ -159,6 +156,40 @@ export async function deleteUser(email: string, password: string) : Promise<bool
     return false
 }
 
-export async function createInterest() : Promise<any> {
-    //TODO
+export async function fetchAirports(query: string) : Promise<Array<Airport>> {
+    const response = await Fetch(ACMESKY_HOST + "/airports?query="+query, "GET" )
+    if (response.status == 200) {
+        return await response.json()
+    } 
+    return Promise.resolve([])
+}
+
+export async function fetchAirport(code: string) : Promise<Airport | null> {
+    const response = await Fetch(ACMESKY_HOST + "/airports/" + code, "GET" )
+    if (response.status == 200) {
+        return await response.json()
+    } 
+    return Promise.resolve(null)
+}
+
+export async function createInterest(interest : Interest) : Promise<boolean> {
+    console.log(interest)
+    const response = await Fetch(ACMESKY_HOST + "/interests", "POST", interest)
+    if (response.status == 201) {
+        showToast("Interesse creato", true)
+        return true
+    } else if (response.status == 400) {
+        showToast("Errore nella richiesta", true)
+        return false
+    } 
+    showToast("Errore interno", true)
+    return false
+}
+
+export async function fetchInterests() : Promise<Array<Interest>> {
+    const response = await Fetch(ACMESKY_HOST + "/interests/", "GET" )
+    if (response.status == 200) {
+        return await response.json()
+    } 
+    return Promise.resolve([])
 }
