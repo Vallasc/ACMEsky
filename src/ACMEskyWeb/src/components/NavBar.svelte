@@ -33,9 +33,15 @@
   <Collapse {isOpen} navbar expand="md" on:update={handleUpdate}>
     <Nav navbar>
         {#if $jwtToken != null}
-            <NavItem>
-                <NavLink href="/interest" active = {pathname == "/interest"}>Aggiungi interessi</NavLink>
-            </NavItem>
+            <Dropdown nav inNavbar >
+                <div class:link-active = {pathname == "/interest" || pathname == "/show"}>
+                    <DropdownToggle nav caret tag = "a">Interessi</DropdownToggle>
+                </div>
+                <DropdownMenu end>
+                    <DropdownItem href="/interest">Aggiungi</DropdownItem>
+                    <DropdownItem href="/show">Visualizza</DropdownItem>
+                </DropdownMenu>
+            </Dropdown>
             <NavItem>
                 <NavLink href="/offer" active = {pathname == "/offer"}>Acquista offerta</NavLink>
             </NavItem>
@@ -57,3 +63,9 @@
     </Nav>
   </Collapse>
 </Navbar>
+
+<style>
+    .link-active :global(a) {
+        color: #1a1a1a !important;
+    }
+</style>
