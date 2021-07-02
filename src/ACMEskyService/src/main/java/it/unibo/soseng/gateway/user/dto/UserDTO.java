@@ -1,6 +1,10 @@
 package it.unibo.soseng.gateway.user.dto;
 
-public class UserResponse {
+import java.io.Serializable;
+
+public class UserDTO implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private String email;
     private String password;
     private String prontogramUsername;
