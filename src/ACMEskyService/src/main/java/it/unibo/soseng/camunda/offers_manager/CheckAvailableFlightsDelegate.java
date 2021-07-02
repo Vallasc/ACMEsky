@@ -14,6 +14,7 @@ import javax.inject.Named;
 import static it.unibo.soseng.camunda.ProcessVariables.AVAILABLE_FLIGHTS;
 import static it.unibo.soseng.camunda.ProcessVariables.USER_INTEREST;
 import static it.unibo.soseng.camunda.ProcessVariables.USER_INTEREST_INDEX;
+import static it.unibo.soseng.camunda.ProcessVariables.THERE_IS_FHLIGHTS;
 
 @Named("checkAvailableFlightsDelegate")
 public class CheckAvailableFlightsDelegate implements JavaDelegate{
@@ -35,6 +36,7 @@ public class CheckAvailableFlightsDelegate implements JavaDelegate{
         matchedFlight.add (offerManager.matchOffer(ui.getFlightBackInterest()));        
       }
       execution.setVariable(AVAILABLE_FLIGHTS, matchedFlight);
+      execution.setVariable(THERE_IS_FHLIGHTS, true);
     }
 }
 

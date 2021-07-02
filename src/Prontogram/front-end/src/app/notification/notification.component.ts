@@ -62,12 +62,6 @@ export class NotificationComponent implements  OnDestroy,OnInit{
         //Create new Notification
         let notification = message['notification']
         let notify = new Notification ();
-        let flightOutBound = new Flight ();
-        let flightback = new Flight ();
-        let departureAirportOutBound = new Airport ();
-        let arrivalAirportOutBound = new Airport ();
-        let departureAirportFlightBack= new Airport ();
-        let arrivalAirportFlightBack = new Airport ();
         notify.flyBack = notification['data']['flyBack'];
         notify.flyOutBound = notification['data']['flyOutBound']
         notify.offerToken = notification['data']['offerToken'];

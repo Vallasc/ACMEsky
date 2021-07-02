@@ -19,6 +19,8 @@ public final class ProcessVariables {
     public static final String USER_INTEREST_LEN = "userInterestLen";
     public static final String USER_INTEREST_INDEX = "UserInterestsIndex";
     public static final String GENERATED_OFFER = "generatedOffer";
+    public static final String THERE_IS_FHLIGHTS = "thereIsFlights";
 
+    
     
 }
