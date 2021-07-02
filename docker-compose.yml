@@ -42,7 +42,18 @@ services:
         depends_on:
             - postgres
     
-            
+    web:
+        container_name: acmesky_web
+        build: ./src/ACMEskyWeb
+        volumes:
+            - ./src/ACMEskyWeb/nginx.conf:/etc/nginx/nginx.conf
+        ports:
+            - "80:80"
+        networks:
+            - acmesky
+        restart: unless-stopped
+        depends_on:
+            - acmesky
 networks:
     acmesky:
         driver: bridge
