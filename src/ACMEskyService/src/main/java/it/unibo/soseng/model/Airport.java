@@ -82,12 +82,12 @@ public class Airport implements Serializable {
         this.countryCode = countryCode;
     }
 
-    public String getAiportCode() {
+    public String getAirportCode() {
         return code;
     }
 
-    public void setAiportCode(String aiportCode) {
-        this.code = aiportCode;
+    public void setAirportCode(String airportCode) {
+        this.code = airportCode;
     }
 
     public String getName() {

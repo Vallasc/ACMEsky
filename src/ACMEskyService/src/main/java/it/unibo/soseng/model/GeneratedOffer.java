@@ -25,11 +25,11 @@ public class GeneratedOffer implements Serializable {
     private long id;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "outbound_flight_id")
+    @JoinColumn(name = "outbound_flight_id", nullable = false)
     private Flight outboundFlight;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "flight_back_id")
+    @JoinColumn(name = "flight_back_id", nullable = false)
     private Flight flightBack;
 
     @Column(name = "expire_date", nullable = false)
