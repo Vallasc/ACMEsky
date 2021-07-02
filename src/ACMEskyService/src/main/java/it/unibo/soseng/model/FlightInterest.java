@@ -1,7 +1,6 @@
 package it.unibo.soseng.model;
 
 import java.time.OffsetDateTime;
-import java.time.ZonedDateTime;
 import java.io.Serializable;
 
 import javax.persistence.CascadeType;
@@ -39,9 +38,6 @@ public class FlightInterest implements Serializable {
 
 	@Column(name = "departure_date_time", columnDefinition= "TIMESTAMP WITH TIME ZONE", nullable = false)
     private OffsetDateTime departureDateTime;
-
-	@Column(name = "arrival_date_time", columnDefinition= "TIMESTAMP WITH TIME ZONE", nullable = false)
-    private OffsetDateTime arrivalDateTime;
 
 
 	public long getId() {
@@ -83,11 +79,4 @@ public class FlightInterest implements Serializable {
 		this.departureDateTime = departureDateTime;
 	}
     
-	public OffsetDateTime getArrivalDateTime() {
-		return this.arrivalDateTime;
-	}
-
-	public void setArrivalDateTime(OffsetDateTime arrivalDateTime) {
-		this.arrivalDateTime = arrivalDateTime;
-	}
 }
