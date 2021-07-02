@@ -215,7 +215,6 @@ ALTER SEQUENCE public.flights_id_seq OWNED BY public.flights.id;
 
 CREATE TABLE public.flights_interest (
     id bigint NOT NULL,
-    arrival_date_time timestamp without time zone NOT NULL,
     departure_date_time timestamp without time zone NOT NULL,
     arrival_airport_id bigint,
     departure_airport_id bigint,
