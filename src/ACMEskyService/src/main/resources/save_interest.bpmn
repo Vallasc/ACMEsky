@@ -1,41 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_0mv31xq" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.3.0">
-  <bpmn:process id="SaveInterests" name="SaveInterests" isExecutable="true">
-    <bpmn:startEvent id="Event_1htubg8">
-      <bpmn:outgoing>Flow_0zi8585</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_1u6uhyl" messageRef="Message_1lcgagw" />
-    </bpmn:startEvent>
+  <bpmn:message id="Message_10nsl8p" name="Message_0vra1hr" />
+  <bpmn:message id="Message_1lcgagw" name="StartSaveInterests" />
+  <bpmn:collaboration id="Collaboration_0usa57o">
+    <bpmn:participant id="Participant_1kih29k" name="ACMEsky" processRef="Process_0q4l1e2" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_0q4l1e2" isExecutable="false">
+    <bpmn:endEvent id="Event_16vsbj4">
+      <bpmn:incoming>Flow_161rhlp</bpmn:incoming>
+    </bpmn:endEvent>
     <bpmn:serviceTask id="saveFlightsInterest" name="Save flights of interest in DB" camunda:delegateExpression="#{saveInterstsDelegate}">
       <bpmn:incoming>Flow_0zi8585</bpmn:incoming>
       <bpmn:outgoing>Flow_161rhlp</bpmn:outgoing>
       <bpmn:property id="Property_0b0njp1" name="__targetRef_placeholder" />
     </bpmn:serviceTask>
-    <bpmn:endEvent id="Event_16vsbj4">
-      <bpmn:incoming>Flow_161rhlp</bpmn:incoming>
-    </bpmn:endEvent>
+    <bpmn:startEvent id="Event_1htubg8">
+      <bpmn:outgoing>Flow_0zi8585</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1u6uhyl" messageRef="Message_1lcgagw" />
+    </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_0zi8585" sourceRef="Event_1htubg8" targetRef="saveFlightsInterest" />
     <bpmn:sequenceFlow id="Flow_161rhlp" sourceRef="saveFlightsInterest" targetRef="Event_16vsbj4" />
   </bpmn:process>
-  <bpmn:message id="Message_10nsl8p" name="Message_0vra1hr" />
-  <bpmn:message id="Message_1lcgagw" name="StartSaveInterests" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="SaveInterests">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0usa57o">
+      <bpmndi:BPMNShape id="Participant_1kih29k_di" bpmnElement="Participant_1kih29k" isHorizontal="true">
+        <dc:Bounds x="160" y="40" width="460" height="160" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_161rhlp_di" bpmnElement="Flow_161rhlp">
-        <di:waypoint x="360" y="120" />
-        <di:waypoint x="442" y="120" />
+        <di:waypoint x="450" y="120" />
+        <di:waypoint x="532" y="120" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0zi8585_di" bpmnElement="Flow_0zi8585">
-        <di:waypoint x="188" y="120" />
-        <di:waypoint x="260" y="120" />
+        <di:waypoint x="278" y="120" />
+        <di:waypoint x="350" y="120" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Event_1htubg8_di" bpmnElement="Event_1htubg8">
-        <dc:Bounds x="152" y="102" width="36" height="36" />
+        <dc:Bounds x="242" y="102" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_151873z_di" bpmnElement="saveFlightsInterest">
-        <dc:Bounds x="260" y="80" width="100" height="80" />
+        <dc:Bounds x="350" y="80" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_16vsbj4_di" bpmnElement="Event_16vsbj4">
-        <dc:Bounds x="442" y="102" width="36" height="36" />
+        <dc:Bounds x="532" y="102" width="36" height="36" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
