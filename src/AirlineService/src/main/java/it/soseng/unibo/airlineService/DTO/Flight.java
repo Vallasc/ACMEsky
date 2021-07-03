@@ -12,7 +12,11 @@ public class Flight {
     
     private Long id;
 
-    private String departureId;
+    private String departureId; //Departure Airport code
+
+    private String arrivalId;
+
+    private String airline_id; // Airline name
 
     private OffsetDateTime  departureTime;
 
@@ -20,13 +24,9 @@ public class Flight {
 
     private OffsetDateTime expDate;
 
-    private String arrivalId;
-
-    private String airline_id;
-
     private double price;
 
-    private boolean soldFlag;
+    //private boolean soldFlag;
 
 
 
