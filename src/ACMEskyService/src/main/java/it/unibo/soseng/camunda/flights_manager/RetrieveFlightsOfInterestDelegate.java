@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.inject.Named;
 import static it.unibo.soseng.camunda.ProcessVariables.INTEREST_FLIGHTS_LIST;
+import static it.unibo.soseng.camunda.ProcessVariables.AIRLINE_SERVICES;
 
 
 @Named("retrieveFlightsOfInterestDelegate")

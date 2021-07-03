@@ -10,7 +10,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -63,7 +62,7 @@ public class FlightOfferController {
      * @throws JsonProcessingException
      * @throws IOException
      */
-    @Scheduled(fixedRate = 6000)
+    @Scheduled(fixedRate = 60000)
     @PostMapping("/createOffer")
     private void autoCreateOffer() throws JsonProcessingException, IOException {
         s.createFlightOffer(FILE,ACMEskyRoute, user, pass);

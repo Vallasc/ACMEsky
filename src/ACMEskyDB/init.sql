@@ -174,10 +174,10 @@ ALTER SEQUENCE public.domain_entities_id_seq OWNED BY public.domain_entities.id;
 
 CREATE TABLE public.flights (
     id bigint NOT NULL,
-    arrival_date_time timestamp without time zone NOT NULL,
+    arrival_date_time timestamp with time zone NOT NULL,
     booked boolean NOT NULL,
-    departure_date_time timestamp without time zone NOT NULL,
-    expire_date timestamp without time zone NOT NULL,
+    departure_date_time timestamp with time zone NOT NULL,
+    expire_date timestamp with time zone NOT NULL,
     flight_code character varying(255) NOT NULL,
     price real NOT NULL,
     airline_id bigint,
@@ -215,8 +215,8 @@ ALTER SEQUENCE public.flights_id_seq OWNED BY public.flights.id;
 
 CREATE TABLE public.flights_interest (
     id bigint NOT NULL,
-    arrival_date_time timestamp without time zone NOT NULL,
-    departure_date_time timestamp without time zone NOT NULL,
+    arrival_date_time timestamp with time zone NOT NULL,
+    departure_date_time timestamp with time zone NOT NULL,
     arrival_airport_id bigint,
     departure_airport_id bigint,
     user_id bigint
@@ -253,7 +253,7 @@ ALTER SEQUENCE public.flights_interest_id_seq OWNED BY public.flights_interest.i
 CREATE TABLE public.generated_offers (
     id bigint NOT NULL,
     booked boolean,
-    expire_date timestamp without time zone NOT NULL,
+    expire_date timestamp with time zone NOT NULL,
     total_price double precision,
     flight_back_id bigint,
     outbound_flight_id bigint
@@ -359,7 +359,7 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 CREATE TABLE public.users_interests (
     id bigint NOT NULL,
-    expire_date timestamp without time zone,
+    expire_date timestamp with time zone,
     flight_back_interest_id bigint,
     outbound_flight_interest_id bigint,
     user_id bigint
@@ -682,15 +682,6 @@ ALTER TABLE ONLY public.flights_interest
 
 
 
-
-
-
-
-
-
-
-
-
 --
 -- DB data
 --
@@ -700,8 +691,8 @@ INSERT INTO public.domain_entities VALUES (2, 'airline2', 'ROLE_AIRLINE', 'b', '
 INSERT INTO public.domain_entities VALUES (3, 'bank', 'ROLE_BANK', 'c', 'bank');
 ALTER SEQUENCE public.domain_entities_id_seq RESTART WITH 5;
 
-INSERT INTO public.airlines VALUES (1, 'localhost:1234', 1);
-INSERT INTO public.airlines VALUES (2, 'localhost:1234', 2);
+INSERT INTO public.airlines VALUES (1, 'http://national-airline:8082', 1);
+INSERT INTO public.airlines VALUES (2, 'http://international-airline:8082', 2);
 ALTER SEQUENCE public.airlines_id_seq RESTART WITH 3;
 
 INSERT INTO public.banks VALUES (1, 'localhost:1234', 3);

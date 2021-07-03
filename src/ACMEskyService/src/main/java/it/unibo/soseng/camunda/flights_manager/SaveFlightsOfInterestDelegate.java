@@ -24,7 +24,7 @@ public class SaveFlightsOfInterestDelegate implements JavaDelegate{
     @Override
     public void execute(DelegateExecution execution){
       LOGGER.info ("saveFlightsOfInterestDelegate in esecuzione");
-      manager.insertFlightOffer((List<Flight>) execution.getVariable(FLIGHTS_TO_SAVE));
+      // manager.insertFlightOffer((List<Flight>) execution.getVariable(FLIGHTS_TO_SAVE));
       
     }
 }

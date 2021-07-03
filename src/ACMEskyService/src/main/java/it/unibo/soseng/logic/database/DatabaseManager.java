@@ -1,5 +1,6 @@
 package it.unibo.soseng.logic.database;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -14,6 +15,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
 
+import it.unibo.soseng.model.Airline;
 import it.unibo.soseng.model.Airport;
 import it.unibo.soseng.model.DomainEntity;
 import it.unibo.soseng.model.Flight;
@@ -80,10 +82,9 @@ public class DatabaseManager {
 
     public void insertFlightOffer(List<Flight> list){
 
-        Iterator<Flight> i = list.iterator();
 
-        while(i.hasNext()){
-            entityManager.persist(i.next());
+        for(Flight f: list){
+            entityManager.persist(f);
         }
 
     }
@@ -96,16 +97,16 @@ public class DatabaseManager {
         return flights;
     }
 
+    public List<Airline> getAirlinesList(){
+
+        @SuppressWarnings("unchecked")
+        List<Airline> airlines = entityManager
+                    .createQuery("SELECT airline FROM Airline airline ")
+                    .getResultList();
+            return airlines;
+
+    }
     
-    
-    // public List<FlightInterest> retrieveFlightInterests() {
-    //     @SuppressWarnings("unchecked")
-    //     List<FlightInterest> interests = entityManager
-    //             .createQuery("SELECT flight.departure_airport_id, flight.departure arrival_airport_id,"
-    //                     + "flight.departure_date_time, flight.arrival_date_time " + "FROM flights_interest flight")
-    //             .getResultList();
-    //     return interests;
-    // }
 
     // public List<Flight> availableFlights(Long id) {
     //     @SuppressWarnings("unchecked")
@@ -149,7 +150,7 @@ public class DatabaseManager {
     }
 
     public Airport getAirport(String code) throws AirportNotFoundException {
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings("unchecked") 
         List<Airport> result = (List<Airport>) entityManager
                 .createQuery("SELECT a FROM Airport a WHERE a.code = :code")
                 .setParameter("code", code).getResultList();
@@ -159,6 +160,16 @@ public class DatabaseManager {
         throw new AirportNotFoundException();
     }
 
+    public Airline getAirline(String airlineId) throws AirlineNotFoundException {
+        @SuppressWarnings("unchecked")
+        List<Airline> result = (List<Airline>) entityManager
+                .createQuery("SELECT a FROM Airline a, DomainEntity e WHERE e.username = :airlineId AND a.entity = e.id")
+                .setParameter("airlineId", airlineId).getResultList();
+        if (result.size() == 1) {
+            return result.get(0);
+        }
+        throw new AirlineNotFoundException();
+    }
     
 
     public void saveUserInterest(UserInterest interest) {
@@ -177,6 +188,10 @@ public class DatabaseManager {
     }
 
     public class AirportNotFoundException extends Exception {
+        private static final long serialVersionUID = 1L;
+    }
+
+    public class AirlineNotFoundException extends Exception {
         private static final long serialVersionUID = 1L;
     }
 

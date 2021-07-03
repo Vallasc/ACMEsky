@@ -1,6 +1,7 @@
 package it.unibo.soseng.model;
 
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 
 import javax.persistence.CascadeType;
@@ -32,8 +33,8 @@ public class GeneratedOffer implements Serializable {
     @JoinColumn(name = "flight_back_id")
     private Flight flightBack;
 
-    @Column(name = "expire_date", nullable = false)
-    private ZonedDateTime expireDate;
+    @Column(name = "expire_date", columnDefinition= "TIMESTAMP WITH TIME ZONE", nullable = false)
+    private OffsetDateTime expireDate;
 
     @Column(name = "total_price", nullable = true)
     private double totalPrice;
@@ -66,11 +67,11 @@ public class GeneratedOffer implements Serializable {
         this.flightBack = flightBack;
     }
 
-    public ZonedDateTime getExpireDate() {
+    public OffsetDateTime getExpireDate() {
         return this.expireDate;
     }
 
-    public void setExpireDate(ZonedDateTime expireDate) {
+    public void setExpireDate(OffsetDateTime expireDate) {
         this.expireDate = expireDate;
     }
 
