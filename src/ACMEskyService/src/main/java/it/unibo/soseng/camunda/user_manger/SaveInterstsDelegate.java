@@ -1,4 +1,4 @@
-package it.unibo.soseng.camunda.interest_manager;
+package it.unibo.soseng.camunda.user_manger;
 
 import java.util.logging.Logger;
 
@@ -11,11 +11,12 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 
 import it.unibo.soseng.logic.interest.InterestManager;
 import it.unibo.soseng.camunda.ProcessState;
-import it.unibo.soseng.camunda.ProcessState.AsyncResponseDTO;
 import it.unibo.soseng.gateway.user.dto.UserInterestDTO;
 
 import static it.unibo.soseng.camunda.ProcessVariables.USER_INTERESTS_REQUEST;
 import static it.unibo.soseng.camunda.ProcessVariables.USERNAME;
+import static it.unibo.soseng.camunda.ProcessVariables.PROCESS_SAVE_INTERST;
+import static it.unibo.soseng.camunda.ProcessVariables.RESPONSE;
 
 @Named("saveInterstsDelegate")
 public class SaveInterstsDelegate implements JavaDelegate {
@@ -30,12 +31,11 @@ public class SaveInterstsDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution){
-        LOGGER.info("Execute save interest");
-        UserInterestDTO interest = (UserInterestDTO) execution.getVariable(USER_INTERESTS_REQUEST);
+        LOGGER.info("Execute SaveIntersts");
+        UserInterestDTO interestRequest = (UserInterestDTO) execution.getVariable(USER_INTERESTS_REQUEST);
         String email = (String) execution.getVariable(USERNAME);
-        AsyncResponseDTO asyncResponse = processState.getResponse(email);
-        Response response = interestManager.handleUserInterests(asyncResponse, email, interest);
-        asyncResponse.getResponse().resume(response);
+        Response response = interestManager.handleUserInterests(email, interestRequest);
+        processState.setState(PROCESS_SAVE_INTERST, email, RESPONSE, response);
     }
   
 }
