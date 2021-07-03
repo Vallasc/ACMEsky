@@ -20,7 +20,6 @@ import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.runtime.ProcessInstanceWithVariables;
 
 import it.unibo.soseng.camunda.ProcessState;
-import it.unibo.soseng.camunda.ProcessState.AsyncResponseDTO;
 import it.unibo.soseng.gateway.user.dto.AirportDTO;
 import it.unibo.soseng.gateway.user.dto.UserInterestDTO;
 import it.unibo.soseng.logic.database.DatabaseManager;
@@ -38,6 +37,9 @@ import static it.unibo.soseng.camunda.StartEvents.SAVE_INTERESTS;
 import static it.unibo.soseng.camunda.ProcessVariables.USER_INTERESTS_REQUEST;
 import static it.unibo.soseng.camunda.ProcessVariables.USERNAME;
 import static it.unibo.soseng.camunda.ProcessVariables.PROCESS_ERROR;
+import static it.unibo.soseng.camunda.ProcessVariables.URI_INFO;
+import static it.unibo.soseng.camunda.ProcessVariables.ASYNC_RESPONSE;
+import static it.unibo.soseng.camunda.ProcessVariables.PROCESS_SAVE_INTERST;
 
 @Stateless
 public class InterestManager {
@@ -64,7 +66,8 @@ public class InterestManager {
         Map<String,Object> processVariables = new HashMap<String,Object>();
         processVariables.put(USER_INTERESTS_REQUEST, request);
         processVariables.put(USERNAME, email);
-        processState.setResponse(email, response, uriInfo);
+        processState.setState(PROCESS_SAVE_INTERST, email, URI_INFO, uriInfo);
+        processState.setState(PROCESS_SAVE_INTERST, email, ASYNC_RESPONSE, response);
   
         // Start the process instance
         ProcessInstanceWithVariables instance = runtimeService.createProcessInstanceByKey(SAVE_INTERESTS)
@@ -76,7 +79,7 @@ public class InterestManager {
             throw new BadRequestException();
     }   
 
-    public Response handleUserInterests(AsyncResponseDTO response, String username, UserInterestDTO interest){
+    public Response handleUserInterests(String username, UserInterestDTO interest){
         // Control date time
         OffsetDateTime now = OffsetDateTime.now();
         OffsetDateTime outboundDateTime = interest.getOutboundFlight().getDepartureOffsetDateTime();
@@ -111,7 +114,8 @@ public class InterestManager {
         }
         try {
             UserInterest userInterest = this.saveUserInterests(username, interest);
-            UriInfo uriInfo = (UriInfo) response.getCompanion();
+
+            UriInfo uriInfo = (UriInfo) processState.getState(PROCESS_SAVE_INTERST, username, URI_INFO);
             return Response.status(Response.Status.CREATED.getStatusCode())
                     .header("Location", String.format("%s/%s", uriInfo.getAbsolutePath().toString(), userInterest.getId()))
                     .build();
