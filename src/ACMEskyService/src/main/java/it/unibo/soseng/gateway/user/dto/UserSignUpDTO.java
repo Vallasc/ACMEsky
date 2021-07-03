@@ -1,9 +1,13 @@
 package it.unibo.soseng.gateway.user.dto;
 
+import java.io.Serializable;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
-public class UserSignUpRequest {
+public class UserSignUpDTO implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     @Email(message = "Email should be valid")
     private String email;
 

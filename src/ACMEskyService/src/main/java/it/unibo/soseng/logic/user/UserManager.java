@@ -5,10 +5,10 @@ import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 import javax.security.enterprise.SecurityContext;
 
-import it.unibo.soseng.gateway.user.dto.UserDeleteRequest;
-import it.unibo.soseng.gateway.user.dto.UserResponse;
-import it.unibo.soseng.gateway.user.dto.UserSignUpRequest;
-import it.unibo.soseng.gateway.user.dto.UserUpdateRequest;
+import it.unibo.soseng.gateway.user.dto.UserDeleteDTO;
+import it.unibo.soseng.gateway.user.dto.UserDTO;
+import it.unibo.soseng.gateway.user.dto.UserSignUpDTO;
+import it.unibo.soseng.gateway.user.dto.UserUpdateDTO;
 import it.unibo.soseng.logic.database.DatabaseManager;
 import it.unibo.soseng.logic.database.DatabaseManager.UserAlreadyInException;
 import it.unibo.soseng.logic.database.DatabaseManager.UserNotFoundException;
@@ -28,7 +28,7 @@ public class UserManager {
     @Inject
     private SecurityContext securityContext;
 
-    public void createUser(UserSignUpRequest request) throws UserAlreadyInException {
+    public void createUser(UserSignUpDTO request) throws UserAlreadyInException {
         User user = new User();
         user.setProntogramUsername(request.getProntogramUsername());
         user.setEmail(request.getEmail());
@@ -36,16 +36,16 @@ public class UserManager {
         entity.setUsername(request.getEmail());
         entity.setPassword(request.getPassword());
         entity.setRole(USER);
-        entity.setSalt("aaaa");
+        entity.setSalt("aaaa"); //TODO
         user.setEntity(entity);
         
         databaseManager.createUser(user);
     }
 
-    public UserResponse getUser() throws UserNotFoundException{
+    public UserDTO getUser() throws UserNotFoundException{
         String email = securityContext.getCallerPrincipal().getName();
         User user = databaseManager.getUser(email);
-        UserResponse response = new UserResponse();
+        UserDTO response = new UserDTO();
         response.setEmail(user.getEmail());
         response.setPassword(user.getEntity().getPassword());
         response.setProntogramUsername(user.getProntogramUsername());
@@ -53,7 +53,7 @@ public class UserManager {
 
     }
     
-    public UserResponse updateUser(UserUpdateRequest request) throws InvalidCredentialsException, UserNotFoundException {
+    public UserDTO updateUser(UserUpdateDTO request) throws InvalidCredentialsException, UserNotFoundException {
         String name = securityContext.getCallerPrincipal().getName();
         if(!name.equals(request.getEmail()))
             throw new InvalidCredentialsException();
@@ -68,14 +68,14 @@ public class UserManager {
             user.setProntogramUsername(request.getNewProntogramUsername());
         
         databaseManager.updateUser(user);
-        UserResponse response = new UserResponse();
+        UserDTO response = new UserDTO();
         response.setEmail(user.getEmail());
         response.setPassword(user.getEntity().getPassword());
         response.setProntogramUsername(user.getProntogramUsername());
         return response;
     }
 
-    public void deleteUser(UserDeleteRequest request) throws InvalidCredentialsException, 
+    public void deleteUser(UserDeleteDTO request) throws InvalidCredentialsException, 
                                                                 PersistenceException, UserNotFoundException {
         String name = securityContext.getCallerPrincipal().getName();
         if(!name.equals(request.getEmail()))

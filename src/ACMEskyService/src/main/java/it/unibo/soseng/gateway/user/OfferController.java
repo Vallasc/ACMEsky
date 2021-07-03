@@ -17,14 +17,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import it.unibo.soseng.gateway.user.dto.InterestsRequest;
-import it.unibo.soseng.gateway.user.dto.UserResponse;
-import it.unibo.soseng.gateway.user.dto.UserSignUpRequest;
+import it.unibo.soseng.gateway.user.dto.UserDTO;
+import it.unibo.soseng.gateway.user.dto.UserSignUpDTO;
 import it.unibo.soseng.logic.airline.AirlineManager;
-import it.unibo.soseng.logic.airline.AirlineManager.BadRequestException;
-import it.unibo.soseng.logic.airline.AirlineManager.UserNotAllowedException;
 import it.unibo.soseng.logic.database.DatabaseManager.UserAlreadyInException;
 import it.unibo.soseng.logic.database.DatabaseManager.UserNotFoundException;
+import it.unibo.soseng.gateway.user.dto.UserInterestDTO;
 import it.unibo.soseng.logic.user.UserManager;
 import it.unibo.soseng.model.User;
 
@@ -33,9 +31,9 @@ import static it.unibo.soseng.security.Constants.USER;
 @Path("offers")
 public class OfferController {
     
-    private final static Logger LOGGER = Logger.getLogger(UserController.class.getName());
+    private final static Logger LOGGER = Logger.getLogger(OfferController.class.getName());
 
-    @Inject
+    /*@Inject
     private UserManager userManager;
 
     @Inject
@@ -103,5 +101,5 @@ public class OfferController {
         return Response.status(Response.Status.CREATED.getStatusCode())
                         .header("Location", String.format("%s/%s", uriInfo.getAbsolutePath().toString(), request.getEmail()))
                         .build();
-    }
+    }*/
 }

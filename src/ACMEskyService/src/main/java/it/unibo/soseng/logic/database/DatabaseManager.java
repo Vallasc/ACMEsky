@@ -34,7 +34,7 @@ public class DatabaseManager {
 
 
     /*
-    *  USER
+    *  User
     */
     public User getUser(String email) throws UserNotFoundException {
         @SuppressWarnings("unchecked")
@@ -68,9 +68,8 @@ public class DatabaseManager {
     }
 
 
-
     /*
-    *  AIRLINE
+    *  Airline
     */
     public List<FlightInterest> retrieveFlightInterests(){
         @SuppressWarnings("unchecked")
@@ -107,6 +106,16 @@ public class DatabaseManager {
 
     }
     
+    public Airline getAirline(String airlineId) throws AirlineNotFoundException {
+        @SuppressWarnings("unchecked")
+        List<Airline> result = (List<Airline>) entityManager
+                .createQuery("SELECT a FROM Airline a, DomainEntity e WHERE e.username = :airlineId AND a.entity = e.id")
+                .setParameter("airlineId", airlineId).getResultList();
+        if (result.size() == 1) {
+            return result.get(0);
+        }
+        throw new AirlineNotFoundException();
+    }
 
     // public List<Flight> availableFlights(Long id) {
     //     @SuppressWarnings("unchecked")
@@ -149,32 +158,63 @@ public class DatabaseManager {
         }
     }
 
+    // Airport
     public Airport getAirport(String code) throws AirportNotFoundException {
         @SuppressWarnings("unchecked") 
         List<Airport> result = (List<Airport>) entityManager
                 .createQuery("SELECT a FROM Airport a WHERE a.code = :code")
                 .setParameter("code", code).getResultList();
-        if (result.size() == 1) {
+        if (result.size() > 0) {
             return result.get(0);
         }
         throw new AirportNotFoundException();
     }
-
-    public Airline getAirline(String airlineId) throws AirlineNotFoundException {
-        @SuppressWarnings("unchecked")
-        List<Airline> result = (List<Airline>) entityManager
-                .createQuery("SELECT a FROM Airline a, DomainEntity e WHERE e.username = :airlineId AND a.entity = e.id")
-                .setParameter("airlineId", airlineId).getResultList();
-        if (result.size() == 1) {
-            return result.get(0);
-        }
-        throw new AirlineNotFoundException();
-    }
     
+    public List<Airport> getAirportsFromQuery(String query) {
+        @SuppressWarnings("unchecked")
+        List<Airport> result = (List<Airport>) entityManager
+                .createQuery("SELECT a FROM Airport a WHERE "+
+                                "LOWER( a.code ) LIKE LOWER( :query ) OR " +
+                                "LOWER( a.name ) LIKE LOWER( :query ) OR " +
+                                "LOWER( a.cityName ) LIKE LOWER( :query ) " +
+                                "ORDER BY LENGTH(a.cityName) ASC, LENGTH(a.name) ASC, LENGTH(a.code) ASC ")
+                .setParameter("query", "%" + query + "%")
+                .setMaxResults(4)
+                .getResultList();
+        return result;
+    }
 
+
+    /*
+     * Interest
+     */
     public void saveUserInterest(UserInterest interest) {
         this.entityManager.persist(interest);
     }
+
+    public List<UserInterest> getUserInterests(String username) {
+        @SuppressWarnings("unchecked")
+        List<UserInterest> result = (List<UserInterest>) entityManager
+            .createQuery("SELECT ui FROM UserInterest ui, User u, DomainEntity d " +
+                            "WHERE d.username = :username AND u.entity = d.id AND ui.user = u.id " +
+                            "ORDER BY ui.id DESC")
+            .setParameter("username", username).getResultList();
+        return result;
+    }
+
+    public UserInterest getUserInterest(String username, String interestId) {
+        @SuppressWarnings("unchecked")
+        List<UserInterest> result = (List<UserInterest>) entityManager
+            .createQuery("SELECT ui FROM UserInterest ui, User u, DomainEntity d " +
+                            "WHERE d.username = :username AND u.entity = d.id AND " + 
+                            "ui.user = u.id AND ui.id = :interestId")
+            .setParameter("username", username)
+            .setParameter("interestId", Long.parseLong(interestId)).getResultList();
+            if (result.get(0) != null)
+                return result.get(0);
+            return null;
+    }
+
 
     public class EntityNotFoundException extends Exception {
         private static final long serialVersionUID = 1L;
