@@ -39,16 +39,9 @@ public class FlightInterest implements Serializable {
 	@Column(name = "departure_date_time", columnDefinition= "TIMESTAMP WITH TIME ZONE", nullable = false)
     private OffsetDateTime departureDateTime;
 
-
-	public FlightInterest(Airport departureAirport, Airport arrivalAirport, OffsetDateTime departureDateTime,
-			OffsetDateTime arrivalDateTime) {
-		this.departureAirport = departureAirport;
-		this.arrivalAirport = arrivalAirport;
-		this.departureDateTime = departureDateTime;
-		this.arrivalDateTime = arrivalDateTime;
-	}
 	public FlightInterest() {
     }
+	
     public long getId() {
 		return this.id;
 	}
