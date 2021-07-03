@@ -27,6 +27,6 @@ public class SaveFlightsDelegate implements JavaDelegate {
     public void execute(DelegateExecution execution){
       LOGGER.info ("saveFlightsDelegate in esecuzione");
       // @SuppressWarnings (value="unchecked")
-      manager.insertFlightOffer((List<Flight>) execution.getVariable("FLIGHTS_TO_SAVE"));
+      manager.insertFlightOffer((List<Flight>) execution.getVariable(FLIGHTS_TO_SAVE));
     }
 }

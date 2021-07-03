@@ -16,6 +16,8 @@ import it.unibo.soseng.model.FlightInterest;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
+import static it.unibo.soseng.camunda.ProcessVariables.AIRLINE_SERVICES;
+import static it.unibo.soseng.camunda.ProcessVariables.AIRLINE_SERVICES_INDEX;
 import static it.unibo.soseng.camunda.ProcessVariables.INTEREST_FLIGHTS_LIST;
 import static it.unibo.soseng.camunda.ProcessVariables.FLIGHTS_TO_SAVE;
 
@@ -35,15 +37,15 @@ public class SearchFlightsDelegate implements JavaDelegate{
     @Override
     public void execute(DelegateExecution execution) throws IOException, InterruptedException, AirportNotFoundException, AirlineNotFoundException{
       LOGGER.info ("searchFlightsDelegate in esecuzione");
-      List<AirlineDTO> airlines = manager.convertToAirlineDTO((List<Airline>) execution.getVariable("AIRLINE_SERVICES"));
-      AirlineDTO a = airlines.get((int) execution.getVariable("AIRLINE_SERVICES_INDEX"));
+      List<AirlineDTO> airlines = manager.convertToAirlineDTO((List<Airline>) execution.getVariable(AIRLINE_SERVICES));
+      AirlineDTO a = airlines.get((int) execution.getVariable(AIRLINE_SERVICES_INDEX));
 
-      List<InterestDTO> listDTO = manager.convertIntToIntDTO((List<FlightInterest>) execution.getVariable("INTEREST_FLIGHTS_LIST"));
+      List<InterestDTO> listDTO = manager.convertIntToIntDTO((List<FlightInterest>) execution.getVariable(INTEREST_FLIGHTS_LIST));
       List<Flight> listToSave = manager.retrieveFlightsList(listDTO, a.getWs_address());
-      int index = (int) execution.getVariable("AIRLINE_SERVICES_INDEX") + 1;
-      execution.setVariable("AIRLINE_SERVICES_INDEX", index);
+      int index = (int) execution.getVariable(AIRLINE_SERVICES_INDEX) + 1;
+      execution.setVariable(AIRLINE_SERVICES_INDEX, index);
       
-      execution.setVariable("FLIGHTS_TO_SAVE", listToSave);
+      execution.setVariable(FLIGHTS_TO_SAVE, listToSave);
       
 
     }

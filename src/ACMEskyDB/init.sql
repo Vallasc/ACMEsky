@@ -690,8 +690,8 @@ INSERT INTO public.domain_entities VALUES (2, 'airline2', 'ROLE_AIRLINE', 'b', '
 INSERT INTO public.domain_entities VALUES (3, 'bank', 'ROLE_BANK', 'c', 'bank');
 ALTER SEQUENCE public.domain_entities_id_seq RESTART WITH 5;
 
-INSERT INTO public.airlines VALUES (1, 'http://localhost:8082', 1);
-INSERT INTO public.airlines VALUES (2, 'http://localhost:8083', 2);
+INSERT INTO public.airlines VALUES (1, 'http://national-airline:8082', 1);
+INSERT INTO public.airlines VALUES (2, 'http://international-airline:8082', 2);
 ALTER SEQUENCE public.airlines_id_seq RESTART WITH 3;
 
 INSERT INTO public.banks VALUES (1, 'localhost:1234', 3);

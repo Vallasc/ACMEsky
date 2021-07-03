@@ -1,6 +1,6 @@
 version: "3"
 services:
-    national:
+    national-airline:
         container_name: national-service
         build: "."
         # lista delle variabili di environment
@@ -11,8 +11,10 @@ services:
              # espongo le porte (come -p su docker)
         ports:
             - 8082:8082
+        networks:
+            - acmesky
     # uguale per tutti gli altri servizi
-    international:
+    international-airline:
         container_name: international-service
         build: "."
         env_file: ./AirlineCredentialsEnvFiles/CredentialsAirline2.env
@@ -23,6 +25,8 @@ services:
             - ./fileSampleOffers/InternationalFlights.json:/list/list.json
         ports:
             - 8083:8082
+        networks: 
+            - acmesky
 
 networks:
     acmesky:

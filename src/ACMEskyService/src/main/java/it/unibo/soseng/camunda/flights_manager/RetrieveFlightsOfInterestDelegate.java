@@ -24,6 +24,6 @@ public class RetrieveFlightsOfInterestDelegate implements JavaDelegate{
     public void execute(DelegateExecution execution){
 
         LOGGER.info ("retrieveFlightsOfInterestDelegate in esecuzione");
-        execution.setVariable("INTEREST_FLIGHTS_LIST", dbManager.retrieveFlightInterests());
+        execution.setVariable(INTEREST_FLIGHTS_LIST, dbManager.retrieveFlightInterests());
     }
 }

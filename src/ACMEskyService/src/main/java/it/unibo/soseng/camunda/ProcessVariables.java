@@ -6,8 +6,7 @@ public final class ProcessVariables {
     public static final String AIRLINE_NAME = "airlineName";
     public static final String INTEREST_FLIGHTS_LIST = "InterestflightsList";
     public static final String FLIGHTS_TO_SAVE = "FlightOfferToSave";
-    public static final String AIRLINE_SERVICES_NUM = "airlineservicesnum";
-    public static final String AIRLINE_SERVICES_INDEX = "airlineServiceIndex";
+    public static final String AIRLINE_SERVICES_INDEX = "airlineService";
     public static final String AIRLINE_SERVICES = "airlineServices";
 
 

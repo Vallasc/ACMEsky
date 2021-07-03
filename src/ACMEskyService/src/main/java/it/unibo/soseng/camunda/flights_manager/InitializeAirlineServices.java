@@ -1,6 +1,4 @@
 package it.unibo.soseng.camunda.flights_manager;
-
-import static it.unibo.soseng.camunda.ProcessVariables.AIRLINE_SERVICES_NUM;
 import static it.unibo.soseng.camunda.ProcessVariables.AIRLINE_SERVICES;
 import static it.unibo.soseng.camunda.ProcessVariables.AIRLINE_SERVICES_INDEX;
 
@@ -32,9 +30,9 @@ public class InitializeAirlineServices implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         List<Airline> airlines = dbManager.getAirlinesList();
-        execution.setVariable("AIRLINE_SERVICES_NUM", airlines.size());
-        execution.setVariable("AIRLINE_SERVICES_INDEX", 0);
-        execution.setVariable("AIRLINE_SERVICES", airlines);
+        execution.setVariable(AIRLINE_SERVICES_INDEX, 0);
+        execution.setVariable(AIRLINE_SERVICES, airlines);
+
     }
     
 }
