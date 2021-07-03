@@ -29,7 +29,7 @@ import it.unibo.soseng.model.FlightInterest;
 
 
 @Path("airline")
-public class AirlineAPI {
+public class AirlineClient {
 
     @Inject
     private DatabaseManager dbManager;
