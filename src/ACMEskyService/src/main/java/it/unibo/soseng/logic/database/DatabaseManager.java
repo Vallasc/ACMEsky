@@ -80,12 +80,9 @@ public class DatabaseManager {
     }
 
     public void insertFlightOffer(List<Flight> list){
-
-
         for(Flight f: list){
             entityManager.persist(f);
         }
-
     }
 
     public List<Flight> retrieveFlights(){
