@@ -7,13 +7,11 @@ import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.Context;
@@ -21,12 +19,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import it.unibo.soseng.gateway.user.dto.AirportDTO;
 import it.unibo.soseng.gateway.user.dto.UserInterestDTO;
 import it.unibo.soseng.logic.interest.InterestManager;
 import it.unibo.soseng.logic.interest.InterestManager.BadRequestException;
-import it.unibo.soseng.model.Airport;
-import it.unibo.soseng.model.UserInterest;
 
 import static it.unibo.soseng.security.Constants.USER;
 

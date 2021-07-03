@@ -23,7 +23,6 @@ import it.unibo.soseng.gateway.user.dto.UserDeleteDTO;
 import it.unibo.soseng.gateway.user.dto.UserDTO;
 import it.unibo.soseng.gateway.user.dto.UserSignUpDTO;
 import it.unibo.soseng.gateway.user.dto.UserUpdateDTO;
-import it.unibo.soseng.logic.airline.AirlineManager;
 import it.unibo.soseng.logic.database.DatabaseManager.UserAlreadyInException;
 import it.unibo.soseng.logic.database.DatabaseManager.UserNotFoundException;
 import it.unibo.soseng.logic.user.UserManager;
