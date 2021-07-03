@@ -21,17 +21,17 @@ public class ProcessState {
     }
 
     @Lock(LockType.READ)
-    public void setState(String state, String username, String key, Object companion){
-        processStates.put(state + username + key, companion);
+    public void setState(String process, String username, String key, Object companion){
+        processStates.put(process + username + key, companion);
     }
 
     @Lock(LockType.READ)
-    public Object getState(String state, String username, String key){
-        return processStates.get(state + username + key);
+    public Object getState(String process, String username, String key){
+        return processStates.get(process + username + key);
     }
 
     @Lock(LockType.READ)
-    public Object getStateAndRemove(String state, String username, String key){
-        return processStates.remove(state + username + key);
+    public Object getStateAndRemove(String process, String username, String key){
+        return processStates.remove(process + username + key);
     }
 }

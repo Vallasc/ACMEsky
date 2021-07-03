@@ -11,8 +11,6 @@ import javax.inject.Named;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 
-import it.unibo.soseng.gateway.airline.dto.AirlineDTO;
-import it.unibo.soseng.logic.airline.AirlineManager;
 import it.unibo.soseng.logic.database.DatabaseManager;
 import it.unibo.soseng.model.Airline;
 
@@ -21,9 +19,6 @@ public class InitializeAirlineServices implements JavaDelegate {
 
     @Inject
     private DatabaseManager dbManager;
-    
-    @Inject
-    private AirlineManager manager;
     
     private final static Logger LOGGER = Logger.getLogger("retrieveFlightsOfInterestDelegate"); 
 

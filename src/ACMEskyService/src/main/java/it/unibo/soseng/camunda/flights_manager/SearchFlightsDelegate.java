@@ -37,10 +37,15 @@ public class SearchFlightsDelegate implements JavaDelegate{
     @Override
     public void execute(DelegateExecution execution) throws IOException, InterruptedException, AirportNotFoundException, AirlineNotFoundException{
       LOGGER.info ("searchFlightsDelegate in esecuzione");
-      List<AirlineDTO> airlines = manager.convertToAirlineDTO((List<Airline>) execution.getVariable(AIRLINE_SERVICES));
-      AirlineDTO a = airlines.get((int) execution.getVariable(AIRLINE_SERVICES_INDEX));
 
-      List<InterestDTO> listDTO = manager.convertIntToIntDTO((List<FlightInterest>) execution.getVariable(INTEREST_FLIGHTS_LIST));
+      @SuppressWarnings (value="unchecked")
+      List<Airline> airlines = (List<Airline>) execution.getVariable(AIRLINE_SERVICES);
+      List<AirlineDTO> airlinesDTO = manager.convertToAirlineDTO( airlines );
+      AirlineDTO a = airlinesDTO.get((int) execution.getVariable(AIRLINE_SERVICES_INDEX));
+
+      @SuppressWarnings (value="unchecked")
+      List<FlightInterest> interestsList = (List<FlightInterest>) execution.getVariable(INTEREST_FLIGHTS_LIST);
+      List<InterestDTO> listDTO = manager.convertIntToIntDTO(interestsList);
       List<Flight> listToSave = manager.retrieveFlightsList(listDTO, a.getWs_address());
       int index = (int) execution.getVariable(AIRLINE_SERVICES_INDEX) + 1;
       execution.setVariable(AIRLINE_SERVICES_INDEX, index);
