@@ -16,3 +16,8 @@ html, body {
 .navbar-collapse {
 	justify-content: space-between;
 }
+
+.navbar-brand {
+    margin-right: 2rem;
+    margin-left: 2rem;
+}

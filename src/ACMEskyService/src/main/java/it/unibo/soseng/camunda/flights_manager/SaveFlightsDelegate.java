@@ -10,7 +10,6 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 
 import it.unibo.soseng.logic.database.DatabaseManager;
-import it.unibo.soseng.model.Airline;
 import it.unibo.soseng.model.Flight;
 
 import static it.unibo.soseng.camunda.ProcessVariables.FLIGHTS_TO_SAVE;
@@ -21,12 +20,13 @@ public class SaveFlightsDelegate implements JavaDelegate {
     private final static Logger LOGGER = Logger.getLogger("saveFlightsDelegate");
 
     @Inject
-    DatabaseManager manager;
+    DatabaseManager databaseManager;
 
     @Override
     public void execute(DelegateExecution execution){
       LOGGER.info ("saveFlightsDelegate in esecuzione");
-      // @SuppressWarnings (value="unchecked")
-      manager.insertFlightOffer((List<Flight>) execution.getVariable(FLIGHTS_TO_SAVE));
+      @SuppressWarnings (value="unchecked")
+      List<Flight> flights = (List<Flight>) execution.getVariable(FLIGHTS_TO_SAVE);
+      databaseManager.insertFlightOffer( flights );
     }
 }

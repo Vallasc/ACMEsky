@@ -2,8 +2,6 @@ package it.unibo.soseng.model;
 
 import java.io.Serializable;
 import java.time.OffsetDateTime;
-import java.time.ZonedDateTime;
-import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,8 +14,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.GenericGenerator;
-
 @Entity
 @Table(name="users_interests")
 public class UserInterest implements Serializable {
@@ -25,26 +21,23 @@ public class UserInterest implements Serializable {
     private static final long serialVersionUID = 1L;
 
 	@Id
-    //@GeneratedValue(generator = "UUID") TODO
-	//@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    //private UUID id;
 	private long id;
 
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "user_id", nullable = false)
     private User user;
 
 	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "outbound_flight_interest_id")
+    @JoinColumn(name = "outbound_flight_interest_id", nullable = false)
 	private FlightInterest outboundFlightInterest;
 
 	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "flight_back_interest_id")
+    @JoinColumn(name = "flight_back_interest_id", nullable = true)
     private FlightInterest flightBackInterest;
 
-    @Column(name = "expire_date", columnDefinition= "TIMESTAMP WITH TIME ZONE", nullable = true)
+    @Column(name = "expire_date", columnDefinition= "TIMESTAMP WITH TIME ZONE", nullable = false)
 	private OffsetDateTime expireDate;
 	
 
@@ -84,7 +77,7 @@ public class UserInterest implements Serializable {
 		return this.expireDate;
 	}
 	
-	public void setgetExpireDate(OffsetDateTime expireDate) {
+	public void setExpireDate(OffsetDateTime expireDate) {
 		this.expireDate = expireDate;
 	}
 }

@@ -19,7 +19,7 @@
     <h1 class="h1 fw-normal mb-4 mt-4">Acquista un'offerta</h1>
     <Steps selected={step} />
     <div class="mt-4"></div>
-    <div class="card mt-4">
+    <div class="card mt-4" in:fade = {{duration: 200}}>
         <form on:submit|preventDefault={submit}>
             {#if step == 0}
                 <div class="row mb-3">
@@ -87,7 +87,6 @@
 <style>
     .main {
         width: 100%;
-        height: 100%;
         display: flex;
         align-items: center;
         flex-direction: column;

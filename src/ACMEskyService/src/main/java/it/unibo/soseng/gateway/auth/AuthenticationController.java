@@ -56,7 +56,7 @@ public class AuthenticationController {
     @POST
     @Path("/")
     @PermitAll
-    public Response authenticate(@Valid AuthRequest request) {
+    public Response authenticate(final @Valid AuthRequest request) {
         LOG.log(Level.INFO, "Authenticate user {0}", request.getUsername());
 
         CredentialValidationResult result = identityStoreHandler

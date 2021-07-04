@@ -13,14 +13,23 @@ public final class ProcessVariables {
 
     // Interest manager
     public static final String USER_INTERESTS_REQUEST = "userInterestsRequest";
-    public static final String USERNAME = "username";
-    public static final String PROCESS_ERROR = "processError";
 
     // Offers manager
     public static final String AVAILABLE_FLIGHTS = "availableFlight";
     public static final String USER_INTEREST = "offerService";
     public static final String USER_INTEREST_LEN = "userInterestLen";
     public static final String USER_INTEREST_INDEX = "userInterestsIndex";
+
+
+    public static final String PROCESS_ERROR = "processError";
+    public static final String USERNAME = "username";
+    public static final String ASYNC_RESPONSE = "asyncResponse";
+    public static final String RESPONSE = "asyncResponse";
+    public static final String URI_INFO = "uriInfo";
+
+
+    public static final String PROCESS_SAVE_INTERST = "processSaveInterest";
+    public static final String PROCESS_BUY_OFFER = "processBuyOffer";
 
 
     

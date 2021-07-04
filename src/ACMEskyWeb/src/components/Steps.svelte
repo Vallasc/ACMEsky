@@ -1,7 +1,8 @@
 <script lang="ts">
+    import { fade } from "svelte/transition"
     export let selected : number= 0;
 </script>
-<div class="steps">
+<div class="steps" in:fade = {{duration: 200}}>
     <div class="step-arrow start" class:active = {selected == 0}>Offerta</div>
     <div class="step-arrow middle" class:active = {selected == 1}>Informazioni</div>
     <div class="step-arrow middle" class:active = {selected == 2}>Pagamento</div>

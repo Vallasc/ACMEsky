@@ -1,0 +1,1 @@
+export const ACMESKY_HOST = process.env.ACMESKY_URL

@@ -2,7 +2,6 @@ package it.unibo.soseng.model;
 
 import java.io.Serializable;
 import java.time.OffsetDateTime;
-import java.time.ZonedDateTime;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -29,15 +28,15 @@ public class Flight implements Serializable {
     private String flightCode;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "departure_airport_id")
+    @JoinColumn(name = "departure_airport_id", nullable = false)
     private Airport departureAirport;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "arrival_airport_id")
+    @JoinColumn(name = "arrival_airport_id", nullable = false)
     private Airport arrivalAirport;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "airline_id")
+    @JoinColumn(name = "airline_id", nullable = false)
     private Airline airline;
 
     @Column(name = "departure_date_time", columnDefinition= "TIMESTAMP WITH TIME ZONE", nullable = false)

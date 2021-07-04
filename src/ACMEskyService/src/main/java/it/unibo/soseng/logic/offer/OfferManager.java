@@ -29,9 +29,10 @@ public class OfferManager {
                 toReturn.setFlightCode(f.getFlightCode());
                 toReturn.setDepartureAirport(f.getDepartureAirport());
                 toReturn.setArrivalAirport(f.getArrivalAirport());
-                toReturn.setDepartureDateTime(f.getDepartureDateTime());
-                toReturn.setArrivalDateTime(f.getArrivalDateTime());
-                toReturn.setExpireDate(f.getExpireDate());
+                // TODO DAVA ERRORE
+                //toReturn.setDepartureDateTime(f.getDepartureDateTime());
+                //toReturn.setArrivalDateTime(f.getArrivalDateTime());
+                //toReturn.setExpireDate(f.getExpireDate());
                 toReturn.setPrice(f.getPrice());
                 toReturn.setBooked(true);
             }

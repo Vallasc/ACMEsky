@@ -1,6 +1,7 @@
 <script lang="ts">
     import { signin } from "../logic";
     import { navigate } from "svelte-navigator";
+    import { fade } from 'svelte/transition'
 
     let email : string
     let password : string
@@ -14,9 +15,9 @@
 </script>
 
 <div class="form" on:submit|preventDefault={handleSubmit}>
-    <img class="mb-3 mt-4" src="./imgs/airplane.png" alt="airplane" height="120" />
+    <img class="mb-3 mt-4" src="./imgs/airplane.png" alt="airplane" height="120" in:fade = {{duration: 200}} />
     <h1 class="h3 fw-normal">Please sign in</h1>
-    <form>
+    <form in:fade = {{duration: 200}}>
         <div class="mb-3 form-floating">
             <input
                 bind:value = {email}
@@ -55,7 +56,6 @@
 <style>
     .form {
         width: 100%;
-        height: 100%;
         display: flex;
         align-items: center;
         flex-direction: column;

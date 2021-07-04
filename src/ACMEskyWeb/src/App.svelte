@@ -6,15 +6,11 @@
 	import SignUp  from "./components/SignUp.svelte"
 	import SignIn  from "./components/SignIn.svelte"
 	import NavBar  from "./components/NavBar.svelte"
-	import {acmeskyHost as acmesky}  from "./stores"
+	import Show  from "./components/Show.svelte"
     import { Toast, ToastBody, ToastHeader } from 'sveltestrap'
 	import { setContext, onMount, getContext} from 'svelte'
 	import { jwtToken } from "./stores"
 	import { init } from "./logic"
-
-	export let acmeskyHost : string
-
-	acmesky.set(acmeskyHost)
 
 	$: {
 		if($jwtToken == null) 
@@ -58,6 +54,9 @@
 			</Route>
 			<Route path="/interest">
 				<Interest/>
+			</Route>
+			<Route path="/show">
+				<Show/>
 			</Route>
 			<Route path="/offer">
 				<Offer/>

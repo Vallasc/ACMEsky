@@ -10,5 +10,5 @@
         * [Database](src/ACMEskyDB/)
         * [Web](src/ACMEskyWeb/)
     * [BankService](src/BankService/)
-    * [AirlineService](src/airlineService/)
+    * [AirlineService](src/AirlineService/)
     * [Prontogram](src/Prontogram/)

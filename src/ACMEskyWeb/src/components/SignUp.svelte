@@ -2,6 +2,7 @@
     import { signup } from "../logic";
     import { Input } from 'sveltestrap';
     import { navigate } from "svelte-navigator"
+    import { fade } from 'svelte/transition'
 
     let email : string
     let password : string
@@ -30,7 +31,7 @@
 
 </script>
   
-<div class="form">
+<div class="form" in:fade = {{duration: 200}}>
     <h1 class="h3 fw-normal">Please sign up</h1>
     <form class="needs-validation" on:submit|preventDefault={handleSubmit}>
         <div class="mb-3">
@@ -55,12 +56,11 @@
 <style>
     .form {
         width: 100%;
-        height: 100%;
         display: flex;
         align-items: center;
         flex-direction: column;
         justify-content: flex-start;
-        padding-top: 130px;
+        padding-top: 50px;
     }
 
     form {

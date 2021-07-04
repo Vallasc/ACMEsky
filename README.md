@@ -94,3 +94,9 @@ Vincoli al problema (Assunzioni):
 - Le offerte generate provengono dalla stessa compagnia aerea
 - I dati del viaggiatore vengono presi dall'account
 - Non viene gestito lo scambio di denaro dalla banca alla compagnia aerea 
+
+
+TODO
+Cancellazione logica del volo 
+Rigenerare db
+Modificare CascadeType in model

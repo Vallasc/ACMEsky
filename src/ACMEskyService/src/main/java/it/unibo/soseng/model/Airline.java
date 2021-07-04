@@ -24,7 +24,7 @@ public class Airline implements Serializable {
     private long id;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "entity_id")
+    @JoinColumn(name = "entity_id", nullable = false)
     private DomainEntity entity;
 
     @Column(name = "ws_address", nullable = false)
