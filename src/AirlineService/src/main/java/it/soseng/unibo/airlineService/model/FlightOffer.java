@@ -23,8 +23,8 @@ public class FlightOffer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "departure_airport_id")
-    private String departureId;
+    @Column(name = "departure_airport_code")
+    private String departureCode;
 
     @Column(name = "departure_date_time")
     private OffsetDateTime  departureTime;
@@ -32,8 +32,8 @@ public class FlightOffer {
     @Column(name = "arrival_date_time")
     private OffsetDateTime arrivalTime;
 
-    @Column(name = "arrival_airport_id")
-    private String arrivalId;
+    @Column(name = "arrival_airport_code")
+    private String arrivalCode;
 
     @Column(name = "airline_id")
     private String airline_id;
@@ -64,8 +64,8 @@ public class FlightOffer {
     /** 
      * @return String id dell'aereoporto di arrivo
      */
-    public String getArrivalId() {
-      return arrivalId;
+    public String getArrivalCode() {
+      return arrivalCode;
     }
 
     /** 
@@ -85,8 +85,8 @@ public class FlightOffer {
     /** 
      * @return String id dell'aereoporto di partenza
      */
-    public String getDepartureId() {
-      return departureId;
+    public String getDepartureCode() {
+      return departureCode;
     }
 
     /** 
@@ -130,8 +130,8 @@ public class FlightOffer {
     /** 
      * imposta l'id dell'aereoporto di arrivo
      */
-    public void setArrivalId(String arrivalId) {
-      this.arrivalId = arrivalId;
+    public void setArrivalCode(String arrivalCode) {
+      this.arrivalCode = arrivalCode;
     }
 
     
@@ -158,8 +158,8 @@ public class FlightOffer {
     /** 
      * imposta l'id dell'aereoporto di partenza
      */
-    public void setDepartureId(String departureId) {
-      this.departureId = departureId;
+    public void setDepartureCode(String departureCode) {
+      this.departureCode = departureCode;
     }
 
     /** 

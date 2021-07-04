@@ -6,8 +6,11 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -98,9 +101,9 @@ public class FlightUtility {
         JsonNode list = n.get("list");
         for(JsonNode i: list){
             FlightOffer o = new FlightOffer();
-                o.setDepartureId(i.get("departure_airport_id").textValue());
+                o.setDepartureCode(i.get("departure_airport_id").textValue());
                 o.setDepartureTime(i.get("departure_date_time").textValue());
-                o.setArrivalId(i.get("arrival_airport_id").textValue());
+                o.setArrivalCode(i.get("arrival_airport_id").textValue());
                 o.setArrivalTime(i.get("arrival_date_time").textValue());
                 o.setAirline_id(i.get("airline_name").textValue());
                 o.setPrice(i.get("price").asDouble());
@@ -120,13 +123,12 @@ public class FlightUtility {
         Flight f = new Flight();
         f.setId(i.getId());
         f.setAirline_id(i.getAirline_id());
-        f.setArrivalId(i.getArrivalId());
-        f.setDepartureId(i.getDepartureId());
+        f.setArrivalCode(i.getArrivalCode());
+        f.setDepartureCode(i.getDepartureCode());
         f.setDepartureTime(i.getDepartureTime());
         f.setArrivalTime(i.getArrivalTime());
         f.setExpDate(i.getExpiryDate());
         f.setPrice(i.getPrice());
-        f.setSoldFlag(i.getSoldFlag());
 
         return f;
     }
@@ -148,11 +150,15 @@ public class FlightUtility {
     public List<FlightOffer> getMatchingOffers(List<UserRequest> requests, FlightOfferRepository repo){
 
         ArrayList<FlightOffer> list = new ArrayList<>();
-
+        ArrayList<UserRequest> filteredList = new ArrayList<>();
         for(UserRequest req : requests){
-            list.addAll(repo.searchFlightOffers(req.departure, req.arrival, req.departureDate, req.arrivalDate)
-            .stream().filter(w -> LastMinuteCheck(w) == false).collect(Collectors.toList()));
+            if(!filteredList.contains(req)){
+                list.addAll(repo.searchFlightOffers(req.departure, req.arrival, req.departureDate)
+                    .stream().filter(w -> LastMinuteCheck(w) == false).collect(Collectors.toList()));
+                filteredList.add(req);
+            }
         }
+
         return list;
     }
 

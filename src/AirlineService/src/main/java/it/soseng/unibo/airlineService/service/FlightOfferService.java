@@ -142,6 +142,7 @@ public class FlightOfferService {
         HttpEntity<List<FlightOffer>> entity = new HttpEntity<>(f, headers);
         // // send POST request
         RestTemplate restTemplate = new RestTemplate();
+        
         ResponseEntity<FlightOffer> result = restTemplate.postForEntity(url, entity, FlightOffer.class);    
     }
 
