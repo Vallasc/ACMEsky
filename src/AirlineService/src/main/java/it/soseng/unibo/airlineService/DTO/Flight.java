@@ -12,7 +12,7 @@ public class Flight {
     
     private Long id;
 
-    private String departureId;
+    private String departureCode;
 
     private OffsetDateTime  departureTime;
 
@@ -20,35 +20,13 @@ public class Flight {
 
     private OffsetDateTime expDate;
 
-    private String arrivalId;
+    private String arrivalCode;
 
     private String airline_id;
 
     private double price;
 
-    private boolean soldFlag;
 
-
-
-public boolean isSoldFlag() {
-      return soldFlag;
-    }
-
-
-
-
-    public void setSoldFlag(boolean soldFlag) {
-      this.soldFlag = soldFlag;
-    }
-
-
-
-
-public OffsetDateTime getExpDate() {
-      return expDate;
-    }
-
-    
 
 	
     /** 
@@ -58,11 +36,15 @@ public OffsetDateTime getExpDate() {
         return this.id;
       }
 
+    public OffsetDateTime getExpDate() {
+      return expDate;
+    }
+
     /** 
      * @return String id dell'aereoporto di arrivo
      */
-    public String getArrivalId() {
-      return arrivalId;
+    public String getArrivalCode() {
+      return arrivalCode;
     }
 
     /** 
@@ -82,8 +64,8 @@ public OffsetDateTime getExpDate() {
     /** 
      * @return String id dell'aereoporto di partenza
      */
-    public String getDepartureId() {
-      return departureId;
+    public String getDepartureCode() {
+      return departureCode;
     }
 
     /** 
@@ -115,8 +97,8 @@ public OffsetDateTime getExpDate() {
     /** 
      * imposta l'id dell'aereoporto di arrivo
      */
-    public void setArrivalId(String arrivalId) {
-      this.arrivalId = arrivalId;
+    public void setArrivalCode(String arrivalCode) {
+      this.arrivalCode = arrivalCode;
     }
 
     
@@ -141,8 +123,8 @@ public OffsetDateTime getExpDate() {
     /** 
      * imposta l'id dell'aereoporto di partenza
      */
-    public void setDepartureId(String departureId) {
-      this.departureId = departureId;
+    public void setDepartureCode(String departureCode) {
+      this.departureCode = departureCode;
     }
 
     /** 
