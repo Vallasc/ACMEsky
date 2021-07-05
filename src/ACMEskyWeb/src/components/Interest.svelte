@@ -17,9 +17,10 @@
 
     let departureCode : string 
     let arrivalCode : string 
-    let ar : boolean = false
     let dateA : string = Date()
     let dateR : string
+
+    let priceLimit : string
 
     let invalidDeparture : boolean = false
     let invalidArrival : boolean  = false
@@ -30,11 +31,7 @@
     let form : HTMLFormElement
 
     async function validate() : Promise<boolean> {
-        if(departureCode === arrivalCode){
-            invalidArrival = true
-            return false
-        }
-        if(ar && (new Date(dateA)).getTime() >= (new Date(dateR)).getTime()){
+        if( (new Date(dateA)).getTime() >= (new Date(dateR)).getTime()){
             invalidDateR = true
             return false
         }
@@ -45,13 +42,17 @@
             return false
         }
 
-        if( ar ){
-            airport = await fetchAirport(arrivalCode)
-            if(airport == null || airport.code !== arrivalCode){
-                invalidArrival = true
-                return false
-            }
+        airport = await fetchAirport(arrivalCode)
+        if(airport == null || airport.code !== arrivalCode){
+            invalidArrival = true
+            return false
         }
+
+        if(departureCode === arrivalCode){
+            invalidArrival = true
+            return false
+        }
+
         return true
     }
 
@@ -61,7 +62,6 @@
         invalidArrival = false
         invalidDateA = false
         invalidDateR = false
-        ar = false
     }
 
 
@@ -86,11 +86,12 @@
                 arrivalAirportCode : arrivalCode,
                 departureTimestamp : (new Date(dateA)).toISOString()
             },
-            flightBack : !ar ? null : {
+            flightBack : {
                 departureAirportCode : arrivalCode,
                 arrivalAirportCode : departureCode,
                 departureTimestamp : (new Date(dateR)).toISOString()
-            }
+            },
+            priceLimit: Number.parseFloat(priceLimit)
         }
         createInterest(request)
         resetForm()
@@ -103,7 +104,7 @@
         <form on:submit|preventDefault={submit} bind:this={form}>
             <div class="row g-3">
                 <div class="col-md-12">
-                    <h1 class="h4 fw-normal">Andata</h1>
+                    <h1 class="h4 fw-normal">Andata e ritorno</h1>
                 </div>
                 <datalist id="datalistOptions">
                     {#each airports as airport}
@@ -120,44 +121,29 @@
                     <label for="_" class="form-label">Arrivo</label>
                     <Input bind:value={arrivalCode} on:keyup={({target}) => fetch(target)} on:focus={() => airports = []}
                         invalid = {invalidArrival} feedback="Seleziona il codice dalla lista"
-                        class="form-control" list="datalistOptions" placeholder="Areoporto di partenza" required />
+                        class="form-control" list="datalistOptions" placeholder="Areoporto di arrivo" required />
                 </div>
 
-                <div class="col-md-6">
-                    <label for="_" class="form-label">Data</label>
+                <div class="col-md-4">
+                    <label for="_" class="form-label">Data di partenza</label>
                     <Input bind:value={dateA} type="date" class="form-control" 
                         min={formatDate(startDate)} max={formatDate(endDate)} 
-                        invalid = {invalidDateA} feedback="Seleziona il codice dalla lista" required />
+                        invalid = {invalidDateA} required />
                 </div>
-                <div class="col-md-6 check">
-                    <div class="checkbox">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" bind:checked={ar}/>
-                            <label class="form-check-label" for="gridCheck">
-                                Andata e ritorno
-                            </label>
-                        </div>
+                <div class="col-md-4">
+                    <label for="_" class="form-label">Data di ritorno</label>
+                    <Input bind:value={dateR} type="date" class="form-control" 
+                        min={formatDate(startDate)} max={formatDate(endDate)} 
+                        invalid = {invalidDateR} required />
+                </div>
+                <div class="col-md-4">
+                    <label for="_" class="form-label">Prezzo limite</label>
+                    <div class="input-group mb-3">
+                        <Input bind:value={priceLimit} type="number"
+                            min={10} max={10000}  placeholder="0" required />
+                        <span class="input-group-text">€</span>
                     </div>
                 </div>
-                {#if ar}
-                    <div class="col-md-12">
-                        <h1 class="h4 fw-normal mt-3">Ritorno</h1>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="_" class="form-label">Partenza</label>
-                        <input bind:value={arrivalCode} class="form-control" disabled>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="_" class="form-label">Arrivo</label>
-                        <input bind:value={departureCode} class="form-control" disabled>
-                    </div>
-                    <div class="col-6">
-                        <label for="_" class="form-label">Data</label>
-                        <Input bind:value={dateR} type="date" class="form-control" 
-                            min={formatDate(startDate)} max={formatDate(endDate)} 
-                            invalid = {invalidDateR} feedback="Seleziona il codice dalla lista" required />
-                    </div>
-                {/if}
                 <div class="mt-4" />
                 <div class="button-row">
                     <button class="mt-3 btn btn-primary" type="submit">Salva</button>
@@ -194,9 +180,4 @@
         margin-bottom: 40px;
     }
 
-    .check {
-        display: flex;
-        align-items: flex-end;
-        justify-content: flex-start;
-    }
 </style>
