@@ -1,47 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_0mv31xq" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.3.0">
   <bpmn:message id="Message_10nsl8p" name="Message_0vra1hr" />
-  <bpmn:message id="Message_1lcgagw" name="StartSaveInterests" />
+  <bpmn:message id="Message_1lcgagw" name="StartSaveInterest" />
   <bpmn:collaboration id="Collaboration_0usa57o">
-    <bpmn:participant id="Participant_1kih29k" name="ACMEsky" processRef="Process_0q4l1e2" />
+    <bpmn:participant id="Participant_1kih29k" name="ACMEsky" processRef="SaveInterest" />
   </bpmn:collaboration>
-  <bpmn:process id="Process_0q4l1e2" isExecutable="false">
+  <bpmn:process id="SaveInterest" isExecutable="true">
+    <bpmn:startEvent id="EventStartSaveInterests">
+      <bpmn:outgoing>Flow_0zi8585</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1u6uhyl" messageRef="Message_1lcgagw" />
+    </bpmn:startEvent>
+    <bpmn:endEvent id="Event_16vsbj4">
+      <bpmn:incoming>Flow_00ysh2j</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sendTask id="sendInterestResponse" name="Send response" camunda:delegateExpression="#{sendInterestResponseDelegate}">
+      <bpmn:incoming>Flow_1tg20gv</bpmn:incoming>
+      <bpmn:outgoing>Flow_00ysh2j</bpmn:outgoing>
+    </bpmn:sendTask>
     <bpmn:serviceTask id="saveFlightsInterest" name="Save flights of interest in DB" camunda:delegateExpression="#{saveInterstsDelegate}">
       <bpmn:incoming>Flow_0zi8585</bpmn:incoming>
       <bpmn:outgoing>Flow_1tg20gv</bpmn:outgoing>
       <bpmn:property id="Property_0b0njp1" name="__targetRef_placeholder" />
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_0zi8585" sourceRef="EventStartSaveInterests" targetRef="saveFlightsInterest" />
-    <bpmn:sendTask id="sendInterestResponse" name="Send response" camunda:delegateExpression="#{sendInterestResponseDelegate}">
-      <bpmn:incoming>Flow_1tg20gv</bpmn:incoming>
-      <bpmn:outgoing>Flow_00ysh2j</bpmn:outgoing>
-    </bpmn:sendTask>
     <bpmn:sequenceFlow id="Flow_1tg20gv" sourceRef="saveFlightsInterest" targetRef="sendInterestResponse" />
     <bpmn:sequenceFlow id="Flow_00ysh2j" sourceRef="sendInterestResponse" targetRef="Event_16vsbj4" />
-    <bpmn:endEvent id="Event_16vsbj4">
-      <bpmn:incoming>Flow_00ysh2j</bpmn:incoming>
-    </bpmn:endEvent>
-    <bpmn:startEvent id="EventStartSaveInterests">
-      <bpmn:outgoing>Flow_0zi8585</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_1u6uhyl" messageRef="Message_1lcgagw" />
-    </bpmn:startEvent>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0usa57o">
       <bpmndi:BPMNShape id="Participant_1kih29k_di" bpmnElement="Participant_1kih29k" isHorizontal="true">
         <dc:Bounds x="160" y="40" width="630" height="160" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_0zi8585_di" bpmnElement="Flow_0zi8585">
-        <di:waypoint x="268" y="120" />
-        <di:waypoint x="350" y="120" />
+      <bpmndi:BPMNEdge id="Flow_00ysh2j_di" bpmnElement="Flow_00ysh2j">
+        <di:waypoint x="630" y="120" />
+        <di:waypoint x="702" y="120" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1tg20gv_di" bpmnElement="Flow_1tg20gv">
         <di:waypoint x="450" y="120" />
         <di:waypoint x="530" y="120" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_00ysh2j_di" bpmnElement="Flow_00ysh2j">
-        <di:waypoint x="630" y="120" />
-        <di:waypoint x="702" y="120" />
+      <bpmndi:BPMNEdge id="Flow_0zi8585_di" bpmnElement="Flow_0zi8585">
+        <di:waypoint x="268" y="120" />
+        <di:waypoint x="350" y="120" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Activity_151873z_di" bpmnElement="saveFlightsInterest">
         <dc:Bounds x="350" y="80" width="100" height="80" />

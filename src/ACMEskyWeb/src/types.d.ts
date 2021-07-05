@@ -17,7 +17,8 @@ interface Interest {
         departureAirportCode : string
         arrivalAirportCode : string
         departureTimestamp : string
-    } | null
+    }
+    priceLimit : number
 }
 
 interface User {

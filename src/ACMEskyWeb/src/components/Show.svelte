@@ -25,9 +25,9 @@
                         <th></th>
                         <th>Partenza</th>
                         <th>Arrivo</th>
-                        <th>Data Andata</th>
-                        <th>A/R</th>
+                        <th>Data Partenza</th>
                         <th>Data Ritorno</th>
+                        <th>Prezzo Limite</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -37,13 +37,8 @@
                             <td>{interest.outboundFlight.departureAirportCode}</td>
                             <td>{interest.outboundFlight.arrivalAirportCode}</td>
                             <td>{(new Date(interest.outboundFlight.departureTimestamp)).toLocaleDateString()}</td>
-                            {#if interest.flightBack != null }
-                                <td>Si</td>
-                                <td>{(new Date(interest.flightBack.departureTimestamp)).toLocaleDateString()}</td>
-                            {:else}
-                                <td>No</td>
-                                <td></td>
-                            {/if}
+                            <td>{(new Date(interest.flightBack.departureTimestamp)).toLocaleDateString()}</td>
+                            <td>{interest.priceLimit}</td>
                         </tr>
                     {/each}
                 </tbody>

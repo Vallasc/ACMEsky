@@ -2,9 +2,10 @@ package it.unibo.soseng.gateway.user.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-import it.unibo.soseng.model.FlightInterest;
 import it.unibo.soseng.model.UserInterest;
 
 public class UserInterestDTO implements Serializable {
@@ -15,7 +16,13 @@ public class UserInterestDTO implements Serializable {
     @NotNull
     private FlightInterestDTO outboundFlight;
 
+    @NotNull
     private FlightInterestDTO flightBack;
+
+    @NotNull
+    @Min(10)
+    @Max(1000)
+    private double priceLimit;
 
     public long getId() {
         return id;
@@ -23,6 +30,14 @@ public class UserInterestDTO implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public double getPriceLimit() {
+        return priceLimit;
+    }
+
+    public void setPriceLimit(double priceLimit) {
+        this.priceLimit = priceLimit;
     }
     
     public FlightInterestDTO getOutboundFlight() {
@@ -46,11 +61,8 @@ public class UserInterestDTO implements Serializable {
         UserInterestDTO dto = new UserInterestDTO();
         dto.setId( userInterest.getId() );
         dto.setOutboundFlight( FlightInterestDTO.from(userInterest.getOutboundFlightInterest()) );
-        FlightInterest flightBack = userInterest.getFlightBackInterest();
-        if( flightBack != null)
-            dto.setFlightBack( FlightInterestDTO.from(flightBack) );
-        else
-            dto.setFlightBack( null );
+        dto.setFlightBack( FlightInterestDTO.from( userInterest.getFlightBackInterest() ) );
+        dto.setPriceLimit(userInterest.getPriceLimit());
         return dto;
     }
 }

@@ -24,7 +24,7 @@ public final class ProcessVariables {
     public static final String PROCESS_ERROR = "processError";
     public static final String USERNAME = "username";
     public static final String ASYNC_RESPONSE = "asyncResponse";
-    public static final String RESPONSE = "asyncResponse";
+    public static final String RESPONSE = "response";
     public static final String URI_INFO = "uriInfo";
 
 

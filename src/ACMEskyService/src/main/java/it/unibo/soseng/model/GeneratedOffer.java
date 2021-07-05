@@ -2,7 +2,6 @@ package it.unibo.soseng.model;
 
 import java.io.Serializable;
 import java.time.OffsetDateTime;
-import java.time.ZonedDateTime;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;

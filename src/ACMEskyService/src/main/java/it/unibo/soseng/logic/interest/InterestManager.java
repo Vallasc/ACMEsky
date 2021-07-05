@@ -71,8 +71,8 @@ public class InterestManager {
   
         // Start the process instance
         ProcessInstanceWithVariables instance = runtimeService.createProcessInstanceByKey(SAVE_INTERESTS)
-                                                            .setVariables(processVariables)
-                                                            .executeWithVariablesInReturn();
+                                                                .setVariables(processVariables)
+                                                                .executeWithVariablesInReturn();
         processVariables = instance.getVariables();
         String error = (String) processVariables.get(PROCESS_ERROR);
         if(error != null)
@@ -83,35 +83,37 @@ public class InterestManager {
         // Control date time
         OffsetDateTime now = OffsetDateTime.now();
         OffsetDateTime outboundDateTime = interest.getOutboundFlight().getDepartureOffsetDateTime();
-        if(interest.getFlightBack() != null){
-            OffsetDateTime flightBackDateTime = interest.getFlightBack().getDepartureOffsetDateTime();
-            flightBackDateTime = flightBackDateTime.minusDays(1);
-            if(outboundDateTime.compareTo(flightBackDateTime) > 0)
-                return Response.status(Response.Status.BAD_REQUEST.getStatusCode())
-                                .entity(Errors.DATE_ERROR)
-                                .build();
+        OffsetDateTime flightBackDateTime = interest.getFlightBack().getDepartureOffsetDateTime();
+
+        flightBackDateTime = flightBackDateTime.minusDays(1);
+        if(outboundDateTime.compareTo(flightBackDateTime) > 0) {
+            return Response.status(Response.Status.BAD_REQUEST.getStatusCode())
+                            .entity(Errors.DATE_ERROR)
+                            .build();
         }
-        if( outboundDateTime.compareTo(now) < 0 ){
+
+        if( outboundDateTime.compareTo(now) < 0 ) {
             return Response.status(Response.Status.BAD_REQUEST.getStatusCode())
                 .entity(Errors.DATE_TO_EARLY)
                 .build();
         }
+
         OffsetDateTime end = now.plusDays(Env.INTEREST_WINDOW);
-        if( outboundDateTime.compareTo(end) > 0 ){
+        if( outboundDateTime.compareTo(end) > 0 ) {
             return Response.status(Response.Status.BAD_REQUEST.getStatusCode())
                 .entity(Errors.DATE_TO_LATE)
                 .build();
         }
         // Control Airport codes
-        if( interest.getFlightBack() != null &&
-            ( interest.getOutboundFlight().getArrivalAirportCode().compareTo(
+        if( interest.getOutboundFlight().getArrivalAirportCode().compareTo(
             interest.getFlightBack().getDepartureAirportCode()) != 0 ||
             interest.getOutboundFlight().getDepartureAirportCode().compareTo(
-            interest.getFlightBack().getArrivalAirportCode()) != 0) ){
+            interest.getFlightBack().getArrivalAirportCode()) != 0 ) {
                 return Response.status(Response.Status.BAD_REQUEST.getStatusCode())
                     .entity(Errors.AIRPORT_CODE_ERROR)
                     .build();
         }
+        
         try {
             UserInterest userInterest = this.saveUserInterests(username, interest);
 
@@ -139,12 +141,8 @@ public class InterestManager {
         // Check airport
         Airport airportOut1 = databaseManager.getAirport(request.getOutboundFlight().getArrivalAirportCode());
         Airport airportOut2 = databaseManager.getAirport(request.getOutboundFlight().getDepartureAirportCode());
-        Airport airportBack1 = null;
-        Airport airportBack2 = null;
-        if(request.getFlightBack() != null){
-            airportBack1 = databaseManager.getAirport(request.getFlightBack().getArrivalAirportCode());
-            airportBack2 = databaseManager.getAirport(request.getFlightBack().getDepartureAirportCode());
-        }
+        Airport airportBack1 = databaseManager.getAirport(request.getFlightBack().getArrivalAirportCode());
+        Airport airportBack2 = databaseManager.getAirport(request.getFlightBack().getDepartureAirportCode());
 
         String email = securityContext.getCallerPrincipal().getName();
         
@@ -156,25 +154,23 @@ public class InterestManager {
         interest.setExpireDate(request.getOutboundFlight().getDepartureOffsetDateTime());
         interest.setUser(user);
 
+        interest.setPriceLimit(request.getPriceLimit());
+
         FlightInterest flightOutInterest = new FlightInterest();
         flightOutInterest.setUser(user);
         flightOutInterest.setDepartureAirport(airportOut1);
         flightOutInterest.setArrivalAirport(airportOut2);
-
         flightOutInterest.setDepartureDateTime(request.getOutboundFlight().getDepartureOffsetDateTime());
 
         interest.setOutboundFlightInterest(flightOutInterest);
 
-        if(request.getFlightBack() != null){
-            FlightInterest flightBackInterest = new FlightInterest();
-            flightBackInterest.setUser(user);
-            flightBackInterest.setDepartureAirport(airportBack1);
-            flightBackInterest.setArrivalAirport(airportBack2);
+        FlightInterest flightBackInterest = new FlightInterest();
+        flightBackInterest.setUser(user);
+        flightBackInterest.setDepartureAirport(airportBack1);
+        flightBackInterest.setArrivalAirport(airportBack2);
+        flightBackInterest.setDepartureDateTime(request.getFlightBack().getDepartureOffsetDateTime());
 
-            flightBackInterest.setDepartureDateTime(request.getFlightBack().getDepartureOffsetDateTime());
-
-            interest.setFlightBackInterest(flightBackInterest);
-        }
+        interest.setFlightBackInterest(flightBackInterest);
 
         databaseManager.saveUserInterest(interest);
         return interest;
