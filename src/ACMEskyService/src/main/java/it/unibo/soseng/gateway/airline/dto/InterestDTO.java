@@ -10,15 +10,12 @@ public class InterestDTO implements Serializable{
     public String departure;
     public String arrival;
     public String departureDate;
-    public String arrivalDate;
 
 
-    public InterestDTO(String departure, String arrival, String departureDateTime,
-            String arrivalDateTime) {
+    public InterestDTO(String departure, String arrival, String departureDateTime) {
         this.departure=departure;
         this.arrival=arrival;
         this.departureDate=departureDateTime;
-        this.arrivalDate=arrivalDateTime;
     }
 
     

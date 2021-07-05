@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -35,6 +36,10 @@ public class FlightInterest implements Serializable {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "arrival_airport_id")
     private Airport arrivalAirport;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "price_limit")
+    private double priceLimit ;
 
 	@Column(name = "departure_date_time", columnDefinition= "TIMESTAMP WITH TIME ZONE", nullable = false)
     private OffsetDateTime departureDateTime;

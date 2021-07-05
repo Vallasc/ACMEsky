@@ -83,8 +83,8 @@ public class AirlineManager {
     public List<InterestDTO> convertIntToIntDTO(List<FlightInterest> interests) {
         ArrayList<InterestDTO> list = new ArrayList<>();
         for(FlightInterest i : interests){
-            InterestDTO dto = new InterestDTO(i.getDepartureAirport().getAiportCode(), i.getArrivalAirport().getAiportCode(),
-                                                    i.getDepartureDateTime().toString(), i.getArrivalDateTime().toString()); 
+            InterestDTO dto = new InterestDTO(i.getDepartureAirport().getAirportCode(), i.getArrivalAirport().getAirportCode(),
+                                                    i.getDepartureDateTime().toString()); 
             list.add(dto);
         }
         return list;
@@ -107,14 +107,14 @@ public class AirlineManager {
         JsonNode root = mapper.readTree(resp);
         for(JsonNode n: root){
             Flight f = new Flight();
-                f.setDepartureAirport(databaseManager.getAirport(n.get("departureId").textValue()));
+                f.setDepartureAirport(databaseManager.getAirport(n.get("departureCode").textValue()));
                 f.setDepartureDateTime(n.get("departureTime").textValue());
-                f.setArrivalAirport(databaseManager.getAirport(n.get("arrivalId").textValue()));
+                f.setArrivalAirport(databaseManager.getAirport(n.get("arrivalCode").textValue()));
                 f.setArrivalDateTime(n.get("arrivalTime").textValue());
                 f.setAirline(databaseManager.getAirline(n.get("airline_id").textValue()));
                 f.setPrice(n.get("price").floatValue());
                 f.setExpireDate(n.get("expDate").textValue());
-                f.setBooked(n.get("soldFlag").asBoolean());
+                f.setBooked(false);
                 f.setFlightCode(n.get("id").asText());
                 list.add(f);
             }

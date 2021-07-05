@@ -37,6 +37,8 @@ public class UserInterest implements Serializable {
     @JoinColumn(name = "flight_back_interest_id", nullable = true)
     private FlightInterest flightBackInterest;
 
+	
+
     @Column(name = "expire_date", columnDefinition= "TIMESTAMP WITH TIME ZONE", nullable = false)
 	private OffsetDateTime expireDate;
 	
