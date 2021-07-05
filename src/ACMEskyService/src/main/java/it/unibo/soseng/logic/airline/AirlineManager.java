@@ -67,7 +67,7 @@ public class AirlineManager {
         ArrayList<InterestDTO> list = new ArrayList<>();
         for(FlightInterest i : interests){
             InterestDTO dto = new InterestDTO(i.getDepartureAirport().getAirportCode(), i.getArrivalAirport().getAirportCode(),
-                                                    i.getDepartureDateTime().toString()); 
+                                                    i.getDepartureDateTime().toLocalDate().toString()); 
             list.add(dto);
         }
         return list;
