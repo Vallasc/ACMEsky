@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -11,6 +12,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -98,8 +100,7 @@ public class FlightUtility {
     public List<FlightOffer> createOffer(JsonNode n){
         
         ArrayList<FlightOffer> a = new ArrayList<>();
-        JsonNode list = n.get("list");
-        for(JsonNode i: list){
+        for(JsonNode i: n){
             FlightOffer o = new FlightOffer();
                 o.setDepartureCode(i.get("departure_airport_id").textValue());
                 o.setDepartureTime(i.get("departure_date_time").textValue());
@@ -153,8 +154,11 @@ public class FlightUtility {
         ArrayList<UserRequest> filteredList = new ArrayList<>();
         for(UserRequest req : requests){
             if(!filteredList.contains(req)){
-                list.addAll(repo.searchFlightOffers(req.departure, req.arrival, req.departureDate)
-                    .stream().filter(w -> LastMinuteCheck(w) == false).collect(Collectors.toList()));
+                //ricerca per giorno 
+                OffsetDateTime startDateSearch = OffsetDateTime.parse(req.departureDate.toString() +"T00:00:00+01:00".toString());
+                OffsetDateTime finishDateSearch = OffsetDateTime.parse(req.departureDate.toString() +"T23:59:59+01:00".toString());
+                list.addAll(repo.searchFlightOffers(req.departure, req.arrival, startDateSearch, finishDateSearch)
+                    .stream().filter(w -> LastMinuteCheck(w) == false && w.getSoldFlag()!= true).collect(Collectors.toList()));
                 filteredList.add(req);
             }
         }
