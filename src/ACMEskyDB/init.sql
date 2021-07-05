@@ -32,7 +32,7 @@ ALTER SYSTEM SET max_prepared_transactions = 200;
 CREATE TABLE public.airlines (
     id bigint NOT NULL,
     ws_address character varying(255) NOT NULL,
-    entity_id bigint
+    entity_id bigint NOT NULL
 );
 
 
@@ -105,7 +105,7 @@ ALTER SEQUENCE public.airports_id_seq OWNED BY public.airports.id;
 CREATE TABLE public.banks (
     id bigint NOT NULL,
     ws_address character varying(255) NOT NULL,
-    entity_id bigint
+    entity_id bigint NOT NULL
 );
 
 
@@ -180,9 +180,9 @@ CREATE TABLE public.flights (
     expire_date timestamp with time zone NOT NULL,
     flight_code character varying(255) NOT NULL,
     price real NOT NULL,
-    airline_id bigint,
-    arrival_airport_id bigint,
-    departure_airport_id bigint
+    airline_id bigint NOT NULL,
+    arrival_airport_id bigint NOT NULL,
+    departure_airport_id bigint NOT NULL
 );
 
 
@@ -215,7 +215,6 @@ ALTER SEQUENCE public.flights_id_seq OWNED BY public.flights.id;
 
 CREATE TABLE public.flights_interest (
     id bigint NOT NULL,
-    -- arrival_date_time timestamp with time zone NOT NULL,
     departure_date_time timestamp with time zone NOT NULL,
     arrival_airport_id bigint,
     departure_airport_id bigint,
@@ -255,8 +254,8 @@ CREATE TABLE public.generated_offers (
     booked boolean,
     expire_date timestamp with time zone NOT NULL,
     total_price double precision,
-    flight_back_id bigint,
-    outbound_flight_id bigint
+    flight_back_id bigint NOT NULL,
+    outbound_flight_id bigint NOT NULL
 );
 
 
@@ -291,7 +290,7 @@ CREATE TABLE public.rent_services (
     id bigint NOT NULL,
     address character varying(255) NOT NULL,
     ws_address character varying(255) NOT NULL,
-    entity_id bigint
+    entity_id bigint NOT NULL
 );
 
 
@@ -326,7 +325,7 @@ CREATE TABLE public.users (
     id bigint NOT NULL,
     email character varying(255) NOT NULL,
     prontogram_username character varying(255) NOT NULL,
-    entity_id bigint
+    entity_id bigint NOT NULL
 );
 
 
@@ -359,10 +358,11 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 CREATE TABLE public.users_interests (
     id bigint NOT NULL,
-    expire_date timestamp with time zone,
-    flight_back_interest_id bigint,
-    outbound_flight_interest_id bigint,
-    user_id bigint
+    expire_date timestamp with time zone NOT NULL,
+    price_limit double precision NOT NULL,
+    flight_back_interest_id bigint NOT NULL,
+    outbound_flight_interest_id bigint NOT NULL,
+    user_id bigint NOT NULL
 );
 
 
