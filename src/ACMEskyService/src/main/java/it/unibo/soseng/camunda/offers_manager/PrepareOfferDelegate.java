@@ -28,7 +28,6 @@ public class PrepareOfferDelegate implements JavaDelegate{
       GeneratedOffer offer;
       if (matchedFlights.size() > 1) {
         offer = offerManager.generateOffer(matchedFlights.get(0), matchedFlights.get(1));
-        
       }
       else {
         offer = offerManager.generateOffer(matchedFlights.get(0), null);

@@ -37,6 +37,6 @@ public class SendOfferDelegate implements JavaDelegate{
     offerToSend.setFlyOutBound(offer.getOutboundFlightId());
     offerToSend.setFlyBack(offer.getFlightBackId());
     prontogramClient.sendNotificationOffer(offerToSend);
-    execution.setVariable(USER_INTEREST_INDEX, userInterestIndex + 1 );
+    execution.setVariable(USER_INTEREST_INDEX, userInterestIndex + 1);
   } 
 }
