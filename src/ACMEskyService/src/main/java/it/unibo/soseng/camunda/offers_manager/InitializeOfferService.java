@@ -21,7 +21,7 @@ public class InitializeOfferService implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         List <UserInterest> usersInterests = dbManager.retrieveUserInterests();
-        execution.setVariable(USER_INTEREST_LEN, usersInterests.size());
+        execution.setVariable(USER_INTEREST_LEN, usersInterests);
         execution.setVariable(USER_INTEREST_INDEX, 0);
         execution.setVariable(USER_INTEREST, usersInterests);   
     }
