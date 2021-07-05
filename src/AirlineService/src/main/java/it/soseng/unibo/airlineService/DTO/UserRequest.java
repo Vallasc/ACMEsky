@@ -1,5 +1,6 @@
 package it.soseng.unibo.airlineService.DTO;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
 import javax.validation.constraints.NotBlank;
@@ -14,7 +15,7 @@ public class UserRequest {
     public String arrival;
 
     @NotBlank(message = "departureDate is mandatory")
-    public OffsetDateTime departureDate;    
+    public LocalDate departureDate;    
     
 
     public UserRequest() {
