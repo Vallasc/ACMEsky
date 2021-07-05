@@ -62,6 +62,7 @@ public class UserInterestDTO implements Serializable {
         dto.setId( userInterest.getId() );
         dto.setOutboundFlight( FlightInterestDTO.from(userInterest.getOutboundFlightInterest()) );
         dto.setFlightBack( FlightInterestDTO.from( userInterest.getFlightBackInterest() ) );
+        dto.setPriceLimit(userInterest.getPriceLimit());
         return dto;
     }
 }
