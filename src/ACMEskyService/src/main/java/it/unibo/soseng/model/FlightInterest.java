@@ -41,7 +41,7 @@ public class FlightInterest implements Serializable {
     @JoinColumn(name = "price_limit")
     private double priceLimit ;
 
-	@Column(name = "departure_date_time", columnDefinition= "TIMESTAMP WITH TIME ZONE", nullable = false)
+    @Column(name = "departure_date_time", columnDefinition= "TIMESTAMP WITH TIME ZONE", nullable = false)
     private OffsetDateTime departureDateTime;
 
 	public FlightInterest() {
@@ -85,5 +85,13 @@ public class FlightInterest implements Serializable {
 	public void setDepartureDateTime(OffsetDateTime departureDateTime) {
 		this.departureDateTime = departureDateTime;
 	}
+
+    public double getPriceLimit() {
+        return priceLimit;
+    }
+
+    public void setPriceLimit(double priceLimit) {
+        this.priceLimit = priceLimit;
+    }
     
 }
