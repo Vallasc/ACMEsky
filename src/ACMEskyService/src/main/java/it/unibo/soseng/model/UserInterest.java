@@ -34,11 +34,12 @@ public class UserInterest implements Serializable {
 	private FlightInterest outboundFlightInterest;
 
 	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "flight_back_interest_id", nullable = true)
+    @JoinColumn(name = "flight_back_interest_id", nullable = false)
     private FlightInterest flightBackInterest;
 
+    @Column(name = "price_limit", nullable = false)
+    private double priceLimit ;
 	
-
     @Column(name = "expire_date", columnDefinition= "TIMESTAMP WITH TIME ZONE", nullable = false)
 	private OffsetDateTime expireDate;
 	
@@ -81,5 +82,13 @@ public class UserInterest implements Serializable {
 	
 	public void setExpireDate(OffsetDateTime expireDate) {
 		this.expireDate = expireDate;
+	}
+
+	public double getPriceLimit() {
+		return this.priceLimit;
+	}
+
+	public void setPriceLimit(double priceLimit) {
+		this.priceLimit = priceLimit;
 	}
 }
