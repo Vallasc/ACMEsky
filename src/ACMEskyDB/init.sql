@@ -23,7 +23,7 @@ SET row_security = off;
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
-
+ALTER SYSTEM SET max_prepared_transactions = 200;
 --
 -- Name: airlines; Type: TABLE; Schema: public; Owner: soseng
 --

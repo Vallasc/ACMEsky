@@ -26,7 +26,6 @@ public class CheckAvailableFlightsDelegate implements JavaDelegate{
 
     @Override
     public void execute(DelegateExecution execution){
-
       LOGGER.info ("checkAvailableFlightsDelegate in esecuzione");
       List <UserInterest> userInterests = (List<UserInterest>) execution.getVariable(USER_INTEREST);
       List <Flight> matchedFlight = new ArrayList <Flight> ();
