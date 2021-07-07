@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit} from '@angular/core';
-import { Notification } from '../_models';
+import { Airport, Flight, Notification } from '../_models';
 import { AccountService, NotificationService } from '../_services';
 import { first, take, takeUntil } from 'rxjs/operators';
 import {SwPush} from '@angular/service-worker'
@@ -62,13 +62,14 @@ export class NotificationComponent implements  OnDestroy,OnInit{
         //Create new Notification
         let notification = message['notification']
         let notify = new Notification ();
-        notify.flyNumber = notification['data']['flyNumber'];
-        notify.flyCompany = notification['data']['flyCompany'];
-        notify.flyToken = notification['data']['flyToken'];
-        notify.user_id = notification['data']['user_id']
-        this.addNotification (notify);
+        notify.flyBack = notification['data']['flyBack'];
+        notify.flyOutBound = notification['data']['flyOutBound']
+        notify.offerToken = notification['data']['offerToken'];
+        notify.username = notification['data']['username']
+        console.log ("Notifica ricevuta ", notify)
+        this.updateNotificationView ()
       });
-       //notification's actions
+      //notification's actions
       this.swPush.notificationClicks.subscribe(({ action, notification }) => {
       //window.open(notification.data.url);
       });
@@ -81,45 +82,8 @@ export class NotificationComponent implements  OnDestroy,OnInit{
       .subscribe(() => this.notifications = this.notifications.filter(x => x._id !== id));
     }
 
-    /*pushSubscription () {
-      if(this.swPush.isEnabled){
-      this.swPush.requestSubscription({
-      serverPublicKey: this.VAPID_PUBLIC_KEY
-      })
-      .then(sub =>{this.notificationService.sendSubscriptionToTheServer(sub,this.user).subscribe(x=>console.log(x),err=>console.log(err))})
-      .catch(err => console.error("Could not subscribe to notifications", err));
-      }
-    }*/
-
-    /*unsubscribeNotifications(){
-      this.swPush.subscription.pipe(take(1)).subscribe(subscriptionValue=>{
-        if (subscriptionValue) {
-            this.notificationService.unsubscribeToNotification (subscriptionValue)
-            .subscribe(
-              res => {
-                // Unsubscribe current client (browser)
-                subscriptionValue.unsubscribe()
-                  .then(success => {
-                    console.log('[App] Unsubscription successful', success)
-                  })
-                  .catch(err => {
-                    console.log('[App] Unsubscription failed', err)
-                  })
-              },
-              err => {
-                console.log('[App] Delete subscription request failed', err)
-              }
-            );
-        }
-        else {
-          console.log("Prima di fare unsubscribe devi fare subscribe!");
-        }
-        
-    });
-  }*/
-
     getAllNotifications () {
-      this.notificationService.getAll(this.user._id).subscribe(
+      this.notificationService.getAll(this.user.username).subscribe(
         (res : Notification []) => {
           this.notifications = res;
         },
@@ -129,10 +93,8 @@ export class NotificationComponent implements  OnDestroy,OnInit{
       );
     }
 
-    addNotification (notification: Notification) {
-      if (notification.user_id == this.user._id) {
-        this.notifications.push(notification);
-      } 
+    updateNotificationView () {
+      this.getAllNotifications ();
     }
 
     ngOnDestroy() {

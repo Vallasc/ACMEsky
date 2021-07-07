@@ -14,6 +14,7 @@ import javax.inject.Named;
 import static it.unibo.soseng.camunda.ProcessVariables.AVAILABLE_FLIGHTS;
 import static it.unibo.soseng.camunda.ProcessVariables.USER_INTEREST;
 import static it.unibo.soseng.camunda.ProcessVariables.USER_INTEREST_INDEX;
+import static it.unibo.soseng.camunda.ProcessVariables.THERE_IS_FHLIGHTS;
 
 @Named("checkAvailableFlightsDelegate")
 public class CheckAvailableFlightsDelegate implements JavaDelegate{
@@ -25,19 +26,16 @@ public class CheckAvailableFlightsDelegate implements JavaDelegate{
 
     @Override
     public void execute(DelegateExecution execution){
-
       LOGGER.info ("checkAvailableFlightsDelegate in esecuzione");
       List <UserInterest> userInterests = (List<UserInterest>) execution.getVariable(USER_INTEREST);
       List <Flight> matchedFlight = new ArrayList <Flight> ();
       UserInterest ui = userInterests.get( (int) execution.getVariable(USER_INTEREST_INDEX));
+      matchedFlight.add (offerManager.matchOffer(ui.getOutboundFlightInterest()));
       if (ui.getFlightBackInterest() != null) {
-        matchedFlight.add (offerManager.matchOffer(ui.getOutboundFlightInterest()));
-        matchedFlight.add (offerManager.matchOffer(ui.getFlightBackInterest()));
-        //var che controllo il gateway
-        execution.setVariable(AVAILABLE_FLIGHTS, matchedFlight);
+        matchedFlight.add (offerManager.matchOffer(ui.getFlightBackInterest()));        
       }
-      int index = (int) execution.getVariable(USER_INTEREST_INDEX) + 1;
-      execution.setVariable(USER_INTEREST_INDEX, index);
+      execution.setVariable(AVAILABLE_FLIGHTS, matchedFlight);
+      execution.setVariable(THERE_IS_FHLIGHTS, true);
     }
 }
 

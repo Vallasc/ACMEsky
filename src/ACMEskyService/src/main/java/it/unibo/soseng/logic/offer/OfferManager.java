@@ -4,10 +4,13 @@ import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.management.loading.PrivateClassLoader;
+
 import it.unibo.soseng.logic.database.DatabaseManager;
 import it.unibo.soseng.logic.database.DatabaseManager.OfferAlreadyInException;
 import it.unibo.soseng.model.Flight;
 import it.unibo.soseng.model.FlightInterest;
+import it.unibo.soseng.model.GeneratedOffer;
 @Stateless
 public class OfferManager {
     private final static Logger LOGGER = Logger.getLogger(OfferManager.class.getName());
@@ -15,8 +18,19 @@ public class OfferManager {
     @Inject
     private DatabaseManager databaseManager;
 
-    public void generateOffer(Flight request) throws OfferAlreadyInException {
-        databaseManager.createOffer(request);
+    public GeneratedOffer generateOffer(Flight requestOutBound, Flight requestFlightBack) throws OfferAlreadyInException {
+        GeneratedOffer offerTogenerate = new GeneratedOffer ();
+        offerTogenerate.setBooked(false);
+        offerTogenerate.setOutboundFlightId(requestOutBound);
+        offerTogenerate.setTotalPrice(requestOutBound.getPrice());
+        double priceOutBound = offerTogenerate.getTotalPrice();
+        if (requestFlightBack != null) {
+            offerTogenerate.setFlightBackId(requestFlightBack);
+            offerTogenerate.setTotalPrice(requestFlightBack.getPrice() + priceOutBound);
+        }
+        
+        databaseManager.createOffer(offerTogenerate);
+        return offerTogenerate;
     }
 
     public Flight matchOffer (FlightInterest request) {
@@ -43,5 +57,7 @@ public class OfferManager {
     private boolean isMatched (Flight f, FlightInterest fi) {
             return f.getDepartureAirport() == fi.getDepartureAirport() && f.getArrivalAirport() == fi.getArrivalAirport();
     }
+
+   
 }
 
