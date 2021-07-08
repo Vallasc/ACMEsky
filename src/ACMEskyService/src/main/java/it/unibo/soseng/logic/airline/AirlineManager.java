@@ -98,6 +98,7 @@ public class AirlineManager {
                 f.setPrice(n.get("price").floatValue());
                 f.setExpireDate(n.get("expDate").textValue());
                 f.setBooked(false);
+                f.setAvailable(true);
                 f.setFlightCode(n.get("id").asText());
                 list.add(f);
             }

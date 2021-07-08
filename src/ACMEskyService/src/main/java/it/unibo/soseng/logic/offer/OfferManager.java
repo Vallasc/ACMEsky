@@ -5,9 +5,10 @@ import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.management.loading.PrivateClassLoader;
+import javax.persistence.PersistenceException;
 
 import it.unibo.soseng.logic.database.DatabaseManager;
-import it.unibo.soseng.logic.database.DatabaseManager.OfferAlreadyInException;
+import it.unibo.soseng.logic.database.DatabaseManager.FlightNotExistException;
 import it.unibo.soseng.model.Flight;
 import it.unibo.soseng.model.FlightInterest;
 import it.unibo.soseng.model.GeneratedOffer;
@@ -18,22 +19,21 @@ public class OfferManager {
     @Inject
     private DatabaseManager databaseManager;
 
-    public GeneratedOffer generateOffer(Flight requestOutBound, Flight requestFlightBack) throws OfferAlreadyInException {
+    public GeneratedOffer generateOffer(Flight requestOutBound, Flight requestFlightBack) throws PersistenceException, FlightNotExistException {
         GeneratedOffer offerTogenerate = new GeneratedOffer ();
+        
         offerTogenerate.setBooked(false);
         offerTogenerate.setOutboundFlightId(requestOutBound);
-        offerTogenerate.setTotalPrice(requestOutBound.getPrice());
-        double priceOutBound = offerTogenerate.getTotalPrice();
-        if (requestFlightBack != null) {
-            offerTogenerate.setFlightBackId(requestFlightBack);
-            offerTogenerate.setTotalPrice(requestFlightBack.getPrice() + priceOutBound);
-        }
+        offerTogenerate.setFlightBackId(requestFlightBack);
+        offerTogenerate.setExpireDate(requestOutBound.getExpireDate());
+        double priceOutBound = requestOutBound.getPrice();
+        offerTogenerate.setTotalPrice(requestFlightBack.getPrice() + priceOutBound);
         
         databaseManager.createOffer(offerTogenerate);
         return offerTogenerate;
     }
 
-    public Flight matchOffer (FlightInterest request) {
+    public Flight matchOffer (FlightInterest request) throws FlightNotExistException{
         List<Flight> flights = databaseManager.retrieveFlights();
         for (Flight f : flights) {
 

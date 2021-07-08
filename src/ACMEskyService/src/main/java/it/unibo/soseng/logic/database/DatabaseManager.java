@@ -148,12 +148,9 @@ public class DatabaseManager {
     }
 
 
-    public void createOffer (GeneratedOffer offer) throws OfferAlreadyInException { 
-        try {
-            this.entityManager.persist(offer);
-        } catch (PersistenceException e) {
-            throw new OfferAlreadyInException();
-        }
+    public void createOffer (GeneratedOffer offer) throws PersistenceException { 
+        this.entityManager.persist(offer);
+        
     }
 
     // Airport
@@ -238,7 +235,7 @@ public class DatabaseManager {
         private static final long serialVersionUID = 1L;
     }
 
-    public class OfferAlreadyInException extends Exception {
+    public class FlightNotExistException extends Exception {
         private static final long serialVersionUID = 1L;
     }
 

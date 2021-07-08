@@ -173,6 +173,7 @@ CREATE TABLE public.flights (
     id bigint NOT NULL,
     arrival_date_time timestamp with time zone NOT NULL,
     booked boolean NOT NULL,
+    available boolean NOT NULL,
     departure_date_time timestamp with time zone NOT NULL,
     expire_date timestamp with time zone NOT NULL,
     flight_code character varying(255) NOT NULL,

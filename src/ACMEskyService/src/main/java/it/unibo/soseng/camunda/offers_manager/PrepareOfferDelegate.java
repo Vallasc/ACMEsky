@@ -4,7 +4,9 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
-import it.unibo.soseng.logic.database.DatabaseManager.OfferAlreadyInException;
+import javax.persistence.PersistenceException;
+
+import it.unibo.soseng.logic.database.DatabaseManager.FlightNotExistException;
 import it.unibo.soseng.logic.offer.OfferManager;
 import it.unibo.soseng.model.Flight;
 import it.unibo.soseng.model.GeneratedOffer;
@@ -12,6 +14,8 @@ import it.unibo.soseng.model.GeneratedOffer;
 import java.util.logging.Logger;
 import static it.unibo.soseng.camunda.ProcessVariables.AVAILABLE_FLIGHTS;
 import static it.unibo.soseng.camunda.ProcessVariables.GENERATED_OFFER;
+import static it.unibo.soseng.camunda.ProcessVariables.PROCESS_ERROR;;
+
 
 @Named("prepareOfferDelegate")
 public class PrepareOfferDelegate implements JavaDelegate{
@@ -21,20 +25,18 @@ public class PrepareOfferDelegate implements JavaDelegate{
     OfferManager offerManager;
 
     @Override
-    public void execute(DelegateExecution execution) throws OfferAlreadyInException{
+    public void execute(DelegateExecution execution) throws PersistenceException, FlightNotExistException{
       LOGGER.info ("prepareOfferDelegate in esecuzione");
       @SuppressWarnings (value="unchecked")
       List<Flight> matchedFlights = (List<Flight>) execution.getVariable(AVAILABLE_FLIGHTS);
-      GeneratedOffer offer;
-      if (matchedFlights.size() > 1) {
-        offer = offerManager.generateOffer(matchedFlights.get(0), matchedFlights.get(1));
+      try{
+        GeneratedOffer offer = offerManager.generateOffer(matchedFlights.get(0), matchedFlights.get(1));
+        execution.setVariable(GENERATED_OFFER, offer);
+      } catch (FlightNotExistException e){
+        execution.setVariable(PROCESS_ERROR,  e.toString());
+      } catch (PersistenceException e){
+        execution.setVariable(PROCESS_ERROR,  e.toString());
       }
-      else {
-        offer = offerManager.generateOffer(matchedFlights.get(0), null);
-      }
-
-      execution.setVariable(GENERATED_OFFER, offer);
-
   }
 }
 

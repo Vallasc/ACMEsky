@@ -2,6 +2,7 @@ package it.unibo.soseng.camunda.offers_manager;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import it.unibo.soseng.logic.database.DatabaseManager;
+import it.unibo.soseng.logic.database.DatabaseManager.FlightNotExistException;
 import it.unibo.soseng.logic.offer.OfferManager;
 import it.unibo.soseng.model.Flight;
 import it.unibo.soseng.model.FlightInterest;
@@ -27,7 +28,7 @@ public class CheckAvailableFlightsDelegate implements JavaDelegate{
     OfferManager offerManager;
 
     @Override
-    public void execute(DelegateExecution execution){
+    public void execute(DelegateExecution execution) throws FlightNotExistException{
       LOGGER.info ("checkAvailableFlightsDelegate in esecuzione");
       List <UserInterest> userInterests = (List<UserInterest>) execution.getVariable(USER_INTEREST);
       List <Flight> matchedFlight = new ArrayList <Flight> ();
@@ -41,9 +42,10 @@ public class CheckAvailableFlightsDelegate implements JavaDelegate{
         offerManager.setFlightAvailability(back);
         //var che controllo il gateway
         execution.setVariable(AVAILABLE_FLIGHTS, matchedFlight);
+        execution.setVariable(THERE_IS_FHLIGHTS, true);
+      }else{
+        execution.setVariable(THERE_IS_FHLIGHTS, false);
       }
-      execution.setVariable(AVAILABLE_FLIGHTS, matchedFlight);
-      execution.setVariable(THERE_IS_FHLIGHTS, true);
     }
 }
 
