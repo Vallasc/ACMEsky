@@ -26,6 +26,7 @@ public class PrepareOfferDelegate implements JavaDelegate{
       for (Flight flight : availableFlights) {
         offerManager.generateOffer(flight);
       }
+      
   }
 }
 

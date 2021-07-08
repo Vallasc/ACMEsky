@@ -20,7 +20,9 @@ public class CheckAvailableFlightsDelegate implements JavaDelegate{
     private final static Logger LOGGER = Logger.getLogger("checkAvailableFlightsDelegate"); 
     
     @Inject
-    DatabaseManager dbManager; 
+    DatabaseManager dbManager;
+    
+    @Inject
     OfferManager offerManager;
 
     @Override
@@ -30,9 +32,13 @@ public class CheckAvailableFlightsDelegate implements JavaDelegate{
       List <UserInterest> userInterests = (List<UserInterest>) execution.getVariable(USER_INTEREST);
       List <Flight> matchedFlight = new ArrayList <Flight> ();
       UserInterest ui = userInterests.get( (int) execution.getVariable(USER_INTEREST_INDEX));
-      if (ui.getFlightBackInterest() != null) {
-        matchedFlight.add (offerManager.matchOffer(ui.getOutboundFlightInterest()));
-        matchedFlight.add (offerManager.matchOffer(ui.getFlightBackInterest()));
+      Flight outBound = offerManager.matchOffer(ui.getOutboundFlightInterest());
+      Flight back = offerManager.matchOffer(ui.getFlightBackInterest());
+      if ( outBound != null && back != null) {
+        matchedFlight.add (outBound);
+        matchedFlight.add (back);
+        offerManager.setFlightAvailability(outBound);
+        offerManager.setFlightAvailability(back);
         //var che controllo il gateway
         execution.setVariable(AVAILABLE_FLIGHTS, matchedFlight);
       }

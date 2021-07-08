@@ -88,7 +88,7 @@ public class DatabaseManager {
     public List<Flight> retrieveFlights(){
         @SuppressWarnings("unchecked")
         List<Flight> flights =
-        entityManager.createQuery("SELECT f FROM Flight f")
+        entityManager.createQuery("SELECT f FROM Flight f WHERE f.available = true AND f.booked = false")
                         .getResultList();
         return flights;
     }
@@ -210,6 +210,10 @@ public class DatabaseManager {
             if (result.get(0) != null)
                 return result.get(0);
             return null;
+    }
+
+    public void updateFlight(Flight f){
+        this.entityManager.merge(f);
     }
 
 

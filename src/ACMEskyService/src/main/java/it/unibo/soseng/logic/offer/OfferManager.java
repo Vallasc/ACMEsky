@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+
+import camundajar.impl.scala.collection.mutable.UnrolledBuffer.Unrolled;
 import it.unibo.soseng.logic.database.DatabaseManager;
 import it.unibo.soseng.logic.database.DatabaseManager.OfferAlreadyInException;
 import it.unibo.soseng.model.Flight;
@@ -21,23 +23,29 @@ public class OfferManager {
 
     public Flight matchOffer (FlightInterest request) {
         List<Flight> flights = databaseManager.retrieveFlights();
-        Flight toReturn = null;
         for (Flight f : flights) {
+
             if (!f.getBooked() && this.isMatched(f, request)) {
-                toReturn = new Flight ();
-                toReturn.setAirline(f.getAirlineId());
-                toReturn.setFlightCode(f.getFlightCode());
-                toReturn.setDepartureAirport(f.getDepartureAirport());
-                toReturn.setArrivalAirport(f.getArrivalAirport());
-                // TODO DAVA ERRORE
-                //toReturn.setDepartureDateTime(f.getDepartureDateTime());
-                //toReturn.setArrivalDateTime(f.getArrivalDateTime());
-                //toReturn.setExpireDate(f.getExpireDate());
-                toReturn.setPrice(f.getPrice());
-                toReturn.setBooked(true);
+                // toReturn = new Flight ();
+                // toReturn.setAirline(f.getAirlineId());
+                // toReturn.setFlightCode(f.getFlightCode());
+                // toReturn.setDepartureAirport(f.getDepartureAirport());
+                // toReturn.setArrivalAirport(f.getArrivalAirport());
+                // // TODO DAVA ERRORE
+                // toReturn.setDepartureDateTime(f.getDepartureDateTime().toString());
+                // toReturn.setArrivalDateTime(f.getArrivalDateTime().toString());
+                // toReturn.setExpireDate(f.getExpireDate().toString());
+                // toReturn.setPrice(f.getPrice());
+                // toReturn.setBooked(true);
+                return f;
             }
         }
-        return toReturn;
+        return null;
+    }
+
+    public void setFlightAvailability(Flight f){
+        f.setAvailable(false);
+        databaseManager.updateFlight(f);
     }
 
     private boolean isMatched (Flight f, FlightInterest fi) {
