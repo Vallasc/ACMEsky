@@ -15,10 +15,10 @@ router.get ('/findOne/:notificationId', async (req, res) => {
 });
 
 //Get all notifications
-router.get ('/notificationByUserId', async (req, res) => {
+router.get ('/all/:username', async (req, res) => {
 
     try {
-        const notifications = await Notification.find ({user_id: req.params.notificationByUserId});
+        const notifications = await Notification.find ({username: req.params.username});
         res.json (notifications); 
     } catch (err) {
         res.json ({ message: err});

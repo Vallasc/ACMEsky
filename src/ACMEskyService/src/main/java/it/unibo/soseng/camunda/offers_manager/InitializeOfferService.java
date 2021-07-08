@@ -20,6 +20,7 @@ public class InitializeOfferService implements JavaDelegate {
     
     @Override
     public void execute(DelegateExecution execution) throws Exception {
+        LOGGER.info("retrieveFlightsOfInterestDelegateExecution");
         List <UserInterest> usersInterests = dbManager.retrieveUserInterests();
         execution.setVariable(USER_INTEREST_LEN, usersInterests.size());
         execution.setVariable(USER_INTEREST_INDEX, 0);

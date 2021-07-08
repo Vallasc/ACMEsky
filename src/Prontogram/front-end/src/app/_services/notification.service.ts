@@ -25,8 +25,8 @@ export class NotificationService {
         return this.http.post(`${environment.apiUrl}/notification/new`, notification);
     }
 
-    getAll(user_id: string) {
-        return this.http.get<Notification[]>(`${environment.apiUrl}/notification/all/${user_id}`); 
+    getAll(username: string) {
+        return this.http.get<Notification[]>(`${environment.apiUrl}/notification/all/${username}`); 
     }
 
     getById(id: string) {
@@ -47,7 +47,8 @@ export class NotificationService {
     sendSubscriptionToTheServer (subscription: PushSubscription, user: User) {
         const sub = new Subscription ();
         sub.subscription = subscription;
-        sub.user_id = user._id;
+        sub.username = user.username;
+        console.log (sub);
         return  this.http.post(`${environment.apiUrl}/subscription/new`,sub);
     }
 

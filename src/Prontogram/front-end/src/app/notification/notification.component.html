@@ -1,36 +1,94 @@
 <div class="p-4">
     <div class="container">
         <h1>Notifiche</h1>
-    <!--<button (click)="pushSubscription()" class="btn btn-sm btn-success mb-2" style="border: 1px solid; margin-left: 4px" >Subscribe</button>
-        <button (click)="unsubscribeNotifications()" class="btn btn-sm btn-success mb-2" style="border: 1px solid; margin-left: 4px">Unsubscribe</button> -->
-        <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th style="width: 30%">Numero volo</th>
-                        <th style="width: 30%">Compagnia aerea</th>
-                        <th style="width: 30%">Token volo</th>
-                        <th style="width: 10%"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let notification of notifications">
-                        <td>{{notification.flyNumber}}</td>
-                        <td>{{notification.flyCompany}}</td>
-                        <td>{{notification.flyToken}}</td>
-                        <td style="white-space: nowrap">
-                            <button (click)="deleteNotification(notification._id)" class="btn btn-sm btn-danger btn-delete-user" >
-                                <span *ngIf="notification.isDeleting" class="spinner-border spinner-border-sm"></span>
-                                <span *ngIf="!notification.isDeleting">Elimina</span>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr *ngIf="!notifications">
-                        <td colspan="4" class="text-center">
-                            <span class="spinner-border spinner-border-lg align-center"></span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div *ngFor="let notification of notifications"> 
+                <mat-card style="background-color:white; border: 1px solid rgb(42, 42, 43); margin-bottom: 5px ">
+                    <mat-card-title>
+                        Notifica volo per <b>{{notification.username}}</b>, il token dell'offerta da inserire su <i>ACMESky</i> è: <b>{{notification.offerToken}}</b>
+                        <mat-card-subtitle>
+                            <br>
+                            <b>Volo di andata</b> 
+                            <mat-card-content>
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 10%">Codice volo</th>
+                                            <th style="width: 35%">Aereoporto di partenza</th>
+                                            <th style="width: 35%">Aereoporto di arrivo</th>
+                                            <th style="width: 10%">Compagnia aerea</th>
+                                            <th style="width: 10%">Prezzo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{notification.flyOutBound.flightCode}}</td>
+                                            <td>
+                                                <div>
+                                                    Nome: {{notification.flyOutBound.departure_airport.name}}<br>
+                                                    Città: {{notification.flyOutBound.departure_airport.cityName}}<br>
+                                                    Data e ora: {{notification.flyOutBound.departureDateTime}}
+                                                </div>
+                                            </td> 
+                                            <td>
+                                                <div>
+                                                    Nome: {{notification.flyOutBound.arrival_airport.name}}<br> 
+                                                    Città: {{notification.flyOutBound.arrival_airport.cityName}}<br>
+                                                    Data e ora: {{notification.flyOutBound.arrivalDateTime}}
+                                                </div>
+                                            </td>
+                                            <td>{{notification.flyOutBound.AirlineName}}</td>
+                                            <td>{{notification.flyOutBound.price}} €</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </mat-card-content>   
+                        </mat-card-subtitle>
+                        <mat-card-subtitle *ngIf="notification.flyBack">
+                            <b>Volo di ritorno</b> 
+                            <mat-card-content>
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 10%">Codice volo</th>
+                                            <th style="width: 35%">Aereoporto di partenza</th>
+                                            <th style="width: 35%">Aereoporto di arrivo</th>
+                                            <th style="width: 10%">Compagnia aerea</th>
+                                            <th style="width: 10%">Prezzo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{notification.flyBack.flightCode}}</td>
+                                            <td>
+                                                <div>
+                                                    Nome: {{notification.flyBack.departure_airport.name}}<br>
+                                                    Città: {{notification.flyBack.departure_airport.cityName}}<br>
+                                                    Data e ora: {{notification.flyBack.departureDateTime}}
+                                                </div>
+                                            </td> 
+                                            <td>
+                                                <div>
+                                                    Nome: {{notification.flyBack.arrival_airport.name}}<br> 
+                                                    Città: {{notification.flyBack.arrival_airport.cityName}}<br>
+                                                    Data e ora: {{notification.flyBack.arrivalDateTime}}
+                                                </div>
+                                            </td>
+                                            <td>{{notification.flyBack.AirlineName}}</td>
+                                            <td>{{notification.flyBack.price}} €</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </mat-card-content> 
+                        </mat-card-subtitle>
+                    </mat-card-title>
+                    <mat-card-actions>
+                        <button (click)="deleteNotification(notification._id)" class="btn btn-sm btn-danger btn-delete-user" >
+                            <span *ngIf="notification.isDeleting" class="spinner-border spinner-border-sm"></span>
+                            <span *ngIf="!notification.isDeleting">Elimina</span>
+                        </button>
+                    </mat-card-actions>
+
+                </mat-card>
+            </div>
     </div>
 </div>
-

@@ -20,6 +20,7 @@ import it.unibo.soseng.model.Airport;
 import it.unibo.soseng.model.DomainEntity;
 import it.unibo.soseng.model.Flight;
 import it.unibo.soseng.model.FlightInterest;
+import it.unibo.soseng.model.GeneratedOffer;
 import it.unibo.soseng.model.User;
 import it.unibo.soseng.model.UserInterest;
 
@@ -147,15 +148,16 @@ public class DatabaseManager {
     }
 
 
-    public void createOffer (Flight flight) throws OfferAlreadyInException { 
+    public void createOffer (GeneratedOffer offer) throws OfferAlreadyInException { 
         try {
-            this.entityManager.persist(flight);
+            this.entityManager.persist(offer);
         } catch (PersistenceException e) {
             throw new OfferAlreadyInException();
         }
     }
 
     // Airport
+    
     public Airport getAirport(String code) throws AirportNotFoundException {
         @SuppressWarnings("unchecked") 
         List<Airport> result = (List<Airport>) entityManager

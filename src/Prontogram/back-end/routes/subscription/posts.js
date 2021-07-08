@@ -5,11 +5,11 @@ const Subscription = require ('../../models/Subscription')
 router.post('/new', async (req, res) => {
     const userSub = new Subscription ({
         info: req.body.subscription,
-        user_id: req.body.user_id
+        username: req.body.username
     });
-    console.log (req.body.subscription)
+    console.log ("subscription success "+ req.body.subscription + "username"+ req.body.username)
     try {
-        const alreadySub= await Subscription.findOne({user_id:req.body.user_id})
+        const alreadySub= await Subscription.findOne({username:req.body.username})
         if(alreadySub) {
             console.log ("User already subscribed!")
         }
