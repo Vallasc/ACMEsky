@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js -p 8083",
+    "start": "node index.js -p 8040 -k NE81GVhyIvXPV43OBZLtoM5cvCdLH",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Giacomo Vallorani",
