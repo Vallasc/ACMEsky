@@ -55,7 +55,7 @@ export class AccountService {
     }
 
     createUser(user: User) {
-        return this.http.post(`${environment.apiUrl}/user/new`, user, {headers: this.getheader ()});
+        return this.http.post(`${environment.apiUrl}/user`, user, {headers: this.getheader ()});
     }
 
     getAll() {
