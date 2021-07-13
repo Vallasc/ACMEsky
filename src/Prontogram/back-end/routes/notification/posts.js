@@ -1,7 +1,7 @@
 const router = require ('express').Router ();
 const verify = require ('../verifyToken');
-const Notification = require('../../models/Notification');
-const Subscription = require ('../../models/Subscription')
+const Notification = require('../../models/notification');
+const Subscription = require ('../../models/subscription')
 const webpush = require('web-push');
 
 const vapidKeys = {

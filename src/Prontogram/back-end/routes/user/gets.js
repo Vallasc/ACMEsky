@@ -1,5 +1,5 @@
 const router = require ('express').Router ();
-const User = require('../../models/User');
+const User = require('../../models/user');
 const verify = require ('../verifyToken');
 
 //Get user by Id  TOLGO VERIFY ('/',verify, async (req, res) ==> ('/', async (req, res)
