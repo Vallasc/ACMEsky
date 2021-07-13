@@ -1,0 +1,96 @@
+{
+  "configVersion": 1,
+  "timestamp": 1626171574990,
+  "index": "/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/5-es2015.f2a7cac244817dab1051.js",
+        "/5-es5.f2a7cac244817dab1051.js",
+        "/6-es2015.3caf675a03d6963a9343.js",
+        "/6-es5.3caf675a03d6963a9343.js",
+        "/favicon.ico",
+        "/index.html",
+        "/main-es2015.97a6473becd69ddb949f.js",
+        "/main-es5.97a6473becd69ddb949f.js",
+        "/manifest.webmanifest",
+        "/polyfills-es2015.95bb65e853d2781ac3bd.js",
+        "/polyfills-es5.341d48ffc88eaeae911d.js",
+        "/runtime-es2015.279bbd896a1e9a772845.js",
+        "/runtime-es5.279bbd896a1e9a772845.js",
+        "/styles.f2a8bd370672884dba8b.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/assets/favicon.ico",
+        "/assets/icons/icon-128x128.png",
+        "/assets/icons/icon-144x144.png",
+        "/assets/icons/icon-152x152.png",
+        "/assets/icons/icon-192x192.png",
+        "/assets/icons/icon-384x384.png",
+        "/assets/icons/icon-512x512.png",
+        "/assets/icons/icon-96x96.png",
+        "/assets/icons/iconaNotifiche.png"
+      ],
+      "patterns": []
+    }
+  ],
+  "dataGroups": [],
+  "hashTable": {
+    "/5-es2015.f2a7cac244817dab1051.js": "2fedf2ebbd8f100c29c361660a8f09168d8cdc1f",
+    "/5-es5.f2a7cac244817dab1051.js": "caf4360a98319dae45313a24cc42af91c1f7e6a6",
+    "/6-es2015.3caf675a03d6963a9343.js": "819bc7815d3e1d9c5a823aa129ee489a0cad8c7e",
+    "/6-es5.3caf675a03d6963a9343.js": "f92c7baa0053a66257bc22bf689ce739863d2044",
+    "/assets/favicon.ico": "9eafe5bfdeb8fa57b5eecf5deb4f00f945326088",
+    "/assets/icons/icon-128x128.png": "dae3b6ed49bdaf4327b92531d4b5b4a5d30c7532",
+    "/assets/icons/icon-144x144.png": "b0bd89982e08f9bd2b642928f5391915b74799a7",
+    "/assets/icons/icon-152x152.png": "7479a9477815dfd9668d60f8b3b2fba709b91310",
+    "/assets/icons/icon-192x192.png": "1abd80d431a237a853ce38147d8c63752f10933b",
+    "/assets/icons/icon-384x384.png": "329749cd6393768d3131ed6304c136b1ca05f2fd",
+    "/assets/icons/icon-512x512.png": "559d9c4318b45a1f2b10596bbb4c960fe521dbcc",
+    "/assets/icons/icon-96x96.png": "3914125a4b445bf111c5627875fc190f560daa41",
+    "/assets/icons/iconaNotifiche.png": "c457e56089a36952cd67156f9996bc4ce54a5ed9",
+    "/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
+    "/index.html": "fdfccd882c61f792545c74361be1b9193eaf45b0",
+    "/main-es2015.97a6473becd69ddb949f.js": "8c49251baa7bd7e4b7b0cf906375844b152aa9f9",
+    "/main-es5.97a6473becd69ddb949f.js": "76229ad23dd4d3a1f00de71ebe2c91026abc6dd3",
+    "/manifest.webmanifest": "57345290b5fee56eef56e50d45fb471eefb47d59",
+    "/polyfills-es2015.95bb65e853d2781ac3bd.js": "72ad4ccc0a3916ae4598199447cdeadd6d380570",
+    "/polyfills-es5.341d48ffc88eaeae911d.js": "d85e194d08fff11f8f102b302777499a0e87cd1c",
+    "/runtime-es2015.279bbd896a1e9a772845.js": "9eaf1b601fb98ad62140b9713615d5edda56482e",
+    "/runtime-es5.279bbd896a1e9a772845.js": "020d128bc568f277d9728a4c821d22ae66e6694d",
+    "/styles.f2a8bd370672884dba8b.css": "0a1275441579c364c1bc25f2fdd8edfa43ed7a39"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+    }
+  ]
+}
