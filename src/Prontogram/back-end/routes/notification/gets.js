@@ -1,5 +1,5 @@
 const router = require ('express').Router ();
-const Notification = require('../../models/Notification');
+const Notification = require('../../models/notification');
 const verify = require ('../verifyToken');
 
 //Get notification by Id

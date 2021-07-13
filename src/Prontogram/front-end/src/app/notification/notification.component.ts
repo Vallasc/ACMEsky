@@ -4,7 +4,7 @@ import { AccountService, NotificationService } from '../_services';
 import { first, take, takeUntil } from 'rxjs/operators';
 import {SwPush} from '@angular/service-worker'
 import { Observable, Subject } from 'rxjs';
-import { User } from '../../../../../../../../../ACMEsky/src/app/_models';
+import { User } from '../_models';
 
 @Component({ templateUrl: './notification.component.html' })
 

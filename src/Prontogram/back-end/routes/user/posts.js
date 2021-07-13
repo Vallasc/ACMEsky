@@ -1,11 +1,11 @@
 const router = require ('express').Router ();
 const verify = require ('../verifyToken');
-const User = require('../../models/User');
+const User = require('../../models/user');
 const bcrypt = require ('bcryptjs');
 const webpush = require('web-push');
 
 //Create a new user
-router.post('/new',verify, async (req, res) => {
+router.post('/', async (req, res) => {
 
     const usernameExist = await User.findOne ({username: req.body.username});
     if (usernameExist) return res.status (400).send ('username already exists');
@@ -26,7 +26,7 @@ router.post('/new',verify, async (req, res) => {
 });
 
 //Delete User
-router.delete ('/:userId',verify, async (req, res) => {
+router.delete ('/:userId', verify, async (req, res) => {
     try {
         const removeUser = await User.remove ({_id: req.params.userId})
         res.json (removeUser);
@@ -36,7 +36,7 @@ router.delete ('/:userId',verify, async (req, res) => {
 });
 
 //Update User
-router.put ('/:userId',verify, async (req, res) => {
+router.put ('/:userId', verify, async (req, res) => {
     try {
             const updateUser = await User.updateOne (
             {_id: req.params.userId}, 
