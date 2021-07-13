@@ -29,6 +29,7 @@ services:
         environment:
             - MONGO_INITDB_ROOT_USERNAME=soseng
             - MONGO_INITDB_ROOT_PASSWORD=adminadmin
+            - MONGO_INITDB_DATABASE=Prontogram
         networks: 
             - acmesky
         volumes:
