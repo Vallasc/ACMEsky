@@ -12,7 +12,7 @@ app.use(bodyParser.json())
 
 const port = 8000;
 app.listen(port, () => {
-    console.log('The server started on port: '+port );
+    console.log('The server started on port: '+ port );
   });
   
 dotenv.config ();

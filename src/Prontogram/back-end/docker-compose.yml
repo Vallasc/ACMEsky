@@ -1,0 +1,53 @@
+version: '3.9'
+
+services:
+    prontogram_service:
+        container_name: prontogram_service_container
+        build: ./back-end/
+        ports:
+            - "8050:8000"
+        restart: always
+        networks: 
+            - acmesky
+        depends_on:
+            - mongo
+        
+
+    mongo:
+        container_name: mongo_container
+        image: mongo
+        restart: always
+        environment:
+            - MONGO_INITDB_ROOT_USERNAME=soseng
+            - MONGO_INITDB_ROOT_PASSWORD=adminadmin
+        networks: 
+            - acmesky
+        volumes:
+            - mongodb-data:/data/db
+        ports: 
+            - 27017:27017
+            
+    mongo-express:
+        image: mongo-express
+        restart: always
+        ports:
+            - 8051:8081
+        environment:
+            - ME_CONFIG_MONGODB_ADMINUSERNAME=soseng
+            - ME_CONFIG_MONGODB_ADMINPASSWORD=adminadmin
+            - ME_CONFIG_MONGODB_SERVER=mongo
+            - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
+            - ME_CONFIG_BASICAUTH_USERNAME=soseng
+            - ME_CONFIG_BASICAUTH_PASSWORD=adminadmin
+        networks: 
+            - acmesky
+        depends_on:
+            - mongo
+
+networks:
+    acmesky:
+        external: true
+        name: acmesky-net
+
+volumes:
+    mongodb-data:
