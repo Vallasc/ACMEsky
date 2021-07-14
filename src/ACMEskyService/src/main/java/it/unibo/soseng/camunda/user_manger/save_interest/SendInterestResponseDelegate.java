@@ -1,4 +1,4 @@
-package it.unibo.soseng.camunda.user_manger;
+package it.unibo.soseng.camunda.user_manger.save_interest;
 
 import java.util.logging.Logger;
 
