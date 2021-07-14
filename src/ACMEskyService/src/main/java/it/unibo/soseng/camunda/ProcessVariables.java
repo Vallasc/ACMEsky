@@ -14,6 +14,9 @@ public final class ProcessVariables {
     // Interest manager
     public static final String USER_INTERESTS_REQUEST = "userInterestsRequest";
 
+    // OfferPayment
+    public static final String OFFER_PRICE = "offerPrice"; // Int
+
     // Offers manager
     public static final String AVAILABLE_FLIGHTS = "availableFlight";
     public static final String USER_INTEREST = "offerService";
@@ -21,6 +24,7 @@ public final class ProcessVariables {
     public static final String USER_INTEREST_INDEX = "userInterestsIndex";
 
 
+    // Commmon
     public static final String PROCESS_ERROR = "processError";
     public static final String USERNAME = "username";
     public static final String ASYNC_RESPONSE = "asyncResponse";
