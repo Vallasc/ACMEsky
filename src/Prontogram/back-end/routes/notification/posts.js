@@ -17,7 +17,7 @@ webpush.setVapidDetails(
 
 //Create new notification
 
-router.post('/new', async (req, res) => {
+router.post('/', async (req, res) => {
     const notification = new Notification ({
         flyBack: req.body.flyBack, 
         flyOutBound: req.body.flyOutBound, 
