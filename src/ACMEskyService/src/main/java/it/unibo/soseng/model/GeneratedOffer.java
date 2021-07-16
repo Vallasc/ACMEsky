@@ -41,6 +41,8 @@ public class GeneratedOffer implements Serializable {
     @Column(name = "booked", nullable = true)
     private boolean booked;
 
+    @Column(name = "token", nullable = true)
+    private String token;
 
     public long getId() {
         return this.id;
@@ -88,5 +90,13 @@ public class GeneratedOffer implements Serializable {
 
     public void setBooked(boolean booked) {
         this.booked = booked;
+    }
+
+    public String getToken() {
+        return this.token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

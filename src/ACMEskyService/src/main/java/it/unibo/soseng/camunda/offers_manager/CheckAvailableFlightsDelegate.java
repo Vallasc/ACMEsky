@@ -5,7 +5,6 @@ import it.unibo.soseng.logic.database.DatabaseManager;
 import it.unibo.soseng.logic.database.DatabaseManager.FlightNotExistException;
 import it.unibo.soseng.logic.offer.OfferManager;
 import it.unibo.soseng.model.Flight;
-import it.unibo.soseng.model.FlightInterest;
 import it.unibo.soseng.model.UserInterest;
 import java.util.ArrayList;
 import java.util.List;

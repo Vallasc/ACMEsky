@@ -1,6 +1,9 @@
 package it.unibo.soseng.logic.offer;
 
+import java.nio.charset.Charset;
+import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -25,10 +28,10 @@ public class OfferManager {
         offerTogenerate.setBooked(false);
         offerTogenerate.setOutboundFlightId(requestOutBound);
         offerTogenerate.setFlightBackId(requestFlightBack);
-        offerTogenerate.setExpireDate(requestOutBound.getExpireDate());
+        offerTogenerate.setExpireDate(OffsetDateTime.now().plusHours(24));
         double priceOutBound = requestOutBound.getPrice();
         offerTogenerate.setTotalPrice(requestFlightBack.getPrice() + priceOutBound);
-        
+        offerTogenerate.setToken(getRandomString(10));
         databaseManager.createOffer(offerTogenerate);
         return offerTogenerate;
     }
@@ -64,6 +67,42 @@ public class OfferManager {
             return f.getDepartureAirport() == fi.getDepartureAirport() && f.getArrivalAirport() == fi.getArrivalAirport();
     }
 
-   
+    static String getRandomString(int i) 
+    { 
+        // bind the length 
+        byte[] bytearray;
+        bytearray = new byte[256];         
+        String mystring;
+        StringBuffer thebuffer;
+        String theAlphaNumericS;
+
+        new Random().nextBytes(bytearray); 
+
+        mystring 
+            = new String(bytearray, Charset.forName("UTF-8")); 
+            
+        thebuffer = new StringBuffer();
+        
+        //remove all spacial char 
+        theAlphaNumericS 
+            = mystring 
+                .replaceAll("[^A-Z0-9]", ""); 
+
+        //random selection
+        for (int m = 0; m < theAlphaNumericS.length(); m++) { 
+
+            if (Character.isLetter(theAlphaNumericS.charAt(m)) 
+                    && (i > 0) 
+                || Character.isDigit(theAlphaNumericS.charAt(m)) 
+                    && (i > 0)) { 
+
+                thebuffer.append(theAlphaNumericS.charAt(m)); 
+                i--; 
+            } 
+        } 
+
+        // the resulting string 
+        return thebuffer.toString(); 
+    } 
 }
 

@@ -8,4 +8,8 @@ public class Errors {
     public static final String AIRPORT_NOT_FOUND = "Airport not found";
     public static final String AIRPORT_CODE_ERROR = "Airports codes error";
     public static final String USER_NOT_FOUND = "Username not found";
+    public static final String INVALID_TOKEN = "Invalid token";
+    public static final String OFFER_EXPIRED = "The offer is expired";
+
+    
 }

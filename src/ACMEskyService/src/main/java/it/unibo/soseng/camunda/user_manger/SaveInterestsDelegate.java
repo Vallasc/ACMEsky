@@ -18,10 +18,10 @@ import static it.unibo.soseng.camunda.ProcessVariables.USERNAME;
 import static it.unibo.soseng.camunda.ProcessVariables.PROCESS_SAVE_INTERST;
 import static it.unibo.soseng.camunda.ProcessVariables.RESPONSE;
 
-@Named("saveInterstsDelegate")
-public class SaveInterstsDelegate implements JavaDelegate {
+@Named("saveInterestsDelegate")
+public class SaveInterestsDelegate implements JavaDelegate {
 
-    private final static Logger LOGGER = Logger.getLogger(SaveInterstsDelegate.class.getName());
+    private final static Logger LOGGER = Logger.getLogger(SaveInterestsDelegate.class.getName());
 
     @Inject 
     InterestManager interestManager;
@@ -31,7 +31,7 @@ public class SaveInterstsDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution){
-        LOGGER.info("Execute SaveIntersts");
+        LOGGER.info("Execute SaveInterests");
         UserInterestDTO interestRequest = (UserInterestDTO) execution.getVariable(USER_INTERESTS_REQUEST);
         String email = (String) execution.getVariable(USERNAME);
         Response response = interestManager.handleUserInterests(email, interestRequest);

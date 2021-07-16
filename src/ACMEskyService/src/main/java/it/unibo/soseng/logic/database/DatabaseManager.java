@@ -48,6 +48,16 @@ public class DatabaseManager {
         throw new UserNotFoundException();
     }
 
+    public GeneratedOffer getOfferByToken(String token) throws OfferNotFoundException {
+        GeneratedOffer result = (GeneratedOffer) entityManager
+                .createQuery("SELECT go FROM GeneratedOffer go WHERE o.token = :token")
+                .setParameter("token", token).getSingleResult();
+        if (result == null) {
+            throw new OfferNotFoundException();
+        }
+        return result;
+    }
+
     @Transactional
     public void createUser(User user) throws UserAlreadyInException {
         try {
@@ -236,6 +246,9 @@ public class DatabaseManager {
     }
 
     public class FlightNotExistException extends Exception {
+        private static final long serialVersionUID = 1L;
+    }
+    public class OfferNotFoundException extends Exception {
         private static final long serialVersionUID = 1L;
     }
 
