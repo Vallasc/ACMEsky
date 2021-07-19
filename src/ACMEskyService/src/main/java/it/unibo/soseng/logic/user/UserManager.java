@@ -26,21 +26,18 @@ import it.unibo.soseng.model.DomainEntity;
 import it.unibo.soseng.model.GeneratedOffer;
 import it.unibo.soseng.model.User;
 import it.unibo.soseng.util.Errors;
-
 import static it.unibo.soseng.security.Constants.USER;
-import static it.unibo.soseng.camunda.StartEvents.RECEIVED_TOKEN;
+import static it.unibo.soseng.camunda.StartEvents.PAY_OFFER;
 import static it.unibo.soseng.camunda.ProcessVariables.USER_OFFER_REQUEST;
 import static it.unibo.soseng.camunda.ProcessVariables.USER_OFFER_TOKEN;
 import static it.unibo.soseng.camunda.ProcessVariables.PROCESS_CONFIRM_FLIGHT;
 import static it.unibo.soseng.camunda.ProcessVariables.URI_INFO;
 import static it.unibo.soseng.camunda.ProcessVariables.ASYNC_RESPONSE;
 import static it.unibo.soseng.camunda.ProcessVariables.PROCESS_ERROR;
-
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Stateless
@@ -59,7 +56,7 @@ public class UserManager {
     // Start Camunda process
     public void startConfirmUserFlight(UserOfferDTO request, AsyncResponse response, UriInfo uriInfo) 
     throws BadRequestException{
-    LOGGER.info("StartConfirmFlightsFromUser");
+    LOGGER.info("startConfirmUserFlight");
     String token = request.getToken();
 
     final RuntimeService runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();
@@ -70,7 +67,7 @@ public class UserManager {
     processState.setState(PROCESS_CONFIRM_FLIGHT, token, ASYNC_RESPONSE, response);
 
         // Start the process instance
-    ProcessInstanceWithVariables instance = runtimeService.createProcessInstanceByKey(RECEIVED_TOKEN)
+    ProcessInstanceWithVariables instance = runtimeService.createProcessInstanceByKey(PAY_OFFER)
     .setVariables(processVariables)
     .executeWithVariablesInReturn();
     processVariables = instance.getVariables();
