@@ -4,12 +4,14 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 import javax.security.enterprise.SecurityContext;
+import javax.validation.constraints.Email;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.camunda.bpm.engine.ProcessEngines;
 import org.camunda.bpm.engine.RuntimeService;
+import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.runtime.ProcessInstanceWithVariables;
 
 import it.unibo.soseng.gateway.user.dto.UserDeleteDTO;
@@ -30,12 +32,13 @@ import static it.unibo.soseng.security.Constants.USER;
 import static it.unibo.soseng.camunda.StartEvents.PAY_OFFER;
 import static it.unibo.soseng.camunda.ProcessVariables.USER_OFFER_REQUEST;
 import static it.unibo.soseng.camunda.ProcessVariables.USER_OFFER_TOKEN;
-import static it.unibo.soseng.camunda.ProcessVariables.PROCESS_CONFIRM_FLIGHT;
-import static it.unibo.soseng.camunda.ProcessVariables.URI_INFO;
+import static it.unibo.soseng.camunda.ProcessVariables.PROCESS_BUY_OFFER;
+import static it.unibo.soseng.camunda.ProcessVariables.USERNAME;
 import static it.unibo.soseng.camunda.ProcessVariables.ASYNC_RESPONSE;
+import static it.unibo.soseng.camunda.ProcessVariables.IS_VALID_TOKEN;
+import static it.unibo.soseng.camunda.ProcessVariables.IS_OFFER_EXPIRED;
 import static it.unibo.soseng.camunda.ProcessVariables.PROCESS_ERROR;
 import java.time.OffsetDateTime;
-import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -53,53 +56,65 @@ public class UserManager {
     @Inject
     private ProcessState processState;
 
+    //TODO: controllare che non ci siano altri processi attivi
     // Start Camunda process
     public void startConfirmUserFlight(UserOfferDTO request, AsyncResponse response, UriInfo uriInfo) 
     throws BadRequestException{
     LOGGER.info("startConfirmUserFlight");
+    String email = securityContext.getCallerPrincipal().getName();
     String token = request.getToken();
 
     final RuntimeService runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();
     Map<String,Object> processVariables = new HashMap<String,Object>();
     processVariables.put(USER_OFFER_REQUEST, request);
     processVariables.put(USER_OFFER_TOKEN, token);
-    processState.setState(PROCESS_CONFIRM_FLIGHT, token, URI_INFO, uriInfo);
-    processState.setState(PROCESS_CONFIRM_FLIGHT, token, ASYNC_RESPONSE, response);
+    processVariables.put(USERNAME, email);
+    processState.setState(PROCESS_BUY_OFFER, email, ASYNC_RESPONSE, response);
 
-        // Start the process instance
+    // Start the process instance
     ProcessInstanceWithVariables instance = runtimeService.createProcessInstanceByKey(PAY_OFFER)
     .setVariables(processVariables)
     .executeWithVariablesInReturn();
     processVariables = instance.getVariables();
     String error = (String) processVariables.get(PROCESS_ERROR);
+
     if(error != null)
-    throw new BadRequestException();
+        throw new BadRequestException();
+
     }  
     
-    public Response handleConfirmUserFlight(String token, UserOfferDTO offer) throws OfferNotFoundException{
+    public Response handleConfirmUserFlight(String token, String email, UserOfferDTO offer, DelegateExecution execution) throws OfferNotFoundException{
             // Control token
+            execution.setVariable(IS_VALID_TOKEN, true);               
+            execution.setVariable(IS_OFFER_EXPIRED, false);               
+
             if (token == null || token == "") {
-                return Response.status(Response.Status.BAD_REQUEST.getStatusCode())
+                execution.setVariable(IS_VALID_TOKEN, false);               
+                 return Response.status(Response.Status.BAD_REQUEST.getStatusCode())
                 .entity(Errors.INVALID_TOKEN)
                 .build();
             }
-            GeneratedOffer offerToReturn = databaseManager.getOfferByToken(token);
+            GeneratedOffer offerToReturn;
+
+            try {
+                offerToReturn = databaseManager.getOfferByToken(token, email);
+
+            } catch (OfferNotFoundException e) {
+                execution.setVariable(IS_VALID_TOKEN, false);               
+                 return Response.status(Response.Status.BAD_REQUEST.getStatusCode())
+                .entity(Errors.INVALID_TOKEN)
+                .build();
+            }
+            
             OffsetDateTime now = OffsetDateTime.now();
             if (offerToReturn.getExpireDate().compareTo(now) < 0) {
+                execution.setVariable(IS_OFFER_EXPIRED, true);  
                 return Response.status(Response.Status.BAD_REQUEST.getStatusCode())
                                 .entity(Errors.OFFER_EXPIRED)
                                 .build();
             }
-            try {
-                UriInfo uriInfo = (UriInfo) processState.getState(PROCESS_CONFIRM_FLIGHT, token, URI_INFO);
-                return Response.status(Response.Status.CREATED.getStatusCode())
-                        .header("Location", String.format("%s/%s", uriInfo.getAbsolutePath().toString(), offer.getId()))
-                        .build();
-            } catch (DateTimeParseException e){
-                return Response.status(Response.Status.BAD_REQUEST.getStatusCode())
-                                .entity(Errors.DATE_FORMAT_ERROR)
-                                .build();
-            }
+            return Response.status(Response.Status.OK.getStatusCode())
+            .build();
         }
 
     public void createUser(UserSignUpDTO request) throws UserAlreadyInException {

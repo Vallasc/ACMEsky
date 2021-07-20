@@ -102,19 +102,4 @@ public class UserController {
         }
     }
 
-    @POST
-    @Path("/userOfferToken")
-    @RolesAllowed({USER})
-    @Consumes( MediaType.APPLICATION_JSON )
-    public void userOfferToken(final @Valid UserOfferDTO request, 
-                                    final @Context UriInfo uriInfo,
-                                    final @Suspended AsyncResponse response) {
-        LOGGER.info("POST userOffer token");
-        try {
-            userManager.startConfirmUserFlight(request, response, uriInfo);
-        } catch (BadRequestException e) {
-            response.resume(Response.status(Response.Status.BAD_REQUEST.getStatusCode()).build());
-        }
-    }
-
 }

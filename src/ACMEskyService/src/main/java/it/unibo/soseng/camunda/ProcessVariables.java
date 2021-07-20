@@ -37,7 +37,6 @@ public final class ProcessVariables {
 
 
     public static final String PROCESS_SAVE_INTERST = "processSaveInterest";
-    public static final String PROCESS_CONFIRM_FLIGHT = "processConfirmFlight";
 
     public static final String PROCESS_BUY_OFFER = "processBuyOffer";
     public static final String GENERATED_OFFER = "generatedOffer";

@@ -3,7 +3,7 @@
   <bpmn:collaboration id="Collaboration_0m8rgth">
     <bpmn:participant id="Participant_14wuqr7" name="ACMESky" processRef="PayOffer" />
   </bpmn:collaboration>
-  <bpmn:process id="PayOffer" isExecutable="true">
+  <bpmn:process id="PayOffer" isExecutable="true" camunda:isStartableInTasklist="false">
     <bpmn:serviceTask id="Activity_1vlshwr" name="Retreive offer" camunda:delegateExpression="#{retrieveOfferDelegate}">
       <bpmn:incoming>Flow_0yho0zi</bpmn:incoming>
       <bpmn:outgoing>Flow_02g1lhk</bpmn:outgoing>
@@ -26,11 +26,11 @@
       <bpmn:endEvent id="Event_1bvrgar">
         <bpmn:incoming>Flow_0yv07w3</bpmn:incoming>
       </bpmn:endEvent>
-      <bpmn:sendTask id="Activity_0vqkz67" name="Send success" camunda:delegateExpression="#{sendOfferSuccessDelegate}">
+      <bpmn:sendTask id="Activity_0vqkz67" name="Send success" camunda:delegateExpression="#{sendOfferResponseDelegate}">
         <bpmn:incoming>Flow_0jm0736</bpmn:incoming>
         <bpmn:outgoing>Flow_0yv07w3</bpmn:outgoing>
       </bpmn:sendTask>
-      <bpmn:sendTask id="Activity_0jn957p" name="Send error" camunda:delegateExpression="#{sendOfferErrorDelegate}">
+      <bpmn:sendTask id="Activity_0jn957p" name="Send error" camunda:delegateExpression="#{sendOfferResponseDelegate}">
         <bpmn:incoming>Flow_1ifywnr</bpmn:incoming>
         <bpmn:incoming>Flow_0r1g7iu</bpmn:incoming>
         <bpmn:outgoing>Flow_1il1922</bpmn:outgoing>
@@ -50,10 +50,10 @@
       <bpmn:sequenceFlow id="Flow_0u2z9cw" name="Yes" sourceRef="Gateway_1qj5yon" targetRef="Gateway_13dfhiy">
         <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${isValidToken== true}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
+      <bpmn:sequenceFlow id="Flow_15ey7dv" sourceRef="Event_1y138le" targetRef="Gateway_1qj5yon" />
       <bpmn:sequenceFlow id="Flow_0r1g7iu" name="Yes" sourceRef="Gateway_13dfhiy" targetRef="Activity_0jn957p">
         <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${isOfferExpired== true}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
-      <bpmn:sequenceFlow id="Flow_15ey7dv" sourceRef="Event_1y138le" targetRef="Gateway_1qj5yon" />
     </bpmn:subProcess>
     <bpmn:endEvent id="Event_1uxcau0" name="Exit">
       <bpmn:incoming>Flow_145aoik</bpmn:incoming>

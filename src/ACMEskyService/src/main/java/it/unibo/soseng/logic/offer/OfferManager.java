@@ -12,9 +12,11 @@ import javax.persistence.PersistenceException;
 
 import it.unibo.soseng.logic.database.DatabaseManager;
 import it.unibo.soseng.logic.database.DatabaseManager.FlightNotExistException;
+import it.unibo.soseng.logic.database.DatabaseManager.UserNotFoundException;
 import it.unibo.soseng.model.Flight;
 import it.unibo.soseng.model.FlightInterest;
 import it.unibo.soseng.model.GeneratedOffer;
+import it.unibo.soseng.model.User;
 @Stateless
 public class OfferManager {
     private final static Logger LOGGER = Logger.getLogger(OfferManager.class.getName());
@@ -22,7 +24,7 @@ public class OfferManager {
     @Inject
     private DatabaseManager databaseManager;
 
-    public GeneratedOffer generateOffer(Flight requestOutBound, Flight requestFlightBack) throws PersistenceException, FlightNotExistException {
+    public GeneratedOffer generateOffer(Flight requestOutBound, Flight requestFlightBack, String username) throws PersistenceException, FlightNotExistException, UserNotFoundException {
         GeneratedOffer offerTogenerate = new GeneratedOffer ();
         
         offerTogenerate.setBooked(false);
@@ -32,6 +34,8 @@ public class OfferManager {
         double priceOutBound = requestOutBound.getPrice();
         offerTogenerate.setTotalPrice(requestFlightBack.getPrice() + priceOutBound);
         offerTogenerate.setToken(getRandomString(10));
+        User user = databaseManager.getUser(username);
+        offerTogenerate.setUser(user);
         databaseManager.createOffer(offerTogenerate);
         return offerTogenerate;
     }

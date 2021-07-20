@@ -48,10 +48,12 @@ public class DatabaseManager {
         throw new UserNotFoundException();
     }
 
-    public GeneratedOffer getOfferByToken(String token) throws OfferNotFoundException {
+    public GeneratedOffer getOfferByToken(String token, String email) throws OfferNotFoundException {
         GeneratedOffer result = (GeneratedOffer) entityManager
-                .createQuery("SELECT go FROM GeneratedOffer go WHERE o.token = :token")
-                .setParameter("token", token).getSingleResult();
+                .createQuery("SELECT go FROM User u, DomainEntity e, GeneratedOffer go "+ 
+                "WHERE e.username = :username AND u.entity = e.id "+
+                "AND go.token = :token AND go.user = u.id")
+                .setParameter("token", token).setParameter("username", email).getSingleResult();
         if (result == null) {
             throw new OfferNotFoundException();
         }
