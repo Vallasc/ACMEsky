@@ -1,5 +1,5 @@
 const router = require ('express').Router ();
-const Subscription = require ('../../models/Subscription')
+const Subscription = require ('../../models/subscription')
 
 //Get all subscription
 router.get ('/all', async (req, res) => {

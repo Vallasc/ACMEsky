@@ -1,14 +1,14 @@
 {
-    "name": "ACMEsky",
+    "name": "prontogram",
     "version": "0.0.0",
     "scripts": {
         "ng": "ng",
         "start": "ng serve --open",
-        "build": "ng build",
+        "build": "ng build --prod",
         "test": "ng test",
         "lint": "ng lint",
         "e2e": "ng e2e",
-        "server-start": "http-server",
+        "server-start": "http-server --port 80 -o /static/",
         "json-server": "json-server --watch db.json"
     },
     "private": true,
@@ -29,6 +29,7 @@
         "body-parser": "^1.19.0",
         "dotenv": "^8.2.0",
         "express": "^4.17.1",
+        "http-server": "^0.12.3",
         "json-server": "^0.16.3",
         "jsonwebtoken": "^8.5.1",
         "mongoose": "^5.11.17",
@@ -53,10 +54,10 @@
         "karma-coverage-istanbul-reporter": "^3.0.2",
         "karma-jasmine": "^3.3.0",
         "karma-jasmine-html-reporter": "^1.5.0",
+        "nodemon": "^2.0.7",
         "protractor": "^7.0.0",
         "ts-node": "^8.3.0",
         "tslint": "^6.1.0",
-        "typescript": "^3.9.5",
-        "nodemon": "^2.0.7"
+        "typescript": "^3.9.5"
     }
 }

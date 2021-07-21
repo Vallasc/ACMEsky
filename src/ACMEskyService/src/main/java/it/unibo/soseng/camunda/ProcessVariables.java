@@ -14,6 +14,14 @@ public final class ProcessVariables {
     // Interest manager
     public static final String USER_INTERESTS_REQUEST = "userInterestsRequest";
 
+    //UserOffer
+    public static final String USER_OFFER_REQUEST = "userOfferRequest";
+    public static final String USER_OFFER_TOKEN = "userOfferToken";
+    public static final String IS_VALID_TOKEN = "isValidToken";
+    public static final String IS_OFFER_EXPIRED = "isOfferExpired";
+
+
+
     // Offers manager
     public static final String AVAILABLE_FLIGHTS = "availableFlight";
     public static final String USER_INTEREST = "offerService";
@@ -31,6 +39,7 @@ public final class ProcessVariables {
 
 
     public static final String PROCESS_SAVE_INTERST = "processSaveInterest";
+
     public static final String PROCESS_BUY_OFFER = "processBuyOffer";
     public static final String GENERATED_OFFER = "generatedOffer";
     public static final String USER_OFFER = "userOffer";

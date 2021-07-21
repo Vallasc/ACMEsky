@@ -5,7 +5,6 @@ import it.unibo.soseng.logic.database.DatabaseManager;
 import it.unibo.soseng.logic.database.DatabaseManager.FlightNotExistException;
 import it.unibo.soseng.logic.offer.OfferManager;
 import it.unibo.soseng.model.Flight;
-import it.unibo.soseng.model.FlightInterest;
 import it.unibo.soseng.model.UserInterest;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +15,8 @@ import static it.unibo.soseng.camunda.ProcessVariables.AVAILABLE_FLIGHTS;
 import static it.unibo.soseng.camunda.ProcessVariables.USER_INTEREST;
 import static it.unibo.soseng.camunda.ProcessVariables.USER_INTEREST_INDEX;
 import static it.unibo.soseng.camunda.ProcessVariables.THERE_IS_FLIGHTS;
+import static it.unibo.soseng.camunda.ProcessVariables.USERNAME;
+
 
 @Named("checkAvailableFlightsDelegate")
 public class CheckAvailableFlightsDelegate implements JavaDelegate{
@@ -33,6 +34,7 @@ public class CheckAvailableFlightsDelegate implements JavaDelegate{
       List <UserInterest> userInterests = (List<UserInterest>) execution.getVariable(USER_INTEREST);
       List <Flight> matchedFlight = new ArrayList <Flight> ();
       UserInterest ui = userInterests.get( (int) execution.getVariable(USER_INTEREST_INDEX));
+      execution.setVariable(USERNAME, ui.getUser().getEntity().getUsername());
       Flight outBound = offerManager.matchOffer(ui.getOutboundFlightInterest());
       Flight back = offerManager.matchOffer(ui.getFlightBackInterest());
       if ( outBound != null && back != null) {

@@ -1,7 +1,7 @@
 const router = require ('express').Router ();
 const verify = require ('../verifyToken');
-const Notification = require('../../models/Notification');
-const Subscription = require ('../../models/Subscription')
+const Notification = require('../../models/notification');
+const Subscription = require ('../../models/subscription')
 const webpush = require('web-push');
 
 const vapidKeys = {
@@ -17,7 +17,7 @@ webpush.setVapidDetails(
 
 //Create new notification
 
-router.post('/new', async (req, res) => {
+router.post('/', async (req, res) => {
     const notification = new Notification ({
         flyBack: req.body.flyBack, 
         flyOutBound: req.body.flyOutBound, 

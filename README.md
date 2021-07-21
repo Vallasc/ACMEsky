@@ -85,6 +85,7 @@ V0.9 - versione interna RFC
 | AirlineNationalService | 8060 |
 | AirlineService | 8061 |
 | ProntogramService | 8050 |
+| ProntogramFrontEnd | 8051 |
 | GeocraphicalService | 8040 |
 | RentService1 | 8030 |
 | RentService2 | 8031 |

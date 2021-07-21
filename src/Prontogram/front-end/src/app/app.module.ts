@@ -9,7 +9,7 @@ import { HomeComponent } from './home';
 import { NotificationComponent } from './notification';;
 import { ServiceWorkerModule } from '@angular/service-worker'; 
 import { environment } from '@environments/environment';
-import { AccountService, NotificationService } from '../../../../../../../../ACMEsky/src/app/_services';
+import { AccountService, NotificationService } from '../app/_services';
 import {MatCardModule} from '@angular/material/card';
 
 @NgModule({
