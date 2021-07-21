@@ -1,0 +1,32 @@
+version: '3.9'
+
+services:
+    rent-service-1:
+        container_name: rent_service_1
+        build: ./
+        environment:
+            - SERVICE_NAME=RentService1
+        ports:
+            - "8030:8080"
+            - "8031:80"
+        restart: always
+        networks: 
+            - acmesky
+
+    rent-service-2:
+        container_name: rent_service_2
+        build: ./
+        environment:
+            - SERVICE_NAME=RentService2
+        ports:
+            - "8032:8080"
+            - "8033:80"
+        restart: always
+        networks: 
+            - acmesky
+
+
+networks:
+    acmesky:
+        external: true
+        name: acmesky-net
