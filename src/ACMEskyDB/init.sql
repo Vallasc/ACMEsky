@@ -24,6 +24,27 @@ SET default_tablespace = '';
 
 SET default_table_access_method = heap;
 ALTER SYSTEM SET max_prepared_transactions = 200;
+
+
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 201 (class 1259 OID 16388)
+-- Name: airlines; Type: TABLE; Schema: public; Owner: soseng
 --
 
 CREATE TABLE public.airlines (
@@ -36,6 +57,7 @@ CREATE TABLE public.airlines (
 ALTER TABLE public.airlines OWNER TO soseng;
 
 --
+-- TOC entry 200 (class 1259 OID 16386)
 -- Name: airlines_id_seq; Type: SEQUENCE; Schema: public; Owner: soseng
 --
 
@@ -50,6 +72,8 @@ CREATE SEQUENCE public.airlines_id_seq
 ALTER TABLE public.airlines_id_seq OWNER TO soseng;
 
 --
+-- TOC entry 3093 (class 0 OID 0)
+-- Dependencies: 200
 -- Name: airlines_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: soseng
 --
 
@@ -57,6 +81,7 @@ ALTER SEQUENCE public.airlines_id_seq OWNED BY public.airlines.id;
 
 
 --
+-- TOC entry 203 (class 1259 OID 16396)
 -- Name: airports; Type: TABLE; Schema: public; Owner: soseng
 --
 
@@ -75,6 +100,7 @@ CREATE TABLE public.airports (
 ALTER TABLE public.airports OWNER TO soseng;
 
 --
+-- TOC entry 202 (class 1259 OID 16394)
 -- Name: airports_id_seq; Type: SEQUENCE; Schema: public; Owner: soseng
 --
 
@@ -89,6 +115,8 @@ CREATE SEQUENCE public.airports_id_seq
 ALTER TABLE public.airports_id_seq OWNER TO soseng;
 
 --
+-- TOC entry 3094 (class 0 OID 0)
+-- Dependencies: 202
 -- Name: airports_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: soseng
 --
 
@@ -96,6 +124,7 @@ ALTER SEQUENCE public.airports_id_seq OWNED BY public.airports.id;
 
 
 --
+-- TOC entry 205 (class 1259 OID 16407)
 -- Name: banks; Type: TABLE; Schema: public; Owner: soseng
 --
 
@@ -109,6 +138,7 @@ CREATE TABLE public.banks (
 ALTER TABLE public.banks OWNER TO soseng;
 
 --
+-- TOC entry 204 (class 1259 OID 16405)
 -- Name: banks_id_seq; Type: SEQUENCE; Schema: public; Owner: soseng
 --
 
@@ -123,6 +153,8 @@ CREATE SEQUENCE public.banks_id_seq
 ALTER TABLE public.banks_id_seq OWNER TO soseng;
 
 --
+-- TOC entry 3095 (class 0 OID 0)
+-- Dependencies: 204
 -- Name: banks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: soseng
 --
 
@@ -130,6 +162,7 @@ ALTER SEQUENCE public.banks_id_seq OWNED BY public.banks.id;
 
 
 --
+-- TOC entry 207 (class 1259 OID 16415)
 -- Name: domain_entities; Type: TABLE; Schema: public; Owner: soseng
 --
 
@@ -145,6 +178,7 @@ CREATE TABLE public.domain_entities (
 ALTER TABLE public.domain_entities OWNER TO soseng;
 
 --
+-- TOC entry 206 (class 1259 OID 16413)
 -- Name: domain_entities_id_seq; Type: SEQUENCE; Schema: public; Owner: soseng
 --
 
@@ -159,6 +193,8 @@ CREATE SEQUENCE public.domain_entities_id_seq
 ALTER TABLE public.domain_entities_id_seq OWNER TO soseng;
 
 --
+-- TOC entry 3096 (class 0 OID 0)
+-- Dependencies: 206
 -- Name: domain_entities_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: soseng
 --
 
@@ -166,14 +202,15 @@ ALTER SEQUENCE public.domain_entities_id_seq OWNED BY public.domain_entities.id;
 
 
 --
+-- TOC entry 209 (class 1259 OID 16426)
 -- Name: flights; Type: TABLE; Schema: public; Owner: soseng
 --
 
 CREATE TABLE public.flights (
     id bigint NOT NULL,
     arrival_date_time timestamp with time zone NOT NULL,
-    booked boolean NOT NULL,
     available boolean NOT NULL,
+    booked boolean NOT NULL,
     departure_date_time timestamp with time zone NOT NULL,
     expire_date timestamp with time zone NOT NULL,
     flight_code character varying(255) NOT NULL,
@@ -187,6 +224,7 @@ CREATE TABLE public.flights (
 ALTER TABLE public.flights OWNER TO soseng;
 
 --
+-- TOC entry 208 (class 1259 OID 16424)
 -- Name: flights_id_seq; Type: SEQUENCE; Schema: public; Owner: soseng
 --
 
@@ -201,6 +239,8 @@ CREATE SEQUENCE public.flights_id_seq
 ALTER TABLE public.flights_id_seq OWNER TO soseng;
 
 --
+-- TOC entry 3097 (class 0 OID 0)
+-- Dependencies: 208
 -- Name: flights_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: soseng
 --
 
@@ -208,6 +248,7 @@ ALTER SEQUENCE public.flights_id_seq OWNED BY public.flights.id;
 
 
 --
+-- TOC entry 211 (class 1259 OID 16434)
 -- Name: flights_interest; Type: TABLE; Schema: public; Owner: soseng
 --
 
@@ -223,6 +264,7 @@ CREATE TABLE public.flights_interest (
 ALTER TABLE public.flights_interest OWNER TO soseng;
 
 --
+-- TOC entry 210 (class 1259 OID 16432)
 -- Name: flights_interest_id_seq; Type: SEQUENCE; Schema: public; Owner: soseng
 --
 
@@ -237,6 +279,8 @@ CREATE SEQUENCE public.flights_interest_id_seq
 ALTER TABLE public.flights_interest_id_seq OWNER TO soseng;
 
 --
+-- TOC entry 3098 (class 0 OID 0)
+-- Dependencies: 210
 -- Name: flights_interest_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: soseng
 --
 
@@ -244,6 +288,7 @@ ALTER SEQUENCE public.flights_interest_id_seq OWNED BY public.flights_interest.i
 
 
 --
+-- TOC entry 213 (class 1259 OID 16442)
 -- Name: generated_offers; Type: TABLE; Schema: public; Owner: soseng
 --
 
@@ -253,13 +298,15 @@ CREATE TABLE public.generated_offers (
     expire_date timestamp with time zone NOT NULL,
     total_price double precision,
     flight_back_id bigint NOT NULL,
-    outbound_flight_id bigint NOT NULL
+    outbound_flight_id bigint NOT NULL,
+    username bigint
 );
 
 
 ALTER TABLE public.generated_offers OWNER TO soseng;
 
 --
+-- TOC entry 212 (class 1259 OID 16440)
 -- Name: generated_offers_id_seq; Type: SEQUENCE; Schema: public; Owner: soseng
 --
 
@@ -274,6 +321,8 @@ CREATE SEQUENCE public.generated_offers_id_seq
 ALTER TABLE public.generated_offers_id_seq OWNER TO soseng;
 
 --
+-- TOC entry 3099 (class 0 OID 0)
+-- Dependencies: 212
 -- Name: generated_offers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: soseng
 --
 
@@ -281,6 +330,7 @@ ALTER SEQUENCE public.generated_offers_id_seq OWNED BY public.generated_offers.i
 
 
 --
+-- TOC entry 215 (class 1259 OID 16450)
 -- Name: rent_services; Type: TABLE; Schema: public; Owner: soseng
 --
 
@@ -288,13 +338,14 @@ CREATE TABLE public.rent_services (
     id bigint NOT NULL,
     address character varying(255) NOT NULL,
     ws_address character varying(255) NOT NULL,
-    entity_id bigint NOT NULL
+    entity_id bigint
 );
 
 
 ALTER TABLE public.rent_services OWNER TO soseng;
 
 --
+-- TOC entry 214 (class 1259 OID 16448)
 -- Name: rent_services_id_seq; Type: SEQUENCE; Schema: public; Owner: soseng
 --
 
@@ -309,6 +360,8 @@ CREATE SEQUENCE public.rent_services_id_seq
 ALTER TABLE public.rent_services_id_seq OWNER TO soseng;
 
 --
+-- TOC entry 3100 (class 0 OID 0)
+-- Dependencies: 214
 -- Name: rent_services_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: soseng
 --
 
@@ -316,6 +369,7 @@ ALTER SEQUENCE public.rent_services_id_seq OWNED BY public.rent_services.id;
 
 
 --
+-- TOC entry 217 (class 1259 OID 16461)
 -- Name: users; Type: TABLE; Schema: public; Owner: soseng
 --
 
@@ -330,6 +384,7 @@ CREATE TABLE public.users (
 ALTER TABLE public.users OWNER TO soseng;
 
 --
+-- TOC entry 216 (class 1259 OID 16459)
 -- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: soseng
 --
 
@@ -344,6 +399,8 @@ CREATE SEQUENCE public.users_id_seq
 ALTER TABLE public.users_id_seq OWNER TO soseng;
 
 --
+-- TOC entry 3101 (class 0 OID 0)
+-- Dependencies: 216
 -- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: soseng
 --
 
@@ -351,6 +408,7 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
+-- TOC entry 219 (class 1259 OID 16472)
 -- Name: users_interests; Type: TABLE; Schema: public; Owner: soseng
 --
 
@@ -367,6 +425,7 @@ CREATE TABLE public.users_interests (
 ALTER TABLE public.users_interests OWNER TO soseng;
 
 --
+-- TOC entry 218 (class 1259 OID 16470)
 -- Name: users_interests_id_seq; Type: SEQUENCE; Schema: public; Owner: soseng
 --
 
@@ -381,6 +440,8 @@ CREATE SEQUENCE public.users_interests_id_seq
 ALTER TABLE public.users_interests_id_seq OWNER TO soseng;
 
 --
+-- TOC entry 3102 (class 0 OID 0)
+-- Dependencies: 218
 -- Name: users_interests_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: soseng
 --
 
@@ -388,6 +449,7 @@ ALTER SEQUENCE public.users_interests_id_seq OWNED BY public.users_interests.id;
 
 
 --
+-- TOC entry 2908 (class 2604 OID 16391)
 -- Name: airlines id; Type: DEFAULT; Schema: public; Owner: soseng
 --
 
@@ -395,6 +457,7 @@ ALTER TABLE ONLY public.airlines ALTER COLUMN id SET DEFAULT nextval('public.air
 
 
 --
+-- TOC entry 2909 (class 2604 OID 16399)
 -- Name: airports id; Type: DEFAULT; Schema: public; Owner: soseng
 --
 
@@ -402,6 +465,7 @@ ALTER TABLE ONLY public.airports ALTER COLUMN id SET DEFAULT nextval('public.air
 
 
 --
+-- TOC entry 2910 (class 2604 OID 16410)
 -- Name: banks id; Type: DEFAULT; Schema: public; Owner: soseng
 --
 
@@ -409,6 +473,7 @@ ALTER TABLE ONLY public.banks ALTER COLUMN id SET DEFAULT nextval('public.banks_
 
 
 --
+-- TOC entry 2911 (class 2604 OID 16418)
 -- Name: domain_entities id; Type: DEFAULT; Schema: public; Owner: soseng
 --
 
@@ -416,6 +481,7 @@ ALTER TABLE ONLY public.domain_entities ALTER COLUMN id SET DEFAULT nextval('pub
 
 
 --
+-- TOC entry 2912 (class 2604 OID 16429)
 -- Name: flights id; Type: DEFAULT; Schema: public; Owner: soseng
 --
 
@@ -423,6 +489,7 @@ ALTER TABLE ONLY public.flights ALTER COLUMN id SET DEFAULT nextval('public.flig
 
 
 --
+-- TOC entry 2913 (class 2604 OID 16437)
 -- Name: flights_interest id; Type: DEFAULT; Schema: public; Owner: soseng
 --
 
@@ -430,6 +497,7 @@ ALTER TABLE ONLY public.flights_interest ALTER COLUMN id SET DEFAULT nextval('pu
 
 
 --
+-- TOC entry 2914 (class 2604 OID 16445)
 -- Name: generated_offers id; Type: DEFAULT; Schema: public; Owner: soseng
 --
 
@@ -437,6 +505,7 @@ ALTER TABLE ONLY public.generated_offers ALTER COLUMN id SET DEFAULT nextval('pu
 
 
 --
+-- TOC entry 2915 (class 2604 OID 16453)
 -- Name: rent_services id; Type: DEFAULT; Schema: public; Owner: soseng
 --
 
@@ -444,6 +513,7 @@ ALTER TABLE ONLY public.rent_services ALTER COLUMN id SET DEFAULT nextval('publi
 
 
 --
+-- TOC entry 2916 (class 2604 OID 16464)
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: soseng
 --
 
@@ -451,6 +521,7 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 
 --
+-- TOC entry 2917 (class 2604 OID 16475)
 -- Name: users_interests id; Type: DEFAULT; Schema: public; Owner: soseng
 --
 
@@ -458,6 +529,7 @@ ALTER TABLE ONLY public.users_interests ALTER COLUMN id SET DEFAULT nextval('pub
 
 
 --
+-- TOC entry 2919 (class 2606 OID 16393)
 -- Name: airlines airlines_pkey; Type: CONSTRAINT; Schema: public; Owner: soseng
 --
 
@@ -466,6 +538,7 @@ ALTER TABLE ONLY public.airlines
 
 
 --
+-- TOC entry 2921 (class 2606 OID 16404)
 -- Name: airports airports_pkey; Type: CONSTRAINT; Schema: public; Owner: soseng
 --
 
@@ -474,6 +547,7 @@ ALTER TABLE ONLY public.airports
 
 
 --
+-- TOC entry 2925 (class 2606 OID 16412)
 -- Name: banks banks_pkey; Type: CONSTRAINT; Schema: public; Owner: soseng
 --
 
@@ -482,6 +556,7 @@ ALTER TABLE ONLY public.banks
 
 
 --
+-- TOC entry 2927 (class 2606 OID 16423)
 -- Name: domain_entities domain_entities_pkey; Type: CONSTRAINT; Schema: public; Owner: soseng
 --
 
@@ -490,6 +565,7 @@ ALTER TABLE ONLY public.domain_entities
 
 
 --
+-- TOC entry 2933 (class 2606 OID 16439)
 -- Name: flights_interest flights_interest_pkey; Type: CONSTRAINT; Schema: public; Owner: soseng
 --
 
@@ -498,6 +574,7 @@ ALTER TABLE ONLY public.flights_interest
 
 
 --
+-- TOC entry 2931 (class 2606 OID 16431)
 -- Name: flights flights_pkey; Type: CONSTRAINT; Schema: public; Owner: soseng
 --
 
@@ -506,6 +583,7 @@ ALTER TABLE ONLY public.flights
 
 
 --
+-- TOC entry 2935 (class 2606 OID 16447)
 -- Name: generated_offers generated_offers_pkey; Type: CONSTRAINT; Schema: public; Owner: soseng
 --
 
@@ -514,6 +592,7 @@ ALTER TABLE ONLY public.generated_offers
 
 
 --
+-- TOC entry 2937 (class 2606 OID 16458)
 -- Name: rent_services rent_services_pkey; Type: CONSTRAINT; Schema: public; Owner: soseng
 --
 
@@ -522,6 +601,7 @@ ALTER TABLE ONLY public.rent_services
 
 
 --
+-- TOC entry 2923 (class 2606 OID 16479)
 -- Name: airports uk_8x5wlokxte7yksdsllxtxbjf0; Type: CONSTRAINT; Schema: public; Owner: soseng
 --
 
@@ -530,6 +610,7 @@ ALTER TABLE ONLY public.airports
 
 
 --
+-- TOC entry 2929 (class 2606 OID 16481)
 -- Name: domain_entities uk_l408l4s7tg5f3dj5dlpai34vj; Type: CONSTRAINT; Schema: public; Owner: soseng
 --
 
@@ -538,6 +619,7 @@ ALTER TABLE ONLY public.domain_entities
 
 
 --
+-- TOC entry 2941 (class 2606 OID 16477)
 -- Name: users_interests users_interests_pkey; Type: CONSTRAINT; Schema: public; Owner: soseng
 --
 
@@ -546,6 +628,7 @@ ALTER TABLE ONLY public.users_interests
 
 
 --
+-- TOC entry 2939 (class 2606 OID 16469)
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: soseng
 --
 
@@ -554,6 +637,7 @@ ALTER TABLE ONLY public.users
 
 
 --
+-- TOC entry 2946 (class 2606 OID 16502)
 -- Name: flights fk27lt4nklvbrwsw7x32dw0d05q; Type: FK CONSTRAINT; Schema: public; Owner: soseng
 --
 
@@ -562,6 +646,7 @@ ALTER TABLE ONLY public.flights
 
 
 --
+-- TOC entry 2957 (class 2606 OID 16557)
 -- Name: users_interests fkcfbenfemx5v0f8pj7nl1ysvem; Type: FK CONSTRAINT; Schema: public; Owner: soseng
 --
 
@@ -570,6 +655,7 @@ ALTER TABLE ONLY public.users_interests
 
 
 --
+-- TOC entry 2950 (class 2606 OID 16522)
 -- Name: generated_offers fkcqdy5o0q5pbu3xplut6ytx369; Type: FK CONSTRAINT; Schema: public; Owner: soseng
 --
 
@@ -578,6 +664,7 @@ ALTER TABLE ONLY public.generated_offers
 
 
 --
+-- TOC entry 2951 (class 2606 OID 16527)
 -- Name: generated_offers fkd19d020bc3wscbwgs8coy1hs5; Type: FK CONSTRAINT; Schema: public; Owner: soseng
 --
 
@@ -586,6 +673,7 @@ ALTER TABLE ONLY public.generated_offers
 
 
 --
+-- TOC entry 2954 (class 2606 OID 16542)
 -- Name: users fkd2mlyge6xfe7q29kj8lsffgoq; Type: FK CONSTRAINT; Schema: public; Owner: soseng
 --
 
@@ -594,6 +682,7 @@ ALTER TABLE ONLY public.users
 
 
 --
+-- TOC entry 2955 (class 2606 OID 16547)
 -- Name: users_interests fkgc4ctcslxvhv4ihkq34fk57ha; Type: FK CONSTRAINT; Schema: public; Owner: soseng
 --
 
@@ -602,6 +691,7 @@ ALTER TABLE ONLY public.users_interests
 
 
 --
+-- TOC entry 2942 (class 2606 OID 16482)
 -- Name: airlines fkggs4sdi8k2swbvbndd7xclqtx; Type: FK CONSTRAINT; Schema: public; Owner: soseng
 --
 
@@ -610,6 +700,7 @@ ALTER TABLE ONLY public.airlines
 
 
 --
+-- TOC entry 2944 (class 2606 OID 16492)
 -- Name: flights fkieor4j3ivp3xu584qenhfh0gd; Type: FK CONSTRAINT; Schema: public; Owner: soseng
 --
 
@@ -618,6 +709,7 @@ ALTER TABLE ONLY public.flights
 
 
 --
+-- TOC entry 2947 (class 2606 OID 16507)
 -- Name: flights_interest fkmtk217st0vrjs6jiiywibsgr8; Type: FK CONSTRAINT; Schema: public; Owner: soseng
 --
 
@@ -626,6 +718,7 @@ ALTER TABLE ONLY public.flights_interest
 
 
 --
+-- TOC entry 2948 (class 2606 OID 16512)
 -- Name: flights_interest fknbpvf7lem2po3lpwloh7pm6lk; Type: FK CONSTRAINT; Schema: public; Owner: soseng
 --
 
@@ -634,6 +727,16 @@ ALTER TABLE ONLY public.flights_interest
 
 
 --
+-- TOC entry 2952 (class 2606 OID 16532)
+-- Name: generated_offers fkntdjb3w7ysfkukm7u2exd6jl; Type: FK CONSTRAINT; Schema: public; Owner: soseng
+--
+
+ALTER TABLE ONLY public.generated_offers
+    ADD CONSTRAINT fkntdjb3w7ysfkukm7u2exd6jl FOREIGN KEY (username) REFERENCES public.domain_entities(id);
+
+
+--
+-- TOC entry 2943 (class 2606 OID 16487)
 -- Name: banks fknwn1ico5ip2e23ad9ofmrrtkt; Type: FK CONSTRAINT; Schema: public; Owner: soseng
 --
 
@@ -642,6 +745,7 @@ ALTER TABLE ONLY public.banks
 
 
 --
+-- TOC entry 2953 (class 2606 OID 16537)
 -- Name: rent_services fko5sl16fr39bd1xt68u41x70pd; Type: FK CONSTRAINT; Schema: public; Owner: soseng
 --
 
@@ -650,6 +754,7 @@ ALTER TABLE ONLY public.rent_services
 
 
 --
+-- TOC entry 2956 (class 2606 OID 16552)
 -- Name: users_interests fko9gc9nrwph3oku9xwtt1wo341; Type: FK CONSTRAINT; Schema: public; Owner: soseng
 --
 
@@ -658,6 +763,7 @@ ALTER TABLE ONLY public.users_interests
 
 
 --
+-- TOC entry 2945 (class 2606 OID 16497)
 -- Name: flights fkr90ujcvdphv3co3ry7aiel6l4; Type: FK CONSTRAINT; Schema: public; Owner: soseng
 --
 
@@ -666,16 +772,12 @@ ALTER TABLE ONLY public.flights
 
 
 --
+-- TOC entry 2949 (class 2606 OID 16517)
 -- Name: flights_interest fkt2yvd2ld5hwv0c4cb028ovrd7; Type: FK CONSTRAINT; Schema: public; Owner: soseng
 --
 
 ALTER TABLE ONLY public.flights_interest
     ADD CONSTRAINT fkt2yvd2ld5hwv0c4cb028ovrd7 FOREIGN KEY (user_id) REFERENCES public.users(id);
-
-
---
--- PostgreSQL database dump complete
---
 
 
 

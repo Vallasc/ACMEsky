@@ -12,6 +12,7 @@ import it.unibo.soseng.logic.database.DatabaseManager.FlightNotExistException;
 import it.unibo.soseng.model.Flight;
 import it.unibo.soseng.model.FlightInterest;
 import it.unibo.soseng.model.GeneratedOffer;
+import it.unibo.soseng.model.UserInterest;
 @Stateless
 public class OfferManager {
     private final static Logger LOGGER = Logger.getLogger(OfferManager.class.getName());
@@ -19,13 +20,14 @@ public class OfferManager {
     @Inject
     private DatabaseManager databaseManager;
 
-    public GeneratedOffer generateOffer(Flight requestOutBound, Flight requestFlightBack) throws PersistenceException, FlightNotExistException {
+    public GeneratedOffer generateOffer(Flight requestOutBound, Flight requestFlightBack, UserInterest ui) throws PersistenceException, FlightNotExistException {
         GeneratedOffer offerTogenerate = new GeneratedOffer ();
-        
+
         offerTogenerate.setBooked(false);
         offerTogenerate.setOutboundFlightId(requestOutBound);
         offerTogenerate.setFlightBackId(requestFlightBack);
         offerTogenerate.setExpireDate(requestOutBound.getExpireDate());
+        offerTogenerate.setUser(ui.getUser().getEntity());
         double priceOutBound = requestOutBound.getPrice();
         offerTogenerate.setTotalPrice(requestFlightBack.getPrice() + priceOutBound);
         
@@ -64,6 +66,9 @@ public class OfferManager {
             return f.getDepartureAirport() == fi.getDepartureAirport() && f.getArrivalAirport() == fi.getArrivalAirport();
     }
 
+    public class SendTicketException extends Exception {
+        private static final long serialVersionUID = 1L;
+    }
    
 }
 

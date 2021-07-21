@@ -158,16 +158,16 @@ public class InterestManager {
 
         FlightInterest flightOutInterest = new FlightInterest();
         flightOutInterest.setUser(user);
-        flightOutInterest.setDepartureAirport(airportOut1);
-        flightOutInterest.setArrivalAirport(airportOut2);
+        flightOutInterest.setDepartureAirport(airportOut2);
+        flightOutInterest.setArrivalAirport(airportOut1);
         flightOutInterest.setDepartureDateTime(request.getOutboundFlight().getDepartureOffsetDateTime());
 
         interest.setOutboundFlightInterest(flightOutInterest);
 
         FlightInterest flightBackInterest = new FlightInterest();
         flightBackInterest.setUser(user);
-        flightBackInterest.setDepartureAirport(airportBack1);
-        flightBackInterest.setArrivalAirport(airportBack2);
+        flightBackInterest.setDepartureAirport(airportBack2);
+        flightBackInterest.setArrivalAirport(airportBack1);
         flightBackInterest.setDepartureDateTime(request.getFlightBack().getDepartureOffsetDateTime());
 
         interest.setFlightBackInterest(flightBackInterest);

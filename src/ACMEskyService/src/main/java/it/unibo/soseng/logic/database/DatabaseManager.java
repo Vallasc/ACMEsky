@@ -80,6 +80,14 @@ public class DatabaseManager {
         return interests;
     }
 
+    public GeneratedOffer retrieveGeneratedOffer(){
+        @SuppressWarnings("unchecked")
+        List<GeneratedOffer> offers =
+        entityManager.createQuery("SELECT o FROM GeneratedOffer o")
+                        .getResultList();
+        return offers.get(0);
+    }
+
     public void insertFlightOffer(List<Flight> list){
         for(Flight f: list){
             entityManager.persist(f);
@@ -215,6 +223,15 @@ public class DatabaseManager {
         this.entityManager.merge(f);
     }
 
+    public void setBookFlights(boolean b, Flight requestOutbound, Flight requestFlightBack ) {
+
+        requestOutbound.setBooked(b);
+        requestFlightBack.setBooked(b);
+        this.entityManager.merge(requestOutbound);
+        this.entityManager.merge(requestFlightBack);
+	}
+
+
 
     public class EntityNotFoundException extends Exception {
         private static final long serialVersionUID = 1L;
@@ -239,4 +256,5 @@ public class DatabaseManager {
         private static final long serialVersionUID = 1L;
     }
 
+	
 }
