@@ -179,6 +179,30 @@ public class FlightUtility {
     }
 
 
+    /** 
+     * cancella l'offerta di volo corrispondente all'id fornito come parametro
+     * @param id
+     */
+    public void soldFlights(FlightOfferRepository repo, long ... id) {
+        for(long i : id){
+            if(repo.existsById(i)){
+                repo.findById(i).get().setSoldFlag(true);
+            }
+        }
+    }
+
+    /** 
+     * cancella l'offerta di volo corrispondente all'id fornito come parametro
+     * @param id
+     */
+    public void unsoldFlights(FlightOfferRepository repo, long ... id ) {
+        for(long i : id){
+            if(repo.existsById(i)){
+                repo.findById(i).get().setSoldFlag(false);
+            }
+        }
+    }
+
 
 
 

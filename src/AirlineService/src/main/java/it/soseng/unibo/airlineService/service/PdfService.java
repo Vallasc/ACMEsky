@@ -5,12 +5,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.lowagie.text.DocumentException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
 import org.thymeleaf.spring5.SpringTemplateEngine;
@@ -35,11 +38,11 @@ import it.soseng.unibo.airlineService.repository.FlightOfferRepository;
 public class PdfService {
 
 
-  @Autowired
-    private FlightOfferRepository repo;
+    @Autowired
+      private FlightOfferRepository repo;
 
-
-    private SpringTemplateEngine templateEngine;
+    @Autowired
+      TemplateEngine templateEngine;
 
     private FlightOfferService service;
 
@@ -49,9 +52,15 @@ public class PdfService {
 
 
     @Autowired
-    public PdfService(SpringTemplateEngine templateEngine, FlightOfferService service) {
+    public PdfService( FlightOfferService service) {
       this.service = service;
-      this.templateEngine = templateEngine;
+
+    }
+
+    @PostConstruct
+    public void postConstruct(){
+      this.templateEngine.addDialect(new Java8TimeDialect());
+
     }
     
     /**
@@ -96,7 +105,6 @@ public class PdfService {
   public Context getContext(long ... l) {
 
       Context context = new Context();
-      this.templateEngine.addDialect(new Java8TimeDialect());
       context.setVariable("flights", service.getOffers(l));
       return context;
     }
@@ -107,7 +115,7 @@ public class PdfService {
    * @return
    */
   private String loadAndFillTemplate(Context context) {
-      return templateEngine.process("Ticket_template", context);
+      return this.templateEngine.process("Ticket_template", context);
   }
 
   /**

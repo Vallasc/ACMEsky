@@ -1,11 +1,15 @@
 package it.soseng.unibo.airlineService.controller;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
-
+import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.lowagie.text.DocumentException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -95,8 +99,8 @@ public class FlightOfferController {
      * @param id che viene passato per identificare l'offerta da eliminare
      */
     @PostMapping("/notPurchasedOffer")
-    public void unsoldFlight(@RequestParam(name = "id") long id) {
-        s.unsoldFlight(id);
+    public void unsoldFlight(@RequestParam(name = "id") long ... id) {
+        s.unsoldFlights(id);
     }
 
 
@@ -111,32 +115,34 @@ public class FlightOfferController {
     //     s.DeleteExpiredOffersFromDB();
     // }
     
-
-    
     /** 
      * invia i biglietti in formato pdf relativi a quelle offerte che hanno il valore degli id corrispondenti
      * a quelli passati attraverso i parametri
      * @param id dei voli che si vuole acquistare
+     * @throws com.lowagie.text.DocumentException
      * @throws JsonProcessingException
      */
     @GetMapping("/getTickets")
-    public void sendPdfFiles( //HttpServletResponse response, 
-                                String SendLastMinuteOffersRoute, @RequestParam(name = "id") long ... id) throws JsonProcessingException {   
-            p.sendPdfs(user, pass, ACMEskyRoute, id);
-        
-            // try {
-            //         Path file = Paths.get(p.generatePdf(id).getAbsolutePath());
-            //         if (Files.exists(file)) {
-            //             response.setContentType("application/pdf");
-            //             response.addHeader("Content-Disposition",
-            //                     "attachment; filename=" + file.getFileName());
-            //             Files.copy(file, response.getOutputStream());
-            //             response.getOutputStream().flush();
-            //     }
-            // } catch (DocumentException | IOException ex) {
-            //     ex.printStackTrace();
-            // }
-        
+    public String sendTickets( HttpServletResponse response, @RequestParam(name = "id") long ... id) throws DocumentException  {
+        try {
+            if(s.checkUnsoldFlights(id) == true){
+
+            Path file = Paths.get(p.generatePdf(id).getAbsolutePath());
+            if (Files.exists(file)) {
+                response.setContentType("application/pdf");
+                response.addHeader("Content-Disposition",
+                        "attachment; filename=" + file.getFileName());
+                Files.copy(file, response.getOutputStream());
+                response.getOutputStream().flush();
+            }
+                return new String("ok");
+            }else{
+                return new String("error: flights have already been sold");
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return "";
     }
 
     

@@ -16,19 +16,18 @@
             <tr>
                 <th>Departure</th>
                 <th>Departure Time</th>
-                <th>Destination Time</th>
-                <th>Destination</th>
+                <th>Arrival Time</th>
+                <th>Arrival</th>
                 <th>Price</th>
             </tr>
             </thead>
             <tbody>
               <tr th:each="flight : ${flights}"> 
-                <td th:text="${flight.departureId}"></td>
+                <td th:text="${flight.departureCode}"></td>
                 <td th:text="${#temporals.format(flight.departureTime, 'dd-MM-yyyy HH:mm:ss')}"></td>
                 <td th:text="${#temporals.format(flight.arrivalTime, 'dd-MM-yyyy HH:mm:ss')}"></td>
-                <td th:text="${flight.arrivalId}"></td>
+                <td th:text="${flight.arrivalCode}"></td>
                 <td th:text="${flight.price}"></td>
-                <td th:text="${flight.place}"></td>
             </tr>
             </tbody>
         </table>

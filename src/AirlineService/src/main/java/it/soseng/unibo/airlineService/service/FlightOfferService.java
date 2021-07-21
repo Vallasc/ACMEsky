@@ -67,20 +67,7 @@ public class FlightOfferService {
         }  
     }
 
-    
-    /** 
-     * cancella l'offerta di volo corrispondente all'id fornito come parametro
-     * @param id
-     */
-    public void unsoldFlight(long id) {
-        
-        if(repo.existsById(id)){
-            repo.findById(id).get().setSoldFlag(false);
-        }
-    }
 
-
-    
     /** 
      * restituisce la lista di tutte le offerte di volo presenti nel db
      * @return List<FlightOffer>
@@ -175,6 +162,31 @@ public class FlightOfferService {
           return flights;
     }
 
+
+    /** 
+     * cancella l'offerta di volo corrispondente all'id fornito come parametro
+     * @param id
+     */
+    public boolean checkUnsoldFlights(long ...id) {
+        for(long i : id){
+            if(this.repo.findById(i).get().getSoldFlag()==true){
+                return false;
+            }else{
+                u.soldFlights(this.repo, id);
+                return true;
+            }
+        }
+        return false;
+    }
+    
+
+    /** 
+     * cancella l'offerta di volo corrispondente all'id fornito come parametro
+     * @param id
+     */
+    public void unsoldFlights(long ... id) {
+        u.unsoldFlights(this.repo, id);
+    }
 
     
 
