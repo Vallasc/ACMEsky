@@ -4,8 +4,23 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 import javax.security.enterprise.SecurityContext;
+import javax.ws.rs.container.AsyncResponse;
+import javax.ws.rs.core.Response;
+
+import org.camunda.bpm.engine.ProcessEngines;
+import org.camunda.bpm.engine.RuntimeService;
+import org.camunda.bpm.engine.cdi.annotation.ProcessVariable;
+import org.camunda.bpm.engine.delegate.DelegateExecution;
 
 import it.unibo.soseng.gateway.user.dto.UserDeleteDTO;
+import it.unibo.soseng.camunda.ProcessState;
+import static it.unibo.soseng.camunda.ProcessVariables.PROCESS_BUY_OFFER;
+import static it.unibo.soseng.camunda.ProcessVariables.ASYNC_RESPONSE;
+import static it.unibo.soseng.camunda.ProcessVariables.PROCESS_ERROR;
+import static it.unibo.soseng.camunda.ProcessVariables.ERRORS_IN_PAYMENT_REQ;
+
+import static it.unibo.soseng.camunda.StartEvents.PAY_OFFER;
+
 import it.unibo.soseng.gateway.user.dto.UserDTO;
 import it.unibo.soseng.gateway.user.dto.UserSignUpDTO;
 import it.unibo.soseng.gateway.user.dto.UserUpdateDTO;
@@ -14,7 +29,12 @@ import it.unibo.soseng.logic.database.DatabaseManager.UserAlreadyInException;
 import it.unibo.soseng.logic.database.DatabaseManager.UserNotFoundException;
 import it.unibo.soseng.model.DomainEntity;
 import it.unibo.soseng.model.User;
+import it.unibo.soseng.util.Errors;
+
 import static it.unibo.soseng.security.Constants.USER;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,6 +47,9 @@ public class UserManager {
 
     @Inject
     private SecurityContext securityContext;
+
+    @Inject
+    private ProcessState processState;
 
     public void createUser(UserSignUpDTO request) throws UserAlreadyInException {
         User user = new User();
@@ -90,7 +113,41 @@ public class UserManager {
         databaseManager.removeUser(user);
     }
 
+    public void startPaymentRequest(AsyncResponse response) throws BadRequestException{
+        String email = securityContext.getCallerPrincipal().getName();
+
+        processState.setState(PROCESS_BUY_OFFER, email, ASYNC_RESPONSE, response);
+
+        final RuntimeService runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();
+        Map<String,Object> processVariables = new HashMap<String,Object>();
+        // processVariables = runtimeService.getVariables(PAY_OFFER);
+    }
+
+    public Response handlePaymentRequest(String email, DelegateExecution execution) {
+        
+        byte[] ticket = (byte[]) processState.getState(PROCESS_BUY_OFFER, email, "PDF");
+
+        if(ticket == null){
+            execution.setVariable(ERRORS_IN_PAYMENT_REQ, true);  
+            return Response.status(Response.Status.BAD_REQUEST.getStatusCode())
+                            .entity(Errors.OFFER_NOT_AVAILABLE)
+                            .build();
+        
+        }        
+        
+        return Response.status(Response.Status.OK.getStatusCode())
+        .build();
+    }
+
+
     public class InvalidCredentialsException extends Exception {
         private static final long serialVersionUID = 1L;
     }
+
+    public class BadRequestException extends Exception {
+        private static final long serialVersionUID = 1L;
+    }
+
+
+
 }

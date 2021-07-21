@@ -1,6 +1,8 @@
 package it.unibo.soseng.camunda.offers_manager;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
+
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -10,8 +12,11 @@ import it.unibo.soseng.logic.database.DatabaseManager.FlightNotExistException;
 import it.unibo.soseng.logic.offer.OfferManager;
 import it.unibo.soseng.model.Flight;
 import it.unibo.soseng.model.GeneratedOffer;
+import it.unibo.soseng.model.UserInterest;
 
 import java.util.logging.Logger;
+import static it.unibo.soseng.camunda.ProcessVariables.USER_INTEREST;
+import static it.unibo.soseng.camunda.ProcessVariables.USER_INTEREST_INDEX;
 import static it.unibo.soseng.camunda.ProcessVariables.AVAILABLE_FLIGHTS;
 import static it.unibo.soseng.camunda.ProcessVariables.GENERATED_OFFER;
 import static it.unibo.soseng.camunda.ProcessVariables.PROCESS_ERROR;;
@@ -29,8 +34,10 @@ public class PrepareOfferDelegate implements JavaDelegate{
       LOGGER.info ("prepareOfferDelegate in esecuzione");
       @SuppressWarnings (value="unchecked")
       List<Flight> matchedFlights = (List<Flight>) execution.getVariable(AVAILABLE_FLIGHTS);
+      List <UserInterest> userInterests = (List<UserInterest>) execution.getVariable(USER_INTEREST);
+      UserInterest ui = userInterests.get( (int) execution.getVariable(USER_INTEREST_INDEX));
       try{
-        GeneratedOffer offer = offerManager.generateOffer(matchedFlights.get(0), matchedFlights.get(1));
+        GeneratedOffer offer = offerManager.generateOffer(matchedFlights.get(0), matchedFlights.get(1), ui);
         execution.setVariable(GENERATED_OFFER, offer);
       } catch (FlightNotExistException e){
         execution.setVariable(PROCESS_ERROR,  e.toString());

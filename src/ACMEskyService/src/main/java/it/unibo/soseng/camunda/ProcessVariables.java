@@ -19,6 +19,7 @@ public final class ProcessVariables {
     public static final String USER_INTEREST = "offerService";
     public static final String USER_INTEREST_LEN = "userInterestLen";
     public static final String USER_INTEREST_INDEX = "userInterestsIndex";
+    
 
 
     public static final String PROCESS_ERROR = "processError";
@@ -26,12 +27,16 @@ public final class ProcessVariables {
     public static final String ASYNC_RESPONSE = "asyncResponse";
     public static final String RESPONSE = "response";
     public static final String URI_INFO = "uriInfo";
+    public static final String ERRORS_IN_PAYMENT_REQ = "ErrorsPaymentReq";
 
 
     public static final String PROCESS_SAVE_INTERST = "processSaveInterest";
     public static final String PROCESS_BUY_OFFER = "processBuyOffer";
     public static final String GENERATED_OFFER = "generatedOffer";
-    public static final String THERE_IS_FHLIGHTS = "thereIsFlights";
+    public static final String USER_OFFER = "userOffer";
+
+    
+    public static final String THERE_IS_FLIGHTS = "thereIsFlights";
 
     
     

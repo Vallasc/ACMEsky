@@ -17,7 +17,7 @@ import javax.inject.Named;
 import static it.unibo.soseng.camunda.ProcessVariables.USER_INTEREST_INDEX;
 import static it.unibo.soseng.camunda.ProcessVariables.GENERATED_OFFER;
 import static it.unibo.soseng.camunda.ProcessVariables.USER_INTEREST;
-import static it.unibo.soseng.camunda.ProcessVariables.PROCESS_ERROR;;
+import static it.unibo.soseng.camunda.ProcessVariables.PROCESS_ERROR;
 
 
 @Named("sendOfferDelegate")
@@ -35,7 +35,7 @@ public class SendOfferDelegate implements JavaDelegate{
     }
     GeneratedOffer offer = (GeneratedOffer) execution.getVariable(GENERATED_OFFER);
     List <UserInterest> userInterests = (List<UserInterest>) execution.getVariable(USER_INTEREST);
-    int userInterestIndex = (int) execution.getVariable(USER_INTEREST_INDEX) ;
+    int userInterestIndex = (int) execution.getVariable(USER_INTEREST_INDEX);
     String offerToken = String.valueOf(offer.getId());
     Notification offerToSend = new Notification();
     offerToSend.setOfferToken(offerToken);
