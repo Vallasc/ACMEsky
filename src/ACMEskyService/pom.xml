@@ -56,6 +56,24 @@
           <scope>provided</scope>
         </dependency>
         <dependency>
+          <groupId>javax.servlet</groupId>
+          <artifactId>javax.servlet-api</artifactId>
+          <version>3.0.1</version>
+          <scope>provided</scope>
+        </dependency>
+        <dependency>
+          <groupId>jakarta.xml.ws</groupId>
+          <artifactId>jakarta.xml.ws-api</artifactId>
+          <version>2.3.3</version>
+          <scope>provided</scope>
+        </dependency>
+        <dependency>
+          <groupId>jakarta.jws</groupId>
+          <artifactId>jakarta.jws-api</artifactId>
+          <version>2.1.0</version>
+          <scope>provided</scope>
+        </dependency>
+        <dependency>
           <groupId>org.hibernate</groupId>
           <artifactId>hibernate-core</artifactId>
           <version>5.4.30.Final</version>
@@ -83,6 +101,11 @@
           <artifactId>jackson-databind</artifactId>
           <version>2.11.1</version>
       </dependency>
+      <dependency>
+          <groupId>com.squareup.okhttp3</groupId>
+          <artifactId>okhttp</artifactId>
+          <version>4.9.1</version>
+      </dependency>
     </dependencies>
   
     
@@ -95,6 +118,31 @@
           <version>2.3</version>
           <configuration>
             <failOnMissingWebXml>false</failOnMissingWebXml>
+          </configuration>
+        </plugin>
+
+        <!-- run mvn install -->
+        <plugin>
+          <!-- new plugin for java 11 -->
+          <groupId>com.helger.maven</groupId>
+          <artifactId>jaxws-maven-plugin</artifactId>
+          <version>2.6</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>wsimport</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <wsdlDirectory>./src/main/resources/WSDL</wsdlDirectory>
+            <wsdlFiles>
+              <wsdlFile>rentService1.wsdl</wsdlFile>
+            </wsdlFiles>
+            <wsdlLocation>./rentService1.wsdl</wsdlLocation>
+            <bindingDirectory>./src/main/resources/WSDL</bindingDirectory>
+            <sourceDestDir>${project.basedir}/src/main/java</sourceDestDir> 
+            <packageName>it.unibo.soseng.ws.generated</packageName>
           </configuration>
         </plugin>
       </plugins>
