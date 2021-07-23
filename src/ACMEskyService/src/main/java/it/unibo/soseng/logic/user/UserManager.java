@@ -32,9 +32,12 @@ public class UserManager {
         User user = new User();
         user.setProntogramUsername(request.getProntogramUsername());
         user.setEmail(request.getEmail());
+        user.setName(request.getName());
+        user.setSurname(request.getSurname());
         DomainEntity entity = new DomainEntity();
         entity.setUsername(request.getEmail());
         entity.setPassword(request.getPassword());
+        entity.setUsername(request.getEmail());
         entity.setRole(USER);
         entity.setSalt("aaaa"); //TODO
         user.setEntity(entity);

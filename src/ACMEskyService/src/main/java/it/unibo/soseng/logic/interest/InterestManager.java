@@ -139,10 +139,10 @@ public class InterestManager {
     public UserInterest saveUserInterests(String username, UserInterestDTO request) throws AirportNotFoundException, UserNotFoundException, DateTimeParseException {
 
         // Check airport
-        Airport airportOut1 = databaseManager.getAirport(request.getOutboundFlight().getArrivalAirportCode());
-        Airport airportOut2 = databaseManager.getAirport(request.getOutboundFlight().getDepartureAirportCode());
-        Airport airportBack1 = databaseManager.getAirport(request.getFlightBack().getArrivalAirportCode());
-        Airport airportBack2 = databaseManager.getAirport(request.getFlightBack().getDepartureAirportCode());
+        Airport airportOut1 = databaseManager.getAirport(request.getOutboundFlight().getDepartureAirportCode());
+        Airport airportOut2 = databaseManager.getAirport(request.getOutboundFlight().getArrivalAirportCode());
+        Airport airportBack1 = databaseManager.getAirport(request.getFlightBack().getDepartureAirportCode());
+        Airport airportBack2 = databaseManager.getAirport(request.getFlightBack().getArrivalAirportCode());
 
         String email = securityContext.getCallerPrincipal().getName();
         
