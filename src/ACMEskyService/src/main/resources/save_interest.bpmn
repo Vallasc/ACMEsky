@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_0mv31xq" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.3.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_0mv31xq" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.6.0">
   <bpmn:message id="Message_10nsl8p" name="Message_0vra1hr" />
   <bpmn:message id="Message_1lcgagw" name="StartSaveInterest" />
   <bpmn:collaboration id="Collaboration_0usa57o">
     <bpmn:participant id="Participant_1kih29k" name="ACMEsky" processRef="SaveInterest" />
   </bpmn:collaboration>
-  <bpmn:process id="SaveInterest" isExecutable="true">
+  <bpmn:process id="SaveInterest" isExecutable="true" camunda:isStartableInTasklist="false">
     <bpmn:startEvent id="EventStartSaveInterests">
       <bpmn:outgoing>Flow_0zi8585</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_1u6uhyl" messageRef="Message_1lcgagw" />
@@ -43,17 +43,17 @@
         <di:waypoint x="268" y="120" />
         <di:waypoint x="350" y="120" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="Activity_151873z_di" bpmnElement="saveFlightsInterest">
-        <dc:Bounds x="350" y="80" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_07v1f10_di" bpmnElement="sendInterestResponse">
-        <dc:Bounds x="530" y="80" width="100" height="80" />
+      <bpmndi:BPMNShape id="Event_1htubg8_di" bpmnElement="EventStartSaveInterests">
+        <dc:Bounds x="232" y="102" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_16vsbj4_di" bpmnElement="Event_16vsbj4">
         <dc:Bounds x="702" y="102" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1htubg8_di" bpmnElement="EventStartSaveInterests">
-        <dc:Bounds x="232" y="102" width="36" height="36" />
+      <bpmndi:BPMNShape id="Activity_07v1f10_di" bpmnElement="sendInterestResponse">
+        <dc:Bounds x="530" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_151873z_di" bpmnElement="saveFlightsInterest">
+        <dc:Bounds x="350" y="80" width="100" height="80" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
