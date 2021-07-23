@@ -15,7 +15,11 @@ public final class ProcessVariables {
     public static final String USER_INTERESTS_REQUEST = "userInterestsRequest";
 
     // OfferPayment
-    public static final String OFFER_PRICE = "offerPrice"; // Int
+    public static final String USER_ADDRESS = "userAddress"; 
+    public static final String USER_OFFER = "userOffer";  // GeneratedOffer
+    public static final String USER_DISTANCE = "userDistance";  // float meters
+    public static final String RENT_OUTBOUND = "rentOutbound"; // BookRentResponse
+    public static final String RENT_BACK = "rentBack"; // BookRentResponse
 
     // Offers manager
     public static final String AVAILABLE_FLIGHTS = "availableFlight";
