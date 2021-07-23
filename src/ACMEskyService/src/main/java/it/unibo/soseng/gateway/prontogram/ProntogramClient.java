@@ -14,12 +14,12 @@ import it.unibo.soseng.gateway.prontogram.dto.Notification;
 
 public class ProntogramClient {
 
+    // TODO CATTURARARE LE ECCEZIONI
     public void sendNotificationOffer(Notification notification) throws IOException, InterruptedException, java.io.IOException{
 
         ObjectMapper objectMapper = new ObjectMapper();
         
         String requestBody = objectMapper
-                //.writerWithDefaultPrettyPrinter()
                 .writeValueAsString(notification);
         
         HttpRequest request = HttpRequest.newBuilder()
