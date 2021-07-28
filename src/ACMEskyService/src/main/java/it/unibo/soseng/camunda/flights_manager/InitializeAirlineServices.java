@@ -1,6 +1,6 @@
 package it.unibo.soseng.camunda.flights_manager;
-import static it.unibo.soseng.camunda.ProcessVariables.AIRLINE_SERVICES;
-import static it.unibo.soseng.camunda.ProcessVariables.AIRLINE_SERVICES_INDEX;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.AIRLINE_SERVICES;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.AIRLINE_SERVICES_INDEX;
 
 import java.util.List;
 import java.util.logging.Logger;

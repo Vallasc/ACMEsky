@@ -9,15 +9,16 @@ import it.unibo.soseng.gateway.prontogram.dto.Notification;
 import it.unibo.soseng.model.GeneratedOffer;
 import it.unibo.soseng.model.UserInterest;
 
+import static it.unibo.soseng.camunda.utils.ProcessVariables.GENERATED_OFFER;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_ERROR;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_INTEREST;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_INTEREST_INDEX;
+
 import java.util.List;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import static it.unibo.soseng.camunda.ProcessVariables.USER_INTEREST_INDEX;
-import static it.unibo.soseng.camunda.ProcessVariables.GENERATED_OFFER;
-import static it.unibo.soseng.camunda.ProcessVariables.USER_INTEREST;
-import static it.unibo.soseng.camunda.ProcessVariables.PROCESS_ERROR;
 
 
 @Named("sendOfferDelegate")

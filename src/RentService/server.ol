@@ -7,7 +7,7 @@ include "string_utils.iol"
 inputPort Rent {
   Location: "socket://localhost:8080"
   Protocol: soap {
-    .wsdl = "./rentService.wsdl"
+    .wsdl = "rentService.wsdl"
     .wsdl.port = "Rent"
     .dropRootValue = true
   }
@@ -17,7 +17,7 @@ inputPort Rent {
 execution { concurrent }
 
 init {
-  println@Console("Rent server: "+args[0])()
+  println@Console("Rent server: " + args[0])()
 }
             
 main {

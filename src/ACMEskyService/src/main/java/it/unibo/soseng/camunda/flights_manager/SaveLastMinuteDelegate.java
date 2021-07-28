@@ -1,6 +1,10 @@
 package it.unibo.soseng.camunda.flights_manager;
 
 import java.util.logging.Logger;
+
+import static it.unibo.soseng.camunda.utils.ProcessVariables.AIRLINE_FLIGHT_OFFERS;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.AIRLINE_NAME;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -11,9 +15,6 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 
 import it.unibo.soseng.gateway.airline.dto.AirlineFlightOffer;
 import it.unibo.soseng.logic.airline.AirlineManager;
-
-import static it.unibo.soseng.camunda.ProcessVariables.AIRLINE_FLIGHT_OFFERS;
-import static it.unibo.soseng.camunda.ProcessVariables.AIRLINE_NAME;
 
 @Named("saveLastMinuteDelegate")
 public class SaveLastMinuteDelegate implements JavaDelegate {

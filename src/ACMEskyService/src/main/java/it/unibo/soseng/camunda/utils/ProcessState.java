@@ -1,4 +1,4 @@
-package it.unibo.soseng.camunda;
+package it.unibo.soseng.camunda.utils;
 
 import java.util.concurrent.ConcurrentHashMap;
 

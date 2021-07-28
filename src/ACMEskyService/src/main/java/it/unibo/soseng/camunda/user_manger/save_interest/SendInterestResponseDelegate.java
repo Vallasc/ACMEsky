@@ -1,4 +1,10 @@
-package it.unibo.soseng.camunda.user_manger;
+package it.unibo.soseng.camunda.user_manger.save_interest;
+
+import static it.unibo.soseng.camunda.utils.ProcessVariables.ASYNC_RESPONSE;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_SAVE_INTERST;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.RESPONSE;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.URI_INFO;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.USERNAME;
 
 import java.util.logging.Logger;
 
@@ -10,12 +16,7 @@ import javax.ws.rs.core.Response;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 
-import it.unibo.soseng.camunda.ProcessState;
-import static it.unibo.soseng.camunda.ProcessVariables.RESPONSE;
-import static it.unibo.soseng.camunda.ProcessVariables.ASYNC_RESPONSE;
-import static it.unibo.soseng.camunda.ProcessVariables.PROCESS_SAVE_INTERST;
-import static it.unibo.soseng.camunda.ProcessVariables.USERNAME;
-import static it.unibo.soseng.camunda.ProcessVariables.URI_INFO;
+import it.unibo.soseng.camunda.utils.ProcessState;
 
 @Named("sendInterestResponseDelegate")
 public class SendInterestResponseDelegate implements JavaDelegate {

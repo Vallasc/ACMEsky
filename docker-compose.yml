@@ -4,8 +4,8 @@ services:
     acmesky:
         container_name: acmesky_container
         build: ./src/ACMEskyService
-        environment:
-            WAIT_HOSTS: postgres:5432
+        env_file:
+            - ./src/ACMEskyService/.env
         ports:
             - "8080:8080"
         networks:

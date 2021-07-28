@@ -1,4 +1,4 @@
-package it.unibo.soseng.util;
+package it.unibo.soseng.utils;
 
 public class Errors {
     public static final String DATE_FORMAT_ERROR = "Incorrect datetime format. Example 2007-04-05T14:30Z";

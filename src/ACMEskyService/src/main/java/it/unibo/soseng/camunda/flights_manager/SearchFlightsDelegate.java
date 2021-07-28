@@ -13,13 +13,14 @@ import it.unibo.soseng.model.Airline;
 import it.unibo.soseng.model.Flight;
 import it.unibo.soseng.model.FlightInterest;
 
+import static it.unibo.soseng.camunda.utils.ProcessVariables.AIRLINE_SERVICES;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.AIRLINE_SERVICES_INDEX;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.FLIGHTS_TO_SAVE;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.INTEREST_FLIGHTS_LIST;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
-import static it.unibo.soseng.camunda.ProcessVariables.AIRLINE_SERVICES;
-import static it.unibo.soseng.camunda.ProcessVariables.AIRLINE_SERVICES_INDEX;
-import static it.unibo.soseng.camunda.ProcessVariables.INTEREST_FLIGHTS_LIST;
-import static it.unibo.soseng.camunda.ProcessVariables.FLIGHTS_TO_SAVE;
 
 import javax.inject.Inject;
 import javax.inject.Named;

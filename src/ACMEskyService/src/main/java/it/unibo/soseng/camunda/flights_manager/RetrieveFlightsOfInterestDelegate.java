@@ -5,11 +5,12 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 
 import it.unibo.soseng.logic.database.DatabaseManager;
 
+import static it.unibo.soseng.camunda.utils.ProcessVariables.INTEREST_FLIGHTS_LIST;
+
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import static it.unibo.soseng.camunda.ProcessVariables.INTEREST_FLIGHTS_LIST;
 
 @Named("retrieveFlightsOfInterestDelegate")
 public class RetrieveFlightsOfInterestDelegate implements JavaDelegate{

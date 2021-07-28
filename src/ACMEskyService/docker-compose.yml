@@ -4,6 +4,8 @@ services:
     acmesky:
         container_name: acmesky_container
         build: ./
+        env_file:
+            - .env
         #volumes:
             #- acmesky:/camunda/standalone/deployments
             #- ./container:/camunda/standalone/deployments/acmesky

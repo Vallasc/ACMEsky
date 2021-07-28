@@ -18,7 +18,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import it.unibo.soseng.camunda.ProcessState;
+import it.unibo.soseng.camunda.utils.ProcessState;
 import it.unibo.soseng.gateway.user.dto.UserDTO;
 import it.unibo.soseng.gateway.user.dto.UserSignUpDTO;
 import it.unibo.soseng.logic.airline.AirlineManager;
@@ -29,9 +29,8 @@ import it.unibo.soseng.gateway.user.dto.UserOfferDTO;
 import it.unibo.soseng.logic.user.UserManager;
 import it.unibo.soseng.logic.user.UserManager.BadRequestException;
 
+import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_BUY_OFFER;
 import static it.unibo.soseng.security.Constants.USER;
-
-import static it.unibo.soseng.camunda.ProcessVariables.PROCESS_BUY_OFFER;
 
 @Path("offers")
 public class OfferController {

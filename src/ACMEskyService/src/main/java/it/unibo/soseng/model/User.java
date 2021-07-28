@@ -30,6 +30,12 @@ public class User implements Serializable {
     @Column(name = "email", nullable = false)
     private String email;
 
+	@Column(name = "name", nullable = false)
+    private String name;
+
+	@Column(name = "surname", nullable = false)
+    private String surname;
+
     @Column(name = "prontogram_username", nullable = false)
     private String prontogramUsername;
 
@@ -39,6 +45,22 @@ public class User implements Serializable {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getSurname() {
+		return this.surname;
+	}
+
+	public void setSurname(String surname) {
+		this.surname = surname;
 	}
 
 	public DomainEntity getEntity() {

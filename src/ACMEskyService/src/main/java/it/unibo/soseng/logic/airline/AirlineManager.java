@@ -31,10 +31,9 @@ import it.unibo.soseng.model.Flight;
 import it.unibo.soseng.model.FlightInterest;
 import it.unibo.soseng.model.GeneratedOffer;
 
-import static it.unibo.soseng.camunda.Events.SAVE_LAST_MINUTE;
-
-import static it.unibo.soseng.camunda.ProcessVariables.AIRLINE_FLIGHT_OFFERS;
-import static it.unibo.soseng.camunda.ProcessVariables.AIRLINE_NAME;
+import static it.unibo.soseng.camunda.utils.Events.SAVE_LAST_MINUTE;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.AIRLINE_FLIGHT_OFFERS;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.AIRLINE_NAME;
 
 @Stateless
 public class AirlineManager {

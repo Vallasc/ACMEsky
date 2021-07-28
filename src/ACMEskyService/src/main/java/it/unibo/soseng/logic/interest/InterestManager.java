@@ -19,7 +19,7 @@ import org.camunda.bpm.engine.ProcessEngines;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.runtime.ProcessInstanceWithVariables;
 
-import it.unibo.soseng.camunda.ProcessState;
+import it.unibo.soseng.camunda.utils.ProcessState;
 import it.unibo.soseng.gateway.user.dto.AirportDTO;
 import it.unibo.soseng.gateway.user.dto.UserInterestDTO;
 import it.unibo.soseng.logic.database.DatabaseManager;
@@ -29,17 +29,16 @@ import it.unibo.soseng.model.Airport;
 import it.unibo.soseng.model.FlightInterest;
 import it.unibo.soseng.model.User;
 import it.unibo.soseng.model.UserInterest;
-import it.unibo.soseng.util.Env;
-import it.unibo.soseng.util.Errors;
+import it.unibo.soseng.utils.Env;
+import it.unibo.soseng.utils.Errors;
 
-import static it.unibo.soseng.camunda.Events.SAVE_INTERESTS;
-
-import static it.unibo.soseng.camunda.ProcessVariables.USER_INTERESTS_REQUEST;
-import static it.unibo.soseng.camunda.ProcessVariables.USERNAME;
-import static it.unibo.soseng.camunda.ProcessVariables.PROCESS_ERROR;
-import static it.unibo.soseng.camunda.ProcessVariables.URI_INFO;
-import static it.unibo.soseng.camunda.ProcessVariables.ASYNC_RESPONSE;
-import static it.unibo.soseng.camunda.ProcessVariables.PROCESS_SAVE_INTERST;
+import static it.unibo.soseng.camunda.utils.Events.SAVE_INTERESTS;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.ASYNC_RESPONSE;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_ERROR;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_SAVE_INTERST;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.URI_INFO;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.USERNAME;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_INTERESTS_REQUEST;
 
 @Stateless
 public class InterestManager {
@@ -139,10 +138,10 @@ public class InterestManager {
     public UserInterest saveUserInterests(String username, UserInterestDTO request) throws AirportNotFoundException, UserNotFoundException, DateTimeParseException {
 
         // Check airport
-        Airport airportOut1 = databaseManager.getAirport(request.getOutboundFlight().getArrivalAirportCode());
-        Airport airportOut2 = databaseManager.getAirport(request.getOutboundFlight().getDepartureAirportCode());
-        Airport airportBack1 = databaseManager.getAirport(request.getFlightBack().getArrivalAirportCode());
-        Airport airportBack2 = databaseManager.getAirport(request.getFlightBack().getDepartureAirportCode());
+        Airport airportOut1 = databaseManager.getAirport(request.getOutboundFlight().getDepartureAirportCode());
+        Airport airportOut2 = databaseManager.getAirport(request.getOutboundFlight().getArrivalAirportCode());
+        Airport airportBack1 = databaseManager.getAirport(request.getFlightBack().getDepartureAirportCode());
+        Airport airportBack2 = databaseManager.getAirport(request.getFlightBack().getArrivalAirportCode());
 
         String email = securityContext.getCallerPrincipal().getName();
         
