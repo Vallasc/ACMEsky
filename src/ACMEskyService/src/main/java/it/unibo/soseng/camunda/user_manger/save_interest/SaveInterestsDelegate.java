@@ -1,6 +1,6 @@
 package it.unibo.soseng.camunda.user_manger.save_interest;
 
-import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_SAVE_INTERST;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_SAVE_INTEREST;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.RESPONSE;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.USERNAME;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_INTERESTS_REQUEST;
@@ -35,7 +35,7 @@ public class SaveInterestsDelegate implements JavaDelegate {
         UserInterestDTO interestRequest = (UserInterestDTO) execution.getVariable(USER_INTERESTS_REQUEST);
         String email = (String) execution.getVariable(USERNAME);
         Response response = interestManager.handleUserInterests(email, interestRequest);
-        processState.setState(PROCESS_SAVE_INTERST, email, RESPONSE, response);
+        processState.setState(PROCESS_SAVE_INTEREST, email, RESPONSE, response);
     }
   
 }

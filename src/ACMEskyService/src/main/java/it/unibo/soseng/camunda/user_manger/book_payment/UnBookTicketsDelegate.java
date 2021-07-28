@@ -15,7 +15,7 @@ import it.unibo.soseng.model.GeneratedOffer;
 
 @Named("unBookTicketsDelegate")
 public class UnBookTicketsDelegate implements JavaDelegate {
-    private final static Logger LOGGER = Logger.getLogger("unBookTicketsDelegate");
+    private final static Logger LOGGER = Logger.getLogger(UnBookTicketsDelegate.class.getName());
 
     @Inject
     AirlineManager airlineManager;

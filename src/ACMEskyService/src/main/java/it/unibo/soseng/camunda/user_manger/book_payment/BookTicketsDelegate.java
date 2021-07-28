@@ -19,7 +19,6 @@ import it.unibo.soseng.logic.user.UserManager;
 import it.unibo.soseng.model.GeneratedOffer;
 
 import static it.unibo.soseng.camunda.utils.ErrorsEvents.SEND_TICKET_ERROR;
-import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_BUY_OFFER;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.RESPONSE;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.USERNAME;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_OFFER;
