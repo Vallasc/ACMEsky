@@ -1,4 +1,4 @@
-package it.unibo.soseng.camunda.flights_manager;
+package it.unibo.soseng.camunda.flights_manager.search_flights;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
@@ -14,15 +14,14 @@ import javax.inject.Named;
 
 @Named("retrieveFlightsOfInterestDelegate")
 public class RetrieveFlightsOfInterestDelegate implements JavaDelegate{
-    private final static Logger LOGGER = Logger.getLogger("retrieveFlightsOfInterestDelegate"); 
+    private final static Logger LOGGER = Logger.getLogger(RetrieveFlightsOfInterestDelegate.class.getName()); 
 
     @Inject
     private DatabaseManager dbManager;
     
     @Override
     public void execute(DelegateExecution execution){
-
-        LOGGER.info ("retrieveFlightsOfInterestDelegate in esecuzione");
+        LOGGER.info ("Execute retrieveFlightsOfInterestDelegate");
         execution.setVariable(INTEREST_FLIGHTS_LIST, dbManager.retrieveFlightInterests());
     }
 }
