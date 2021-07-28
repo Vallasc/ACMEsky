@@ -1,4 +1,4 @@
-package it.unibo.soseng.camunda;
+package it.unibo.soseng.camunda.utils;
 
 // METTERE I NOMI DELLE VARIBILI CON INIZIALE MINUSCOLA
 public final class ProcessVariables {
@@ -21,6 +21,11 @@ public final class ProcessVariables {
     public static final String IS_OFFER_EXPIRED = "isOfferExpired";
 
 
+    // OfferPayment
+    public static final String USER_ADDRESS = "userAddress"; 
+    public static final String USER_DISTANCE = "userDistance";  // float meters
+    public static final String RENT_OUTBOUND = "rentOutbound"; // BookRentResponse
+    public static final String RENT_BACK = "rentBack"; // BookRentResponse
 
     // Offers manager
     public static final String AVAILABLE_FLIGHTS = "availableFlight";
@@ -30,6 +35,7 @@ public final class ProcessVariables {
     
 
 
+    // Commmon
     public static final String PROCESS_ERROR = "processError";
     public static final String BUSINESS_KEY = "businessKey";
     public static final String USERNAME = "username";

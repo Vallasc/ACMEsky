@@ -1,7 +1,8 @@
 package it.unibo.soseng.camunda.offers_manager;
-import static it.unibo.soseng.camunda.ProcessVariables.USER_INTEREST;
-import static it.unibo.soseng.camunda.ProcessVariables.USER_INTEREST_LEN;
-import static it.unibo.soseng.camunda.ProcessVariables.USER_INTEREST_INDEX;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_INTEREST;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_INTEREST_INDEX;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_INTEREST_LEN;
+
 import java.util.List;
 import java.util.logging.Logger;
 import javax.inject.Inject;

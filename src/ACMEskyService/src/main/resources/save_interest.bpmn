@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_0mv31xq" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.4.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_0mv31xq" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.6.0">
   <bpmn:message id="Message_10nsl8p" name="Message_0vra1hr" />
   <bpmn:message id="Message_1lcgagw" name="StartSaveInterest" />
   <bpmn:collaboration id="Collaboration_0usa57o">
     <bpmn:participant id="Participant_1kih29k" name="ACMEsky" processRef="SaveInterest" />
   </bpmn:collaboration>
-  <bpmn:process id="SaveInterest" isExecutable="true">
+  <bpmn:process id="SaveInterest" isExecutable="true" camunda:isStartableInTasklist="false">
     <bpmn:startEvent id="EventStartSaveInterests">
       <bpmn:outgoing>Flow_0zi8585</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_1u6uhyl" messageRef="Message_1lcgagw" />

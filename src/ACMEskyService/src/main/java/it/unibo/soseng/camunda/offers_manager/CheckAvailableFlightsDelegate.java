@@ -6,16 +6,18 @@ import it.unibo.soseng.logic.database.DatabaseManager.FlightNotExistException;
 import it.unibo.soseng.logic.offer.OfferManager;
 import it.unibo.soseng.model.Flight;
 import it.unibo.soseng.model.UserInterest;
+
+import static it.unibo.soseng.camunda.utils.ProcessVariables.AVAILABLE_FLIGHTS;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.THERE_IS_FLIGHTS;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.USERNAME;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_INTEREST;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_INTEREST_INDEX;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.inject.Named;
-import static it.unibo.soseng.camunda.ProcessVariables.AVAILABLE_FLIGHTS;
-import static it.unibo.soseng.camunda.ProcessVariables.USER_INTEREST;
-import static it.unibo.soseng.camunda.ProcessVariables.USER_INTEREST_INDEX;
-import static it.unibo.soseng.camunda.ProcessVariables.THERE_IS_FLIGHTS;
-import static it.unibo.soseng.camunda.ProcessVariables.USERNAME;
 
 
 @Named("checkAvailableFlightsDelegate")

@@ -16,16 +16,7 @@ import org.camunda.bpm.engine.runtime.ProcessInstanceWithVariables;
 
 import it.unibo.soseng.gateway.user.dto.UserDeleteDTO;
 import it.unibo.soseng.gateway.user.dto.UserOfferDTO;
-import it.unibo.soseng.camunda.ProcessState;
-import static it.unibo.soseng.camunda.ProcessVariables.PROCESS_BUY_OFFER;
-import static it.unibo.soseng.camunda.ProcessVariables.ASYNC_RESPONSE;
-import static it.unibo.soseng.camunda.ProcessVariables.PROCESS_ERROR;
-import static it.unibo.soseng.camunda.ProcessVariables.ERRORS_IN_PAYMENT_REQ;
-
-import static it.unibo.soseng.camunda.Events.PAY_OFFER;
-import static it.unibo.soseng.camunda.Events.PAYMENT_REQUEST;
-
-
+import it.unibo.soseng.camunda.utils.ProcessState;
 import it.unibo.soseng.gateway.user.dto.UserDTO;
 import it.unibo.soseng.gateway.user.dto.UserSignUpDTO;
 import it.unibo.soseng.gateway.user.dto.UserUpdateDTO;
@@ -36,15 +27,22 @@ import it.unibo.soseng.logic.database.DatabaseManager.UserNotFoundException;
 import it.unibo.soseng.model.DomainEntity;
 import it.unibo.soseng.model.GeneratedOffer;
 import it.unibo.soseng.model.User;
-import it.unibo.soseng.util.Errors;
+import it.unibo.soseng.utils.Errors;
+
 import static it.unibo.soseng.security.Constants.USER;
-import static it.unibo.soseng.camunda.ProcessVariables.USER_OFFER_REQUEST;
-import static it.unibo.soseng.camunda.ProcessVariables.USER_OFFER_TOKEN;
-import static it.unibo.soseng.camunda.ProcessVariables.USERNAME;
-import static it.unibo.soseng.camunda.ProcessVariables.BUSINESS_KEY;
-import static it.unibo.soseng.camunda.ProcessVariables.IS_VALID_TOKEN;
-import static it.unibo.soseng.camunda.ProcessVariables.IS_OFFER_EXPIRED;
-import static it.unibo.soseng.camunda.ProcessVariables.USER_OFFER;
+import static it.unibo.soseng.camunda.utils.Events.PAYMENT_REQUEST;
+import static it.unibo.soseng.camunda.utils.Events.PAY_OFFER;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.ASYNC_RESPONSE;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.BUSINESS_KEY;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.ERRORS_IN_PAYMENT_REQ;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.IS_OFFER_EXPIRED;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.IS_VALID_TOKEN;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_BUY_OFFER;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_ERROR;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.USERNAME;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_OFFER;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_OFFER_REQUEST;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_OFFER_TOKEN;
 
 import java.time.OffsetDateTime;
 import java.util.HashMap;
@@ -134,9 +132,12 @@ public class UserManager {
         User user = new User();
         user.setProntogramUsername(request.getProntogramUsername());
         user.setEmail(request.getEmail());
+        user.setName(request.getName());
+        user.setSurname(request.getSurname());
         DomainEntity entity = new DomainEntity();
         entity.setUsername(request.getEmail());
         entity.setPassword(request.getPassword());
+        entity.setUsername(request.getEmail());
         entity.setRole(USER);
         entity.setSalt("aaaa"); //TODO
         user.setEntity(entity);

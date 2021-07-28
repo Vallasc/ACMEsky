@@ -1,5 +1,7 @@
 package it.unibo.soseng.gateway.airline;
 
+import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_BUY_OFFER;
+
 import java.io.IOException;
 
 import java.net.URI;
@@ -26,13 +28,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.logging.Logger;
 
+import it.unibo.soseng.camunda.utils.ProcessState;
 import it.unibo.soseng.gateway.airline.dto.InterestDTO;
 import it.unibo.soseng.logic.airline.AirlineManager;
 import it.unibo.soseng.logic.database.DatabaseManager;
-
-import static it.unibo.soseng.camunda.ProcessVariables.PROCESS_BUY_OFFER;
-import it.unibo.soseng.camunda.ProcessState;
-
 import it.unibo.soseng.model.GeneratedOffer;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

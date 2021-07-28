@@ -42,6 +42,7 @@
 |  | generated_offers |
 | - | - |
 | PK | id |
+| FK | user_id |
 | FK | outbound_flight_id |
 | FK | flight_back_id |
 |  | expire_date |

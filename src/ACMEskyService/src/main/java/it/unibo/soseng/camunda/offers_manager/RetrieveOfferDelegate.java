@@ -1,5 +1,11 @@
 package it.unibo.soseng.camunda.offers_manager;
 
+import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_BUY_OFFER;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.RESPONSE;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.USERNAME;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_OFFER_REQUEST;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_OFFER_TOKEN;
+
 import java.util.logging.Logger;
 
 import javax.inject.Named;
@@ -11,13 +17,8 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 
 import it.unibo.soseng.logic.database.DatabaseManager.OfferNotFoundException;
 import it.unibo.soseng.logic.user.UserManager;
-import it.unibo.soseng.camunda.ProcessState;
+import it.unibo.soseng.camunda.utils.ProcessState;
 import it.unibo.soseng.gateway.user.dto.UserOfferDTO;
-import static it.unibo.soseng.camunda.ProcessVariables.USER_OFFER_REQUEST;
-import static it.unibo.soseng.camunda.ProcessVariables.USER_OFFER_TOKEN;
-import static it.unibo.soseng.camunda.ProcessVariables.PROCESS_BUY_OFFER;
-import static it.unibo.soseng.camunda.ProcessVariables.RESPONSE;
-import static it.unibo.soseng.camunda.ProcessVariables.USERNAME;
 
 
 @Named("retrieveOfferDelegate")

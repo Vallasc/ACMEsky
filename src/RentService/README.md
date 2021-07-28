@@ -2,11 +2,10 @@
 
 ### Run:
 ```sh
-jolie server.ol
+jolie server.ol $SERVICE_NAME $WSDL_PATH
 ```
 
-### Create and run on Docker container
+### Create and run the docker stack
 ```sh
-docker build -t rent_service .
-docker run --rm -d -p 8083:8080/tcp rent_service
+docker-compose up
 ```

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="www.unibo.it.wsdl" xmlns:xsd1="www.unibo.it.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="www.unibo.it.wsdl" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+    <xs:schema targetNamespace="www.unibo.it.xsd" xmlns:sch="www.unibo.it.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema"><xs:element name="bookRent"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="clientName" type="xs:string"/><xs:element maxOccurs="1" minOccurs="1" name="clientSurname" type="xs:string"/><xs:element maxOccurs="1" minOccurs="1" name="fromAddress" type="xs:string"/><xs:element maxOccurs="1" minOccurs="1" name="arrivalDateTime" type="xs:string"/><xs:element maxOccurs="1" minOccurs="1" name="toAddress" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="bookRentResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="0" name="departureDateTime" type="xs:string"/><xs:element maxOccurs="1" minOccurs="0" name="arrivalDateTime" type="xs:string"/><xs:element maxOccurs="1" minOccurs="1" name="status" type="xs:string"/><xs:element maxOccurs="1" minOccurs="0" name="rentId" type="xs:string"/></xs:sequence></xs:complexType></xs:element></xs:schema>
+  </wsdl:types>
+  <wsdl:message name="RentResponse">
+    <wsdl:part name="body" element="xsd1:bookRentResponse"/>
+  </wsdl:message>
+  <wsdl:message name="RentRequest">
+    <wsdl:part name="body" element="xsd1:bookRent"/>
+  </wsdl:message>
+  <wsdl:portType name="Rent">
+    <wsdl:operation name="bookRent">
+      <wsdl:input message="tns:RentRequest"/>
+      <wsdl:output message="tns:RentResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="RentSOAPBinding" type="tns:Rent">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="bookRent">
+      <soap:operation soapAction="bookRent" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="RentService">
+    <wsdl:port name="RentServicePort" binding="tns:RentSOAPBinding">
+      <soap:address location="http://localhost:8080"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

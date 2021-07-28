@@ -1,4 +1,4 @@
-package it.unibo.soseng.camunda;
+package it.unibo.soseng.camunda.utils;
 
 public final class Events {
     public static final String SAVE_LAST_MINUTE = "StartSaveLastMinute";

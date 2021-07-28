@@ -1,4 +1,4 @@
-package it.unibo.soseng.camunda.user_manger;
+package it.unibo.soseng.camunda.user_manger.book_payment;
 
 import java.util.logging.Logger;
 
@@ -18,12 +18,11 @@ import it.unibo.soseng.logic.bank.BankManager.ErrorReceivedPayLinkException;
 import it.unibo.soseng.logic.database.DatabaseManager;
 import it.unibo.soseng.model.Bank;
 import it.unibo.soseng.model.GeneratedOffer;
-import it.unibo.soseng.util.*;
+import it.unibo.soseng.utils.*;
 
-import static it.unibo.soseng.camunda.ProcessVariables.USER_OFFER;
-import static it.unibo.soseng.camunda.ProcessVariables.PAYMENT_LINK;
-
-import static it.unibo.soseng.camunda.ErrorsEvents.RESPONSE_PAYMENT_LINK_ERROR;
+import static it.unibo.soseng.camunda.utils.ErrorsEvents.RESPONSE_PAYMENT_LINK_ERROR;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.PAYMENT_LINK;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_OFFER;
 
 
 @Named("askPaymentLinkDelegate")

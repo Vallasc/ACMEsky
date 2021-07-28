@@ -1,5 +1,7 @@
 package it.unibo.soseng.camunda.flights_manager;
 
+import static it.unibo.soseng.camunda.utils.ProcessVariables.FLIGHTS_TO_SAVE;
+
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -11,8 +13,6 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 
 import it.unibo.soseng.logic.database.DatabaseManager;
 import it.unibo.soseng.model.Flight;
-
-import static it.unibo.soseng.camunda.ProcessVariables.FLIGHTS_TO_SAVE;
 
 
 @Named("saveFlightsDelegate")

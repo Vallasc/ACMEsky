@@ -88,8 +88,8 @@ V0.9 - versione interna RFC
 | ProntogramFrontEnd | 8051 |
 | GeocraphicalService | 8040 |
 | RentService1 | 8030 |
-| RentService2 | 8031 |
-| RentService3 | 8032 |
+| RentService2 | 8032 |
+| RentService3 | 8034 |
 
 Vincoli al problema (Assunzioni):
 - Le offerte generate provengono dalla stessa compagnia aerea

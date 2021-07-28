@@ -2,6 +2,13 @@ package it.unibo.soseng.camunda.offers_manager;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 
+import static it.unibo.soseng.camunda.utils.ProcessVariables.AVAILABLE_FLIGHTS;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.GENERATED_OFFER;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_ERROR;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.USERNAME;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_INTEREST;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_INTEREST_INDEX;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -16,12 +23,6 @@ import it.unibo.soseng.model.GeneratedOffer;
 import it.unibo.soseng.model.UserInterest;
 
 import java.util.logging.Logger;
-import static it.unibo.soseng.camunda.ProcessVariables.USER_INTEREST;
-import static it.unibo.soseng.camunda.ProcessVariables.USER_INTEREST_INDEX;
-import static it.unibo.soseng.camunda.ProcessVariables.AVAILABLE_FLIGHTS;
-import static it.unibo.soseng.camunda.ProcessVariables.GENERATED_OFFER;
-import static it.unibo.soseng.camunda.ProcessVariables.PROCESS_ERROR;
-import static it.unibo.soseng.camunda.ProcessVariables.USERNAME;
 
 
 @Named("prepareOfferDelegate")

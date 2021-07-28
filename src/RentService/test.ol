@@ -5,7 +5,7 @@ include "rent.iol"
 outputPort RentOutput {
   Location: "socket://localhost:8080"
   Protocol: soap {
-    .wsdl = "./rentService.wsdl"
+    .wsdl = "./rentServiceTest.wsdl"
     .wsdl.port = "Rent"
     .dropRootValue = true
   }
@@ -13,8 +13,8 @@ outputPort RentOutput {
 }
 
 main {
-    request.clientName = "Pippo"
-    request.clientSurname = "Rossi"
+    request.clientName = "Mario"
+    request.clientSurname = "Verdi"
     request.fromAddress = "Piazza Verdi 69, 40127, Bologna"
     request.toAddress = "Via del lavoro 10, 40136, Bologna"
     request.toDateTime = "2021-03-03T10:36:23+0100"
