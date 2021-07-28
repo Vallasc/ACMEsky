@@ -9,15 +9,20 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 
-import it.unibo.soseng.gateway.prontogram.dto.Notification;
+import it.unibo.soseng.gateway.prontogram.dto.NotificationDTO;
+import okhttp3.OkHttpClient;
 
 
 public class ProntogramClient {
+    final String BASE_URL = System.getenv("PRONTOGRAM_PATH");
 
-    // TODO CATTURARARE LE ECCEZIONI
-    public void sendNotificationOffer(Notification notification) throws IOException, InterruptedException, java.io.IOException{
+    OkHttpClient client = new OkHttpClient();
 
-        ObjectMapper objectMapper = new ObjectMapper();
+    // TODO CATTURARARE LE ECCEZIONI e usare okhttp
+    public void sendNotificationOffer(NotificationDTO notification) throws IOException {
+
+        String url = BASE_URL + "/api/notification/new";
+        /*ObjectMapper objectMapper = new ObjectMapper();
         
         String requestBody = objectMapper
                 .writeValueAsString(notification);
@@ -28,7 +33,7 @@ public class ProntogramClient {
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                 .build();
 
-        HttpResponse<String> response = HttpClient.newHttpClient().send(request, BodyHandlers.ofString());
+        HttpResponse<String> response = HttpClient.newHttpClient().send(request, BodyHandlers.ofString());*/
 
         //return objectMapper.createArrayNode().add(response.body());
     }
