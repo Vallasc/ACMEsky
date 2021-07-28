@@ -39,8 +39,8 @@ public class FlightInterest implements Serializable {
     @Column(name = "departure_date_time", columnDefinition= "TIMESTAMP WITH TIME ZONE", nullable = false)
     private OffsetDateTime departureDateTime;
 
-	public FlightInterest() {
-    }
+    @Column(name = "used", nullable = false)
+    private boolean used ;
 	
     public long getId() {
 		return this.id;
@@ -80,5 +80,12 @@ public class FlightInterest implements Serializable {
 	public void setDepartureDateTime(OffsetDateTime departureDateTime) {
 		this.departureDateTime = departureDateTime;
 	}
-    
+
+    public boolean getUsed() {
+		return this.used;
+	}
+
+	public void setUsed(boolean used) {
+		this.used = used;
+	}
 }
