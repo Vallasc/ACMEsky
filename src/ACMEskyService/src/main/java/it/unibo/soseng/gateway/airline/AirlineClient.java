@@ -119,7 +119,7 @@ public class AirlineClient {
                             .addHeader("Content-Type", "*/*")
                             .build();
 
-        Response response = client.newCall(request).execute();
+        client.newCall(request).execute();
 
         processState.getStateAndRemove(PROCESS_BUY_OFFER, offer.getUser().getProntogramUsername(), "PDF");
 

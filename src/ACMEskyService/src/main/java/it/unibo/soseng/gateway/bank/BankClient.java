@@ -14,11 +14,14 @@ import it.unibo.soseng.gateway.bank.dto.AuthRequest;
 import it.unibo.soseng.gateway.bank.dto.PaymentLinkRequest;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 public class BankClient {
+
+    final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
 
     public String auth(String wsAddress, AuthRequest reqDTO) throws IOException, InterruptedException{
@@ -27,35 +30,30 @@ public class BankClient {
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        String requestBody = objectMapper
-                .writeValueAsString(reqDTO);
+        String requestBody = objectMapper.writeValueAsString(reqDTO);
+        RequestBody body = RequestBody.Companion.create(requestBody, JSON);
 
-        HttpClient httpClient = HttpClient.newBuilder()
-            .version(HttpClient.Version.HTTP_1_1)
-            .build();   
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder().url(url)
+                            .addHeader("Content-Type", "application/json")
+                            .post(body)
+                            .build();
+        Response response = client.newCall(request).execute();   
 
-        HttpRequest request = HttpRequest.newBuilder(
-                                    URI.create(url))
-                                    .header("Content-Type", "application/json")
-                                    .POST(HttpRequest.BodyPublishers.ofString(requestBody))
-                                    .build();
-
-        HttpResponse<String> response = httpClient.send(request, BodyHandlers.ofString());
         
-        return response.body();
+        return response.body().string();
 
     }
 
 
-    public ResponseBody paymentLink (String wsAddress, String token, PaymentLinkRequest linkReqDTO ) throws IOException, InterruptedException{
+    public String paymentLink (String wsAddress, String token, PaymentLinkRequest linkReqDTO ) throws IOException, InterruptedException{
 
         String url = wsAddress+"/payments";
 
         ObjectMapper m = new ObjectMapper();
         String req = m.writeValueAsString(linkReqDTO);
 
-        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-        RequestBody body = RequestBody.create(JSON, req);
+        RequestBody body = RequestBody.Companion.create(req, JSON);
 
         OkHttpClient client = new OkHttpClient();
         okhttp3.Request request = new okhttp3.Request.Builder()
@@ -64,9 +62,10 @@ public class BankClient {
                                     .addHeader("Authorization: Bearer ", token)
                                     .post(body)
                                     .build();
+
         Response response = client.newCall(request).execute();
         
-        return response.body();
+        return response.body().string();
 
         
     }

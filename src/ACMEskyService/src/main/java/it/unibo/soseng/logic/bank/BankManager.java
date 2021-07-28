@@ -34,9 +34,9 @@ public class BankManager {
 
     public PaymentLink getPaymentLink(String wsAddress, String token, PaymentLinkRequest payReq ) throws IOException, InterruptedException, ErrorReceivedPayLinkException{
 
-        ResponseBody res = bankClient.paymentLink(wsAddress, token, payReq);
+        String res = bankClient.paymentLink(wsAddress, token, payReq);
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = mapper.readTree(res.string());
+        JsonNode root = mapper.readTree(res);
         
         PaymentLink infoPayment = new PaymentLink();
             infoPayment.setPath(root.get("path").toString());

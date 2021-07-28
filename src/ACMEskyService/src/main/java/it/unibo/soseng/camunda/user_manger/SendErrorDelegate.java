@@ -2,7 +2,6 @@ package it.unibo.soseng.camunda.user_manger;
 
 import java.util.logging.Logger;
 
-import javax.ejb.AsyncResult;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.container.AsyncResponse;
@@ -14,7 +13,6 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 import it.unibo.soseng.camunda.ProcessState;
 import it.unibo.soseng.util.Errors;
 
-import static it.unibo.soseng.camunda.ProcessVariables.ERRORS_IN_PAYMENT_REQ;
 import static it.unibo.soseng.camunda.ProcessVariables.ASYNC_RESPONSE;
 import static it.unibo.soseng.camunda.ProcessVariables.USERNAME;
 import static it.unibo.soseng.camunda.ProcessVariables.PROCESS_BUY_OFFER;
