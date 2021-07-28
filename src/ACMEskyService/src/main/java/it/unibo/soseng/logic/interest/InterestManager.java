@@ -35,7 +35,7 @@ import it.unibo.soseng.utils.Errors;
 import static it.unibo.soseng.camunda.utils.Events.SAVE_INTERESTS;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.ASYNC_RESPONSE;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_ERROR;
-import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_SAVE_INTERST;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_SAVE_INTEREST;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.URI_INFO;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.USERNAME;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_INTERESTS_REQUEST;
@@ -65,8 +65,8 @@ public class InterestManager {
         Map<String,Object> processVariables = new HashMap<String,Object>();
         processVariables.put(USER_INTERESTS_REQUEST, request);
         processVariables.put(USERNAME, email);
-        processState.setState(PROCESS_SAVE_INTERST, email, URI_INFO, uriInfo);
-        processState.setState(PROCESS_SAVE_INTERST, email, ASYNC_RESPONSE, response);
+        processState.setState(PROCESS_SAVE_INTEREST, email, URI_INFO, uriInfo);
+        processState.setState(PROCESS_SAVE_INTEREST, email, ASYNC_RESPONSE, response);
   
         // Start the process instance
         ProcessInstanceWithVariables instance = runtimeService.createProcessInstanceByKey(SAVE_INTERESTS)
@@ -115,8 +115,8 @@ public class InterestManager {
         
         try {
             UserInterest userInterest = this.saveUserInterests(username, interest);
-
-            UriInfo uriInfo = (UriInfo) processState.getState(PROCESS_SAVE_INTERST, username, URI_INFO);
+            
+            UriInfo uriInfo = (UriInfo) processState.getState(PROCESS_SAVE_INTEREST, username, URI_INFO);
             return Response.status(Response.Status.CREATED.getStatusCode())
                     .header("Location", String.format("%s/%s", uriInfo.getAbsolutePath().toString(), userInterest.getId()))
                     .build();
@@ -149,6 +149,7 @@ public class InterestManager {
         User user = databaseManager.getUser(email);
 
         UserInterest interest = new UserInterest();
+        interest.setUsed(false);
 
         interest.setExpireDate(request.getOutboundFlight().getDepartureOffsetDateTime());
         interest.setUser(user);
@@ -156,6 +157,7 @@ public class InterestManager {
         interest.setPriceLimit(request.getPriceLimit());
 
         FlightInterest flightOutInterest = new FlightInterest();
+        flightOutInterest.setUsed(false);
         flightOutInterest.setUser(user);
         flightOutInterest.setDepartureAirport(airportOut2);
         flightOutInterest.setArrivalAirport(airportOut1);
@@ -164,6 +166,7 @@ public class InterestManager {
         interest.setOutboundFlightInterest(flightOutInterest);
 
         FlightInterest flightBackInterest = new FlightInterest();
+        flightBackInterest.setUsed(false);
         flightBackInterest.setUser(user);
         flightBackInterest.setDepartureAirport(airportBack2);
         flightBackInterest.setArrivalAirport(airportBack1);
