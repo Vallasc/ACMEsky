@@ -32,7 +32,7 @@ import it.unibo.soseng.model.UserInterest;
 import it.unibo.soseng.util.Env;
 import it.unibo.soseng.util.Errors;
 
-import static it.unibo.soseng.camunda.StartEvents.SAVE_INTERESTS;
+import static it.unibo.soseng.camunda.Events.SAVE_INTERESTS;
 
 import static it.unibo.soseng.camunda.ProcessVariables.USER_INTERESTS_REQUEST;
 import static it.unibo.soseng.camunda.ProcessVariables.USERNAME;

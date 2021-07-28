@@ -22,7 +22,9 @@ import static it.unibo.soseng.camunda.ProcessVariables.ASYNC_RESPONSE;
 import static it.unibo.soseng.camunda.ProcessVariables.PROCESS_ERROR;
 import static it.unibo.soseng.camunda.ProcessVariables.ERRORS_IN_PAYMENT_REQ;
 
-import static it.unibo.soseng.camunda.StartEvents.PAY_OFFER;
+import static it.unibo.soseng.camunda.Events.PAY_OFFER;
+import static it.unibo.soseng.camunda.Events.PAYMENT_REQUEST;
+
 
 import it.unibo.soseng.gateway.user.dto.UserDTO;
 import it.unibo.soseng.gateway.user.dto.UserSignUpDTO;
@@ -39,8 +41,11 @@ import static it.unibo.soseng.security.Constants.USER;
 import static it.unibo.soseng.camunda.ProcessVariables.USER_OFFER_REQUEST;
 import static it.unibo.soseng.camunda.ProcessVariables.USER_OFFER_TOKEN;
 import static it.unibo.soseng.camunda.ProcessVariables.USERNAME;
+import static it.unibo.soseng.camunda.ProcessVariables.BUSINESS_KEY;
 import static it.unibo.soseng.camunda.ProcessVariables.IS_VALID_TOKEN;
 import static it.unibo.soseng.camunda.ProcessVariables.IS_OFFER_EXPIRED;
+import static it.unibo.soseng.camunda.ProcessVariables.USER_OFFER;
+
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -72,12 +77,16 @@ public class UserManager {
     processVariables.put(USER_OFFER_REQUEST, request);
     processVariables.put(USER_OFFER_TOKEN, token);
     processVariables.put(USERNAME, email);
+    processVariables.put(BUSINESS_KEY, email+PROCESS_BUY_OFFER);
     processState.setState(PROCESS_BUY_OFFER, email, ASYNC_RESPONSE, response);
 
+    
     // Start the process instance
     ProcessInstanceWithVariables instance = runtimeService.createProcessInstanceByKey(PAY_OFFER)
+    .businessKey(email+PROCESS_BUY_OFFER)
     .setVariables(processVariables)
     .executeWithVariablesInReturn();
+    
     processVariables = instance.getVariables();
     String error = (String) processVariables.get(PROCESS_ERROR);
 
@@ -116,6 +125,7 @@ public class UserManager {
                                 .entity(Errors.OFFER_EXPIRED)
                                 .build();
             }
+            execution.setVariable(USER_OFFER, offerToReturn);
             return Response.status(Response.Status.OK.getStatusCode())
             .build();
         }
@@ -185,28 +195,9 @@ public class UserManager {
 
     public void startPaymentRequest(AsyncResponse response) throws BadRequestException{
         String email = securityContext.getCallerPrincipal().getName();
-
-        processState.setState(PROCESS_BUY_OFFER, email, ASYNC_RESPONSE, response);
-
         final RuntimeService runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();
-        Map<String,Object> processVariables = new HashMap<String,Object>();
-        // processVariables = runtimeService.getVariables(PAY_OFFER);
-    }
-
-    public Response handlePaymentRequest(String email, DelegateExecution execution) {
-        
-        byte[] ticket = (byte[]) processState.getState(PROCESS_BUY_OFFER, email, "PDF");
-
-        if(ticket == null){
-            execution.setVariable(ERRORS_IN_PAYMENT_REQ, true);  
-            return Response.status(Response.Status.BAD_REQUEST.getStatusCode())
-                            .entity(Errors.OFFER_NOT_AVAILABLE)
-                            .build();
-        
-        }        
-        
-        return Response.status(Response.Status.OK.getStatusCode())
-        .build();
+        runtimeService.correlateMessage(PAY_OFFER, email+PROCESS_BUY_OFFER);
+        processState.setState(PROCESS_BUY_OFFER, email, ASYNC_RESPONSE, response);
     }
 
 

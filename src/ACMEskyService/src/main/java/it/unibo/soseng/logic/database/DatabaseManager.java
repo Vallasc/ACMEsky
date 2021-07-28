@@ -17,6 +17,7 @@ import javax.transaction.Transactional;
 
 import it.unibo.soseng.model.Airline;
 import it.unibo.soseng.model.Airport;
+import it.unibo.soseng.model.Bank;
 import it.unibo.soseng.model.DomainEntity;
 import it.unibo.soseng.model.Flight;
 import it.unibo.soseng.model.FlightInterest;
@@ -244,6 +245,18 @@ public class DatabaseManager {
 	}
 
 
+    public Bank getBank() throws BankNotFoundException{
+        @SuppressWarnings("unchecked") 
+        List<Bank> result = (List<Bank>) entityManager
+                .createQuery("SELECT b FROM Bank b")
+                .getResultList();
+        if (result.size() > 0) {
+            return result.get(0);
+        }
+        throw new BankNotFoundException();
+    }
+
+
 
     public class EntityNotFoundException extends Exception {
         private static final long serialVersionUID = 1L;
@@ -268,6 +281,9 @@ public class DatabaseManager {
         private static final long serialVersionUID = 1L;
     }
     public class OfferNotFoundException extends Exception {
+        private static final long serialVersionUID = 1L;
+    }
+    public class BankNotFoundException extends Exception {
         private static final long serialVersionUID = 1L;
     }
 

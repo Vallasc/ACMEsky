@@ -46,6 +46,7 @@ public class OfferController {
     
     @GET
     @Path("/getTickets/{username}")
+    @RolesAllowed({USER})
     public Response getTickets(@PathParam("username") String username) {
         System.out.println(username);
         byte[] out = (byte[]) processState.getState(PROCESS_BUY_OFFER, username, "PDF");
@@ -59,19 +60,6 @@ public class OfferController {
     }
 
     
-    @GET
-    @Path("/requestPaymentLink")
-    @RolesAllowed({USER})
-    @Consumes( MediaType.APPLICATION_JSON )
-    public void userOfferToken(final @Suspended AsyncResponse response) {
-        LOGGER.info("GET paymentRequest");
-        try {
-            userManager.startPaymentRequest(response);
-        } catch (BadRequestException e) {
-            response.resume(Response.status(Response.Status.BAD_REQUEST.getStatusCode()).build());
-        }
-    }
-    
     @POST
     @Path("/confirmOffer")
     @RolesAllowed({USER})
@@ -82,6 +70,19 @@ public class OfferController {
         LOGGER.info("POST userOffer token");
         try {
             userManager.startConfirmUserFlight(request, response, uriInfo);
+        } catch (BadRequestException e) {
+            response.resume(Response.status(Response.Status.BAD_REQUEST.getStatusCode()).build());
+        }
+    }
+
+
+    @GET
+    @Path("/requestPaymentLink")
+    @RolesAllowed({USER})
+    public void userOfferToken(final @Suspended AsyncResponse response) {
+        LOGGER.info("GET paymentRequest");
+        try {
+            userManager.startPaymentRequest(response);
         } catch (BadRequestException e) {
             response.resume(Response.status(Response.Status.BAD_REQUEST.getStatusCode()).build());
         }

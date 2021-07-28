@@ -3,6 +3,8 @@ package it.unibo.soseng.camunda.offers_manager;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import it.unibo.soseng.camunda.ProcessState;
+import it.unibo.soseng.logic.airline.AirlineManager;
+
 import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -11,7 +13,7 @@ import javax.ws.rs.core.Response;
 import static it.unibo.soseng.camunda.ProcessVariables.PROCESS_BUY_OFFER;
 import static it.unibo.soseng.camunda.ProcessVariables.RESPONSE;
 import static it.unibo.soseng.camunda.ProcessVariables.ASYNC_RESPONSE;
-import static it.unibo.soseng.camunda.ProcessVariables.USERNAME;;
+import static it.unibo.soseng.camunda.ProcessVariables.USERNAME;
 
 @Named("sendOfferResponseDelegate")
 public class SendOfferResponseDelegate implements JavaDelegate {
@@ -19,6 +21,9 @@ public class SendOfferResponseDelegate implements JavaDelegate {
     
     @Inject
     private ProcessState processState;
+
+    @Inject
+    AirlineManager airlineManager;
     
     @Override
     public void execute(DelegateExecution execution){

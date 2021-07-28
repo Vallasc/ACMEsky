@@ -26,8 +26,7 @@ public class UnBookTicketsDelegate implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws IOException{
         LOGGER.info("UnBookTickets working");
-        // GeneratedOffer offer = dbManager.retrieveGeneratedOffer();
-        // airlineManager.unbookOffer(offer);
+        
 
 
         

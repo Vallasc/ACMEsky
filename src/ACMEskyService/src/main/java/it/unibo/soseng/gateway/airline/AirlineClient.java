@@ -121,7 +121,7 @@ public class AirlineClient {
 
         Response response = client.newCall(request).execute();
 
-        processState.getStateAndRemove(PROCESS_BUY_OFFER, offer.getUser().getUsername(), "PDF");
+        processState.getStateAndRemove(PROCESS_BUY_OFFER, offer.getUser().getProntogramUsername(), "PDF");
 
     }
 

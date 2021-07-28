@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.core.Response;
 
+import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 
@@ -45,19 +46,17 @@ public class BookTicketsDelegate implements JavaDelegate{
     UserManager userManager;
 
     @Override
-    public void execute(DelegateExecution execution) throws IOException, SendTicketError{
+    public void execute(DelegateExecution execution){
         LOGGER.info("BookTickets working");
         try{
-            GeneratedOffer offer = dbManager.retrieveGeneratedOffer();
-            // GeneratedOffer offer = (GeneratedOffer) execution.getVariable(USER_OFFER);
-            byte[] ticket = airManager.getOfferTicket(offer);
+            GeneratedOffer offer = (GeneratedOffer) execution.getVariable(USER_OFFER);
+            airManager.getOfferTicket(offer);
             dbManager.setBookFlights(true, offer.getOutboundFlightId(), offer.getFlightBackId());
-            String email = (String) execution.getVariable(USERNAME);
-            Response response = userManager.handlePaymentRequest(email, execution);
-            processState.setState(PROCESS_BUY_OFFER, email, RESPONSE, response);
         }catch(SendTicketException e){
             LOGGER.severe(e.toString());
-            throw new SendTicketError(SEND_TICKET_ERROR);
-        }    
+            throw new BpmnError(SEND_TICKET_ERROR);
+        }catch(IOException e){
+            throw new BpmnError(SEND_TICKET_ERROR);
+        }
     }
 }

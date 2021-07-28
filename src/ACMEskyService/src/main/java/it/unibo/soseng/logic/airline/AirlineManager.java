@@ -31,7 +31,7 @@ import it.unibo.soseng.model.Flight;
 import it.unibo.soseng.model.FlightInterest;
 import it.unibo.soseng.model.GeneratedOffer;
 
-import static it.unibo.soseng.camunda.StartEvents.SAVE_LAST_MINUTE;
+import static it.unibo.soseng.camunda.Events.SAVE_LAST_MINUTE;
 
 import static it.unibo.soseng.camunda.ProcessVariables.AIRLINE_FLIGHT_OFFERS;
 import static it.unibo.soseng.camunda.ProcessVariables.AIRLINE_NAME;
@@ -108,7 +108,7 @@ public class AirlineManager {
 
     public byte[] getOfferTicket(GeneratedOffer offer) throws IOException, SendTicketException{
 
-        byte[] fileByte = api.getFlightTickets(offer.getOutboundFlightId().getAirlineId().getWsAddress(), offer.getUser().getUsername(), offer.getOutboundFlightId().getFlightCode(), 
+        byte[] fileByte = api.getFlightTickets(offer.getOutboundFlightId().getAirlineId().getWsAddress(), offer.getUser().getProntogramUsername(), offer.getOutboundFlightId().getFlightCode(), 
                                                 offer.getFlightBackId().getFlightCode());
         offer.setBooked(true);
         return fileByte;

@@ -31,6 +31,7 @@ public final class ProcessVariables {
 
 
     public static final String PROCESS_ERROR = "processError";
+    public static final String BUSINESS_KEY = "businessKey";
     public static final String USERNAME = "username";
     public static final String ASYNC_RESPONSE = "asyncResponse";
     public static final String RESPONSE = "response";
@@ -43,6 +44,9 @@ public final class ProcessVariables {
     public static final String PROCESS_BUY_OFFER = "processBuyOffer";
     public static final String GENERATED_OFFER = "generatedOffer";
     public static final String USER_OFFER = "userOffer";
+    public static final String PAYMENT_LINK = "paymentLink";
+    
+    
 
     
     public static final String THERE_IS_FLIGHTS = "thereIsFlights";

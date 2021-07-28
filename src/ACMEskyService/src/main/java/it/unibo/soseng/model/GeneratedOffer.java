@@ -39,10 +39,6 @@ public class GeneratedOffer implements Serializable {
     @Column(name = "total_price", nullable = true)
     private double totalPrice;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "username", nullable = true)
-    private DomainEntity user;
-
     @Column(name = "booked", nullable = true)
     private boolean booked;
 
@@ -100,14 +96,6 @@ public class GeneratedOffer implements Serializable {
 
     public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
-    }
-
-    public DomainEntity getUser() {
-        return user;
-    }
-
-    public void setUser(DomainEntity user) {
-        this.user = user;
     }
 
     public boolean getBooked() {
