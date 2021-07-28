@@ -25,12 +25,13 @@ import it.unibo.soseng.gateway.airline.dto.InterestDTO;
 import it.unibo.soseng.logic.database.DatabaseManager;
 import it.unibo.soseng.logic.database.DatabaseManager.AirlineNotFoundException;
 import it.unibo.soseng.logic.database.DatabaseManager.AirportNotFoundException;
+import it.unibo.soseng.logic.offer.OfferManager.SendTicketException;
 import it.unibo.soseng.model.Airline;
 import it.unibo.soseng.model.Flight;
 import it.unibo.soseng.model.FlightInterest;
+import it.unibo.soseng.model.GeneratedOffer;
 
-
-import static it.unibo.soseng.camunda.StartEvents.SAVE_LAST_MINUTE;
+import static it.unibo.soseng.camunda.Events.SAVE_LAST_MINUTE;
 
 import static it.unibo.soseng.camunda.ProcessVariables.AIRLINE_FLIGHT_OFFERS;
 import static it.unibo.soseng.camunda.ProcessVariables.AIRLINE_NAME;
@@ -98,11 +99,29 @@ public class AirlineManager {
                 f.setPrice(n.get("price").floatValue());
                 f.setExpireDate(n.get("expDate").textValue());
                 f.setBooked(false);
+                f.setAvailable(true);
                 f.setFlightCode(n.get("id").asText());
                 list.add(f);
             }
         return list;
     }
+
+    public byte[] getOfferTicket(GeneratedOffer offer) throws IOException, SendTicketException{
+
+        byte[] fileByte = api.getFlightTickets(offer.getOutboundFlightId().getAirlineId().getWsAddress(), offer.getUser().getProntogramUsername(), offer.getOutboundFlightId().getFlightCode(), 
+                                                offer.getFlightBackId().getFlightCode());
+        offer.setBooked(true);
+        return fileByte;
+    }
+
+
+    public void unbookOffer(GeneratedOffer offer) throws IOException {
+        
+        // api.unbookFlights();
+        offer.setBooked(false);
+    }
+
+
 
     public class UserNotAllowedException extends Exception {
         private static final long serialVersionUID = 1L;
@@ -111,5 +130,7 @@ public class AirlineManager {
     public class BadRequestException extends Exception {
         private static final long serialVersionUID = 1L;
     }
+
+    
 
 }

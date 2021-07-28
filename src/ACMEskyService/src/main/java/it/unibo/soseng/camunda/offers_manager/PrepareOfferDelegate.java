@@ -1,17 +1,28 @@
 package it.unibo.soseng.camunda.offers_manager;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
+
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
-import it.unibo.soseng.logic.database.DatabaseManager.OfferAlreadyInException;
+import javax.persistence.PersistenceException;
+
+import it.unibo.soseng.logic.database.DatabaseManager.FlightNotExistException;
+import it.unibo.soseng.logic.database.DatabaseManager.UserNotFoundException;
 import it.unibo.soseng.logic.offer.OfferManager;
 import it.unibo.soseng.model.Flight;
 import it.unibo.soseng.model.GeneratedOffer;
+import it.unibo.soseng.model.UserInterest;
 
 import java.util.logging.Logger;
+import static it.unibo.soseng.camunda.ProcessVariables.USER_INTEREST;
+import static it.unibo.soseng.camunda.ProcessVariables.USER_INTEREST_INDEX;
 import static it.unibo.soseng.camunda.ProcessVariables.AVAILABLE_FLIGHTS;
 import static it.unibo.soseng.camunda.ProcessVariables.GENERATED_OFFER;
+import static it.unibo.soseng.camunda.ProcessVariables.PROCESS_ERROR;
+import static it.unibo.soseng.camunda.ProcessVariables.USERNAME;
+
 
 @Named("prepareOfferDelegate")
 public class PrepareOfferDelegate implements JavaDelegate{
@@ -21,21 +32,24 @@ public class PrepareOfferDelegate implements JavaDelegate{
     OfferManager offerManager;
 
     @Override
-    public void execute(DelegateExecution execution) throws OfferAlreadyInException{
+    public void execute(DelegateExecution execution) {
       LOGGER.info ("prepareOfferDelegate in esecuzione");
       @SuppressWarnings (value="unchecked")
       List<Flight> matchedFlights = (List<Flight>) execution.getVariable(AVAILABLE_FLIGHTS);
-      GeneratedOffer offer;
-      if (matchedFlights.size() > 1) {
-        offer = offerManager.generateOffer(matchedFlights.get(0), matchedFlights.get(1));
+      List <UserInterest> userInterests = (List<UserInterest>) execution.getVariable(USER_INTEREST);
+      UserInterest ui = userInterests.get( (int) execution.getVariable(USER_INTEREST_INDEX));
+      try{
+        String username = (String) execution.getVariable(USERNAME);
+        GeneratedOffer offer = offerManager.generateOffer(matchedFlights.get(0), matchedFlights.get(1), username);
+        execution.setVariable(GENERATED_OFFER, offer);
+      } catch (FlightNotExistException e){
+        execution.setVariable(PROCESS_ERROR,  e.toString());
+      } catch (PersistenceException e){
+        execution.setVariable(PROCESS_ERROR,  e.toString());
+      } catch (UserNotFoundException e){
+        execution.setVariable(PROCESS_ERROR,  e.toString());
       }
-      else {
-        offer = offerManager.generateOffer(matchedFlights.get(0), null);
-      }
-
-      execution.setVariable(GENERATED_OFFER, offer);
-
-  }
+    } 
 }
 
 

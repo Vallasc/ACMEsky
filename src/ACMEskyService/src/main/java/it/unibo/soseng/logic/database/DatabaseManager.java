@@ -17,6 +17,7 @@ import javax.transaction.Transactional;
 
 import it.unibo.soseng.model.Airline;
 import it.unibo.soseng.model.Airport;
+import it.unibo.soseng.model.Bank;
 import it.unibo.soseng.model.DomainEntity;
 import it.unibo.soseng.model.Flight;
 import it.unibo.soseng.model.FlightInterest;
@@ -46,6 +47,18 @@ public class DatabaseManager {
             return result.get(0);
         }
         throw new UserNotFoundException();
+    }
+
+    public GeneratedOffer getOfferByToken(String token, String email) throws OfferNotFoundException {
+        GeneratedOffer result = (GeneratedOffer) entityManager
+                .createQuery("SELECT go FROM User u, DomainEntity e, GeneratedOffer go "+ 
+                "WHERE e.username = :username AND u.entity = e.id "+
+                "AND go.token = :token AND go.user = u.id")
+                .setParameter("token", token).setParameter("username", email).getSingleResult();
+        if (result == null) {
+            throw new OfferNotFoundException();
+        }
+        return result;
     }
 
     @Transactional
@@ -80,6 +93,14 @@ public class DatabaseManager {
         return interests;
     }
 
+    public GeneratedOffer retrieveGeneratedOffer(){
+        @SuppressWarnings("unchecked")
+        List<GeneratedOffer> offers =
+        entityManager.createQuery("SELECT o FROM GeneratedOffer o")
+                        .getResultList();
+        return offers.get(0);
+    }
+
     public void insertFlightOffer(List<Flight> list){
         for(Flight f: list){
             entityManager.persist(f);
@@ -89,7 +110,7 @@ public class DatabaseManager {
     public List<Flight> retrieveFlights(){
         @SuppressWarnings("unchecked")
         List<Flight> flights =
-        entityManager.createQuery("SELECT f FROM Flight f")
+        entityManager.createQuery("SELECT f FROM Flight f WHERE f.available = true AND f.booked = false")
                         .getResultList();
         return flights;
     }
@@ -148,12 +169,9 @@ public class DatabaseManager {
     }
 
 
-    public void createOffer (GeneratedOffer offer) throws OfferAlreadyInException { 
-        try {
-            this.entityManager.persist(offer);
-        } catch (PersistenceException e) {
-            throw new OfferAlreadyInException();
-        }
+    public void createOffer (GeneratedOffer offer) throws PersistenceException { 
+        this.entityManager.persist(offer);
+        
     }
 
     // Airport
@@ -214,6 +232,31 @@ public class DatabaseManager {
             return null;
     }
 
+    public void updateFlight(Flight f){
+        this.entityManager.merge(f);
+    }
+
+    public void setBookFlights(boolean b, Flight requestOutbound, Flight requestFlightBack ) {
+
+        requestOutbound.setBooked(b);
+        requestFlightBack.setBooked(b);
+        this.entityManager.merge(requestOutbound);
+        this.entityManager.merge(requestFlightBack);
+	}
+
+
+    public Bank getBank() throws BankNotFoundException{
+        @SuppressWarnings("unchecked") 
+        List<Bank> result = (List<Bank>) entityManager
+                .createQuery("SELECT b FROM Bank b")
+                .getResultList();
+        if (result.size() > 0) {
+            return result.get(0);
+        }
+        throw new BankNotFoundException();
+    }
+
+
 
     public class EntityNotFoundException extends Exception {
         private static final long serialVersionUID = 1L;
@@ -234,8 +277,15 @@ public class DatabaseManager {
         private static final long serialVersionUID = 1L;
     }
 
-    public class OfferAlreadyInException extends Exception {
+    public class FlightNotExistException extends Exception {
+        private static final long serialVersionUID = 1L;
+    }
+    public class OfferNotFoundException extends Exception {
+        private static final long serialVersionUID = 1L;
+    }
+    public class BankNotFoundException extends Exception {
         private static final long serialVersionUID = 1L;
     }
 
+	
 }

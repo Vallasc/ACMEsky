@@ -22,7 +22,7 @@ export class NotificationService {
     }
 
     createNotification(notification: Notification) {
-        return this.http.post(`${environment.apiUrl}/notification/new`, notification);
+        return this.http.post(`${environment.apiUrl}/notification`, notification);
     }
 
     getAll(username: string) {
@@ -44,10 +44,10 @@ export class NotificationService {
             }));
     }
 
-    sendSubscriptionToTheServer (subscription: PushSubscription, user: User) {
+    sendSubscriptionToTheServer (subscription: PushSubscription, username: string) {
         const sub = new Subscription ();
         sub.subscription = subscription;
-        sub.username = user.username;
+        sub.username = username;
         console.log (sub);
         return  this.http.post(`${environment.apiUrl}/subscription/new`,sub);
     }

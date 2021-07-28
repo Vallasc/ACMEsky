@@ -4,26 +4,26 @@ import javax.validation.constraints.NotBlank;
 
 public class AuthRequest {
     
-    @NotBlank(message = "user is mandatory")
-    private String user;
+    @NotBlank(message = "username is mandatory")
+    private String username;
 
-    @NotBlank(message = "pass is mandatory")
-    private String pass;
+    @NotBlank(message = "password is mandatory")
+    private String password;
 
     
-    public String getUser() {
-        return user;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getPass() {
-        return pass;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPass(String pass) {
-        this.pass = pass;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

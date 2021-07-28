@@ -12,17 +12,31 @@ app.use(bodyParser.json())
 
 const port = 8000;
 app.listen(port, () => {
-    console.log('The server started on port: '+port );
+    console.log('The server started on port: '+ port );
   });
   
 dotenv.config ();
 
 //connect db 
-mongoose.connect(
+/*mongoose.connect(
   process.env.MONGO_CONNECTION,
     { useNewUrlParser: true },
     () => console.log ('connect to db')
-    );
+    );*/
+
+mongoose.connect(process.env.MONGO_CONNECTION, {
+      useNewUrlParser: true,
+      user: process.env.MONGO_USER,
+      pass: process.env.MONGO_PASSWORD,
+      auth: {
+        authSource: "admin"
+      },
+}).then(() => {
+      console.log('successfully connected to the database');
+}).catch(err => {
+      console.log('error connecting to the database');
+      process.exit();
+});
 
 //imports routes
 const authRoute = require ('./routes/auth');

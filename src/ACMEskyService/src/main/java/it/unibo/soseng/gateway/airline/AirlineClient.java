@@ -1,41 +1,55 @@
 package it.unibo.soseng.gateway.airline;
 
 import java.io.IOException;
+
 import java.net.URI;
+
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
-import java.util.ArrayList;
+
 import java.util.List;
 
-import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
+import javax.websocket.server.PathParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 import java.util.logging.Logger;
 
 import it.unibo.soseng.gateway.airline.dto.InterestDTO;
 import it.unibo.soseng.logic.airline.AirlineManager;
 import it.unibo.soseng.logic.database.DatabaseManager;
-import it.unibo.soseng.model.FlightInterest;
+
+import static it.unibo.soseng.camunda.ProcessVariables.PROCESS_BUY_OFFER;
+import it.unibo.soseng.camunda.ProcessState;
+
+import it.unibo.soseng.model.GeneratedOffer;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 
-@Path("airline")
+@javax.ws.rs.Path("airline")
 public class AirlineClient {
 
     @Inject
-    private DatabaseManager dbManager;
+    ProcessState processState;
 
     @Inject
-    private AirlineManager airlineManager;
+    DatabaseManager dbManager;
+
+    @Inject
+    AirlineManager airManager;
 
     @POST
     @Consumes( MediaType.APPLICATION_JSON )
@@ -68,6 +82,47 @@ public class AirlineClient {
     }
 
 
-    
+    @GET
+    @Path("/getTickets/{username}")
+    public byte[] getFlightTickets(String wsAddress, String username, String outboundFlightCode, String flightBackCode) throws IOException{
+
+        String url = new String(wsAddress + "/getTickets?id="+ outboundFlightCode +"&id=" + flightBackCode);
+
+
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder().url(url)
+                            .addHeader("Content-Type", "application/pdf")
+                            .build();
+        Response response = client.newCall(request).execute();
+
+        byte[] ticket = response.body().bytes();
+
+        processState.setState(PROCESS_BUY_OFFER, username, "PDF", ticket);
+
+
+        return ticket;
+
+    }
+
+    @POST
+    @Path("/unbook")
+    public void unbookFlights() throws IOException{
+
+        GeneratedOffer offer = dbManager.retrieveGeneratedOffer();
+        airManager.unbookOffer(offer);
+
+        String url = new String(offer.getOutboundFlightId().getAirlineId().getWsAddress() + "/notPurchasedOffer?id="+ 
+                                    offer.getOutboundFlightId().getFlightCode() +"&id=" + offer.getFlightBackId().getFlightCode());
+
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder().url(url)
+                            .addHeader("Content-Type", "*/*")
+                            .build();
+
+        Response response = client.newCall(request).execute();
+
+        processState.getStateAndRemove(PROCESS_BUY_OFFER, offer.getUser().getProntogramUsername(), "PDF");
+
+    }
 
 }

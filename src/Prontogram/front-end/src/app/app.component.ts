@@ -8,7 +8,6 @@ export class AppComponent implements OnInit {
 
     user: User;
     notification: Notification;
-    readonly VAPID_PUBLIC_KEY = "BA161ZnkX9G6CwYOZifUyGpOxslxcANly0PfMtti7y1rDO9NZlPNI1yepdaTodQXX0gVHqXHVApmArL1MUNsBoM";
 
     constructor(
         private accountService: AccountService, 
@@ -17,8 +16,6 @@ export class AppComponent implements OnInit {
         private swPush: SwPush,
         ) {
         this.accountService.user.subscribe(x => this.user = x);
-        this.notificationService.notification.subscribe(x => this.notification = x);
-        this.pushSubscription();
         }
 
     ngOnInit () {
@@ -33,16 +30,6 @@ export class AppComponent implements OnInit {
 
             });
 
-        }
-    }
-
-    pushSubscription () {
-        if(this.swPush.isEnabled){
-        this.swPush.requestSubscription({
-        serverPublicKey: this.VAPID_PUBLIC_KEY
-        })
-        .then(sub =>{this.notificationService.sendSubscriptionToTheServer(sub,this.user).subscribe(x=>console.log(x),err=>console.log(err))})
-        .catch(err => console.error("Could not subscribe to notifications", err));
         }
     }
 

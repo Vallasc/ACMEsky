@@ -23,8 +23,8 @@ public class Auth {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         AuthRequest req = new AuthRequest();
-        req.setUser(username);
-        req.setPass(password);
+        req.setUsername(username);
+        req.setPassword(password);
         ObjectMapper mapper = new ObjectMapper();
 
         String jsonCredentials = mapper.writeValueAsString(req);

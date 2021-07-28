@@ -54,6 +54,10 @@ public class Flight implements Serializable {
     @Column(name = "booked", nullable = false)
     private boolean booked;
 
+    @Column(name = "available", nullable = false)
+    private boolean available;
+
+
     public long getId() {
         return id;
     }
@@ -139,9 +143,17 @@ public class Flight implements Serializable {
         this.booked = booked;
     }
 
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
+
     public Flight(String flightCode, Airport departureAirport, Airport arrivalAirport, Airline airline,
             OffsetDateTime departureDateTime, OffsetDateTime arrivalDateTime, OffsetDateTime expireDate, float price,
-            boolean booked) {
+            boolean booked, boolean available) {
         this.flightCode = flightCode;
         this.departureAirport = departureAirport;
         this.arrivalAirport = arrivalAirport;
@@ -151,6 +163,7 @@ public class Flight implements Serializable {
         this.expireDate = expireDate;
         this.price = price;
         this.booked = booked;
+        this.available = available;
     }
 
     public Flight() {

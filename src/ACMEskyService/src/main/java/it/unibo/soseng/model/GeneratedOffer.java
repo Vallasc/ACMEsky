@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -40,6 +41,21 @@ public class GeneratedOffer implements Serializable {
 
     @Column(name = "booked", nullable = true)
     private boolean booked;
+
+    @Column(name = "token", nullable = true)
+    private String token;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    public User getUser() {
+        return this.user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
 
     public long getId() {
@@ -88,5 +104,13 @@ public class GeneratedOffer implements Serializable {
 
     public void setBooked(boolean booked) {
         this.booked = booked;
+    }
+
+    public String getToken() {
+        return this.token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }
