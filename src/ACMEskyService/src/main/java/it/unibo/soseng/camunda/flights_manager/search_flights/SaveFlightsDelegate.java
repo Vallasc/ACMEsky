@@ -1,4 +1,4 @@
-package it.unibo.soseng.camunda.flights_manager;
+package it.unibo.soseng.camunda.flights_manager.search_flights;
 
 import static it.unibo.soseng.camunda.utils.ProcessVariables.FLIGHTS_TO_SAVE;
 
@@ -17,7 +17,7 @@ import it.unibo.soseng.model.Flight;
 
 @Named("saveFlightsDelegate")
 public class SaveFlightsDelegate implements JavaDelegate {
-    private final static Logger LOGGER = Logger.getLogger("saveFlightsDelegate");
+  private final static Logger LOGGER = Logger.getLogger(SaveFlightsDelegate.class.getName()); 
 
     @Inject
     DatabaseManager databaseManager;

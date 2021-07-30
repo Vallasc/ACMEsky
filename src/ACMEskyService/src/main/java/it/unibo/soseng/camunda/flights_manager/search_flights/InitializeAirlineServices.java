@@ -1,4 +1,4 @@
-package it.unibo.soseng.camunda.flights_manager;
+package it.unibo.soseng.camunda.flights_manager.search_flights;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.AIRLINE_SERVICES;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.AIRLINE_SERVICES_INDEX;
 
@@ -20,14 +20,14 @@ public class InitializeAirlineServices implements JavaDelegate {
     @Inject
     private DatabaseManager dbManager;
     
-    private final static Logger LOGGER = Logger.getLogger("retrieveFlightsOfInterestDelegate"); 
+    private final static Logger LOGGER = Logger.getLogger(InitializeAirlineServices.class.getName()); 
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
+        LOGGER.info("Execute retrieveFlightsOfInterestDelegate"); 
         List<Airline> airlines = dbManager.getAirlinesList();
         execution.setVariable(AIRLINE_SERVICES_INDEX, 0);
         execution.setVariable(AIRLINE_SERVICES, airlines);
-
     }
     
 }

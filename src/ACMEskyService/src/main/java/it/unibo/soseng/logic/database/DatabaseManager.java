@@ -88,7 +88,7 @@ public class DatabaseManager {
     public List<FlightInterest> retrieveFlightInterests(){
         @SuppressWarnings("unchecked")
         List<FlightInterest> interests =
-        entityManager.createQuery("SELECT f FROM FlightInterest f")
+        entityManager.createQuery("SELECT f FROM FlightInterest f WHERE f.used = FALSE")
                         .getResultList();
         return interests;
     }
@@ -152,7 +152,7 @@ public class DatabaseManager {
     public List<UserInterest> retrieveUserInterests() {
         @SuppressWarnings("unchecked")
         List<UserInterest> interests = entityManager
-                .createQuery("SELECT interest FROM UserInterest interest")
+                .createQuery("SELECT ui FROM UserInterest ui WHERE ui.used = FALSE")
                 .getResultList();
         return interests;
     }
@@ -171,7 +171,6 @@ public class DatabaseManager {
 
     public void createOffer (GeneratedOffer offer) throws PersistenceException { 
         this.entityManager.persist(offer);
-        
     }
 
     // Airport

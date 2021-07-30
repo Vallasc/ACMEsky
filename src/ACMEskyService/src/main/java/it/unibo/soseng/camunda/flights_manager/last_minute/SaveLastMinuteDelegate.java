@@ -1,4 +1,4 @@
-package it.unibo.soseng.camunda.flights_manager;
+package it.unibo.soseng.camunda.flights_manager.last_minute;
 
 import java.util.logging.Logger;
 

@@ -1,7 +1,7 @@
 package it.unibo.soseng.camunda.user_manger.save_interest;
 
 import static it.unibo.soseng.camunda.utils.ProcessVariables.ASYNC_RESPONSE;
-import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_SAVE_INTERST;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_SAVE_INTEREST;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.RESPONSE;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.URI_INFO;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.USERNAME;
@@ -32,10 +32,10 @@ public class SendInterestResponseDelegate implements JavaDelegate {
         LOGGER.info("Execute SendInterestResponse");
 
         String email = (String) execution.getVariable(USERNAME);
-        Response response = (Response) processState.getStateAndRemove(PROCESS_SAVE_INTERST, email, RESPONSE);
-        AsyncResponse asyncResponse = (AsyncResponse) processState.getStateAndRemove(PROCESS_SAVE_INTERST, email, ASYNC_RESPONSE);
+        Response response = (Response) processState.getStateAndRemove(PROCESS_SAVE_INTEREST, email, RESPONSE);
+        AsyncResponse asyncResponse = (AsyncResponse) processState.getStateAndRemove(PROCESS_SAVE_INTEREST, email, ASYNC_RESPONSE);
         asyncResponse.resume(response);
 
-        processState.getStateAndRemove(PROCESS_SAVE_INTERST, email, URI_INFO);
+        processState.getStateAndRemove(PROCESS_SAVE_INTEREST, email, URI_INFO);
     }
 }

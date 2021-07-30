@@ -1,9 +1,8 @@
-package it.unibo.soseng.camunda.flights_manager;
+package it.unibo.soseng.camunda.flights_manager.search_flights;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 
-import it.unibo.soseng.gateway.airline.dto.AirlineDTO;
 import it.unibo.soseng.gateway.airline.dto.InterestDTO;
 import it.unibo.soseng.logic.airline.AirlineManager;
 import it.unibo.soseng.logic.database.DatabaseManager;
@@ -27,7 +26,7 @@ import javax.inject.Named;
 
 @Named("searchFlightsDelegate")
 public class SearchFlightsDelegate implements JavaDelegate{
-    private final static Logger LOGGER = Logger.getLogger("searchFlightsDelegate"); 
+  private final static Logger LOGGER = Logger.getLogger(SearchFlightsDelegate.class.getName()); 
 
     @Inject
     AirlineManager manager;
@@ -41,18 +40,15 @@ public class SearchFlightsDelegate implements JavaDelegate{
 
       @SuppressWarnings (value="unchecked")
       List<Airline> airlines = (List<Airline>) execution.getVariable(AIRLINE_SERVICES);
-      List<AirlineDTO> airlinesDTO = manager.convertToAirlineDTO( airlines );
-      AirlineDTO a = airlinesDTO.get((int) execution.getVariable(AIRLINE_SERVICES_INDEX));
+      Airline a = airlines.get((int) execution.getVariable(AIRLINE_SERVICES_INDEX));
 
       @SuppressWarnings (value="unchecked")
       List<FlightInterest> interestsList = (List<FlightInterest>) execution.getVariable(INTEREST_FLIGHTS_LIST);
       List<InterestDTO> listDTO = manager.convertIntToIntDTO(interestsList);
-      List<Flight> listToSave = manager.retrieveFlightsList(listDTO, a.getWs_address());
+      List<Flight> listToSave = manager.retrieveFlightsList(listDTO, a.getWsAddress());
       int index = (int) execution.getVariable(AIRLINE_SERVICES_INDEX) + 1;
       execution.setVariable(AIRLINE_SERVICES_INDEX, index);
-      
+    
       execution.setVariable(FLIGHTS_TO_SAVE, listToSave);
-      
-
     }
 }

@@ -2,7 +2,7 @@ package it.unibo.soseng.camunda.user_manger.book_payment;
 
 import static it.unibo.soseng.camunda.utils.ProcessVariables.ASYNC_RESPONSE;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.PAYMENT_LINK;
-import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_BUY_OFFER;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_CONFIRM_BUY_OFFER;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.USERNAME;
 
 import java.util.logging.Logger;
@@ -33,7 +33,7 @@ public class SendPaymentLinkDelegate implements JavaDelegate {
         Response res = Response.status(Response.Status.OK.getStatusCode())
                             .entity(path)
                             .build();
-        AsyncResponse async = (AsyncResponse) processState.getStateAndRemove(PROCESS_BUY_OFFER, (String) execution.getVariable(USERNAME), ASYNC_RESPONSE);
+        AsyncResponse async = (AsyncResponse) processState.getStateAndRemove(PROCESS_CONFIRM_BUY_OFFER, (String) execution.getVariable(USERNAME), ASYNC_RESPONSE);
         async.resume(res);
         
     }

@@ -1,6 +1,6 @@
 package it.unibo.soseng.gateway.airline;
 
-import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_BUY_OFFER;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_CONFIRM_BUY_OFFER;
 
 import java.io.IOException;
 
@@ -50,8 +50,8 @@ public class AirlineClient {
     @Inject
     AirlineManager airManager;
 
-    @POST
-    @Consumes( MediaType.APPLICATION_JSON )
+    @POST // TODO togliere
+    @Consumes( MediaType.APPLICATION_JSON ) // TODO togliere
     public String getFlightList(List<InterestDTO> listDTO, String wsAddress)  throws IOException, InterruptedException{
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -81,8 +81,8 @@ public class AirlineClient {
     }
 
 
-    @GET
-    @Path("/getTickets/{username}")
+    @GET // TODO togliere
+    @Path("/getTickets/{username}") // TODO togliere
     public byte[] getFlightTickets(String wsAddress, String username, String outboundFlightCode, String flightBackCode) throws IOException{
 
         String url = new String(wsAddress + "/getTickets?id="+ outboundFlightCode +"&id=" + flightBackCode);
@@ -96,15 +96,15 @@ public class AirlineClient {
 
         byte[] ticket = response.body().bytes();
 
-        processState.setState(PROCESS_BUY_OFFER, username, "PDF", ticket);
+        processState.setState(PROCESS_CONFIRM_BUY_OFFER, username, "PDF", ticket);
 
 
         return ticket;
 
     }
 
-    @POST
-    @Path("/unbook")
+    @POST // TODO togliere
+    @Path("/unbook") // TODO togliere
     public void unbookFlights() throws IOException{
 
         GeneratedOffer offer = dbManager.retrieveGeneratedOffer();
@@ -120,7 +120,7 @@ public class AirlineClient {
 
         client.newCall(request).execute();
 
-        processState.getStateAndRemove(PROCESS_BUY_OFFER, offer.getUser().getProntogramUsername(), "PDF");
+        processState.getStateAndRemove(PROCESS_CONFIRM_BUY_OFFER, offer.getUser().getProntogramUsername(), "PDF");
 
     }
 

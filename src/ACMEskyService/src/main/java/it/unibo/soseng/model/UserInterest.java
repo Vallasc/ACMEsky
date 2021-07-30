@@ -43,6 +43,8 @@ public class UserInterest implements Serializable {
     @Column(name = "expire_date", columnDefinition= "TIMESTAMP WITH TIME ZONE", nullable = false)
 	private OffsetDateTime expireDate;
 	
+	@Column(name = "used", nullable = false)
+    private boolean used ;
 
 	public long getId() {
 		return this.id;
@@ -90,5 +92,13 @@ public class UserInterest implements Serializable {
 
 	public void setPriceLimit(double priceLimit) {
 		this.priceLimit = priceLimit;
+	}
+
+	public boolean getUsed() {
+		return this.used;
+	}
+
+	public void setUsed(boolean used) {
+		this.used = used;
 	}
 }

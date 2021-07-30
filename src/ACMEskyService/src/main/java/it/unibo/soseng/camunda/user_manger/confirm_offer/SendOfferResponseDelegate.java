@@ -1,4 +1,4 @@
-package it.unibo.soseng.camunda.offers_manager;
+package it.unibo.soseng.camunda.user_manger.confirm_offer;
 
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
@@ -7,7 +7,7 @@ import it.unibo.soseng.camunda.utils.ProcessState;
 import it.unibo.soseng.logic.airline.AirlineManager;
 
 import static it.unibo.soseng.camunda.utils.ProcessVariables.ASYNC_RESPONSE;
-import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_BUY_OFFER;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_CONFIRM_BUY_OFFER;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.RESPONSE;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.USERNAME;
 
@@ -19,7 +19,7 @@ import javax.ws.rs.core.Response;
 
 @Named("sendOfferResponseDelegate")
 public class SendOfferResponseDelegate implements JavaDelegate {
-    private final static Logger LOGGER = Logger.getLogger("sendOfferResponseDelegate"); 
+    private final static Logger LOGGER = Logger.getLogger(SendOfferResponseDelegate.class.getName()); 
     
     @Inject
     private ProcessState processState;
@@ -33,8 +33,8 @@ public class SendOfferResponseDelegate implements JavaDelegate {
         LOGGER.info("Execute sendOfferResponseDelegate");
 
         String email = (String) execution.getVariable(USERNAME);
-        Response response = (Response) processState.getStateAndRemove(PROCESS_BUY_OFFER, email, RESPONSE);
-        AsyncResponse asyncResponse = (AsyncResponse) processState.getStateAndRemove(PROCESS_BUY_OFFER, email, ASYNC_RESPONSE);
+        Response response = (Response) processState.getStateAndRemove(PROCESS_CONFIRM_BUY_OFFER, email, RESPONSE);
+        AsyncResponse asyncResponse = (AsyncResponse) processState.getStateAndRemove(PROCESS_CONFIRM_BUY_OFFER, email, ASYNC_RESPONSE);
         asyncResponse.resume(response);  
     }
 

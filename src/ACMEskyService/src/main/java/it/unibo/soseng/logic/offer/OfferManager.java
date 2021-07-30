@@ -5,6 +5,7 @@ import static it.unibo.soseng.camunda.utils.ProcessVariables.RENT_OUTBOUND;
 
 import java.io.IOException;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
@@ -30,6 +31,7 @@ import it.unibo.soseng.model.FlightInterest;
 import it.unibo.soseng.model.GeneratedOffer;
 import it.unibo.soseng.model.RentService;
 import it.unibo.soseng.model.User;
+import it.unibo.soseng.model.UserInterest;
 import it.unibo.soseng.ws.generated.BookRent;
 import it.unibo.soseng.ws.generated.BookRentResponse;
 import it.unibo.soseng.ws.generated.Rent;
@@ -48,61 +50,67 @@ public class OfferManager {
     @Inject
     private RentClient rentClient;
 
-    public GeneratedOffer generateOffer(Flight requestOutBound, Flight requestFlightBack, String username) throws PersistenceException, FlightNotExistException, UserNotFoundException {
+    public GeneratedOffer generateOffer(Flight outBound, Flight flightBack, String username) throws PersistenceException, FlightNotExistException, UserNotFoundException {    
+        this.setFlightUnavailable(outBound);
+        this.setFlightUnavailable(flightBack);
+
         GeneratedOffer offerTogenerate = new GeneratedOffer ();
-        
         offerTogenerate.setBooked(false);
-        offerTogenerate.setOutboundFlightId(requestOutBound);
-        offerTogenerate.setFlightBackId(requestFlightBack);
+        offerTogenerate.setOutboundFlightId(outBound);
+        offerTogenerate.setFlightBackId(flightBack);
         offerTogenerate.setExpireDate(OffsetDateTime.now().plusHours(24));
-        double priceOutBound = requestOutBound.getPrice();
-        offerTogenerate.setTotalPrice(requestFlightBack.getPrice() + priceOutBound);
-        offerTogenerate.setToken(getRandomString(10));
+        offerTogenerate.setTotalPrice(flightBack.getPrice() + outBound.getPrice());
+        offerTogenerate.setToken(getRandomString(10)); //TODO
         User user = databaseManager.getUser(username);
         offerTogenerate.setUser(user);
         databaseManager.createOffer(offerTogenerate);
         return offerTogenerate;
     }
 
-    public Flight matchOffer (FlightInterest request) throws FlightNotExistException{
+    public List<Flight> checkFlightsRequirements(UserInterest ui){
+        List<Flight> matchedFlights = new ArrayList<Flight> ();
         List<Flight> flights = databaseManager.retrieveFlights();
-        for (Flight f : flights) {
 
-            if (!f.getBooked() && this.isMatched(f, request)) {
-                // toReturn = new Flight ();
-                // toReturn.setAirline(f.getAirlineId());
-                // toReturn.setFlightCode(f.getFlightCode());
-                // toReturn.setDepartureAirport(f.getDepartureAirport());
-                // toReturn.setArrivalAirport(f.getArrivalAirport());
-                // // TODO DAVA ERRORE
-                // toReturn.setDepartureDateTime(f.getDepartureDateTime().toString());
-                // toReturn.setArrivalDateTime(f.getArrivalDateTime().toString());
-                // toReturn.setExpireDate(f.getExpireDate().toString());
-                // toReturn.setPrice(f.getPrice());
-                // toReturn.setBooked(true);
-                return f;
+        for(Flight flight1 : flights){
+            if(this.isMatched(flight1, ui.getOutboundFlightInterest())){
+                for(Flight flight2 : flights){
+                    if(flight1 != flight2 && this.isMatched(flight2, ui.getFlightBackInterest()) &&
+                    flight1.getPrice() + flight2.getPrice() <= ui.getPriceLimit()){
+                        matchedFlights.add(flight1);
+                        matchedFlights.add(flight2);
+                        return matchedFlights;
+                    }
+                }
             }
         }
-        return null;
-    }
 
-    public void setFlightAvailability(Flight f){
-        f.setAvailable(false);
-        databaseManager.updateFlight(f);
+        return matchedFlights;
     }
 
     private boolean isMatched (Flight f, FlightInterest fi) {
-            return f.getDepartureAirport() == fi.getDepartureAirport() && f.getArrivalAirport() == fi.getArrivalAirport();
+        OffsetDateTime flightDate = f.getDepartureDateTime();
+        OffsetDateTime interestDateStart = fi.getDepartureDateTime();
+        OffsetDateTime interestDateEnd = interestDateStart.plusDays(1);
+
+        return f.getDepartureAirport() == fi.getDepartureAirport() && 
+                f.getArrivalAirport() == fi.getArrivalAirport() &&
+                interestDateStart.compareTo(flightDate) <=0 && 
+                interestDateEnd.compareTo(flightDate) >=0;
+    }
+
+    public void setFlightUnavailable(Flight f){
+        f.setAvailable(false);
+        databaseManager.updateFlight(f);
     }
 
     public class SendTicketException extends Exception {
         private static final long serialVersionUID = 1L;
     }
+
     /**
      * Ritona la distanza tra l'aereoporto dell'offerta e línidirizzo inserito
      * @throws DistanceServiceException
      */
-
     public float getDistance(AddressDTO userAddress, GeneratedOffer offer) throws DistanceServiceException {
         Float latitude = offer.getOutboundFlightId().getDepartureAirport().getLatitude();
         Float longitude = offer.getOutboundFlightId().getDepartureAirport().getLongitude();

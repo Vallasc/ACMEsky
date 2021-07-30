@@ -16,7 +16,7 @@ public final class ProcessVariables {
 
     //UserOffer
     public static final String USER_OFFER_REQUEST = "userOfferRequest";
-    public static final String USER_OFFER_TOKEN = "userOfferToken";
+    public static final String OFFER_TOKEN = "offerToken";
     public static final String IS_VALID_TOKEN = "isValidToken";
     public static final String IS_OFFER_EXPIRED = "isOfferExpired";
 
@@ -29,10 +29,11 @@ public final class ProcessVariables {
 
     // Offers manager
     public static final String AVAILABLE_FLIGHTS = "availableFlight";
-    public static final String USER_INTEREST = "offerService";
-    public static final String USER_INTEREST_LEN = "userInterestLen";
+    public static final String USER_INTERESTS = "userInterests";
     public static final String USER_INTEREST_INDEX = "userInterestsIndex";
-    
+    public static final String PRONTOGRAM_USERNAME = "prontogramUsername";
+    public static final String THERE_IS_FLIGHTS = "thereIsFlights";
+    public static final String GENERATED_OFFER = "generatedOffer";
 
 
     // Commmon
@@ -42,21 +43,14 @@ public final class ProcessVariables {
     public static final String ASYNC_RESPONSE = "asyncResponse";
     public static final String RESPONSE = "response";
     public static final String URI_INFO = "uriInfo";
+
+
     public static final String ERRORS_IN_PAYMENT_REQ = "ErrorsPaymentReq";
-
-
-    public static final String PROCESS_SAVE_INTERST = "processSaveInterest";
-
-    public static final String PROCESS_BUY_OFFER = "processBuyOffer";
-    public static final String GENERATED_OFFER = "generatedOffer";
     public static final String USER_OFFER = "userOffer";
     public static final String PAYMENT_LINK = "paymentLink";
-    
-    
-
-    
-    public static final String THERE_IS_FLIGHTS = "thereIsFlights";
-
-    
+    public static final String PROCESS_STATE = "processState";
+    // Processes
+    public static final String PROCESS_SAVE_INTEREST = "processSaveInterest";
+    public static final String PROCESS_CONFIRM_BUY_OFFER = "processConfirmBuyOffer";
     
 }

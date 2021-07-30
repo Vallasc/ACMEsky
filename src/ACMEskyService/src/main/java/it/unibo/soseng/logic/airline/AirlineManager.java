@@ -46,7 +46,7 @@ public class AirlineManager {
     private SecurityContext securityContext;
 
     @Inject
-    AirlineClient api;
+    AirlineClient client;
 
     // Camunda
     public void startSaveLastMinuteProcess(List<AirlineFlightOffer> airlineLastMinuteOffers, String airlineName){
@@ -84,7 +84,7 @@ public class AirlineManager {
     }
 
     public List<Flight> retrieveFlightsList(List<InterestDTO> listDTO, String wsAddress) throws IOException, InterruptedException, AirportNotFoundException, AirlineNotFoundException {
-        String resp = api.getFlightList(listDTO, wsAddress);
+        String resp = client.getFlightList(listDTO, wsAddress);
         List<Flight> list = new ArrayList<>();
         ObjectMapper mapper = new ObjectMapper();
         JsonNode root = mapper.readTree(resp);
@@ -107,7 +107,7 @@ public class AirlineManager {
 
     public byte[] getOfferTicket(GeneratedOffer offer) throws IOException, SendTicketException{
 
-        byte[] fileByte = api.getFlightTickets(offer.getOutboundFlightId().getAirlineId().getWsAddress(), offer.getUser().getProntogramUsername(), offer.getOutboundFlightId().getFlightCode(), 
+        byte[] fileByte = client.getFlightTickets(offer.getOutboundFlightId().getAirlineId().getWsAddress(), offer.getUser().getProntogramUsername(), offer.getOutboundFlightId().getFlightCode(), 
                                                 offer.getFlightBackId().getFlightCode());
         offer.setBooked(true);
         return fileByte;

@@ -1,7 +1,8 @@
 package it.unibo.soseng.camunda.user_manger.book_payment;
 
 import static it.unibo.soseng.camunda.utils.ProcessVariables.ASYNC_RESPONSE;
-import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_BUY_OFFER;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.ERRORS_IN_PAYMENT_REQ;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_CONFIRM_BUY_OFFER;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.USERNAME;
 
 import java.util.logging.Logger;
@@ -30,7 +31,7 @@ public class SendErrorDelegate implements JavaDelegate {
         Response res = Response.status(Response.Status.BAD_REQUEST.getStatusCode())
                             .entity(Errors.OFFER_NOT_AVAILABLE)
                             .build();
-        AsyncResponse async = (AsyncResponse) processState.getStateAndRemove(PROCESS_BUY_OFFER, (String) execution.getVariable(USERNAME), ASYNC_RESPONSE);
+        AsyncResponse async = (AsyncResponse) processState.getStateAndRemove(PROCESS_CONFIRM_BUY_OFFER, (String) execution.getVariable(USERNAME), ASYNC_RESPONSE);
         async.resume(res);
     }
 
