@@ -33,7 +33,7 @@ router.post('/', async (req, res) => {
             const saveNotification= await notification.save ();
             res.json (saveNotification); 
         } else {
-            res.json ({ message: "There is no user to sent notification"});
+            res.status(404).send("There is no user to sent notification!");
         }
     } catch (err) {
         res.json ({ message: err});
