@@ -38,7 +38,7 @@ public class RetrieveOfferDelegate implements JavaDelegate {
         UserOfferDTO offerRequest = (UserOfferDTO) execution.getVariable(USER_OFFER_REQUEST);
         String token = (String) execution.getVariable(OFFER_TOKEN);
         String email = (String) execution.getVariable(USERNAME);
-        Response response = userManager.handleConfirmUserFlight(token, email, offerRequest, execution);
+        Response response = userManager.handleConfirmOffer(token, email, offerRequest, execution);
         processState.setState(PROCESS_CONFIRM_BUY_OFFER, email, RESPONSE, response);
     }
   
