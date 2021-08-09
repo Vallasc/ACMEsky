@@ -5,17 +5,13 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 
 import io.jsonwebtoken.io.IOException;
 import it.unibo.soseng.gateway.prontogram.ProntogramClient;
+import it.unibo.soseng.gateway.prontogram.ProntogramClient.ProntogramServiceErrorException;
 import it.unibo.soseng.gateway.prontogram.dto.NotificationDTO;
 import it.unibo.soseng.model.GeneratedOffer;
-import it.unibo.soseng.model.UserInterest;
 
 import static it.unibo.soseng.camunda.utils.ProcessVariables.GENERATED_OFFER;
-import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_ERROR;
-import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_INTERESTS;
-import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_INTEREST_INDEX;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.PRONTOGRAM_USERNAME;
 
-import java.util.List;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
@@ -34,10 +30,12 @@ public class SendOfferDelegate implements JavaDelegate{
     LOGGER.info ("Execute sendOfferDelegate");
 
     String prontogramUsername = (String) execution.getVariable(PRONTOGRAM_USERNAME);
-
     GeneratedOffer offer = (GeneratedOffer) execution.getVariable(GENERATED_OFFER);
-
     NotificationDTO notification = NotificationDTO.fromOffer(offer, prontogramUsername);
-    prontogramClient.sendNotificationOffer(notification);
+    try {
+      prontogramClient.sendNotificationOffer(notification);
+    } catch (IOException | ProntogramServiceErrorException e) {
+      LOGGER.severe("Send prontogram notification error: " + e);
+    }
   } 
 }
