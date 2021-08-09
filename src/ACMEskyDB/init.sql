@@ -255,6 +255,7 @@ ALTER SEQUENCE public.flights_id_seq OWNED BY public.flights.id;
 CREATE TABLE public.flights_interest (
     id bigint NOT NULL,
     departure_date_time timestamp with time zone NOT NULL,
+    used boolean NOT NULL,
     arrival_airport_id bigint,
     departure_airport_id bigint,
     user_id bigint
@@ -372,14 +373,14 @@ ALTER SEQUENCE public.rent_services_id_seq OWNED BY public.rent_services.id;
 -- TOC entry 217 (class 1259 OID 16461)
 -- Name: users; Type: TABLE; Schema: public; Owner: soseng
 --
-
 CREATE TABLE public.users (
     id bigint NOT NULL,
     email character varying(255) NOT NULL,
+    name character varying(255) NOT NULL,
     prontogram_username character varying(255) NOT NULL,
+    surname character varying(255) NOT NULL,
     entity_id bigint NOT NULL
 );
-
 
 ALTER TABLE public.users OWNER TO soseng;
 
@@ -416,6 +417,7 @@ CREATE TABLE public.users_interests (
     id bigint NOT NULL,
     expire_date timestamp with time zone NOT NULL,
     price_limit double precision NOT NULL,
+    used boolean NOT NULL,
     flight_back_interest_id bigint NOT NULL,
     outbound_flight_interest_id bigint NOT NULL,
     user_id bigint NOT NULL
@@ -732,7 +734,7 @@ ALTER TABLE ONLY public.flights_interest
 --
 
 ALTER TABLE ONLY public.generated_offers
-    ADD CONSTRAINT fkntdjb3w7ysfkukm7u2exd6jl FOREIGN KEY (username) REFERENCES public.domain_entities(id);
+    ADD CONSTRAINT fkntdjb3w7ysfkukm7u2exd6jl FOREIGN KEY (user_id) REFERENCES public.domain_entities(id);
 
 
 --
@@ -795,10 +797,10 @@ INSERT INTO public.domain_entities VALUES (6, 'a', 'ROLE_USER', 'aaaa', 'a@a');
 INSERT INTO public.domain_entities VALUES (7, 'r', 'ROLE_USER', 'aaaa', 'r@r');
 ALTER SEQUENCE public.domain_entities_id_seq RESTART WITH 8;
 
-INSERT INTO public.users VALUES (1, 'g@g', 'g', 5, 'Giacomo', 'Vallorani');
-INSERT INTO public.users VALUES (2, 'a@a', 'a', 6, 'Andrea', 'Di Ubaldo');
-INSERT INTO public.users VALUES (3, 'r@r', 'r', 7, 'Riccardo', 'Baratin');
-ALTER SEQUENCE public.users RESTART WITH 4;
+INSERT INTO public.users VALUES (1, 'g@g', 'Giacomo', 'Giacomo', 'Vallorani', 5);
+INSERT INTO public.users VALUES (2, 'a@a', 'Andrea', 'Andrea', 'Di Ubaldo', 6);
+INSERT INTO public.users VALUES (3, 'r@r', 'Riccardo', 'Riccardo', 'Baratin', 7);
+ALTER SEQUENCE public.users_id_seq RESTART WITH 4;
 
 
 INSERT INTO public.airlines VALUES (1, 'http://national-airline:8082', 1);
@@ -5213,13 +5215,13 @@ INSERT INTO public.airports VALUES (4400, 'Zanesville', 'ZZV', 'US', 39.9445, -8
 ALTER SEQUENCE public.airports_id_seq RESTART WITH 4401;
 
 
-INSERT INTO public.flights_interest VALUES (1, '2021-10-28 00:00:00+00', 1048, 4307, 1);
-INSERT INTO public.flights_interest VALUES (2, '2021-08-28 00:00:00+00', 4307, 1048, 1);
-INSERT INTO public.flights_interest VALUES (3, '2021-10-30 00:00:00+00', 16, 424, 1);
-INSERT INTO public.flights_interest VALUES (4, '2021-10-25 00:00:00+00', 424, 16, 1);
-ALTER SEQUENCE public.flights_interest RESTART WITH 5;
+INSERT INTO public.flights_interest VALUES (1, '2021-10-28 00:00:00+00', FALSE, 1048, 4307, 1);
+INSERT INTO public.flights_interest VALUES (2, '2021-08-28 00:00:00+00', FALSE, 4307, 1048, 1);
+INSERT INTO public.flights_interest VALUES (3, '2021-10-30 00:00:00+00', FALSE, 16, 424, 1);
+INSERT INTO public.flights_interest VALUES (4, '2021-10-25 00:00:00+00', FALSE, 424, 16, 1);
+ALTER SEQUENCE public.flights_interest_id_seq RESTART WITH 5;
 
 
-INSERT INTO public.users_interests VALUES (1, '2021-08-28 00:00:00+00', 130, 1, 2, 1);
-INSERT INTO public.users_interests VALUES (2, '2021-10-25 00:00:00+00', 400, 3, 4, 1);
-ALTER SEQUENCE public.users_interests RESTART WITH 3;
+INSERT INTO public.users_interests VALUES (1, '2021-08-28 00:00:00+00', 130, FALSE, 1, 2, 1);
+INSERT INTO public.users_interests VALUES (2, '2021-10-25 00:00:00+00', 400, FALSE, 3, 4, 1);
+ALTER SEQUENCE public.users_interests_id_seq RESTART WITH 3;
