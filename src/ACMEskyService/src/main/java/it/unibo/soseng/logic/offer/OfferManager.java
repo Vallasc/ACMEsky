@@ -7,14 +7,11 @@ import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.Random;
+import java.util.UUID;
 import java.util.logging.Logger;
-import java.nio.charset.Charset;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
-import javax.xml.ws.Service;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 
@@ -30,7 +27,6 @@ import it.unibo.soseng.model.Airport;
 import it.unibo.soseng.model.Flight;
 import it.unibo.soseng.model.FlightInterest;
 import it.unibo.soseng.model.GeneratedOffer;
-import it.unibo.soseng.model.RentService;
 import it.unibo.soseng.model.User;
 import it.unibo.soseng.model.UserInterest;
 import it.unibo.soseng.ws.generated.BookRent;
@@ -55,17 +51,21 @@ public class OfferManager {
         this.setFlightUnavailable(outBound);
         this.setFlightUnavailable(flightBack);
 
-        GeneratedOffer offerTogenerate = new GeneratedOffer ();
-        offerTogenerate.setBooked(false);
-        offerTogenerate.setOutboundFlightId(outBound);
-        offerTogenerate.setFlightBackId(flightBack);
-        offerTogenerate.setExpireDate(OffsetDateTime.now().plusHours(24));
-        offerTogenerate.setTotalPrice(flightBack.getPrice() + outBound.getPrice());
-        offerTogenerate.setToken(getRandomString(10)); //TODO
+        GeneratedOffer generatedOffer = new GeneratedOffer ();
+        generatedOffer.setBooked(false);
+        generatedOffer.setAvailable(true);
+        generatedOffer.setOutboundFlightId(outBound);
+        generatedOffer.setFlightBackId(flightBack);
+        generatedOffer.setExpireDate(OffsetDateTime.now().plusHours(24));
+        generatedOffer.setTotalPrice(flightBack.getPrice() + outBound.getPrice());
         User user = databaseManager.getUser(username);
-        offerTogenerate.setUser(user);
-        databaseManager.createOffer(offerTogenerate);
-        return offerTogenerate;
+        generatedOffer.setUser(user);
+
+        databaseManager.createOffer(generatedOffer);
+        String uniqueToken = UUID.randomUUID().toString().substring(0, 4) + String.valueOf(generatedOffer.getId());
+        generatedOffer.setToken(uniqueToken);
+        databaseManager.updateOffer(generatedOffer);
+        return generatedOffer;
     }
 
     public List<Flight> checkFlightsRequirements(UserInterest ui){
@@ -105,13 +105,13 @@ public class OfferManager {
     }
 
     public void removeExpiredOffers() {
-        OffsetDateTime now = OffsetDateTime.now();
+        /*OffsetDateTime now = OffsetDateTime.now();
         List<GeneratedOffer> expFlights = databaseManager.getAvailableFlights().stream().dropWhile(f -> f.getExpireDate().isBefore(now)).collect(Collectors.toList());
         for (ListIterator<Flight> iter = expFlights.listIterator(); iter.hasNext(); ) {
             Flight f = iter.next();
             f.setAvailable(false);
             databaseManager.updateFlight(f);
-        }
+        }*/
     } 
 
     public class SendTicketException extends Exception {
@@ -178,43 +178,5 @@ public class OfferManager {
 
     public class RentServiceException extends Exception {}
    
-    static String getRandomString(int i) 
-    { 
-        // bind the length 
-        byte[] bytearray;
-        bytearray = new byte[256];         
-        String mystring;
-        StringBuffer thebuffer;
-        String theAlphaNumericS;
-
-        new Random().nextBytes(bytearray); 
-
-        mystring 
-            = new String(bytearray, Charset.forName("UTF-8")); 
-            
-        thebuffer = new StringBuffer();
-        
-        //remove all spacial char 
-        theAlphaNumericS 
-            = mystring 
-                .replaceAll("[^A-Z0-9]", ""); 
-
-        //random selection
-        for (int m = 0; m < theAlphaNumericS.length(); m++) { 
-
-            if (Character.isLetter(theAlphaNumericS.charAt(m)) 
-                    && (i > 0) 
-                || Character.isDigit(theAlphaNumericS.charAt(m)) 
-                    && (i > 0)) { 
-
-                thebuffer.append(theAlphaNumericS.charAt(m)); 
-                i--; 
-            } 
-        } 
-
-        // the resulting string 
-        return thebuffer.toString(); 
-    }
-
 }
 
