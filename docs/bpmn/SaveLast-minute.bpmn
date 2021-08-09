@@ -9,7 +9,7 @@
   <bpmn:process id="Process_0p4vc5n" isExecutable="true">
     <bpmn:sequenceFlow id="Flow_16n8q06" sourceRef="Event_1u8hzc6" targetRef="Activity_0z25vbb" />
     <bpmn:sequenceFlow id="Flow_0nz23sg" sourceRef="Activity_0z25vbb" targetRef="Event_00e40m5" />
-    <bpmn:dataStoreReference id="DataStoreReference_1jjza34" name="Available flights" />
+    <bpmn:dataStoreReference id="DataStoreReference_1jjza34" name="Table available_flights" />
     <bpmn:startEvent id="Event_1u8hzc6">
       <bpmn:outgoing>Flow_16n8q06</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0u7evl4" messageRef="Message_0ep6um1" />
@@ -43,7 +43,7 @@
       <bpmndi:BPMNShape id="DataStoreReference_1jjza34_di" bpmnElement="DataStoreReference_1jjza34">
         <dc:Bounds x="275" y="115" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="261" y="98" width="76" height="14" />
+          <dc:Bounds x="260" y="86" width="79" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1u8hzc6_di" bpmnElement="Event_1u8hzc6">
@@ -58,13 +58,13 @@
       <bpmndi:BPMNShape id="Participant_0hxfsep_di" bpmnElement="Participant_0snmrqs" isHorizontal="true">
         <dc:Bounds x="190" y="310" width="600" height="60" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_112l8do_di" bpmnElement="Flow_112l8do">
-        <di:waypoint x="460" y="310" />
-        <di:waypoint x="460" y="228" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="DataInputAssociation_1y8v7uj_di" bpmnElement="DataInputAssociation_1y8v7uj">
         <di:waypoint x="325" y="144" />
         <di:waypoint x="531" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_112l8do_di" bpmnElement="Flow_112l8do">
+        <di:waypoint x="460" y="310" />
+        <di:waypoint x="460" y="228" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

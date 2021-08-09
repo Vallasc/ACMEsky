@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0oo99sg" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.3.0">
+  <bpmn:collaboration id="Collaboration_0x7o12t">
+    <bpmn:participant id="Participant_1l2pna9" name="ACMEsky" processRef="Process_0h1nhce" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_0h1nhce" isExecutable="true">
+    <bpmn:intermediateCatchEvent id="Event_0oittir" name="Every 12 hours">
+      <bpmn:outgoing>Flow_1kz1qc0</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_0unb98e">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression" />
+      </bpmn:timerEventDefinition>
+    </bpmn:intermediateCatchEvent>
+    <bpmn:endEvent id="Event_1cpvbes">
+      <bpmn:incoming>Flow_1abdwnz</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:dataStoreReference id="DataStoreReference_0ywee4g" name="Table generated_offers" />
+    <bpmn:subProcess id="Activity_08khp92" name="For each expired offer">
+      <bpmn:incoming>Flow_1kz1qc0</bpmn:incoming>
+      <bpmn:outgoing>Flow_1abdwnz</bpmn:outgoing>
+      <bpmn:startEvent id="Event_00k45td">
+        <bpmn:outgoing>Flow_1inoktk</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:serviceTask id="Activity_1n8b3g7" name="Remove expired offers">
+        <bpmn:incoming>Flow_1inoktk</bpmn:incoming>
+        <bpmn:outgoing>Flow_0f3x82a</bpmn:outgoing>
+        <bpmn:property id="Property_0vxnf6k" name="__targetRef_placeholder" />
+        <bpmn:dataInputAssociation id="DataInputAssociation_16wgq3k">
+          <bpmn:sourceRef>DataStoreReference_0ywee4g</bpmn:sourceRef>
+          <bpmn:targetRef>Property_0vxnf6k</bpmn:targetRef>
+        </bpmn:dataInputAssociation>
+      </bpmn:serviceTask>
+      <bpmn:serviceTask id="Activity_1hj7evt" name="Set flight available true">
+        <bpmn:incoming>Flow_0f3x82a</bpmn:incoming>
+        <bpmn:outgoing>Flow_0thqcf7</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:endEvent id="Event_0e1iheb">
+        <bpmn:incoming>Flow_0thqcf7</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_0thqcf7" sourceRef="Activity_1hj7evt" targetRef="Event_0e1iheb" />
+      <bpmn:sequenceFlow id="Flow_1inoktk" sourceRef="Event_00k45td" targetRef="Activity_1n8b3g7" />
+      <bpmn:sequenceFlow id="Flow_0f3x82a" sourceRef="Activity_1n8b3g7" targetRef="Activity_1hj7evt" />
+    </bpmn:subProcess>
+    <bpmn:sequenceFlow id="Flow_1kz1qc0" sourceRef="Event_0oittir" targetRef="Activity_08khp92" />
+    <bpmn:sequenceFlow id="Flow_1abdwnz" sourceRef="Activity_08khp92" targetRef="Event_1cpvbes" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0x7o12t">
+      <bpmndi:BPMNShape id="Participant_1l2pna9_di" bpmnElement="Participant_1l2pna9" isHorizontal="true">
+        <dc:Bounds x="120" y="85" width="940" height="265" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1kz1qc0_di" bpmnElement="Flow_1kz1qc0">
+        <di:waypoint x="308" y="250" />
+        <di:waypoint x="380" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1abdwnz_di" bpmnElement="Flow_1abdwnz">
+        <di:waypoint x="890" y="250" />
+        <di:waypoint x="992" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_0oittir_di" bpmnElement="Event_0oittir">
+        <dc:Bounds x="272" y="232" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="252" y="273" width="75" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1cpvbes_di" bpmnElement="Event_1cpvbes">
+        <dc:Bounds x="992" y="232" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataStoreReference_0ywee4g_di" bpmnElement="DataStoreReference_0ywee4g">
+        <dc:Bounds x="195" y="105" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="179" y="162" width="84" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_08khp92_di" bpmnElement="Activity_08khp92" isExpanded="true">
+        <dc:Bounds x="380" y="170" width="510" height="150" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0thqcf7_di" bpmnElement="Flow_0thqcf7">
+        <di:waypoint x="750" y="250" />
+        <di:waypoint x="802" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1inoktk_di" bpmnElement="Flow_1inoktk">
+        <di:waypoint x="456" y="250" />
+        <di:waypoint x="500" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0f3x82a_di" bpmnElement="Flow_0f3x82a">
+        <di:waypoint x="600" y="250" />
+        <di:waypoint x="650" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_00k45td_di" bpmnElement="Event_00k45td">
+        <dc:Bounds x="420" y="232" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1n8b3g7_di" bpmnElement="Activity_1n8b3g7">
+        <dc:Bounds x="500" y="210" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1hj7evt_di" bpmnElement="Activity_1hj7evt">
+        <dc:Bounds x="650" y="210" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0e1iheb_di" bpmnElement="Event_0e1iheb">
+        <dc:Bounds x="802" y="232" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="DataInputAssociation_16wgq3k_di" bpmnElement="DataInputAssociation_16wgq3k">
+        <di:waypoint x="245" y="138" />
+        <di:waypoint x="502" y="215" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
