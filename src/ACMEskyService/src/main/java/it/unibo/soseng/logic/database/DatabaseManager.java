@@ -1,5 +1,6 @@
 package it.unibo.soseng.logic.database;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -93,13 +94,13 @@ public class DatabaseManager {
         return interests;
     }
 
-    public GeneratedOffer retrieveGeneratedOffer(){
-        @SuppressWarnings("unchecked")
-        List<GeneratedOffer> offers =
-        entityManager.createQuery("SELECT o FROM GeneratedOffer o")
-                        .getResultList();
-        return offers.get(0);
-    }
+    // public GeneratedOffer retrieveGeneratedOffer(){
+    //     @SuppressWarnings("unchecked")
+    //     List<GeneratedOffer> offers =
+    //     entityManager.createQuery("SELECT o FROM GeneratedOffer o")
+    //                     .getResultList();
+    //     return offers.get(0);
+    // }
 
     public void insertFlightOffer(List<Flight> list){
         for(Flight f: list){
@@ -171,6 +172,14 @@ public class DatabaseManager {
 
     public void createOffer (GeneratedOffer offer) throws PersistenceException { 
         this.entityManager.persist(offer);
+    }
+
+    public List<Flight> getAvailableFlights() {
+        @SuppressWarnings("unchecked")
+        List<Flight> expFlights = (List<Flight>) entityManager
+                .createQuery("SELECT f FROM Flight f WHERE f.booked = FALSE AND f.available = TRUE")
+                .getResultList();
+        return expFlights;
     }
 
     // Airport

@@ -122,29 +122,6 @@
         </plugin>
 
         <!-- run mvn install -->
-        <plugin>
-          <!-- new plugin for java 11 -->
-          <groupId>com.helger.maven</groupId>
-          <artifactId>jaxws-maven-plugin</artifactId>
-          <version>2.6</version>
-          <executions>
-            <execution>
-              <goals>
-                <goal>wsimport</goal>
-              </goals>
-            </execution>
-          </executions>
-          <configuration>
-            <wsdlDirectory>./src/main/resources/WSDL</wsdlDirectory>
-            <wsdlFiles>
-              <wsdlFile>rentService1.wsdl</wsdlFile>
-            </wsdlFiles>
-            <wsdlLocation>./rentService1.wsdl</wsdlLocation>
-            <bindingDirectory>./src/main/resources/WSDL</bindingDirectory>
-            <sourceDestDir>${project.basedir}/src/main/java</sourceDestDir> 
-            <packageName>it.unibo.soseng.ws.generated</packageName>
-          </configuration>
-        </plugin>
       </plugins>
     </build>
 

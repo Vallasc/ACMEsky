@@ -20,7 +20,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,13 +32,17 @@ import it.unibo.soseng.gateway.airline.dto.InterestDTO;
 import it.unibo.soseng.logic.airline.AirlineManager;
 import it.unibo.soseng.logic.database.DatabaseManager;
 import it.unibo.soseng.model.GeneratedOffer;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 
 @javax.ws.rs.Path("airline")
 public class AirlineClient {
+    final MediaType JSON = MediaType.get("application/json; charset=utf-8");
+
 
     @Inject
     ProcessState processState;
@@ -51,32 +54,28 @@ public class AirlineClient {
     AirlineManager airManager;
 
     @POST // TODO togliere
-    @Consumes( MediaType.APPLICATION_JSON ) // TODO togliere
     public String getFlightList(List<InterestDTO> listDTO, String wsAddress)  throws IOException, InterruptedException{
+
+        String url = new String(wsAddress + "/getFlights");
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        String requestBody = objectMapper
-                .writeValueAsString(listDTO);
+        String requestBody = objectMapper.writeValueAsString(listDTO);
+        RequestBody body = RequestBody.Companion.create(requestBody, JSON);
 
-        // create a client
-        HttpClient httpClient = HttpClient.newBuilder()
-            .version(HttpClient.Version.HTTP_1_1)
-            .build();
+        OkHttpClient client = new OkHttpClient();
 
-        // create a request
-        HttpRequest request = HttpRequest.newBuilder(
-            URI.create(wsAddress+"/getFlights"))
-            .header("Content-Type", "application/json")
-            .POST(HttpRequest.BodyPublishers.ofString(requestBody))
-            .build();
+
+        Request request = new Request.Builder().url(url)
+                            .addHeader("Content-Type", "application/json")
+                            .build();
+        Response response = client.newCall(request).execute();
         
         
-        HttpResponse<String> response = httpClient.send(request, BodyHandlers.ofString());
         final Logger LOGGER = Logger.getLogger("getFlightList"); 
-        LOGGER.info(response.body());
+        LOGGER.info(response.body().string());
         
-        return response.body();
+        return response.body().string();
 
     }
 
@@ -105,12 +104,9 @@ public class AirlineClient {
 
     @POST // TODO togliere
     @Path("/unbook") // TODO togliere
-    public void unbookFlights() throws IOException{
+    public void unbookFlights(GeneratedOffer offer) throws IOException{
 
-        GeneratedOffer offer = dbManager.retrieveGeneratedOffer();
-        airManager.unbookOffer(offer);
-
-        String url = new String(offer.getOutboundFlightId().getAirlineId().getWsAddress() + "/notPurchasedOffer?id="+ 
+        String url = new String( offer.getOutboundFlightId().getAirlineId().getWsAddress() + "/notPurchasedOffer?id="+ 
                                     offer.getOutboundFlightId().getFlightCode() +"&id=" + offer.getFlightBackId().getFlightCode());
 
         OkHttpClient client = new OkHttpClient();

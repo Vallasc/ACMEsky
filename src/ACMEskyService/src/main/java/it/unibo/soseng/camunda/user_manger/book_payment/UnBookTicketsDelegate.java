@@ -13,6 +13,9 @@ import it.unibo.soseng.logic.airline.AirlineManager;
 import it.unibo.soseng.logic.database.DatabaseManager;
 import it.unibo.soseng.model.GeneratedOffer;
 
+import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_OFFER;
+
+
 @Named("unBookTicketsDelegate")
 public class UnBookTicketsDelegate implements JavaDelegate {
     private final static Logger LOGGER = Logger.getLogger(UnBookTicketsDelegate.class.getName());
@@ -26,6 +29,10 @@ public class UnBookTicketsDelegate implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws IOException{
         LOGGER.info("UnBookTickets working");
+        GeneratedOffer offer = (GeneratedOffer) execution.getVariable(USER_OFFER);
+        airlineManager.unbookOffer(offer);
+        
+
         
 
 

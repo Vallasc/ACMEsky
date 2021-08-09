@@ -53,4 +53,7 @@ public final class ProcessVariables {
     public static final String PROCESS_SAVE_INTEREST = "processSaveInterest";
     public static final String PROCESS_CONFIRM_BUY_OFFER = "processConfirmBuyOffer";
     
+    // Premium Service Error
+    public static final String PREMIUM_SERVICE_ERROR = "PremiumServiceError";
+     
 }

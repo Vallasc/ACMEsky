@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_17e098l" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.3.0">
+  <bpmn:collaboration id="Collaboration_0hkmceq">
+    <bpmn:participant id="Participant_0e3mrb7" name="ACMEsky_FlightsManager" processRef="RemoveFlights" />
+  </bpmn:collaboration>
+  <bpmn:process id="RemoveFlights" isExecutable="true">
+    <bpmn:serviceTask id="Activity_0tq6913" name="Remove expired flights" camunda:delegateExpression="removeExpiredFlightsDelegate">
+      <bpmn:incoming>Flow_0x50cch</bpmn:incoming>
+      <bpmn:outgoing>Flow_06do8z0</bpmn:outgoing>
+      <bpmn:property id="Property_1y38kvt" name="__targetRef_placeholder" />
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="Event_0y4zovv">
+      <bpmn:incoming>Flow_06do8z0</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:intermediateCatchEvent id="Event_1cgs2zd" name="Every 12 hours">
+      <bpmn:outgoing>Flow_0x50cch</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_0rwqomo">
+        <bpmn:timeCycle xsi:type="bpmn:tFormalExpression">R1/PT5M</bpmn:timeCycle>
+      </bpmn:timerEventDefinition>
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_0x50cch" sourceRef="Event_1cgs2zd" targetRef="Activity_0tq6913" />
+    <bpmn:sequenceFlow id="Flow_06do8z0" sourceRef="Activity_0tq6913" targetRef="Event_0y4zovv" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0hkmceq">
+      <bpmndi:BPMNShape id="Participant_0e3mrb7_di" bpmnElement="Participant_0e3mrb7" isHorizontal="true">
+        <dc:Bounds x="160" y="80" width="600" height="160" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0x50cch_di" bpmnElement="Flow_0x50cch">
+        <di:waypoint x="308" y="160" />
+        <di:waypoint x="400" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_06do8z0_di" bpmnElement="Flow_06do8z0">
+        <di:waypoint x="500" y="160" />
+        <di:waypoint x="592" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Activity_0tq6913_di" bpmnElement="Activity_0tq6913">
+        <dc:Bounds x="400" y="120" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0y4zovv_di" bpmnElement="Event_0y4zovv">
+        <dc:Bounds x="592" y="142" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1cgs2zd_di" bpmnElement="Event_1cgs2zd">
+        <dc:Bounds x="272" y="142" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="252" y="183" width="75" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Random;
 import java.util.logging.Logger;
 import java.nio.charset.Charset;
@@ -102,6 +103,16 @@ public class OfferManager {
         f.setAvailable(false);
         databaseManager.updateFlight(f);
     }
+
+    public void removeExpiredOffers() {
+        OffsetDateTime now = OffsetDateTime.now();
+        List<GeneratedOffer> expFlights = databaseManager.getAvailableFlights().stream().dropWhile(f -> f.getExpireDate().isBefore(now)).collect(Collectors.toList());
+        for (ListIterator<Flight> iter = expFlights.listIterator(); iter.hasNext(); ) {
+            Flight f = iter.next();
+            f.setAvailable(false);
+            databaseManager.updateFlight(f);
+        }
+    } 
 
     public class SendTicketException extends Exception {
         private static final long serialVersionUID = 1L;
@@ -203,6 +214,7 @@ public class OfferManager {
 
         // the resulting string 
         return thebuffer.toString(); 
-    } 
+    }
+
 }
 

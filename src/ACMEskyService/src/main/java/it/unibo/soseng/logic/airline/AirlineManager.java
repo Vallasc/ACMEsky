@@ -1,12 +1,15 @@
 package it.unibo.soseng.logic.airline;
 
 import java.io.IOException;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -17,9 +20,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.camunda.bpm.engine.ProcessEngines;
 import org.camunda.bpm.engine.RuntimeService;
+import org.camunda.bpm.engine.impl.db.entitymanager.operation.comparator.DbBulkOperationComparator;
+import org.w3c.dom.ElementTraversal;
 
 import it.unibo.soseng.gateway.airline.AirlineClient;
-import it.unibo.soseng.gateway.airline.dto.AirlineDTO;
 import it.unibo.soseng.gateway.airline.dto.AirlineFlightOffer;
 import it.unibo.soseng.gateway.airline.dto.InterestDTO;
 import it.unibo.soseng.logic.database.DatabaseManager;
@@ -73,16 +77,6 @@ public class AirlineManager {
         return list;
     }
 
-
-    public List<AirlineDTO> convertToAirlineDTO(List<Airline> airlines) {
-        ArrayList<AirlineDTO> list = new ArrayList<>();
-        for(Airline i : airlines){
-            AirlineDTO dto = new AirlineDTO(i.getId(), i.getWsAddress()); 
-            list.add(dto);
-        }
-        return list;
-    }
-
     public List<Flight> retrieveFlightsList(List<InterestDTO> listDTO, String wsAddress) throws IOException, InterruptedException, AirportNotFoundException, AirlineNotFoundException {
         String resp = client.getFlightList(listDTO, wsAddress);
         List<Flight> list = new ArrayList<>();
@@ -105,6 +99,16 @@ public class AirlineManager {
         return list;
     }
 
+    public void removeExpiredFlights() {
+        OffsetDateTime now = OffsetDateTime.now();
+        List<Flight> expFlights = databaseManager.getAvailableFlights().stream().dropWhile(f -> f.getExpireDate().isBefore(now)).collect(Collectors.toList());
+        for (ListIterator<Flight> iter = expFlights.listIterator(); iter.hasNext(); ) {
+            Flight f = iter.next();
+            f.setAvailable(false);
+            databaseManager.updateFlight(f);
+        }
+    }
+
     public byte[] getOfferTicket(GeneratedOffer offer) throws IOException, SendTicketException{
 
         byte[] fileByte = client.getFlightTickets(offer.getOutboundFlightId().getAirlineId().getWsAddress(), offer.getUser().getProntogramUsername(), offer.getOutboundFlightId().getFlightCode(), 
@@ -116,8 +120,10 @@ public class AirlineManager {
 
     public void unbookOffer(GeneratedOffer offer) throws IOException {
         
-        // api.unbookFlights();
+        client.unbookFlights(offer);
         offer.setBooked(false);
+        offer.getOutboundFlightId().setBooked(false);
+        offer.getFlightBackId().setBooked(false);
     }
 
 
