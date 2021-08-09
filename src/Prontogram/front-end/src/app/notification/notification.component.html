@@ -3,7 +3,7 @@
         <h1>Notifiche</h1>
             <div *ngFor="let notification of notifications"> 
                 <mat-card style="background-color:white; border: 1px solid rgb(42, 42, 43); margin-bottom: 5px ">
-                    <mat-card-title>
+                    <!--<mat-card-title>
                         Notifica volo per <b>{{notification.username}}</b>, il token dell'offerta da inserire su <i>ACMESky</i> è: <b>{{notification.offerToken}}</b>
                         <mat-card-subtitle>
                             <br>
@@ -80,7 +80,11 @@
                                 </table>
                             </mat-card-content> 
                         </mat-card-subtitle>
-                    </mat-card-title>
+                    </mat-card-title> -->
+                    <app-chat-card-area>
+                        <div [innerHTML]="notification.message"></div> 
+                    </app-chat-card-area>
+                    
                     <mat-card-actions>
                         <button (click)="deleteNotification(notification._id)" class="btn btn-sm btn-danger btn-delete-user" >
                             <span *ngIf="notification.isDeleting" class="spinner-border spinner-border-sm"></span>

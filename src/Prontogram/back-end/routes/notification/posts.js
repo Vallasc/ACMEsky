@@ -22,7 +22,8 @@ router.post('/', async (req, res) => {
         flyBack: req.body.flyBack, 
         flyOutBound: req.body.flyOutBound, 
         offerToken: req.body.offerToken,
-        username: req.body.username
+        username: req.body.username,
+        message: req.body.message
     });
     console.log ("NOTIFICATION ", notification)
     try {
@@ -66,24 +67,19 @@ async function sendNotification (notification, userSub) {
                       400
                     ],
                     "data": {
-                      "url": "http://127.0.0.1:8080/notification",
-                      "created_at": Date.now (),
-                      "flyOutBound": notification.flyOutBound,
-                      "flyBack": notification.flyBack,
-                      "offerToken": notification.offerToken,
-                      "username": notification.username
+                      "url": "http://127.0.0.1:8051/notification",
+                      //"created_at": Date.now (),
+                      //"flyOutBound": notification.flyOutBound,
+                      //"flyBack": notification.flyBack,
+                      //"offerToken": notification.offerToken,
+                      "username": notification.username,
+                      "message": notification.message
                     }
                 }
             };
 
             Promise.all(userSub.map(sub => webpush.sendNotification(
                 sub.info, JSON.stringify(notificationPayload) )));
-                //TODO gestire errori 
-                /*.then(() => res.status(200).json({message: 'Newsletter sent successfully.'}))
-                .catch(err => {
-                    console.error("Error sending notification, reason: ", err);
-                    res.sendStatus(500);
-                })*/
         }
     
 }
