@@ -1,18 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <datasources>
-    <!--<datasource jndi-name="java:jboss/datasources/postgresacmesky" pool-name="postgresacmesky" enabled="true" use-java-context="true">
-        <connection-url>jdbc:postgresql://acmesky.duckdns.org/acmesky</connection-url>
-        <driver>postgresql-42.2.19.jar</driver>
-        <security>
-            <user-name>soseng</user-name>
-            <password>adminadmin</password>
-        </security>
-    </datasource>-->
-
     <xa-datasource jndi-name="java:jboss/datasources/postgresacmesky" pool-name="postgresacmesky" enabled="true" use-ccm="false">
         <driver>postgresql-42.2.19.jar</driver>
         <xa-datasource-class>org.postgresql.xa.PGXADataSource</xa-datasource-class> 
-        <xa-datasource-property name="ServerName">postgres</xa-datasource-property> <!-- dominio del db -->
+        <xa-datasource-property name="ServerName">postgres</xa-datasource-property>
         <xa-datasource-property name="PortNumber">5432</xa-datasource-property>
         <xa-datasource-property name="DatabaseName">acmesky</xa-datasource-property>
         <xa-datasource-property name="User">soseng</xa-datasource-property>
