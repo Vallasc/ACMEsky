@@ -86,7 +86,7 @@ public class UserManager {
                     .executeWithVariablesInReturn();
     }  
     
-    public Response handleConfirmUserFlight(String token, String email, UserOfferDTO offer, DelegateExecution execution) throws OfferNotFoundException{
+    public Response handleConfirmOffer(String token, String email, UserOfferDTO offer, DelegateExecution execution) throws OfferNotFoundException{
         // Control token
         execution.setVariable(IS_VALID_TOKEN, true);               
         execution.setVariable(IS_OFFER_EXPIRED, false);               
