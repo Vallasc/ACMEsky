@@ -11,6 +11,10 @@ const notificationSchema = new mongoose.Schema ({
     username: {
         type: String,
         require: true,
+    },
+    message: {
+        type: String,
+        require: true,
     }
 });
 

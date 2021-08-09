@@ -6,4 +6,5 @@ export class Notification {
     flyOutBound: Flight;
     offerToken: string;
     username: string;
+    message: string;
 }
