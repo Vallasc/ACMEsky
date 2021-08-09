@@ -220,7 +220,7 @@ public class DatabaseManager {
         @SuppressWarnings("unchecked")
         List<UserInterest> result = (List<UserInterest>) entityManager
             .createQuery("SELECT ui FROM UserInterest ui, User u, DomainEntity d " +
-                            "WHERE d.username = :username AND u.entity = d.id AND ui.user = u.id " +
+                            "WHERE d.username = :username AND u.entity = d.id AND ui.user = u.id AND ui.used = FALSE " +
                             "ORDER BY ui.id DESC")
             .setParameter("username", username).getResultList();
         return result;
