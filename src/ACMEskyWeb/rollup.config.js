@@ -7,9 +7,10 @@ import sveltePreprocess from 'svelte-preprocess';
 import typescript from '@rollup/plugin-typescript';
 import css from 'rollup-plugin-css-only';
 import replace from '@rollup/plugin-replace';
-import dotenv from 'dotenv';
+//import dotenv from 'dotenv';
 
-dotenv.config();
+//if(process.env.ACMESKY_URL == undefined)
+//	dotenv.config();
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -44,10 +45,10 @@ export default {
 	},
 	plugins: [
 		// If we're building for production replace inject .env
-		replace({
+		//replace({
 			// stringify the object       
-			'process.env.ACMESKY_URL': JSON.stringify(process.env.ACMESKY_URL)
-		}),
+			//'process.env.ACMESKY_URL': JSON.stringify(process.env.ACMESKY_URL)
+		//}),
 
 		svelte({
 			preprocess: sveltePreprocess({ sourceMap: !production }),

@@ -789,7 +789,17 @@ ALTER TABLE ONLY public.flights_interest
 INSERT INTO public.domain_entities VALUES (1, 'airline1', 'ROLE_AIRLINE', 'a', 'airline1');
 INSERT INTO public.domain_entities VALUES (2, 'airline2', 'ROLE_AIRLINE', 'b', 'airline2');
 INSERT INTO public.domain_entities VALUES (3, 'bank', 'ROLE_BANK', 'c', 'bank');
-ALTER SEQUENCE public.domain_entities_id_seq RESTART WITH 5;
+
+INSERT INTO public.domain_entities VALUES (5, 'g', 'ROLE_USER', 'aaaa', 'g@g');
+INSERT INTO public.domain_entities VALUES (6, 'a', 'ROLE_USER', 'aaaa', 'a@a');
+INSERT INTO public.domain_entities VALUES (7, 'r', 'ROLE_USER', 'aaaa', 'r@r');
+ALTER SEQUENCE public.domain_entities_id_seq RESTART WITH 8;
+
+INSERT INTO public.users VALUES (1, 'g@g', 'g', 5, 'Giacomo', 'Vallorani');
+INSERT INTO public.users VALUES (2, 'a@a', 'a', 6, 'Andrea', 'Di Ubaldo');
+INSERT INTO public.users VALUES (3, 'r@r', 'r', 7, 'Riccardo', 'Baratin');
+ALTER SEQUENCE public.users RESTART WITH 4;
+
 
 INSERT INTO public.airlines VALUES (1, 'http://national-airline:8082', 1);
 INSERT INTO public.airlines VALUES (2, 'http://international-airline:8082', 2);
@@ -5201,3 +5211,15 @@ INSERT INTO public.airports VALUES (4399, 'Marnardal', 'ZYY', 'NO', 0, 0, 'Marna
 INSERT INTO public.airports VALUES (4400, 'Zanesville', 'ZZV', 'US', 39.9445, -81.8921, 'Zanesville Arpt', -100);
 
 ALTER SEQUENCE public.airports_id_seq RESTART WITH 4401;
+
+
+INSERT INTO public.flights_interest VALUES (1, '2021-10-28 00:00:00+00', 1048, 4307, 1);
+INSERT INTO public.flights_interest VALUES (2, '2021-08-28 00:00:00+00', 4307, 1048, 1);
+INSERT INTO public.flights_interest VALUES (3, '2021-10-30 00:00:00+00', 16, 424, 1);
+INSERT INTO public.flights_interest VALUES (4, '2021-10-25 00:00:00+00', 424, 16, 1);
+ALTER SEQUENCE public.flights_interest RESTART WITH 5;
+
+
+INSERT INTO public.users_interests VALUES (1, '2021-08-28 00:00:00+00', 130, 1, 2, 1);
+INSERT INTO public.users_interests VALUES (2, '2021-10-25 00:00:00+00', 400, 3, 4, 1);
+ALTER SEQUENCE public.users_interests RESTART WITH 3;

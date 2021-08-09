@@ -67,7 +67,7 @@ export async function signin(email: string, password: string, remainSignin: bool
     }
 }
 
-export async function signup(email: string, password: string, prontogramUsername: string) : Promise<boolean> {
+export async function signup(user: User) : Promise<boolean> {
     const response = await fetch(ACMESKY_HOST + "/users/", 
         {
             method: 'POST',
@@ -75,11 +75,7 @@ export async function signup(email: string, password: string, prontogramUsername
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                email: email,
-                password: password,
-                prontogramUsername: prontogramUsername
-            })
+            body: JSON.stringify(user)
         })
     console.log(response)
     if (response.status == 201) {
