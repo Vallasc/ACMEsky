@@ -1,16 +1,11 @@
 package it.unibo.soseng.logic.database;
 
-import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
@@ -172,6 +167,10 @@ public class DatabaseManager {
 
     public void createOffer (GeneratedOffer offer) throws PersistenceException { 
         this.entityManager.persist(offer);
+    }
+
+    public void updateOffer (GeneratedOffer offer) throws PersistenceException { 
+        this.entityManager.merge(offer);
     }
 
     public List<Flight> getAvailableFlights() {
