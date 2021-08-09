@@ -29,7 +29,7 @@ public class NotificationDTO implements Serializable {
     // TODO costruire il messaggio in base all'offerta
     public static NotificationDTO fromOffer(GeneratedOffer offer, String prontogramUsername){
         NotificationDTO notification = new NotificationDTO();
-        String message = "<table>qualcosa dentro utilizzando offer</table>" + offer.getToken();
+        String message = "<table>TODO token "+offer.getToken()+"</table>";
         notification.setMessage(message);
         notification.setProntogramUsername(prontogramUsername);
         return notification;
