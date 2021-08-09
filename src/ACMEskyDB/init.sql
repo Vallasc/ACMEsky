@@ -291,17 +291,17 @@ ALTER SEQUENCE public.flights_interest_id_seq OWNED BY public.flights_interest.i
 -- TOC entry 213 (class 1259 OID 16442)
 -- Name: generated_offers; Type: TABLE; Schema: public; Owner: soseng
 --
-
 CREATE TABLE public.generated_offers (
     id bigint NOT NULL,
+    available boolean,
     booked boolean,
     expire_date timestamp with time zone NOT NULL,
+    token character varying(255),
     total_price double precision,
     flight_back_id bigint NOT NULL,
     outbound_flight_id bigint NOT NULL,
-    username bigint
+    user_id bigint NOT NULL
 );
-
 
 ALTER TABLE public.generated_offers OWNER TO soseng;
 
