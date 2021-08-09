@@ -1,11 +1,9 @@
 package it.soseng.unibo.airlineService.service;
 
 import java.io.IOException;
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -15,17 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import it.soseng.unibo.airlineService.model.FlightUtility;
 import it.soseng.unibo.airlineService.model.FlightOffer;
-import it.soseng.unibo.airlineService.model.Iban;
 import it.soseng.unibo.airlineService.DTO.Flight;
 import it.soseng.unibo.airlineService.DTO.UserRequest;
-import it.soseng.unibo.airlineService.auth.Auth;
 import it.soseng.unibo.airlineService.repository.FlightOfferRepository;
 
 /**
@@ -41,9 +36,6 @@ public class FlightOfferService {
     private FlightOfferRepository repo;
 
     private FlightUtility u = new FlightUtility();
-
-    private Auth auth = new Auth();
-
     
     /** 
      * genera una lista di offerte di volo randomicamente che viene cancellata se scaduta prima di essere salvata sul DB, 
@@ -66,28 +58,6 @@ public class FlightOfferService {
 
         }  
     }
-
-
-    /** 
-     * restituisce la lista di tutte le offerte di volo presenti nel db
-     * @return List<FlightOffer>
-     */
-    public List<FlightOffer> getAll(){
-        return repo.findAll();
-    }
-
-    
-    /** 
-     * restituisce l'unica istanza Iban contenente le coordinate bancarie 
-     * del servizio airline 
-     * @param iban
-     * @return Iban
-     */
-    public Iban sendIban(String iban){
-        Iban.getInstance().setIban(iban);
-        return Iban.getInstance();
-    }
-
 
     
     /** 
@@ -130,26 +100,9 @@ public class FlightOfferService {
         // // send POST request
         RestTemplate restTemplate = new RestTemplate();
         
-        ResponseEntity<FlightOffer> result = restTemplate.postForEntity(url, entity, FlightOffer.class);    
+        restTemplate.postForEntity(url, entity, FlightOffer.class);    
     }
 
-
-    /** 
-     * cancella le offerte di volo scadute
-     */
-    public void DeleteExpiredOffersFromDB() {
-        OffsetDateTime now = OffsetDateTime.now();
-        ListIterator<FlightOffer> iterator= repo.findAll().listIterator();
-
-        while(iterator.hasNext()){
-            FlightOffer o = iterator.next();
-            if(now.equals(o.getExpiryDate()) || now.isAfter(o.getExpiryDate())){
-                repo.deleteById(o.getId());
-            }
-        }
-    }
-
-    
 
 
     public List<FlightOffer> getOffers(long ... l){

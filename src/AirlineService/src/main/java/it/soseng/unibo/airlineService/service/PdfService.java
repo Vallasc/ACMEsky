@@ -12,7 +12,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.lowagie.text.DocumentException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -25,7 +24,6 @@ import org.springframework.web.client.RestTemplate;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
-import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import it.soseng.unibo.airlineService.auth.Auth;
@@ -154,7 +152,7 @@ public class PdfService {
     String serverUrl = ACMEskyRoute + "/airline/OfferFiles";
 
     RestTemplate restTemplate = new RestTemplate();
-    ResponseEntity<String> response = restTemplate
+    restTemplate
       .postForEntity(serverUrl, requestEntity, String.class);
   }
 

@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 import it.soseng.unibo.airlineService.DTO.Flight;
 import it.soseng.unibo.airlineService.DTO.UserRequest;
 import it.soseng.unibo.airlineService.model.FlightOffer;
-import it.soseng.unibo.airlineService.model.Iban;
 import it.soseng.unibo.airlineService.service.FlightOfferService;
 import it.soseng.unibo.airlineService.service.PdfService;
 
@@ -85,15 +84,6 @@ public class FlightOfferController {
     }
 
     
-    /** restituisce la lista di tutte le offerte di volo
-     * @return List<FlightOffer>
-     */
-    @GetMapping("/getAll")
-    public List<FlightOffer> getAll() {
-        return s.getAll();
-    }
-
-    
     /** si occupa di impostare il soldFlag con il valore false dell'offerta di volo quando risulta 
      * che l'offerta non sia stata acquistata per un eventuale errore (viene chiamata dopo il tentativo di pagamento dell'utente)
      * @param id che viene passato per identificare l'offerta da eliminare
@@ -102,18 +92,7 @@ public class FlightOfferController {
     public void unsoldFlight(@RequestParam(name = "id") long ... id) {
         s.unsoldFlights(id);
     }
-
-
-
-    /** cancella le offerte scadute ogni 6 secondi
-     * @param id dell'offerta di cui si richiede lo stato
-     * @return boolean il cui valore true indica che l'offerta è prenotabile(viceversa false se non lo è)
-     */
-    // @Scheduled(fixedRate = 6000)
-    // @DeleteMapping("/deleteExpiredOffer")
-    // private void deleteExpiredOffer(){
-    //     s.DeleteExpiredOffersFromDB();
-    // }
+    
     
     /** 
      * invia i biglietti in formato pdf relativi a quelle offerte che hanno il valore degli id corrispondenti
@@ -145,14 +124,4 @@ public class FlightOfferController {
         return "";
     }
 
-    
-    /** 
-     * restituisce l'iban del servizio necessario per il pagamento dell'offerta
-     * @param sendIban iban preso dal paramtro server.iban presente in application.properties in resources
-     * @return Iban del servizio
-     */
-    @GetMapping("/getIban")
-    public Iban sendIban(@Value("${server.iban}") String iban) {
-        return s.sendIban(iban);
-    }
 }
