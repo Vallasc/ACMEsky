@@ -1,18 +1,14 @@
 const mongoose = require ('mongoose');
 const notificationSchema = new mongoose.Schema ({
-    flyBack: {
-    },
-    flyOutBound: {
-    },
-    offerToken: {
-        type: String,
-        require: true,
-    },
     username: {
         type: String,
         require: true,
     },
     message: {
+        type: String,
+        require: true,
+    },
+    info: {
         type: String,
         require: true,
     }
