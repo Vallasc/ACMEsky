@@ -1,9 +1,11 @@
 package it.soseng.unibo.airlineService.DTO;
 
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.time.format.DateTimeParseException;
 
 import javax.validation.constraints.NotBlank;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 public class UserRequest {
@@ -15,9 +17,13 @@ public class UserRequest {
     public String arrival;
 
     @NotBlank(message = "departureDate is mandatory")
-    public LocalDate departureDate;    
+    public String departureDate;    
     
-
+    @JsonIgnore
+    public OffsetDateTime getDepartureOffsetDateTime() throws DateTimeParseException {
+        return OffsetDateTime.parse(departureDate);
+    }
+    
     public UserRequest() {
     }
 

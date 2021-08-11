@@ -26,10 +26,10 @@ public class FlightOffer {
     @Column(name = "departure_airport_code")
     private String departureCode;
 
-    @Column(name = "departure_date_time")
+    @Column(name = "departure_date_time", columnDefinition = "TIMESTAMP WITH TIME ZONE")
     private OffsetDateTime  departureTime;
 
-    @Column(name = "arrival_date_time")
+    @Column(name = "arrival_date_time", columnDefinition = "TIMESTAMP WITH TIME ZONE")
     private OffsetDateTime arrivalTime;
 
     @Column(name = "arrival_airport_code")
@@ -44,7 +44,7 @@ public class FlightOffer {
     @Column(name = "place")
     private String place;
 
-    @Column(name = "expire_offer")
+    @Column(name = "expire_offer", columnDefinition = "TIMESTAMP WITH TIME ZONE")
     private OffsetDateTime expiryDate;
 
     @Column(name = "flag")
