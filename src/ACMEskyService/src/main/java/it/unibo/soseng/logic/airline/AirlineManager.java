@@ -13,24 +13,21 @@ import java.util.stream.Collectors;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.security.enterprise.SecurityContext;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.camunda.bpm.engine.ProcessEngines;
 import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.impl.db.entitymanager.operation.comparator.DbBulkOperationComparator;
-import org.w3c.dom.ElementTraversal;
 
 import it.unibo.soseng.gateway.airline.AirlineClient;
+import it.unibo.soseng.gateway.airline.AirlineClient.AirlineErrorException;
 import it.unibo.soseng.gateway.airline.dto.AirlineFlightOffer;
 import it.unibo.soseng.gateway.airline.dto.InterestDTO;
 import it.unibo.soseng.logic.database.DatabaseManager;
 import it.unibo.soseng.logic.database.DatabaseManager.AirlineNotFoundException;
 import it.unibo.soseng.logic.database.DatabaseManager.AirportNotFoundException;
 import it.unibo.soseng.logic.offer.OfferManager.SendTicketException;
-import it.unibo.soseng.model.Airline;
 import it.unibo.soseng.model.Flight;
 import it.unibo.soseng.model.FlightInterest;
 import it.unibo.soseng.model.GeneratedOffer;
@@ -46,8 +43,6 @@ public class AirlineManager {
     @Inject
     private DatabaseManager databaseManager;
     
-    @Inject
-    private SecurityContext securityContext;
 
     @Inject
     AirlineClient client;
@@ -70,20 +65,23 @@ public class AirlineManager {
     public List<InterestDTO> convertIntToIntDTO(List<FlightInterest> interests) {
         ArrayList<InterestDTO> list = new ArrayList<>();
         for(FlightInterest i : interests){
-            InterestDTO dto = new InterestDTO(i.getDepartureAirport().getAirportCode(), i.getArrivalAirport().getAirportCode(),
-                                                    i.getDepartureDateTime().toLocalDate().toString()); 
+            InterestDTO dto = new InterestDTO(i.getDepartureAirport().getAirportCode(), 
+                                            i.getArrivalAirport().getAirportCode(),
+                                            i.getDepartureDateTime().toString()); 
             list.add(dto);
         }
         return list;
     }
 
-    public List<Flight> retrieveFlightsList(List<InterestDTO> listDTO, String wsAddress) throws IOException, InterruptedException, AirportNotFoundException, AirlineNotFoundException {
-        String resp = client.getFlightList(listDTO, wsAddress);
+    public List<Flight> retrieveFlightsList(List<InterestDTO> listDTO, String wsAddress) {
         List<Flight> list = new ArrayList<>();
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = mapper.readTree(resp);
-        for(JsonNode n: root){
-            Flight f = new Flight();
+        try{
+            String resp = client.getFlightList(listDTO, wsAddress);
+            JsonNode root = mapper.readTree(resp);
+            for(JsonNode n: root){
+                Flight f = new Flight();
+                try{
                 f.setDepartureAirport(databaseManager.getAirport(n.get("departureCode").textValue()));
                 f.setDepartureDateTime(n.get("departureTime").textValue());
                 f.setArrivalAirport(databaseManager.getAirport(n.get("arrivalCode").textValue()));
@@ -95,7 +93,16 @@ public class AirlineManager {
                 f.setAvailable(true);
                 f.setFlightCode(n.get("id").asText());
                 list.add(f);
+                } catch (AirportNotFoundException e) {
+                    LOGGER.info("Airport not found: "+
+                                n.get("departureCode").textValue()+" or " + n.get("arrivalCode").textValue());
+                } catch (AirlineNotFoundException e) {
+                    LOGGER.info("Airline not found: " + n.get("airline_id").textValue());
+                }
             }
+        } catch (InterruptedException | IOException | AirlineErrorException e) {
+            LOGGER.info("IOException contacting airline:" + wsAddress);
+        }
         return list;
     }
 
@@ -124,6 +131,7 @@ public class AirlineManager {
         offer.setBooked(false);
         offer.getOutboundFlightId().setBooked(false);
         offer.getFlightBackId().setBooked(false);
+        //TODO fare richiesta fittizia ad airline
     }
 
 

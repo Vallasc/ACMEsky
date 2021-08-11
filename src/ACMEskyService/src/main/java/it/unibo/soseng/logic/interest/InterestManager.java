@@ -57,6 +57,7 @@ public class InterestManager {
     // Start Camunda process
     public void startSaveUserInterests(UserInterestDTO request, AsyncResponse response, UriInfo uriInfo) 
                                                                 throws BadRequestException{
+
         LOGGER.info("StartSaveUserInterests");
         String email = securityContext.getCallerPrincipal().getName();
 
@@ -83,7 +84,6 @@ public class InterestManager {
         OffsetDateTime now = OffsetDateTime.now();
         OffsetDateTime outboundDateTime = interest.getOutboundFlight().getDepartureOffsetDateTime();
         OffsetDateTime flightBackDateTime = interest.getFlightBack().getDepartureOffsetDateTime();
-
         flightBackDateTime = flightBackDateTime.minusDays(1);
         if(outboundDateTime.compareTo(flightBackDateTime) > 0) {
             return Response.status(Response.Status.BAD_REQUEST.getStatusCode())
@@ -140,6 +140,7 @@ public class InterestManager {
         // Check airport
         Airport airportOut1 = databaseManager.getAirport(request.getOutboundFlight().getDepartureAirportCode());
         Airport airportOut2 = databaseManager.getAirport(request.getOutboundFlight().getArrivalAirportCode());
+
         Airport airportBack1 = databaseManager.getAirport(request.getFlightBack().getDepartureAirportCode());
         Airport airportBack2 = databaseManager.getAirport(request.getFlightBack().getArrivalAirportCode());
 
@@ -159,8 +160,8 @@ public class InterestManager {
         FlightInterest flightOutInterest = new FlightInterest();
         flightOutInterest.setUsed(false);
         flightOutInterest.setUser(user);
-        flightOutInterest.setDepartureAirport(airportOut2);
-        flightOutInterest.setArrivalAirport(airportOut1);
+        flightOutInterest.setDepartureAirport(airportOut1);
+        flightOutInterest.setArrivalAirport(airportOut2);
         flightOutInterest.setDepartureDateTime(request.getOutboundFlight().getDepartureOffsetDateTime());
 
         interest.setOutboundFlightInterest(flightOutInterest);
@@ -168,8 +169,8 @@ public class InterestManager {
         FlightInterest flightBackInterest = new FlightInterest();
         flightBackInterest.setUsed(false);
         flightBackInterest.setUser(user);
-        flightBackInterest.setDepartureAirport(airportBack2);
-        flightBackInterest.setArrivalAirport(airportBack1);
+        flightBackInterest.setDepartureAirport(airportBack1);
+        flightBackInterest.setArrivalAirport(airportBack2);
         flightBackInterest.setDepartureDateTime(request.getFlightBack().getDepartureOffsetDateTime());
 
         interest.setFlightBackInterest(flightBackInterest);

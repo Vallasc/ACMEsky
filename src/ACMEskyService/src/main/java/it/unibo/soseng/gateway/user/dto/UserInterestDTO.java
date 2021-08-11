@@ -16,7 +16,7 @@ public class UserInterestDTO implements Serializable {
     @NotNull
     private FlightInterestDTO outboundFlight;
 
-    @NotNull
+    @NotNull //TODO puo essere eliminato e lasciata solo la data
     private FlightInterestDTO flightBack;
 
     @NotNull

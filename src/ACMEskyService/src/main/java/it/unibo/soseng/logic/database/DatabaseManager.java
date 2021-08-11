@@ -57,7 +57,7 @@ public class DatabaseManager {
         return result;
     }
 
-    @Transactional
+    @Transactional // TODO vedere transactional per gli altri metodi
     public void createUser(User user) throws UserAlreadyInException {
         try {
             this.entityManager.persist(user);
@@ -84,7 +84,7 @@ public class DatabaseManager {
     public List<FlightInterest> retrieveFlightInterests(){
         @SuppressWarnings("unchecked")
         List<FlightInterest> interests =
-        entityManager.createQuery("SELECT f FROM FlightInterest f WHERE f.used = FALSE")
+        entityManager.createQuery("SELECT f FROM FlightInterest f WHERE f.used = false")
                         .getResultList();
         return interests;
     }
@@ -214,6 +214,10 @@ public class DatabaseManager {
      */
     public void saveUserInterest(UserInterest interest) {
         this.entityManager.persist(interest);
+    }
+
+    public void updateUserInterest(UserInterest userInterest){
+        this.entityManager.merge(userInterest);
     }
 
     public List<UserInterest> getUserInterests(String username) {
