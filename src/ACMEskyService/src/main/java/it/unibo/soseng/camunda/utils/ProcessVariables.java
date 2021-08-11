@@ -31,6 +31,7 @@ public final class ProcessVariables {
     public static final String AVAILABLE_FLIGHTS = "availableFlight";
     public static final String USER_INTERESTS = "userInterests";
     public static final String USER_INTEREST_INDEX = "userInterestsIndex";
+    public static final String CURRENT_USER_INTEREST= "currentUserInterest";
     public static final String PRONTOGRAM_USERNAME = "prontogramUsername";
     public static final String THERE_IS_FLIGHTS = "thereIsFlights";
     public static final String GENERATED_OFFER = "generatedOffer";
