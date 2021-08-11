@@ -10,7 +10,7 @@ services:
             - ./fileSampleOffers/NationalFlights.json:/list/list.json
              # espongo le porte (come -p su docker)
         ports:
-            - 8082:8082
+            - 8060:8082
         networks:
             - acmesky
     # uguale per tutti gli altri servizi
@@ -24,7 +24,7 @@ services:
             - ./db:/db
             - ./fileSampleOffers/InternationalFlights.json:/list/list.json
         ports:
-            - 8083:8082
+            - 8061:8082
         networks: 
             - acmesky
 
