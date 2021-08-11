@@ -118,6 +118,13 @@ public class OfferManager {
         private static final long serialVersionUID = 1L;
     }
 
+    public void setUsedUserInterest(UserInterest userInterest){
+        userInterest.setUsed(true);
+        userInterest.getOutboundFlightInterest().setUsed(true);
+        userInterest.getFlightBackInterest().setUsed(true);
+        databaseManager.updateUserInterest(userInterest);
+    }
+
     /**
      * Ritona la distanza tra l'aereoporto dell'offerta e línidirizzo inserito
      * @throws DistanceServiceException
