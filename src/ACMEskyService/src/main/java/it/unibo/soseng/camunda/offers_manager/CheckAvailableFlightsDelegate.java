@@ -12,6 +12,7 @@ import static it.unibo.soseng.camunda.utils.ProcessVariables.AVAILABLE_FLIGHTS;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.THERE_IS_FLIGHTS;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.USERNAME;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.PRONTOGRAM_USERNAME;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.CURRENT_USER_INTEREST;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_INTERESTS;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_INTEREST_INDEX;
 
@@ -40,6 +41,7 @@ public class CheckAvailableFlightsDelegate implements JavaDelegate {
         execution.setVariable(USER_INTEREST_INDEX, index + 1);
 
         UserInterest ui = userInterests.get(index);
+        execution.setVariable(CURRENT_USER_INTEREST, ui);
         execution.setVariable(USERNAME, ui.getUser().getEntity().getUsername());
         execution.setVariable(PRONTOGRAM_USERNAME, ui.getUser().getProntogramUsername());
 
