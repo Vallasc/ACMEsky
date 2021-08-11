@@ -19,11 +19,9 @@ webpush.setVapidDetails(
 
 router.post('/', async (req, res) => {
     const notification = new Notification ({
-        flyBack: req.body.flyBack, 
-        flyOutBound: req.body.flyOutBound, 
-        offerToken: req.body.offerToken,
         username: req.body.username,
-        message: req.body.message
+        message: req.body.message,
+        info: req.body.info
     });
     console.log ("NOTIFICATION ", notification)
     try {
@@ -53,7 +51,7 @@ async function sendNotification (notification, userSub) {
                         "title": "Apri notifica"
                       }
                     ],
-                    "body": "Ciao "+notification.username+"!"+"\nAccedi a Prontogram per vedere i dettagli della notifica.",
+                    "body": notification.info,
                     "dir": "auto",
                     "icon": "back-end/assets/icon/prontogram.jpg",
                     "badge": "back-end/assets/icon/prontogram.png",
@@ -68,10 +66,6 @@ async function sendNotification (notification, userSub) {
                     ],
                     "data": {
                       "url": "http://127.0.0.1:8051/notification",
-                      //"created_at": Date.now (),
-                      //"flyOutBound": notification.flyOutBound,
-                      //"flyBack": notification.flyBack,
-                      //"offerToken": notification.offerToken,
                       "username": notification.username,
                       "message": notification.message
                     }

@@ -11,6 +11,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '@environments/environment';
 import { AccountService, NotificationService } from '../app/_services';
 import {MatCardModule} from '@angular/material/card';
+import {AuthGuard} from './_helpers/auth.guard';
 
 @NgModule({
     imports: [
@@ -27,7 +28,7 @@ import {MatCardModule} from '@angular/material/card';
         NotificationComponent
 
     ],
-    providers: [AccountService, NotificationService
+    providers: [AccountService, NotificationService, AuthGuard
     ],
     bootstrap: [AppComponent]
 })
