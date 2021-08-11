@@ -8,14 +8,15 @@ public class NotificationDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String message;
-    private String prontogramUsername; // Vedere come impostare in base a prontogram
+    private String username;
+    private String info;
 
-    public void setProntogramUsername(String prontogramUsername) {
-        this.prontogramUsername = prontogramUsername;
+    public void setUsername(String prontogramUsername) {
+        this.username = prontogramUsername;
     }
 
-    public String getProntogramUsername() {
-        return this.prontogramUsername;
+    public String getusername() {
+        return this.username;
     }
 
     public void setMessage(String message) {
@@ -26,12 +27,21 @@ public class NotificationDTO implements Serializable {
         return this.message;
     }
 
+    public void setInfo(String info) {
+        this.info = info;
+    }
+
+    public String getInfo() {
+        return this.info;
+    }
+
     // TODO costruire il messaggio in base all'offerta
     public static NotificationDTO fromOffer(GeneratedOffer offer, String prontogramUsername){
         NotificationDTO notification = new NotificationDTO();
         String message = "<table>TODO token "+offer.getToken()+"</table>";
         notification.setMessage(message);
-        notification.setProntogramUsername(prontogramUsername);
+        notification.setUsername(prontogramUsername);
+        notification.setInfo("Nuova offerta per te!\n");
         return notification;
     }
 }
