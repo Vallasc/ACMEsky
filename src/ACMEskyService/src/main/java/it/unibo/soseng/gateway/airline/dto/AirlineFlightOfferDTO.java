@@ -1,18 +1,22 @@
 package it.unibo.soseng.gateway.airline.dto;
 
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 
-public class AirlineFlightOffer implements Serializable {
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+public class AirlineFlightOfferDTO implements Serializable {
     
     private static final long serialVersionUID = 1L;
 
     private String flightCode;
     private String departureAirportCode;
     private String arrivalAirportCode;
-    private long departureTimestamp;
-    private long arrivalTimestamp;
-    private long expireTimestamp;
+    private String departureTimestamp;
+    private String arrivalTimestamp;
+    private String expireTimestamp;
     private float price;
+    private String airlineName;
 
     public String getFlightCode() {
         return flightCode;
@@ -30,27 +34,27 @@ public class AirlineFlightOffer implements Serializable {
         this.price = price;
     }
 
-    public long getExpireTimestamp() {
+    public String getExpireTimestamp() {
         return expireTimestamp;
     }
 
-    public void setExpireTimestamp(long expireTimestamp) {
+    public void setExpireTimestamp(String expireTimestamp) {
         this.expireTimestamp = expireTimestamp;
     }
 
-    public long getArrivalTimestamp() {
+    public String getArrivalTimestamp() {
         return arrivalTimestamp;
     }
 
-    public void setArrivalTimestamp(long arrivalTimestamp) {
+    public void setArrivalTimestamp(String arrivalTimestamp) {
         this.arrivalTimestamp = arrivalTimestamp;
     }
 
-    public long getDepartureTimestamp() {
+    public String getDepartureTimestamp() {
         return departureTimestamp;
     }
 
-    public void setDepartureTimestamp(long departureTimestamp) {
+    public void setDepartureTimestamp(String departureTimestamp) {
         this.departureTimestamp = departureTimestamp;
     }
 
@@ -69,4 +73,28 @@ public class AirlineFlightOffer implements Serializable {
     public void setDepartureAirportCode(String departureAirportCode) {
         this.departureAirportCode = departureAirportCode;
     }
+
+    public String getAirlineName() {
+        return this.airlineName;
+    }
+
+    public void setAirlinename(String airlineName) {
+        this.airlineName = airlineName;
+    }
+
+    @JsonIgnore
+    public OffsetDateTime getDepartureOffsetDateTime () {
+        return OffsetDateTime.parse(this.departureTimestamp); 
+    }
+
+    @JsonIgnore
+    public OffsetDateTime getArrivalOffsetDateTime () {
+        return OffsetDateTime.parse(this.arrivalTimestamp); 
+    }
+
+    @JsonIgnore
+    public OffsetDateTime getExpiredOffsetDateTime () {
+        return OffsetDateTime.parse(this.expireTimestamp); 
+    }
+
 }
