@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.camunda.bpm.engine.ProcessEngines;
 import org.camunda.bpm.engine.RuntimeService;
 
+import it.unibo.soseng.camunda.utils.ProcessState;
 import it.unibo.soseng.gateway.airline.AirlineClient;
 import it.unibo.soseng.gateway.airline.AirlineClient.AirlineErrorException;
 import it.unibo.soseng.gateway.airline.dto.AirlineFlightOffer;
@@ -35,6 +36,8 @@ import it.unibo.soseng.model.GeneratedOffer;
 import static it.unibo.soseng.camunda.utils.Events.SAVE_LAST_MINUTE;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.AIRLINE_FLIGHT_OFFERS;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.AIRLINE_NAME;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_CONFIRM_BUY_OFFER;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.TICKET_FILE;;
 
 @Stateless
 public class AirlineManager {
@@ -45,7 +48,10 @@ public class AirlineManager {
     
 
     @Inject
-    AirlineClient client;
+    private AirlineClient client;
+
+    @Inject
+    private ProcessState processState;
 
     // Camunda
     public void startSaveLastMinuteProcess(List<AirlineFlightOffer> airlineLastMinuteOffers, String airlineName){
@@ -79,25 +85,31 @@ public class AirlineManager {
         try{
             String resp = client.getFlightList(listDTO, wsAddress);
             JsonNode root = mapper.readTree(resp);
-            for(JsonNode n: root){
+            for(JsonNode node: root){
                 Flight f = new Flight();
                 try{
-                f.setDepartureAirport(databaseManager.getAirport(n.get("departureCode").textValue()));
-                f.setDepartureDateTime(n.get("departureTime").textValue());
-                f.setArrivalAirport(databaseManager.getAirport(n.get("arrivalCode").textValue()));
-                f.setArrivalDateTime(n.get("arrivalTime").textValue());
-                f.setAirline(databaseManager.getAirline(n.get("airline_id").textValue()));
-                f.setPrice(n.get("price").floatValue());
-                f.setExpireDate(n.get("expDate").textValue());
+                f.setDepartureAirport(databaseManager.getAirport(node.get("departureCode").textValue()));
+
+                OffsetDateTime departureDateTime = OffsetDateTime.parse(node.get("departureTime").textValue());
+                f.setDepartureDateTime(departureDateTime);
+                f.setArrivalAirport(databaseManager.getAirport(node.get("arrivalCode").textValue()));
+
+                OffsetDateTime arrivalDateTime = OffsetDateTime.parse(node.get("arrivalTime").textValue());
+                f.setArrivalDateTime(arrivalDateTime);
+                f.setAirline(databaseManager.getAirline(node.get("airline_id").textValue()));
+                f.setPrice(node.get("price").floatValue());
+
+                OffsetDateTime expireDateTime = OffsetDateTime.parse(node.get("expDate").textValue());
+                f.setExpireDate(expireDateTime);
                 f.setBooked(false);
                 f.setAvailable(true);
-                f.setFlightCode(n.get("id").asText());
+                f.setFlightCode(node.get("id").asText());
                 list.add(f);
                 } catch (AirportNotFoundException e) {
                     LOGGER.info("Airport not found: "+
-                                n.get("departureCode").textValue()+" or " + n.get("arrivalCode").textValue());
+                    node.get("departureCode").textValue()+" or " + node.get("arrivalCode").textValue());
                 } catch (AirlineNotFoundException e) {
-                    LOGGER.info("Airline not found: " + n.get("airline_id").textValue());
+                    LOGGER.info("Airline not found: " + node.get("airline_id").textValue());
                 }
             }
         } catch (InterruptedException | IOException | AirlineErrorException e) {
@@ -116,12 +128,20 @@ public class AirlineManager {
         }
     }
 
-    public byte[] getOfferTicket(GeneratedOffer offer) throws IOException, SendTicketException{
+    public byte[] bookOfferTicket(GeneratedOffer offer) throws IOException, SendTicketException{
 
-        byte[] fileByte = client.getFlightTickets(offer.getOutboundFlightId().getAirlineId().getWsAddress(), offer.getUser().getProntogramUsername(), offer.getOutboundFlightId().getFlightCode(), 
-                                                offer.getFlightBackId().getFlightCode());
+        byte[] pdfTicket = client.getFlightTickets(
+                                    offer.getOutboundFlight().getAirlineId().getWsAddress(), 
+                                    offer.getUser().getProntogramUsername(), 
+                                    offer.getOutboundFlight().getFlightCode(), 
+                                    offer.getFlightBack().getFlightCode());
         offer.setBooked(true);
-        return fileByte;
+        offer.getOutboundFlight().setBooked(true);
+        offer.getFlightBack().setBooked(true);
+
+        String email = offer.getUser().getEmail();
+        processState.setState(PROCESS_CONFIRM_BUY_OFFER, email, TICKET_FILE, pdfTicket);
+        return pdfTicket;
     }
 
 
@@ -129,12 +149,10 @@ public class AirlineManager {
         
         client.unbookFlights(offer);
         offer.setBooked(false);
-        offer.getOutboundFlightId().setBooked(false);
-        offer.getFlightBackId().setBooked(false);
+        offer.getOutboundFlight().setBooked(false);
+        offer.getFlightBack().setBooked(false);
         //TODO fare richiesta fittizia ad airline
     }
-
-
 
     public class UserNotAllowedException extends Exception {
         private static final long serialVersionUID = 1L;
