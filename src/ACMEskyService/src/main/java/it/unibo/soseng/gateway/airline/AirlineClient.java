@@ -21,9 +21,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 
 import java.util.logging.Logger;
 
@@ -38,11 +36,9 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-
 @javax.ws.rs.Path("airline")
 public class AirlineClient {
     final MediaType JSON = MediaType.get("application/json; charset=utf-8");
-
 
     @Inject
     ProcessState processState;
@@ -54,7 +50,7 @@ public class AirlineClient {
     AirlineManager airManager;
 
     @POST // TODO togliere
-    public String getFlightList(List<InterestDTO> listDTO, String wsAddress)  throws IOException, InterruptedException{
+    public String getFlightList(List<InterestDTO> listDTO, String wsAddress) throws IOException, InterruptedException {
 
         String url = new String(wsAddress + "/getFlights");
 
@@ -65,38 +61,30 @@ public class AirlineClient {
 
         OkHttpClient client = new OkHttpClient();
 
-
-        Request request = new Request.Builder().url(url)
-                            .addHeader("Content-Type", "application/json")
-                            .build();
+        Request request = new Request.Builder().url(url).addHeader("Content-Type", "application/json").build();
         Response response = client.newCall(request).execute();
-        
-        
-        final Logger LOGGER = Logger.getLogger("getFlightList"); 
+
+        final Logger LOGGER = Logger.getLogger("getFlightList");
         LOGGER.info(response.body().string());
-        
-        return response.body().string();
+
+        return response.body().toString();
 
     }
 
-
     @GET // TODO togliere
     @Path("/getTickets/{username}") // TODO togliere
-    public byte[] getFlightTickets(String wsAddress, String username, String outboundFlightCode, String flightBackCode) throws IOException{
+    public byte[] getFlightTickets(String wsAddress, String username, String outboundFlightCode, String flightBackCode)
+            throws IOException {
 
-        String url = new String(wsAddress + "/getTickets?id="+ outboundFlightCode +"&id=" + flightBackCode);
-
+        String url = new String(wsAddress + "/getTickets?id=" + outboundFlightCode + "&id=" + flightBackCode);
 
         OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder().url(url)
-                            .addHeader("Content-Type", "application/pdf")
-                            .build();
+        Request request = new Request.Builder().url(url).addHeader("Content-Type", "application/pdf").build();
         Response response = client.newCall(request).execute();
 
         byte[] ticket = response.body().bytes();
 
         processState.setState(PROCESS_CONFIRM_BUY_OFFER, username, "PDF", ticket);
-
 
         return ticket;
 
@@ -104,15 +92,13 @@ public class AirlineClient {
 
     @POST // TODO togliere
     @Path("/unbook") // TODO togliere
-    public void unbookFlights(GeneratedOffer offer) throws IOException{
+    public void unbookFlights(GeneratedOffer offer) throws IOException {
 
-        String url = new String( offer.getOutboundFlightId().getAirlineId().getWsAddress() + "/notPurchasedOffer?id="+ 
-                                    offer.getOutboundFlightId().getFlightCode() +"&id=" + offer.getFlightBackId().getFlightCode());
+        String url = new String(offer.getOutboundFlightId().getAirlineId().getWsAddress() + "/notPurchasedOffer?id="
+                + offer.getOutboundFlightId().getFlightCode() + "&id=" + offer.getFlightBackId().getFlightCode());
 
         OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder().url(url)
-                            .addHeader("Content-Type", "*/*")
-                            .build();
+        Request request = new Request.Builder().url(url).addHeader("Content-Type", "*/*").build();
 
         client.newCall(request).execute();
 

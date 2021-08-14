@@ -23,9 +23,8 @@ import static it.unibo.soseng.camunda.utils.ProcessVariables.RESPONSE;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.USERNAME;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_OFFER;
 
-
 @Named("bookTicketsDelegate")
-public class BookTicketsDelegate implements JavaDelegate{
+public class BookTicketsDelegate implements JavaDelegate {
     private final static Logger LOGGER = Logger.getLogger(BookTicketsDelegate.class.getName());
 
     @Inject
@@ -37,20 +36,19 @@ public class BookTicketsDelegate implements JavaDelegate{
     @Inject
     ProcessState processState;
 
-    @Inject 
+    @Inject
     UserManager userManager;
 
     @Override
-    public void execute(DelegateExecution execution){
+    public void execute(DelegateExecution execution) {
         LOGGER.info("BookTickets working");
-        try{
+        try {
             GeneratedOffer offer = (GeneratedOffer) execution.getVariable(USER_OFFER);
             airManager.getOfferTicket(offer);
-            dbManager.setBookFlights(true, offer.getOutboundFlightId(), offer.getFlightBackId());
-        }catch(SendTicketException e){
+        } catch (SendTicketException e) {
             LOGGER.severe(e.toString());
             throw new BpmnError(SEND_TICKET_ERROR);
-        }catch(IOException e){
+        } catch (IOException e) {
             throw new BpmnError(SEND_TICKET_ERROR);
         }
     }
