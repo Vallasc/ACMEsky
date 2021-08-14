@@ -68,19 +68,19 @@ public class GeneratedOffer implements Serializable {
         this.id = id;
     }
 
-    public Flight getOutboundFlightId() {
+    public Flight getOutboundFlight() {
         return this.outboundFlight;
     }
 
-    public void setOutboundFlightId(Flight outboundFlight) {
+    public void setOutboundFlight(Flight outboundFlight) {
         this.outboundFlight = outboundFlight;
     }
 
-    public Flight getFlightBackId() {
+    public Flight getFlightBack() {
         return this.flightBack;
     }
 
-    public void setFlightBackId(Flight flightBack) {
+    public void setFlightBack(Flight flightBack) {
         this.flightBack = flightBack;
     }
 
