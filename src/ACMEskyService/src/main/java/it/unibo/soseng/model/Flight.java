@@ -104,18 +104,16 @@ public class Flight implements Serializable {
         return departureDateTime;
     }
 
-    public void setDepartureDateTime(String departureTime) {
-        OffsetDateTime zonedDateTime = OffsetDateTime.parse(departureTime);
-        this.departureDateTime = zonedDateTime;
+    public void setDepartureDateTime(OffsetDateTime departureTime) {
+        this.departureDateTime = departureTime;
     }
     
     public OffsetDateTime getArrivalDateTime() {
         return arrivalDateTime;
     }
 
-    public void setArrivalDateTime(String arrivalTime) {
-        OffsetDateTime zonedDateTime = OffsetDateTime.parse(arrivalTime);
-        this.arrivalDateTime = zonedDateTime;
+    public void setArrivalDateTime(OffsetDateTime arrivalTime) {
+        this.arrivalDateTime = arrivalTime;
     }
 
     public float getPrice() {
@@ -130,9 +128,8 @@ public class Flight implements Serializable {
         return expireDate;
     }
 
-    public void setExpireDate(String expireDate) {
-        OffsetDateTime zonedDateTime = OffsetDateTime.parse(expireDate);
-        this.expireDate = zonedDateTime;
+    public void setExpireDate(OffsetDateTime expireDate) {
+        this.expireDate = expireDate;
     }
 
     public boolean getBooked() {
@@ -149,23 +146,5 @@ public class Flight implements Serializable {
 
     public void setAvailable(boolean available) {
         this.available = available;
-    }
-
-    public Flight(String flightCode, Airport departureAirport, Airport arrivalAirport, Airline airline,
-            OffsetDateTime departureDateTime, OffsetDateTime arrivalDateTime, OffsetDateTime expireDate, float price,
-            boolean booked, boolean available) {
-        this.flightCode = flightCode;
-        this.departureAirport = departureAirport;
-        this.arrivalAirport = arrivalAirport;
-        this.airline = airline;
-        this.departureDateTime = departureDateTime;
-        this.arrivalDateTime = arrivalDateTime;
-        this.expireDate = expireDate;
-        this.price = price;
-        this.booked = booked;
-        this.available = available;
-    }
-
-    public Flight() {
     }
 }
