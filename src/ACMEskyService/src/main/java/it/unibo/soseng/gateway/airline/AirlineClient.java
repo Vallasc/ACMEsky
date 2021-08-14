@@ -85,8 +85,9 @@ public class AirlineClient {
 
     public void unbookFlights(GeneratedOffer offer) throws IOException{
 
-        String url = new String( offer.getOutboundFlightId().getAirlineId().getWsAddress() + "/notPurchasedOffer?id="+ 
-                                    offer.getOutboundFlightId().getFlightCode() +"&id=" + offer.getFlightBackId().getFlightCode());
+        String url = new String( offer.getOutboundFlight().getAirlineId().getWsAddress() 
+                                + "/notPurchasedOffer?id="+ offer.getOutboundFlight().getFlightCode() 
+                                +"&id=" + offer.getFlightBack().getFlightCode());
 
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(url)
@@ -95,7 +96,7 @@ public class AirlineClient {
 
         client.newCall(request).execute();
 
-        processState.getStateAndRemove(PROCESS_CONFIRM_BUY_OFFER, offer.getUser().getProntogramUsername(), "PDF");
+        processState.getStateAndRemove(PROCESS_CONFIRM_BUY_OFFER, offer.getUser().getEmail(), "PDF");
 
     }
 
