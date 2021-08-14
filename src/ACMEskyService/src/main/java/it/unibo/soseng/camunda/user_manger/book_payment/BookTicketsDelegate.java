@@ -13,44 +13,35 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 
 import it.unibo.soseng.camunda.utils.ProcessState;
 import it.unibo.soseng.logic.airline.AirlineManager;
-import it.unibo.soseng.logic.database.DatabaseManager;
 import it.unibo.soseng.logic.offer.OfferManager.SendTicketException;
-import it.unibo.soseng.logic.user.UserManager;
 import it.unibo.soseng.model.GeneratedOffer;
 
 import static it.unibo.soseng.camunda.utils.ErrorsEvents.SEND_TICKET_ERROR;
-import static it.unibo.soseng.camunda.utils.ProcessVariables.RESPONSE;
-import static it.unibo.soseng.camunda.utils.ProcessVariables.USERNAME;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_OFFER;
-
+import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_CONFIRM_BUY_OFFER;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.RESPONSE;
 
 @Named("bookTicketsDelegate")
 public class BookTicketsDelegate implements JavaDelegate{
     private final static Logger LOGGER = Logger.getLogger(BookTicketsDelegate.class.getName());
 
     @Inject
-    DatabaseManager dbManager;
+    private ProcessState processState;
 
     @Inject
-    AirlineManager airManager;
-
-    @Inject
-    ProcessState processState;
-
-    @Inject 
-    UserManager userManager;
+    private AirlineManager airlineManager;
 
     @Override
     public void execute(DelegateExecution execution){
-        LOGGER.info("BookTickets working");
+        LOGGER.info("Execute BookTickets");
+        GeneratedOffer offer = (GeneratedOffer) execution.getVariable(USER_OFFER);
         try{
-            GeneratedOffer offer = (GeneratedOffer) execution.getVariable(USER_OFFER);
-            airManager.getOfferTicket(offer);
-            dbManager.setBookFlights(true, offer.getOutboundFlightId(), offer.getFlightBackId());
-        }catch(SendTicketException e){
+            airlineManager.bookOfferTicket(offer);
+            execution.setVariable(USER_OFFER, offer);
+        }catch(SendTicketException | IOException e){
+            Response response = Response.status(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()).build();
+            processState.setState(PROCESS_CONFIRM_BUY_OFFER, offer.getUser().getEmail(), RESPONSE, response);
             LOGGER.severe(e.toString());
-            throw new BpmnError(SEND_TICKET_ERROR);
-        }catch(IOException e){
             throw new BpmnError(SEND_TICKET_ERROR);
         }
     }
