@@ -31,7 +31,7 @@ public class BankController {
     public Response confirmPayment(@QueryParam("code") String code) {
         LOGGER.info("GET confirmPayment");
         LOGGER.info("code "+code);
-        bankManager.payentSuccess(code);
+        bankManager.paymentSuccess(code);
         return Response.status(Response.Status.OK.getStatusCode()).build();
     }
 }
