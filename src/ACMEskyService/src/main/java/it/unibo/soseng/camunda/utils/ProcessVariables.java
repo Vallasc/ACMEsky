@@ -25,6 +25,7 @@ public final class ProcessVariables {
     public static final String RENT_OUTBOUND = "rentOutbound"; // BookRentResponse
     public static final String RENT_BACK = "rentBack"; // BookRentResponse
     public static final String TICKET_FILE = "ticketFile"; // byte[]
+    public static final String PREMIUM_SERVICE_ERROR = "premiumServiceError";
 
 
     // Offers manager
