@@ -7,6 +7,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
@@ -30,31 +31,48 @@ public class DatabaseManager {
     @PersistenceContext(unitName = "primary")
     private EntityManager entityManager;
 
+    /*
+    *  Entity
+    */
+    public DomainEntity getEntity(String username) throws EntityNotFoundException {
+        try {
+            DomainEntity result = (DomainEntity) entityManager
+                    .createQuery("SELECT e FROM DomainEntity e WHERE e.username = :username")
+                    .setParameter("username", username)
+                    .getSingleResult();
+            return result;
+        } catch (NoResultException e) {
+            throw new EntityNotFoundException();
+        }
+    }
+
+   /*
+    *  Bank
+    */
+    public Bank getBank(String name) throws BankNotFoundException{
+        try {
+            Bank result = (Bank) entityManager
+                    .createQuery("SELECT b FROM Bank b, DomainEntity e WHERE e.username = :name AND b.entity = e.id")
+                    .setParameter("name", name)
+                    .getSingleResult();
+            return result;
+        } catch (NoResultException e) {
+            throw new BankNotFoundException();
+        }
+    }
 
     /*
     *  User
     */
     public User getUser(String email) throws UserNotFoundException {
-        @SuppressWarnings("unchecked")
-        List<User> result = (List<User>) entityManager
-                .createQuery("SELECT u FROM User u, DomainEntity e WHERE e.username = :username AND u.entity = e.id")
-                .setParameter("username", email).getResultList();
-        if (result.size() == 1) {
-            return result.get(0);
+        try {
+            User result = (User) entityManager
+                    .createQuery("SELECT u FROM User u, DomainEntity e WHERE e.username = :username AND u.entity = e.id")
+                    .setParameter("username", email).getSingleResult();
+                return result;
+        } catch (NoResultException e) {
+            throw new UserNotFoundException();
         }
-        throw new UserNotFoundException();
-    }
-
-    public GeneratedOffer getOfferByToken(String token, String email) throws OfferNotFoundException {
-        GeneratedOffer result = (GeneratedOffer) entityManager
-                .createQuery("SELECT go FROM User u, DomainEntity e, GeneratedOffer go "+ 
-                "WHERE e.username = :username AND u.entity = e.id "+
-                "AND go.token = :token AND go.user = u.id")
-                .setParameter("token", token).setParameter("username", email).getSingleResult();
-        if (result == null) {
-            throw new OfferNotFoundException();
-        }
-        return result;
     }
 
     @Transactional // TODO vedere transactional per gli altri metodi
@@ -81,36 +99,6 @@ public class DatabaseManager {
     /*
     *  Airline
     */
-    public List<FlightInterest> retrieveFlightInterests(){
-        @SuppressWarnings("unchecked")
-        List<FlightInterest> interests =
-        entityManager.createQuery("SELECT f FROM FlightInterest f WHERE f.used = false")
-                        .getResultList();
-        return interests;
-    }
-
-    // public GeneratedOffer retrieveGeneratedOffer(){
-    //     @SuppressWarnings("unchecked")
-    //     List<GeneratedOffer> offers =
-    //     entityManager.createQuery("SELECT o FROM GeneratedOffer o")
-    //                     .getResultList();
-    //     return offers.get(0);
-    // }
-
-    public void insertFlightOffer(List<Flight> list){
-        for(Flight f: list){
-            entityManager.persist(f);
-        }
-    }
-
-    public List<Flight> retrieveFlights(){
-        @SuppressWarnings("unchecked")
-        List<Flight> flights =
-        entityManager.createQuery("SELECT f FROM Flight f WHERE f.available = true AND f.booked = false")
-                        .getResultList();
-        return flights;
-    }
-
     public List<Airline> getAirlinesList(){
 
         @SuppressWarnings("unchecked")
@@ -132,19 +120,6 @@ public class DatabaseManager {
         throw new AirlineNotFoundException();
     }
 
-    // public List<Flight> availableFlights(Long id) {
-    //     @SuppressWarnings("unchecked")
-    //     List<Flight> availableFlight = entityManager
-    //             .createQuery(
-    //             "SELECT f FROM Flight f, FlightInterest fi, UserInterest ui WHERE ui.id = "+id+ 
-    //             "AND ui.outbound_flight_interest_id = fi.id" + 
-    //             "AND fi.departure_airport_id = f.departure_airport_id"+ 
-    //             "AND fi.arrival_airport_id = f.arrival_airport_id"+
-    //             "AND fi.departure_date_time = f.departure_date_time")
-    //             .getResultList();
-    //     return availableFlight;
-    // }
-
     public List<UserInterest> retrieveUserInterests() {
         @SuppressWarnings("unchecked")
         List<UserInterest> interests = entityManager
@@ -153,45 +128,19 @@ public class DatabaseManager {
         return interests;
     }
 
-    public DomainEntity getEntity(String username) throws EntityNotFoundException {
-        @SuppressWarnings("unchecked")
-        List<DomainEntity> result = (List<DomainEntity>) entityManager
-                .createQuery("SELECT e FROM DomainEntity e WHERE e.username = :username")
-                .setParameter("username", username).getResultList();
-        if (result.size() == 1) {
-            return result.get(0);
-        }
-        throw new EntityNotFoundException();
-    }
-
-
-    public void createOffer (GeneratedOffer offer) throws PersistenceException { 
-        this.entityManager.persist(offer);
-    }
-
-    public void updateOffer (GeneratedOffer offer) throws PersistenceException { 
-        this.entityManager.merge(offer);
-    }
-
-    public List<Flight> getAvailableFlights() {
-        @SuppressWarnings("unchecked")
-        List<Flight> expFlights = (List<Flight>) entityManager
-                .createQuery("SELECT f FROM Flight f WHERE f.booked = FALSE AND f.available = TRUE")
-                .getResultList();
-        return expFlights;
-    }
-
-    // Airport
-    
+    /*
+    * Airport
+    */
     public Airport getAirport(String code) throws AirportNotFoundException {
-        @SuppressWarnings("unchecked") 
-        List<Airport> result = (List<Airport>) entityManager
+        try {
+            Airport result = (Airport) entityManager
                 .createQuery("SELECT a FROM Airport a WHERE a.code = :code")
-                .setParameter("code", code).getResultList();
-        if (result.size() > 0) {
-            return result.get(0);
+                .setParameter("code", code)
+                .getSingleResult();
+            return result;
+        } catch (NoResultException e) {
+            throw new AirportNotFoundException();
         }
-        throw new AirportNotFoundException();
     }
     
     public List<Airport> getAirportsFromQuery(String query) {
@@ -242,32 +191,75 @@ public class DatabaseManager {
                 return result.get(0);
             return null;
     }
-
-    public void updateFlight(Flight f){
-        this.entityManager.merge(f);
+    
+    public List<FlightInterest> retrieveFlightInterests(){
+        @SuppressWarnings("unchecked")
+        List<FlightInterest> interests =
+        entityManager.createQuery("SELECT f FROM FlightInterest f WHERE f.used = false")
+                        .getResultList();
+        return interests;
     }
 
-    public void setBookFlights(boolean b, Flight requestOutbound, Flight requestFlightBack ) {
-
-        requestOutbound.setBooked(b);
-        requestFlightBack.setBooked(b);
-        this.entityManager.merge(requestOutbound);
-        this.entityManager.merge(requestFlightBack);
-	}
-
-
-    public Bank getBank() throws BankNotFoundException{
-        @SuppressWarnings("unchecked") 
-        List<Bank> result = (List<Bank>) entityManager
-                .createQuery("SELECT b FROM Bank b")
-                .getResultList();
-        if (result.size() > 0) {
-            return result.get(0);
+    /*
+    * Flight
+    */
+    public void insertFlights(List<Flight> list){
+        for(Flight flight: list){
+            entityManager.persist(flight);
         }
-        throw new BankNotFoundException();
+    }
+
+    public void updateFlight(Flight flight){
+        this.entityManager.merge(flight);
+    }
+
+    public List<Flight> getAvailableFlights() {
+        @SuppressWarnings("unchecked")
+        List<Flight> expFlights = (List<Flight>) entityManager
+                .createQuery("SELECT f FROM Flight f WHERE f.booked = FALSE AND f.available = TRUE")
+                .getResultList();
+        return expFlights;
     }
 
 
+    /*
+     * Offer
+     */
+    public void createOffer (GeneratedOffer offer) throws PersistenceException { 
+        this.entityManager.persist(offer);
+    }
+
+    public void updateOffer (GeneratedOffer offer) throws PersistenceException { 
+        this.entityManager.merge(offer);
+    }
+    
+    public GeneratedOffer getOfferByTokenEmail(String token, String email) throws OfferNotFoundException {
+        try {
+            GeneratedOffer result = (GeneratedOffer) entityManager
+                    .createQuery("SELECT go FROM User u, DomainEntity e, GeneratedOffer go "+ 
+                    "WHERE e.username = :username AND u.entity = e.id "+
+                    "AND go.token = :token AND go.user = u.id")
+                    .setParameter("token", token)
+                    .setParameter("username", email)
+                    .getSingleResult();
+            return result;
+        } catch (NoResultException e) {
+            throw new OfferNotFoundException();
+        }
+    }
+
+    public GeneratedOffer getOfferByToken(String token) throws OfferNotFoundException {
+        try {
+            GeneratedOffer result = (GeneratedOffer) entityManager
+                    .createQuery("SELECT go FROM GeneratedOffer go "+ 
+                    "WHERE go.token = :token ")
+                    .setParameter("token", token)
+                    .getSingleResult();
+            return result;
+        } catch (NoResultException e) {
+            throw new OfferNotFoundException();
+        }
+    }
 
     public class EntityNotFoundException extends Exception {
         private static final long serialVersionUID = 1L;
