@@ -1,6 +1,8 @@
 package it.unibo.soseng.gateway.bank.dto;
 
-public class PaymentLink {
+import java.io.Serializable;
+
+public class PaymentLinkDTO implements Serializable {
     
     private String path;
     private String paymentToken;
@@ -18,7 +20,5 @@ public class PaymentLink {
     public void setPaymentToken(String paymentToken) {
         this.paymentToken = paymentToken;
     }
-
-    
     
 }

@@ -2,7 +2,7 @@ package it.unibo.soseng.gateway.auth.dto;
 
 import javax.validation.constraints.NotNull;
 
-public class AuthRequest {
+public class AuthRequestDTO {
 
     @NotNull(message = "Username cannot be null")
     private String username;

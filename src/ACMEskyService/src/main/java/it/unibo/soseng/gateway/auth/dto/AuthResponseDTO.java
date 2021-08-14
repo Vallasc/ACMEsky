@@ -1,7 +1,6 @@
-package it.unibo.soseng.gateway.bank.dto;
+package it.unibo.soseng.gateway.auth.dto;
 
-public class AuthResponse {
-    
+public class AuthResponseDTO {
     private String token;
 
     public String getToken() {
@@ -11,6 +10,4 @@ public class AuthResponse {
     public void setToken(String token) {
         this.token = token;
     }
-
-    
 }
