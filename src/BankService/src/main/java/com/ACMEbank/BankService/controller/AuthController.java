@@ -53,7 +53,8 @@ public class AuthController {
         User authUser = userService.findByLogin(request.userId, request.password);
 
         if(authUser == null) {
-            throw new ServletException("User not present!");
+            //throw new ServletException("User not present!");
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 
         String token = getJWTToken(authUser.getLoginId());
