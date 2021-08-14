@@ -19,10 +19,9 @@ webpush.setVapidDetails(
 
 router.post('/', async (req, res) => {
     const notification = new Notification ({
-        flyBack: req.body.flyBack, 
-        flyOutBound: req.body.flyOutBound, 
-        offerToken: req.body.offerToken,
-        username: req.body.username
+        username: req.body.username,
+        message: req.body.message,
+        info: req.body.info
     });
     console.log ("NOTIFICATION ", notification)
     try {
@@ -32,7 +31,7 @@ router.post('/', async (req, res) => {
             const saveNotification= await notification.save ();
             res.json (saveNotification); 
         } else {
-            res.json ({ message: "There is no user to sent notification"});
+            res.status(404).send("There is no user to sent notification!");
         }
     } catch (err) {
         res.json ({ message: err});
@@ -52,7 +51,7 @@ async function sendNotification (notification, userSub) {
                         "title": "Apri notifica"
                       }
                     ],
-                    "body": "Ciao "+notification.username+"!"+"\nAccedi a Prontogram per vedere i dettagli della notifica.",
+                    "body": notification.info,
                     "dir": "auto",
                     "icon": "back-end/assets/icon/prontogram.jpg",
                     "badge": "back-end/assets/icon/prontogram.png",
@@ -66,24 +65,15 @@ async function sendNotification (notification, userSub) {
                       400
                     ],
                     "data": {
-                      "url": "http://127.0.0.1:8080/notification",
-                      "created_at": Date.now (),
-                      "flyOutBound": notification.flyOutBound,
-                      "flyBack": notification.flyBack,
-                      "offerToken": notification.offerToken,
-                      "username": notification.username
+                      "url": "http://127.0.0.1:8051/notification",
+                      "username": notification.username,
+                      "message": notification.message
                     }
                 }
             };
 
             Promise.all(userSub.map(sub => webpush.sendNotification(
                 sub.info, JSON.stringify(notificationPayload) )));
-                //TODO gestire errori 
-                /*.then(() => res.status(200).json({message: 'Newsletter sent successfully.'}))
-                .catch(err => {
-                    console.error("Error sending notification, reason: ", err);
-                    res.sendStatus(500);
-                })*/
         }
     
 }

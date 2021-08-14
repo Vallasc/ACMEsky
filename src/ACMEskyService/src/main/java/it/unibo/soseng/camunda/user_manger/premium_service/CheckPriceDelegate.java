@@ -47,12 +47,12 @@ public class CheckPriceDelegate implements JavaDelegate {
             Flight outboundFlight = new Flight();
             outboundFlight.setDepartureAirport(databaseManager.getAirport("BLQ"));
             outboundFlight.setArrivalAirport(databaseManager.getAirport("AMS"));
-            offer.setOutboundFlightId(outboundFlight);
+            offer.setOutboundFlight(outboundFlight);
 
             Flight flightBack = new Flight();
             flightBack.setDepartureAirport(databaseManager.getAirport("AMS"));
             flightBack.setArrivalAirport(databaseManager.getAirport("BLQ"));
-            offer.setFlightBackId(flightBack);
+            offer.setFlightBack(flightBack);
             offer.setTotalPrice(10000);
 
             execution.setVariable(GENERATED_OFFER, offer);

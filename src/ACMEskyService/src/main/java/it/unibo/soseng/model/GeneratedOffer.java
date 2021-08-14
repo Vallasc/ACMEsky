@@ -11,7 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -25,11 +24,11 @@ public class GeneratedOffer implements Serializable {
     @Column(name = "id", nullable = false)
     private long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "outbound_flight_id", nullable = false)
     private Flight outboundFlight;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "flight_back_id", nullable = false)
     private Flight flightBack;
 
@@ -41,6 +40,9 @@ public class GeneratedOffer implements Serializable {
 
     @Column(name = "booked", nullable = true)
     private boolean booked;
+
+    @Column(name = "available", nullable = true)
+    private boolean available;
 
     @Column(name = "token", nullable = true)
     private String token;
@@ -66,19 +68,19 @@ public class GeneratedOffer implements Serializable {
         this.id = id;
     }
 
-    public Flight getOutboundFlightId() {
+    public Flight getOutboundFlight() {
         return this.outboundFlight;
     }
 
-    public void setOutboundFlightId(Flight outboundFlight) {
+    public void setOutboundFlight(Flight outboundFlight) {
         this.outboundFlight = outboundFlight;
     }
 
-    public Flight getFlightBackId() {
+    public Flight getFlightBack() {
         return this.flightBack;
     }
 
-    public void setFlightBackId(Flight flightBack) {
+    public void setFlightBack(Flight flightBack) {
         this.flightBack = flightBack;
     }
 
@@ -104,6 +106,14 @@ public class GeneratedOffer implements Serializable {
 
     public void setBooked(boolean booked) {
         this.booked = booked;
+    }
+
+    public boolean getAvailable() {
+        return this.available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
     }
 
     public String getToken() {

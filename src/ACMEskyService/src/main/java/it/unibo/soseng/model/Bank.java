@@ -30,6 +30,12 @@ public class Bank implements Serializable {
     @Column(name = "ws_address", nullable = false)
     private String wsAddress;
 
+    @Column(name = "login_username", nullable = false)
+    private String loginUsername;
+
+    @Column(name = "login_password", nullable = false)
+    private String loginPassword;
+
 
     public long getId() {
         return this.id;
@@ -53,6 +59,22 @@ public class Bank implements Serializable {
 
     public void setWsAddress(String wsAddress) {
         this.wsAddress = wsAddress;
+    }
+
+    public String getLoginUsername() {
+        return this.loginUsername;
+    }
+
+    public void setLoginUsername(String loginUsername) {
+        this.loginUsername = loginUsername;
+    }
+
+    public String getLoginPassword() {
+        return this.loginPassword;
+    }
+
+    public void setLoginPassword(String loginPassword) {
+        this.loginPassword = loginPassword;
     }
 
 }

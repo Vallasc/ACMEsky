@@ -10,7 +10,7 @@ services:
         networks: 
             - acmesky
 
-    prontogram_service:
+    prontogram:
         container_name: prontogram_service_container
         build: ./back-end/
         ports:

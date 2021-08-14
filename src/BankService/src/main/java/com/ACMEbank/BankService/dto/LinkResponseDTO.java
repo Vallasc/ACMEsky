@@ -2,12 +2,12 @@ package com.ACMEbank.BankService.dto;
 
 public class LinkResponseDTO {
 	public String path;
-	public String paymenToken;
+	public String paymentToken;
 
 	public LinkResponseDTO(){}
 	
-	public LinkResponseDTO(String path, String paymenToken){
+	public LinkResponseDTO(String path, String paymentToken){
 		this.path = path;
-		this.paymenToken = paymenToken;
+		this.paymentToken = paymentToken;
 	}
 }

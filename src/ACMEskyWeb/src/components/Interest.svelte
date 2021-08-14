@@ -79,17 +79,20 @@
 
     async function submit() {
         if( ! (await validate()) ) return
-
+        let dateOutbound = new Date(dateA)
+        dateOutbound.setHours(dateOutbound.getHours() + 12)
+        let dateBack = new Date(dateR)
+        dateBack.setHours(dateBack.getHours() + 12)
         let request : Interest = {
             outboundFlight : {
                 departureAirportCode : departureCode,
                 arrivalAirportCode : arrivalCode,
-                departureTimestamp : (new Date(dateA)).toISOString()
+                departureTimestamp : dateOutbound.toISOString()
             },
             flightBack : {
                 departureAirportCode : arrivalCode,
                 arrivalAirportCode : departureCode,
-                departureTimestamp : (new Date(dateR)).toISOString()
+                departureTimestamp : dateBack.toISOString()
             },
             priceLimit: Number.parseFloat(priceLimit)
         }

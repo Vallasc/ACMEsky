@@ -1,15 +1,11 @@
 package it.unibo.soseng.gateway.bank.dto;
 
-public class AuthRequest {
+import java.io.Serializable;
+
+public class AuthRequestDTO implements Serializable {
     
     private String userId;
     private String password;
-
-    
-    public AuthRequest(String acmeUser, String acmePass) {
-        this.userId=acmeUser;
-        this.password=acmePass;
-    }
     
     public String getUserId() {
         return userId;

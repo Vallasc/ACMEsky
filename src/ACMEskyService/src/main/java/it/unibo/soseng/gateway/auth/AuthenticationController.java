@@ -21,8 +21,8 @@ import javax.ws.rs.core.Response.Status;
 
 import javax.security.enterprise.credential.UsernamePasswordCredential;
 
-import it.unibo.soseng.gateway.auth.dto.AuthRequest;
-import it.unibo.soseng.gateway.auth.dto.AuthResponse;
+import it.unibo.soseng.gateway.auth.dto.AuthRequestDTO;
+import it.unibo.soseng.gateway.auth.dto.AuthResponseDTO;
 import it.unibo.soseng.logic.database.DatabaseManager;
 import it.unibo.soseng.logic.database.DatabaseManager.EntityNotFoundException;
 import it.unibo.soseng.model.DomainEntity;
@@ -56,7 +56,7 @@ public class AuthenticationController {
     @POST
     @Path("/")
     @PermitAll
-    public Response authenticate(final @Valid AuthRequest request) {
+    public Response authenticate(final @Valid AuthRequestDTO request) {
         LOG.log(Level.INFO, "Authenticate user {0}", request.getUsername());
 
         CredentialValidationResult result = identityStoreHandler
@@ -65,7 +65,7 @@ public class AuthenticationController {
         if (result.getStatus() == CredentialValidationResult.Status.VALID) {
             try {
                 String jwt = tokenProvider.createToken(result.getCallerPrincipal().getName(), result.getCallerGroups());
-                AuthResponse res = new AuthResponse();
+                AuthResponseDTO res = new AuthResponseDTO();
                 res.setToken(jwt);
                 return Response.status(Status.OK).header(AUTHORIZATION_HEADER, BEARER + jwt).entity(res).build();
             } catch (Exception e) {
@@ -99,7 +99,7 @@ public class AuthenticationController {
         if (result.getStatus() == CredentialValidationResult.Status.VALID) {
             try {
                 String jwt = tokenProvider.createToken(result.getCallerPrincipal().getName(), result.getCallerGroups());
-                AuthResponse res = new AuthResponse();
+                AuthResponseDTO res = new AuthResponseDTO();
                 res.setToken(jwt);
                 return Response.status(Status.OK).header(AUTHORIZATION_HEADER, BEARER + jwt).entity(res).build();
             } catch (Exception e) {

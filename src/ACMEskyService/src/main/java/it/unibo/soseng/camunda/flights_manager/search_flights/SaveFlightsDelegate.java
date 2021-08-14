@@ -24,9 +24,9 @@ public class SaveFlightsDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution){
-      LOGGER.info ("saveFlightsDelegate in esecuzione");
+      LOGGER.info ("Execute saveFlightsDelegate");
       @SuppressWarnings (value="unchecked")
       List<Flight> flights = (List<Flight>) execution.getVariable(FLIGHTS_TO_SAVE);
-      databaseManager.insertFlightOffer( flights );
+      databaseManager.insertFlights(flights);
     }
 }

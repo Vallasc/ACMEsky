@@ -14,8 +14,8 @@ docker-compose up
 
 ### API:
 ```sh
-http://localhost:8082/swagger-ui.html
-http://localhost:8083/swagger-ui.html
+http://localhost:8060/swagger-ui.html
+http://localhost:8061/swagger-ui.html
 ```
 <iframe title="API"
     width="900"
@@ -27,14 +27,14 @@ http://localhost:8083/swagger-ui.html
 
 ## DB console service 1
 ```sh
-http://localhost:8082/h2
+http://localhost:8060/h2
 URL: jdbc:h2:file:./db/db
 user: sa
 passw: 
 ```
 ## DB console service 2
 ```sh
-http://localhost:8083/h2
+http://localhost:8061/h2
 URL: jdbc:h2:file:./db/db
 user: sa
 passw:

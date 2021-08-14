@@ -6,8 +6,6 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 import it.unibo.soseng.gateway.airline.dto.InterestDTO;
 import it.unibo.soseng.logic.airline.AirlineManager;
 import it.unibo.soseng.logic.database.DatabaseManager;
-import it.unibo.soseng.logic.database.DatabaseManager.AirlineNotFoundException;
-import it.unibo.soseng.logic.database.DatabaseManager.AirportNotFoundException;
 import it.unibo.soseng.model.Airline;
 import it.unibo.soseng.model.Flight;
 import it.unibo.soseng.model.FlightInterest;
@@ -17,7 +15,6 @@ import static it.unibo.soseng.camunda.utils.ProcessVariables.AIRLINE_SERVICES_IN
 import static it.unibo.soseng.camunda.utils.ProcessVariables.FLIGHTS_TO_SAVE;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.INTEREST_FLIGHTS_LIST;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -35,8 +32,8 @@ public class SearchFlightsDelegate implements JavaDelegate{
     DatabaseManager dbManager;
 
     @Override
-    public void execute(DelegateExecution execution) throws IOException, InterruptedException, AirportNotFoundException, AirlineNotFoundException{
-      LOGGER.info ("searchFlightsDelegate in esecuzione");
+    public void execute(DelegateExecution execution) {
+      LOGGER.info ("Execute searchFlightsDelegate");
 
       @SuppressWarnings (value="unchecked")
       List<Airline> airlines = (List<Airline>) execution.getVariable(AIRLINE_SERVICES);
@@ -45,10 +42,11 @@ public class SearchFlightsDelegate implements JavaDelegate{
       @SuppressWarnings (value="unchecked")
       List<FlightInterest> interestsList = (List<FlightInterest>) execution.getVariable(INTEREST_FLIGHTS_LIST);
       List<InterestDTO> listDTO = manager.convertIntToIntDTO(interestsList);
-      List<Flight> listToSave = manager.retrieveFlightsList(listDTO, a.getWsAddress());
+      List<Flight> retrieveFlights;
+      retrieveFlights = manager.retrieveFlightsList(listDTO, a.getWsAddress());
       int index = (int) execution.getVariable(AIRLINE_SERVICES_INDEX) + 1;
       execution.setVariable(AIRLINE_SERVICES_INDEX, index);
     
-      execution.setVariable(FLIGHTS_TO_SAVE, listToSave);
+      execution.setVariable(FLIGHTS_TO_SAVE, retrieveFlights);
     }
 }

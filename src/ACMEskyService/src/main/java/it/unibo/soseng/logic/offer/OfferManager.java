@@ -8,37 +8,60 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Random;
+import java.util.UUID;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.nio.charset.Charset;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
-import javax.xml.ws.Service;
+import javax.security.enterprise.SecurityContext;
+import javax.ws.rs.container.AsyncResponse;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
+import org.camunda.bpm.engine.ProcessEngines;
+import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+
+import it.unibo.soseng.camunda.utils.ProcessState;
 import it.unibo.soseng.gateway.distance.DistanceClient;
 import it.unibo.soseng.gateway.distance.DistanceClient.GeoserverErrorException;
 import it.unibo.soseng.gateway.distance.dto.DistanceDTO;
 import it.unibo.soseng.gateway.rent.RentClient;
 import it.unibo.soseng.gateway.user.dto.AddressDTO;
+import it.unibo.soseng.gateway.user.dto.UserOfferDTO;
 import it.unibo.soseng.logic.database.DatabaseManager;
 import it.unibo.soseng.logic.database.DatabaseManager.FlightNotExistException;
+import it.unibo.soseng.logic.database.DatabaseManager.OfferNotFoundException;
 import it.unibo.soseng.logic.database.DatabaseManager.UserNotFoundException;
 import it.unibo.soseng.model.Airport;
 import it.unibo.soseng.model.Flight;
 import it.unibo.soseng.model.FlightInterest;
 import it.unibo.soseng.model.GeneratedOffer;
-import it.unibo.soseng.model.RentService;
 import it.unibo.soseng.model.User;
 import it.unibo.soseng.model.UserInterest;
+import it.unibo.soseng.utils.Errors;
 import it.unibo.soseng.ws.generated.BookRent;
 import it.unibo.soseng.ws.generated.BookRentResponse;
 import it.unibo.soseng.ws.generated.Rent;
 import it.unibo.soseng.ws.generated.RentService1;
 import it.unibo.soseng.ws.generated.RentService2;
+
+import static it.unibo.soseng.camunda.utils.Events.PAY_OFFER;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.ASYNC_RESPONSE;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.BUSINESS_KEY;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.IS_OFFER_EXPIRED;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.IS_VALID_TOKEN;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_CONFIRM_BUY_OFFER;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.USERNAME;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_OFFER;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_OFFER_REQUEST;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.OFFER_TOKEN;
 
 @Stateless
 public class OfferManager {
@@ -53,27 +76,37 @@ public class OfferManager {
     @Inject
     private RentClient rentClient;
 
+    @Inject
+    private ProcessState processState;
+
+    @Inject
+    private SecurityContext securityContext;
+
     public GeneratedOffer generateOffer(Flight outBound, Flight flightBack, String username)
             throws PersistenceException, FlightNotExistException, UserNotFoundException {
         this.setFlightUnavailable(outBound);
         this.setFlightUnavailable(flightBack);
 
-        GeneratedOffer offerTogenerate = new GeneratedOffer();
-        offerTogenerate.setBooked(false);
-        offerTogenerate.setOutboundFlightId(outBound);
-        offerTogenerate.setFlightBackId(flightBack);
-        offerTogenerate.setExpireDate(OffsetDateTime.now().plusHours(24));
-        offerTogenerate.setTotalPrice(flightBack.getPrice() + outBound.getPrice());
-        offerTogenerate.setToken(getRandomString(10)); // TODO
+        GeneratedOffer generatedOffer = new GeneratedOffer();
+        generatedOffer.setBooked(false);
+        generatedOffer.setAvailable(true);
+        generatedOffer.setOutboundFlight(outBound);
+        generatedOffer.setFlightBack(flightBack);
+        generatedOffer.setExpireDate(OffsetDateTime.now().plusHours(24));
+        generatedOffer.setTotalPrice(flightBack.getPrice() + outBound.getPrice());
         User user = databaseManager.getUser(username);
-        offerTogenerate.setUser(user);
-        databaseManager.createOffer(offerTogenerate);
-        return offerTogenerate;
+        generatedOffer.setUser(user);
+
+        databaseManager.createOffer(generatedOffer);
+        String uniqueToken = UUID.randomUUID().toString().substring(0, 4) + String.valueOf(generatedOffer.getId());
+        generatedOffer.setToken(uniqueToken);
+        databaseManager.updateOffer(generatedOffer);
+        return generatedOffer;
     }
 
     public List<Flight> checkFlightsRequirements(UserInterest ui) {
         List<Flight> matchedFlights = new ArrayList<Flight>();
-        List<Flight> flights = databaseManager.retrieveFlights();
+        List<Flight> flights = databaseManager.getAvailableFlights();
 
         for (Flight flight1 : flights) {
             if (this.isMatched(flight1, ui.getOutboundFlightInterest())) {
@@ -114,7 +147,7 @@ public class OfferManager {
             GeneratedOffer g = iter.next();
             // g.setAvailable(false);
             offersNotAvailable.add(g);
-            databaseManager.updateGeneratedOffer(g);
+            databaseManager.updateOffer(g);
 
         }
 
@@ -124,15 +157,78 @@ public class OfferManager {
     public void setUnavailableOfferFlights(List<GeneratedOffer> list) {
         for (ListIterator<GeneratedOffer> iter = list.listIterator(); iter.hasNext();) {
             GeneratedOffer g = iter.next();
-            g.getOutboundFlightId().setAvailable(true);
-            g.getFlightBackId().setAvailable(true);
-            databaseManager.updateFlight(g.getOutboundFlightId());
-            databaseManager.updateFlight(g.getFlightBackId());
+            g.getOutboundFlight().setAvailable(true);
+            g.getFlightBack().setAvailable(true);
+            databaseManager.updateFlight(g.getOutboundFlight());
+            databaseManager.updateFlight(g.getFlightBack());
         }
     }
 
-    public class SendTicketException extends Exception {
-        private static final long serialVersionUID = 1L;
+    public void setUsedUserInterest(UserInterest userInterest) {
+        userInterest.setUsed(true);
+        userInterest.getOutboundFlightInterest().setUsed(true);
+        userInterest.getFlightBackInterest().setUsed(true);
+        databaseManager.updateUserInterest(userInterest);
+    }
+
+    // TODO: controllare che non ci siano altri processi attivi
+    // Start Camunda process
+    public void startConfirmOffer(UserOfferDTO request, AsyncResponse response, UriInfo uriInfo) {
+        LOGGER.info("StartConfirmOffer");
+        String email = securityContext.getCallerPrincipal().getName();
+        String token = request.getToken();
+
+        final RuntimeService runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();
+        Map<String, Object> processVariables = new HashMap<String, Object>();
+        processVariables.put(USER_OFFER_REQUEST, request);
+        processVariables.put(OFFER_TOKEN, token);
+        processVariables.put(USERNAME, email);
+        processVariables.put(BUSINESS_KEY, email + PROCESS_CONFIRM_BUY_OFFER);
+        processState.setState(PROCESS_CONFIRM_BUY_OFFER, email, ASYNC_RESPONSE, response);
+
+        // Start the process instance
+        // TODO Iniziare processo con messaggio se si puo
+        runtimeService.createProcessInstanceByKey(PAY_OFFER).businessKey(email + PROCESS_CONFIRM_BUY_OFFER)
+                .setVariables(processVariables).executeWithVariablesInReturn();
+    }
+
+    public Response handleConfirmOffer(String token, String email, UserOfferDTO offer, DelegateExecution execution)
+            throws OfferNotFoundException {
+        // Control token
+        execution.setVariable(IS_VALID_TOKEN, true);
+        execution.setVariable(IS_OFFER_EXPIRED, false);
+
+        if (token == null || token == "") {
+            execution.setVariable(IS_VALID_TOKEN, false);
+            return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).entity(Errors.INVALID_TOKEN).build();
+        }
+        GeneratedOffer offerToReturn;
+
+        try {
+            offerToReturn = databaseManager.getOfferByTokenEmail(token, email);
+
+        } catch (OfferNotFoundException e) {
+            execution.setVariable(IS_VALID_TOKEN, false);
+            return Response.status(Response.Status.NOT_FOUND.getStatusCode()).entity(Errors.INVALID_TOKEN).build();
+        }
+
+        OffsetDateTime now = OffsetDateTime.now();
+        if (offerToReturn.getExpireDate().compareTo(now) < 0) {
+            execution.setVariable(IS_OFFER_EXPIRED, true);
+            return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).entity(Errors.OFFER_EXPIRED).build();
+        }
+        execution.setVariable(USER_OFFER, offerToReturn);
+        return Response.status(Response.Status.OK.getStatusCode()).build();
+    }
+
+    public void startPaymentRequest(AsyncResponse response) {
+        String email = securityContext.getCallerPrincipal().getName();
+        final RuntimeService runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();
+
+        processState.setState(PROCESS_CONFIRM_BUY_OFFER, email, ASYNC_RESPONSE, response);
+        runtimeService.createMessageCorrelation(PAY_OFFER).processInstanceBusinessKey(email + PROCESS_CONFIRM_BUY_OFFER)
+                // .setVariable("var", response)
+                .correlate();
     }
 
     /**
@@ -141,8 +237,8 @@ public class OfferManager {
      * @throws DistanceServiceException
      */
     public float getDistance(AddressDTO userAddress, GeneratedOffer offer) throws DistanceServiceException {
-        Float latitude = offer.getOutboundFlightId().getDepartureAirport().getLatitude();
-        Float longitude = offer.getOutboundFlightId().getDepartureAirport().getLongitude();
+        Float latitude = offer.getOutboundFlight().getDepartureAirport().getLatitude();
+        Float longitude = offer.getOutboundFlight().getDepartureAirport().getLongitude();
         String fullAddress = userAddress.getAddress() + ", " + userAddress.getPostCode() + " "
                 + userAddress.getCityName() + ", " + userAddress.getCountry();
         try {
@@ -162,7 +258,7 @@ public class OfferManager {
         User user = databaseManager.getUser(email);
         String userAddress = address.getAddress() + ", " + address.getPostCode() + " " + address.getCityName() + ", "
                 + address.getCountry();
-        Airport airport = offer.getOutboundFlightId().getDepartureAirport();
+        Airport airport = offer.getOutboundFlight().getDepartureAirport();
         String airportAddress = String.valueOf(airport.getLatitude()) + ',' + String.valueOf(airport.getLongitude());
         try {
             BookRentResponse reponse = this.bookRent(RentService1.class, user, userAddress, airportAddress);
@@ -195,12 +291,6 @@ public class OfferManager {
         bookRent.setToAddress(addressTo);
 
         return rentClient.rentRequest(ws, bookRent);
-    }
-
-    public class DistanceServiceException extends Exception {
-    }
-
-    public class RentServiceException extends Exception {
     }
 
     static String getRandomString(int i) {
@@ -239,9 +329,14 @@ public class OfferManager {
 
         offer.setBooked(true);
         // offer.setAvailable(false);
-        databaseManager.updateGeneratedOffer(offer);
+        databaseManager.updateOffer(offer);
+        databaseManager.setBookFlights(true, offer.getOutboundFlight(), offer.getFlightBack());
+    }
 
-        databaseManager.setBookFlights(true, offer.getOutboundFlightId(), offer.getFlightBackId());
+    public class DistanceServiceException extends Exception {
+    }
+
+    public class RentServiceException extends Exception {
     }
 
 }

@@ -1,41 +1,47 @@
 package it.unibo.soseng.gateway.prontogram;
 
-import javax.ws.rs.Path;
+import java.io.IOException;
+import java.util.logging.Logger;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.net.http.HttpResponse.BodyHandlers;
 
 import it.unibo.soseng.gateway.prontogram.dto.NotificationDTO;
+import okhttp3.HttpUrl;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 
 public class ProntogramClient {
-    final String BASE_URL = System.getenv("PRONTOGRAM_PATH");
+    private final static Logger LOGGER = Logger.getLogger(ProntogramClient.class.getName()); 
+    public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
-    OkHttpClient client = new OkHttpClient();
+    private final String BASE_URL = System.getenv("PRONTOGRAM_PATH");
+    private OkHttpClient client = new OkHttpClient();
 
-    // TODO CATTURARARE LE ECCEZIONI e usare okhttp
-    public void sendNotificationOffer(NotificationDTO notification) throws IOException {
-
-        String url = BASE_URL + "/api/notification/new";
-        /*ObjectMapper objectMapper = new ObjectMapper();
+    public void sendNotificationOffer(NotificationDTO notification) throws IOException, ProntogramServiceErrorException  {
         
-        String requestBody = objectMapper
-                .writeValueAsString(notification);
-        
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://192.168.1.77:8000/api/notification/new"))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(requestBody))
-                .build();
+        String url = HttpUrl.parse(BASE_URL + "/api/notification")
+                            .newBuilder()
+                            .build()
+                            .toString();
 
-        HttpResponse<String> response = HttpClient.newHttpClient().send(request, BodyHandlers.ofString());*/
+        ObjectMapper objectMapper = new ObjectMapper(); 
+        String json = objectMapper.writeValueAsString(notification);
+        RequestBody body = RequestBody.create(json, JSON);
+        Request request = new Request.Builder()
+                                .url(url)
+                                .post(body)
+                                .build();
 
-        //return objectMapper.createArrayNode().add(response.body());
+        try (Response response = client.newCall(request).execute()) {
+            //LOGGER.severe(response.body().string());
+            if(response.code() != 200)
+                throw new ProntogramServiceErrorException();
+        }
     }
 
+    public class ProntogramServiceErrorException extends Exception {}
 }

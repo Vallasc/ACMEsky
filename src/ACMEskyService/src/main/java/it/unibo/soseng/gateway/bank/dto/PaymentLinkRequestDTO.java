@@ -1,17 +1,12 @@
 package it.unibo.soseng.gateway.bank.dto;
 
-public class PaymentLinkRequest {
+import java.io.Serializable;
+
+public class PaymentLinkRequestDTO implements Serializable {
     
     private double amount;
     private String description;
     private String notificationUrl;
-
-    
-    public PaymentLinkRequest(double totalPrice, String description, String notificationUrl) {
-        this.amount = totalPrice;
-        this.description=description;
-        this.notificationUrl=notificationUrl;
-    }
 
     public double getAmount() {
         return amount;
@@ -31,6 +26,4 @@ public class PaymentLinkRequest {
     public void setNotificationUrl(String notificationUrl) {
         this.notificationUrl = notificationUrl;
     }
-
-    
 }

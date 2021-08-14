@@ -26,22 +26,7 @@ services:
         networks:
             - acmesky
         restart: unless-stopped
-    
-    pgadmin:
-        container_name: pgadmin_container
-        image: dpage/pgadmin4:5.4
-        env_file:
-            - ./src/ACMEskyDB/.env
-        volumes:
-            - pgadmin:/root/.pgadmin
-        ports:
-            - "5050:80"
-        networks:
-            - acmesky
-        restart: unless-stopped
-        depends_on:
-            - postgres
-    
+
     web:
         container_name: acmesky_web
         build: ./src/ACMEskyWeb
@@ -54,6 +39,21 @@ services:
         restart: unless-stopped
         depends_on:
             - acmesky
+
+#    pgadmin:
+#        container_name: pgadmin_container
+#        image: dpage/pgadmin4:5.4
+#        env_file:
+#            - ./src/ACMEskyDB/.env
+#        volumes:
+#            - pgadmin:/root/.pgadmin
+#        ports:
+#            - "5050:80"
+#        networks:
+#            - acmesky
+#        restart: unless-stopped
+#        depends_on:
+#            - postgres
             
 networks:
     acmesky:
@@ -63,4 +63,4 @@ networks:
 volumes:
 
     postgres:
-    pgadmin:
+#    pgadmin:

@@ -9,7 +9,7 @@
    ],
    "servers":[
       {
-         "url":"http://localhost:8082",
+         "url":"http://localhost:8060",
          "description":""
       }
    ],
@@ -170,30 +170,24 @@
       "schemas":{
          "UserRequest":{
             "required":[
-               "departureCity",
-               "departureDate",
-               "destinationCity",
-               "destinationDate"
+               "departure",
+               "arrival",
+               "departureDate"
             ],
             "type":"object",
             "properties":{
-               "departureCity":{
+               "departure":{
                   "type":"string",
-                  "example":"2218"
+                  "example":"AMS"
                },
-               "destinationCity":{
+               "arrival":{
                   "type":"string",
-                  "example":"2890"
+                  "example":"BOS"
                },
                "departureDate":{
                   "type":"string",
                   "format":"date-time",
                   "example":"2021-08-27T20:00:00+01:00"
-               },
-               "destinationDate":{
-                  "type":"string",
-                  "format":"date-time",
-                  "example":"2021-08-27T21:00:00+01:00"
                }
             }
          },

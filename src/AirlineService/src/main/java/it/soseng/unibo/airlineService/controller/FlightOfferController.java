@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import it.soseng.unibo.airlineService.DTO.Flight;
 import it.soseng.unibo.airlineService.DTO.UserRequest;
-import it.soseng.unibo.airlineService.model.FlightOffer;
 import it.soseng.unibo.airlineService.service.FlightOfferService;
 import it.soseng.unibo.airlineService.service.PdfService;
 

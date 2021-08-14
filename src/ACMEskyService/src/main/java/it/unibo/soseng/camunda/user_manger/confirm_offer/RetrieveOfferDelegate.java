@@ -16,7 +16,7 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 
 import it.unibo.soseng.logic.database.DatabaseManager.OfferNotFoundException;
-import it.unibo.soseng.logic.user.UserManager;
+import it.unibo.soseng.logic.offer.OfferManager;
 import it.unibo.soseng.camunda.utils.ProcessState;
 import it.unibo.soseng.gateway.user.dto.UserOfferDTO;
 
@@ -27,7 +27,7 @@ public class RetrieveOfferDelegate implements JavaDelegate {
     private final static Logger LOGGER = Logger.getLogger(RetrieveOfferDelegate.class.getName());
 
     @Inject 
-    UserManager userManager;
+    OfferManager offerManager;
 
     @Inject
     private ProcessState processState;
@@ -38,7 +38,7 @@ public class RetrieveOfferDelegate implements JavaDelegate {
         UserOfferDTO offerRequest = (UserOfferDTO) execution.getVariable(USER_OFFER_REQUEST);
         String token = (String) execution.getVariable(OFFER_TOKEN);
         String email = (String) execution.getVariable(USERNAME);
-        Response response = userManager.handleConfirmUserFlight(token, email, offerRequest, execution);
+        Response response = offerManager.handleConfirmOffer(token, email, offerRequest, execution);
         processState.setState(PROCESS_CONFIRM_BUY_OFFER, email, RESPONSE, response);
     }
   

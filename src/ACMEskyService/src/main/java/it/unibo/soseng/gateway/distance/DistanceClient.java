@@ -20,7 +20,6 @@ public class DistanceClient {
 
     final String BASE_URL = System.getenv("GEOSERVICE_PATH");
 
-    // TODO metterlo singleton
     OkHttpClient client = new OkHttpClient();
 
     public DistanceDTO requestDistance(String from, String to) throws IOException, GeoserverErrorException {

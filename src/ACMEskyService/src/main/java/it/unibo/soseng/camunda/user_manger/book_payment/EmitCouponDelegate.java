@@ -14,9 +14,8 @@ public class EmitCouponDelegate implements JavaDelegate{
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
-        LOGGER.info("emitCouponDelegate is working");
+        LOGGER.info("Execute EmitCouponDelegate");
 
-        
     }
     
 }

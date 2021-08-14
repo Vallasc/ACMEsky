@@ -51,7 +51,7 @@ public class PaymentController {
     private ResponseEntity<LinkResponseDTO> savePayment(@Valid @RequestBody PaymentLinkRequestDTO paymentDTO) {
         String userId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String token = paymentService.savePayment(paymentDTO, userId);
-        String path = env.getProperty("server.path") + "/link/index.html?token="+token;
+        String path = env.getProperty("server.external_path") + "/link/index.html?token="+token;
         LinkResponseDTO response = new LinkResponseDTO(path, token);
         return new ResponseEntity<LinkResponseDTO>(response, HttpStatus.CREATED);
     }
