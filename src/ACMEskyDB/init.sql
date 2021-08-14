@@ -131,7 +131,9 @@ ALTER SEQUENCE public.airports_id_seq OWNED BY public.airports.id;
 CREATE TABLE public.banks (
     id bigint NOT NULL,
     ws_address character varying(255) NOT NULL,
-    entity_id bigint NOT NULL
+    entity_id bigint NOT NULL,
+    login_username character varying(255) NOT NULL,
+    login_password character varying(255) NOT NULL
 );
 
 
@@ -5208,7 +5210,7 @@ INSERT INTO public.airlines VALUES (1, 'http://national-airline:8082', 1);
 INSERT INTO public.airlines VALUES (2, 'http://international-airline:8082', 2);
 ALTER SEQUENCE public.airlines_id_seq RESTART WITH 3;
 
-INSERT INTO public.banks VALUES (1, 'http://bank:8070', 3);
+INSERT INTO public.banks VALUES (1, 'http://bank:8080', 3, '925461', '1234');
 ALTER SEQUENCE public.banks_id_seq RESTART WITH 2;
 
 --
@@ -5229,4 +5231,10 @@ ALTER SEQUENCE public.users_interests_id_seq RESTART WITH 3;
 
 INSERT INTO public.flights VALUES (1, '2021-10-28 22:00:00+02', TRUE, FALSE, '2021-10-28 15:00:00+02', '2021-10-26 15:00:00+02', 'XEG8F3G1', 130, 1, 2221, 3386);
 INSERT INTO public.flights VALUES (2, '2021-11-8 22:00:00+02', TRUE, FALSE, '2021-11-8 15:00:00+02', '2021-10-6 15:00:00+02', 'BEGDRG2', 130, 1, 3386, 2221);
-ALTER SEQUENCE public.flights_id_seq RESTART WITH 3;
+
+INSERT INTO public.flights VALUES (3, '2021-10-28 20:00:00+00', FALSE, FALSE, '2021-10-28 13:00:00+00', '2021-10-26 13:00:00+00', 'XEG8F3G1', 130, 1, 2221, 391);
+INSERT INTO public.flights VALUES (4, '2021-11-08 20:00:00+00', FALSE, FALSE, '2021-11-08 13:00:00+00', '2021-10-06 13:00:00+00', 'BEGDRG2', 130, 1, 391, 2221);
+ALTER SEQUENCE public.flights_id_seq RESTART WITH 5;
+
+INSERT INTO public.generated_offers VALUES (1, TRUE, FALSE, '2021-12-12 14:39:57.388312+00', 'b62c1', 260, 4, 3, 1);
+ALTER SEQUENCE public.generated_offers_id_seq RESTART WITH 5;
