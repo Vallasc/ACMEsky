@@ -1,49 +1,94 @@
 package it.unibo.soseng.logic.bank;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import javax.inject.Inject;
+import javax.security.enterprise.SecurityContext;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.camunda.bpm.engine.ProcessEngines;
+import org.camunda.bpm.engine.RuntimeService;
 
 import it.unibo.soseng.gateway.bank.BankClient;
-import it.unibo.soseng.gateway.bank.dto.AuthRequest;
-import it.unibo.soseng.gateway.bank.dto.AuthResponse;
-import it.unibo.soseng.gateway.bank.dto.PaymentLink;
-import it.unibo.soseng.gateway.bank.dto.PaymentLinkRequest;
-import okhttp3.ResponseBody;
+import it.unibo.soseng.gateway.bank.BankClient.BankAuthRequestException;
+import it.unibo.soseng.gateway.bank.BankClient.RequestPaymentLinkException;
+import it.unibo.soseng.gateway.bank.dto.AuthRequestDTO;
+import it.unibo.soseng.gateway.bank.dto.PaymentLinkDTO;
+import it.unibo.soseng.gateway.bank.dto.PaymentLinkRequestDTO;
+import it.unibo.soseng.logic.database.DatabaseManager;
+import it.unibo.soseng.logic.database.DatabaseManager.OfferNotFoundException;
+import it.unibo.soseng.model.Airport;
+import it.unibo.soseng.model.Bank;
+import it.unibo.soseng.model.GeneratedOffer;
+
+import static it.unibo.soseng.camunda.utils.Events.PAYMENT_SUCCESSFUL;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_CONFIRM_BUY_OFFER;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_OFFER;
+
 
 public class BankManager {
+    private final static Logger LOGGER = Logger.getLogger(BankManager.class.getName());
+    private final String ACMESKY_PATH = System.getenv("ACMESKY_PATH");
 
     @Inject
-    BankClient bankClient;
-    
-    public AuthResponse getToken(String wsAddress, AuthRequest reqDTO) throws IOException, InterruptedException{
+    private BankClient bankClient;
 
-        String token = bankClient.auth(wsAddress, reqDTO);
+    @Inject
+    private DatabaseManager databaseManager;
 
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = mapper.readTree(token);
+    public PaymentLinkRequestDTO makePaymentLinkRequest(GeneratedOffer offer){
+        PaymentLinkRequestDTO linkRequest = new PaymentLinkRequestDTO();
+        linkRequest.setAmount(offer.getTotalPrice());
+
+        Airport departureAirport = offer.getOutboundFlight().getDepartureAirport();
+        Airport arrivalAirport = offer.getOutboundFlight().getArrivalAirport();
         
-            AuthResponse res = new AuthResponse();
-                res.setToken(root.get("jwtToken").toString());
-
-        return res;
+        String description = "Codice offerta " + offer.getToken() + "<br>" +
+                        "Tratta " + departureAirport.getCityName() + "(" + departureAirport.getAirportCode() + ") - " +
+                        arrivalAirport.getCityName() + "(" + arrivalAirport.getAirportCode() + ")<br>" +
+                        offer.getOutboundFlight().getDepartureDateTime().toString() + " - " +
+                        offer.getFlightBack().getDepartureDateTime().toString();
+        linkRequest.setDescription(description);
+        String link = ACMESKY_PATH + "/banks/confirmPayment?code=" + offer.getToken();
+        linkRequest.setNotificationUrl(link);
+        return linkRequest;
     }
 
-    public PaymentLink getPaymentLink(String wsAddress, String token, PaymentLinkRequest payReq ) throws IOException, InterruptedException, ErrorReceivedPayLinkException{
+    public String requestPaymentLink(Bank bank, PaymentLinkRequestDTO request) 
+                                                throws BankAuthRequestException, RequestPaymentLinkException {
+        AuthRequestDTO authRequest = new AuthRequestDTO();
+        authRequest.setUserId(bank.getLoginUsername());
+        authRequest.setPassword(bank.getLoginPassword());
+        String token;
+        try {
+            token = bankClient.auth(bank.getWsAddress(), authRequest);
+        } catch (IOException | InterruptedException e) {
+            LOGGER.severe(e.toString());
+            throw bankClient.new BankAuthRequestException();
+        }
 
-        String res = bankClient.paymentLink(wsAddress, token, payReq);
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = mapper.readTree(res);
-        
-        PaymentLink infoPayment = new PaymentLink();
-            infoPayment.setPath(root.get("path").toString());
-            infoPayment.setPaymentToken(root.get("paymenToken").toString());
-        
-        return infoPayment;
-        
+        PaymentLinkDTO res;
+        try {
+            res = bankClient.requestPaymentLink(bank.getWsAddress(), token, request);
+        } catch (IOException | InterruptedException e) {
+            LOGGER.severe(e.toString());
+            throw bankClient.new RequestPaymentLinkException();
+        }
+        return res.getPath();
+    }
+
+    public void paymentSuccess(String offerCode) {
+        try{
+            GeneratedOffer offer = databaseManager.getOfferByToken(offerCode);
+            String email = offer.getUser().getEmail();
+            final RuntimeService runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();
+             //runtimeService.getVariable(USER_OFFER) TODO controllare offerCode sia uguale all'offerta nel processo
+            runtimeService.createMessageCorrelation(PAYMENT_SUCCESSFUL)
+                        .processInstanceBusinessKey(email+PROCESS_CONFIRM_BUY_OFFER)
+                        .correlate();
+        } catch (OfferNotFoundException e){
+            LOGGER.severe(e.toString());
+        }
     }
 
     public class ErrorReceivedPayLinkException extends Exception {
