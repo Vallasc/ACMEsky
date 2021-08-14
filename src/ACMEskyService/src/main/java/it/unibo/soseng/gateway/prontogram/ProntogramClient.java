@@ -37,7 +37,7 @@ public class ProntogramClient {
                                 .build();
 
         try (Response response = client.newCall(request).execute()) {
-            LOGGER.severe(response.body().string());
+            //LOGGER.severe(response.body().string());
             if(response.code() != 200)
                 throw new ProntogramServiceErrorException();
         }
