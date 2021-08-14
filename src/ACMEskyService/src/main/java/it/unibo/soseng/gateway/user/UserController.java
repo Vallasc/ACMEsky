@@ -14,22 +14,18 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.container.AsyncResponse;
-import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import it.unibo.soseng.gateway.user.dto.UserDeleteDTO;
-import it.unibo.soseng.gateway.user.dto.UserOfferDTO;
 import it.unibo.soseng.gateway.user.dto.UserDTO;
 import it.unibo.soseng.gateway.user.dto.UserSignUpDTO;
 import it.unibo.soseng.gateway.user.dto.UserUpdateDTO;
 import it.unibo.soseng.logic.database.DatabaseManager.UserAlreadyInException;
 import it.unibo.soseng.logic.database.DatabaseManager.UserNotFoundException;
 import it.unibo.soseng.logic.user.UserManager;
-import it.unibo.soseng.logic.user.UserManager.BadRequestException;
 import it.unibo.soseng.logic.user.UserManager.InvalidCredentialsException;
 
 import static it.unibo.soseng.security.Constants.USER;
