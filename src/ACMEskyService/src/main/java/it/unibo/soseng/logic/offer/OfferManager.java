@@ -140,27 +140,21 @@ public class OfferManager {
 
     public List<GeneratedOffer> removeExpiredOffers() {
         OffsetDateTime now = OffsetDateTime.now();
-        ArrayList<GeneratedOffer> offersNotAvailable = new ArrayList<>();
         List<GeneratedOffer> expFlights = databaseManager.getAvailableOffers().stream()
-                .dropWhile(f -> f.getExpireDate().isBefore(now)).collect(Collectors.toList());
-        for (ListIterator<GeneratedOffer> iter = expFlights.listIterator(); iter.hasNext();) {
-            GeneratedOffer g = iter.next();
-            // g.setAvailable(false);
-            offersNotAvailable.add(g);
-            databaseManager.updateOffer(g);
+                .filter(f -> f.getExpireDate().isBefore(now)).collect(Collectors.toList());
 
-        }
-
-        return offersNotAvailable;
+        return expFlights;
     }
 
     public void setUnavailableOfferFlights(List<GeneratedOffer> list) {
         for (ListIterator<GeneratedOffer> iter = list.listIterator(); iter.hasNext();) {
             GeneratedOffer g = iter.next();
-            g.getOutboundFlight().setAvailable(true);
-            g.getFlightBack().setAvailable(true);
+            g.setAvailable(false);
+            g.getOutboundFlight().setAvailable(false);
+            g.getFlightBack().setAvailable(false);
             databaseManager.updateFlight(g.getOutboundFlight());
             databaseManager.updateFlight(g.getFlightBack());
+            databaseManager.updateOffer(g);
         }
     }
 
