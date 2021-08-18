@@ -160,12 +160,13 @@ public class AirlineManager {
 
     public void removeExpiredFlights() {
         OffsetDateTime now = OffsetDateTime.now();
-        List<Flight> expFlights = databaseManager.getAvailableFlights().stream()
-                .dropWhile(f -> f.getExpireDate().isBefore(now)).collect(Collectors.toList());
+        List<Flight> expFlights = databaseManager.getAvailableFlights();
         for (ListIterator<Flight> iter = expFlights.listIterator(); iter.hasNext();) {
             Flight f = iter.next();
-            f.setAvailable(false);
-            databaseManager.updateFlight(f);
+            if (f.getExpireDate().isBefore(now)) {
+                f.setAvailable(false);
+                databaseManager.updateFlight(f);
+            }
         }
     }
 
