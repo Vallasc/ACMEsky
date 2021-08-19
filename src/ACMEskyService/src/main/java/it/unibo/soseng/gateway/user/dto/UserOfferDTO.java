@@ -8,14 +8,14 @@ public class UserOfferDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @NotNull(message = "Token cannot be null")
-    private String token;
+    private String offerToken;
  
-    public void setToken (String token) {
-        this.token = token;
+    public void setOfferToken (String offerToken) {
+        this.offerToken = offerToken;
     }
 
-    public String getToken () {
-        return this.token;
+    public String getOfferToken () {
+        return this.offerToken;
     }
 
 }
