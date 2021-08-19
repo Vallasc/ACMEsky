@@ -23,6 +23,7 @@ import javax.security.enterprise.SecurityContext;
 import it.unibo.soseng.camunda.utils.ProcessState;
 import it.unibo.soseng.gateway.airline.AirlineClient;
 import it.unibo.soseng.gateway.airline.AirlineClient.AirlineErrorException;
+import it.unibo.soseng.gateway.airline.AirlineClient.BookTicketsExceptionException;
 import it.unibo.soseng.gateway.airline.dto.AirlineFlightOfferDTO;
 import it.unibo.soseng.gateway.airline.dto.InterestDTO;
 import it.unibo.soseng.logic.database.DatabaseManager;
@@ -173,7 +174,7 @@ public class AirlineManager {
         }
     }
 
-    public byte[] bookOfferTicket(GeneratedOffer offer) throws IOException, SendTicketException{
+    public byte[] bookOfferTicket(GeneratedOffer offer) throws IOException, SendTicketException, BookTicketsExceptionException{
 
         byte[] pdfTicket = client.getFlightTickets(
                                     offer.getOutboundFlight().getAirlineId().getWsAddress(), 
@@ -184,19 +185,15 @@ public class AirlineManager {
         offer.getOutboundFlight().setBooked(true);
         offer.getFlightBack().setBooked(true);
 
-        String email = offer.getUser().getEmail();
-        processState.setState(PROCESS_CONFIRM_BUY_OFFER, email, TICKET_FILE, pdfTicket);
         return pdfTicket;
     }
 
 
     public void unbookOffer(GeneratedOffer offer) throws IOException {
-        
         client.unbookFlights(offer);
         offer.setBooked(false);
         offer.getOutboundFlight().setBooked(false);
         offer.getFlightBack().setBooked(false);
-        //TODO fare richiesta fittizia ad airline
     }
 
     public class UserNotAllowedException extends Exception {

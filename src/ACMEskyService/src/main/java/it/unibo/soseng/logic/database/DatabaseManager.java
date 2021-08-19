@@ -19,6 +19,7 @@ import it.unibo.soseng.model.DomainEntity;
 import it.unibo.soseng.model.Flight;
 import it.unibo.soseng.model.FlightInterest;
 import it.unibo.soseng.model.GeneratedOffer;
+import it.unibo.soseng.model.RentService;
 import it.unibo.soseng.model.User;
 import it.unibo.soseng.model.UserInterest;
 
@@ -59,6 +60,18 @@ public class DatabaseManager {
         } catch (NoResultException e) {
             throw new BankNotFoundException();
         }
+    }
+
+    /*
+    *  RentService
+    */
+    public List<RentService> getAllRentServices() {
+        
+        @SuppressWarnings("unchecked")
+        List<RentService> result = (List<RentService>) entityManager
+                .createQuery("SELECT r FROM RentService r")
+                .getResultList();
+        return result;
     }
 
     /*

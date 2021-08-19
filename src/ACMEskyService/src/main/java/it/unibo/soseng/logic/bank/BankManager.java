@@ -83,9 +83,8 @@ public class BankManager {
             String email = offer.getUser().getEmail();
             final RuntimeService runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();
              //runtimeService.getVariable(USER_OFFER) TODO controllare offerCode sia uguale all'offerta nel processo
-            runtimeService.createMessageCorrelation(PAYMENT_SUCCESSFUL)
-                        .processInstanceBusinessKey(email+PROCESS_CONFIRM_BUY_OFFER)
-                        .correlate();
+             runtimeService.correlateMessage(PAYMENT_SUCCESSFUL, 
+                                            PROCESS_CONFIRM_BUY_OFFER + email + offer.getToken());
         } catch (OfferNotFoundException e){
             LOGGER.severe(e.toString());
         }
