@@ -50,6 +50,7 @@ import it.unibo.soseng.utils.Errors;
 import it.unibo.soseng.ws.generated.BookRentResponse;
 
 import static it.unibo.soseng.camunda.utils.Events.PAY_OFFER;
+import static it.unibo.soseng.camunda.utils.Events.START_PAY_OFFER;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.ASYNC_RESPONSE;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.BUSINESS_KEY;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.IS_OFFER_EXPIRED;
@@ -190,7 +191,7 @@ public class OfferManager {
 
 
         // Start the process instance
-        runtimeService.correlateMessage(PAY_OFFER, 
+        runtimeService.correlateMessage(START_PAY_OFFER, 
                                         PROCESS_CONFIRM_BUY_OFFER + email + token,
                                         processVariables);
     }  
@@ -254,6 +255,8 @@ public class OfferManager {
         Map<String,Object> processVariables = new HashMap<String,Object>();
         processVariables.put(USER_ADDRESS, address);
 
+        LOGGER.severe(email);
+        LOGGER.severe(address.getOfferToken());
         final RuntimeService runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();
         runtimeService.correlateMessage(PAY_OFFER, 
                                         PROCESS_CONFIRM_BUY_OFFER + email + address.getOfferToken(),
