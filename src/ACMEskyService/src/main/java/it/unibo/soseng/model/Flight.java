@@ -1,8 +1,10 @@
 package it.unibo.soseng.model;
  
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.time.OffsetDateTime;
- 
+import java.time.format.DateTimeFormatter;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -145,6 +147,16 @@ public class Flight implements Serializable {
  
     public void setAvailable(boolean available) {
         this.available = available;
+    }
+
+    @Override
+    public String toString(){
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+        return this.departureAirport.getCityName() + " (" +
+                this.departureAirport.getAirportCode() + ") - " +
+                this.arrivalAirport.getCityName() + " (" +
+                this.arrivalAirport.getAirportCode() + ") " +
+                fmt.format(this.departureDateTime);
     }
 }
  
