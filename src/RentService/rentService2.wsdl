@@ -27,9 +27,9 @@
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
-  <wsdl:service name="RentService">
+  <wsdl:service name="RentService2">
     <wsdl:port name="RentServicePort" binding="tns:RentSOAPBinding">
-      <soap:address location="http://rent-service-2:8032"/>
+      <soap:address location="http://rent-service-2:8080"/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
