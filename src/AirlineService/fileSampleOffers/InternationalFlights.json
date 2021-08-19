@@ -23,6 +23,28 @@
                     "price": 600.00
                 } 
             ]
+    ],
+    "LAST-MINUTE": [
+            [
+                {
+                    "departure_airport_id": "AMS",
+                    "arrival_airport_id": "BOS",
+                    "airline_name": "airline2",
+                    "departure_date_time": "2021-08-28T20:00:00+01:00",
+                    "arrival_date_time": "2021-08-28T21:00:00+01:00",
+                    "place":"26",
+                    "price": 100.00
+                },
+                {
+                    "departure_airport_id": "AMS",
+                    "arrival_airport_id": "BOS",
+                    "airline_name": "airline2",
+                    "departure_date_time": "2021-08-28T20:00:00+01:00",
+                    "arrival_date_time": "2021-08-28T21:00:00+01:00",
+                    "place":"94",
+                    "price": 100.00
+                }    
+            ]
             
     ]
 }

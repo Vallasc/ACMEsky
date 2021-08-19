@@ -1,5 +1,7 @@
 package it.soseng.unibo.airlineService.auth;
 
+import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.Collections;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -16,9 +18,11 @@ import it.soseng.unibo.airlineService.DTO.UserRequest;
 
 public class Auth {
 
-    public String AuthRequest( String ACMEskyRoute, String username, String password) throws JsonProcessingException{
+    public String AuthRequest(String ACMEskyRoute, String username, String password)
+            throws JsonProcessingException, UnknownHostException {
+
         String url = ACMEskyRoute + "/auth";
-    
+
         // // create headers
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -33,6 +37,7 @@ public class Auth {
         // // send POST request
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> jwt = restTemplate.postForEntity(url, entity, String.class);
-        return jwt.toString();   
+        return jwt.toString();
+
     }
 }

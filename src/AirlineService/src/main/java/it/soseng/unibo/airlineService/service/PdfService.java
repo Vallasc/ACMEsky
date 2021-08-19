@@ -29,54 +29,51 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
 import it.soseng.unibo.airlineService.auth.Auth;
 import it.soseng.unibo.airlineService.repository.FlightOfferRepository;
 
-
-
 @Service
 @Transactional
 public class PdfService {
 
+  @Autowired
+  private FlightOfferRepository repo;
 
-    @Autowired
-      private FlightOfferRepository repo;
+  @Autowired
+  TemplateEngine templateEngine;
 
-    @Autowired
-      TemplateEngine templateEngine;
+  private FlightOfferService service;
 
-    private FlightOfferService service;
+  private Auth auth = new Auth();
 
-    private Auth auth = new Auth();
+  private static final String PDF_RESOURCES = "/pdf-resources/";
 
-    private static final String PDF_RESOURCES = "/pdf-resources/";
+  @Autowired
+  public PdfService(FlightOfferService service) {
+    this.service = service;
 
-
-    @Autowired
-    public PdfService( FlightOfferService service) {
-      this.service = service;
-
-    }
-
-    @PostConstruct
-    public void postConstruct(){
-      this.templateEngine.addDialect(new Java8TimeDialect());
-
-    }
-    
-    /**
-     * fa generare il biglietto del volo che sta per essere acquistato dall'utente
-     * @param id
-     * @return
-     * @throws IOException
-     * @throws DocumentException
-     */
-    public File generatePdf(long ... id) throws IOException, DocumentException {
-      Context context = getContext(id);
-      String html = loadAndFillTemplate(context);
-      return renderPdf(html);
   }
 
+  @PostConstruct
+  public void postConstruct() {
+    this.templateEngine.addDialect(new Java8TimeDialect());
+
+  }
+
+  /**
+   * fa generare il biglietto del volo che sta per essere acquistato dall'utente
+   * 
+   * @param id
+   * @return
+   * @throws IOException
+   * @throws DocumentException
+   */
+  public File generatePdf(long... id) throws IOException, DocumentException {
+    Context context = getContext(id);
+    String html = loadAndFillTemplate(context);
+    return renderPdf(html);
+  }
 
   /**
    * si occupa del rendering del file pdf del biglietto
+   * 
    * @param html
    * @return
    * @throws IOException
@@ -86,7 +83,7 @@ public class PdfService {
     File file = File.createTempFile("Ticket", ".pdf");
     OutputStream outputStream = new FileOutputStream(file);
     ITextRenderer renderer = new ITextRenderer(20f * 4f / 3f, 20);
-    renderer.setDocumentFromString(html,  new ClassPathResource(PDF_RESOURCES).getURL().toExternalForm());
+    renderer.setDocumentFromString(html, new ClassPathResource(PDF_RESOURCES).getURL().toExternalForm());
     renderer.layout();
     renderer.createPDF(outputStream);
     outputStream.close();
@@ -94,68 +91,29 @@ public class PdfService {
     return file;
   }
 
-
   /**
-   * fornisce il contesto del biglietto, ovvero il recupero delle informazioni relative ai voli che l'utente vuole acquistare
+   * fornisce il contesto del biglietto, ovvero il recupero delle informazioni
+   * relative ai voli che l'utente vuole acquistare
+   * 
    * @param l
    * @return
    */
-  public Context getContext(long ... l) {
+  public Context getContext(long... l) {
 
-      Context context = new Context();
-      context.setVariable("flights", service.getOffers(l));
-      return context;
-    }
+    Context context = new Context();
+    context.setVariable("flights", service.getOffers(l));
+    return context;
+  }
 
   /**
-   * "riempie" il template del biglietto con le informazioni dei voli da acquistare
+   * "riempie" il template del biglietto con le informazioni dei voli da
+   * acquistare
+   * 
    * @param context
    * @return
    */
   private String loadAndFillTemplate(Context context) {
-      return this.templateEngine.process("Ticket_template", context);
+    return this.templateEngine.process("Ticket_template", context);
   }
-
-  /**
-   * si occupa di inviare ad ACMEsky (o chiunque chiami la risorsa) i biglietti che l'utente vuole acquistare attraverso una chiamata 
-   * HTTP POST che ha nel suo body i file pdf dei biglietti dopo aver imposta il soldFlag delle offerte relative ai voli oggetto 
-   * dell'acquisto 
-   * @param sendLastMinuteOffersRoute
-   * @param id
-   * @throws JsonProcessingException
-   */
-  public void sendPdfs(String user, String pass, String ACMEskyRoute, long...id) throws JsonProcessingException{
-
-    String jwt = auth.AuthRequest(ACMEskyRoute, user, pass);
-
-    for(long i : id){
-      repo.findById(i).get().setSoldFlag(true);
-    }
-
-    MultiValueMap<String, Object> body  = new LinkedMultiValueMap<>();
-    for(long i : id){
-      try {
-        body.add("files", generatePdf(i));
-      } catch (IOException e) {
-        e.printStackTrace();
-      } catch (DocumentException e) {
-        e.printStackTrace();
-      }
-    }
-
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-    headers.set("Authorization", jwt);
-
-    HttpEntity<MultiValueMap<String, Object>> requestEntity= new HttpEntity<>(body, headers);
-
-    String serverUrl = ACMEskyRoute + "/airline/OfferFiles";
-
-    RestTemplate restTemplate = new RestTemplate();
-    restTemplate
-      .postForEntity(serverUrl, requestEntity, String.class);
-  }
-
-
 
 }

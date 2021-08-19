@@ -1,7 +1,5 @@
 package it.unibo.soseng.gateway.airline;
 
-import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_CONFIRM_BUY_OFFER;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
@@ -10,7 +8,6 @@ import javax.inject.Inject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import it.unibo.soseng.camunda.utils.ProcessState;
 import it.unibo.soseng.gateway.airline.dto.InterestDTO;
 import it.unibo.soseng.logic.airline.AirlineManager;
 import it.unibo.soseng.logic.database.DatabaseManager;
@@ -23,7 +20,7 @@ import okhttp3.Response;
 
 public class AirlineClient {
 
-    private final static Logger LOGGER = Logger.getLogger(AirlineClient.class.getName()); 
+    private final static Logger LOGGER = Logger.getLogger(AirlineClient.class.getName());
 
     final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
@@ -33,7 +30,8 @@ public class AirlineClient {
     @Inject
     AirlineManager airManager;
 
-    public String getFlightList(List<InterestDTO> listDTO, String wsAddress)  throws IOException, InterruptedException, AirlineErrorException{
+    public String getFlightList(List<InterestDTO> listDTO, String wsAddress)
+            throws IOException, InterruptedException, AirlineErrorException {
 
         String url = new String(wsAddress + "/getFlights");
 
@@ -42,24 +40,22 @@ public class AirlineClient {
 
         String requestBody = objectMapper.writeValueAsString(listDTO);
         RequestBody body = RequestBody.Companion.create(requestBody, JSON);
-        Request request = new Request.Builder().url(url)
-                            .addHeader("Content-Type", "application/json")
-                            .post(body)
-                            .build();        
+        Request request = new Request.Builder().url(url).addHeader("Content-Type", "application/json").post(body)
+                .build();
         String res;
         // IMPORTANTE: Non utilizzare il metodo string() piu di una volta
         try (Response response = client.newCall(request).execute()) {
-            if(response.code() != 200)
+            if (response.code() != 200)
                 throw new AirlineErrorException();
             res = response.body().string();
         }
-        LOGGER.info("Airline response: "+res);
+        LOGGER.info("Airline response: " + res);
         return res;
 
     }
 
-
-    public byte[] getFlightTickets(String wsAddress, String username, String outboundFlightCode, String flightBackCode) throws IOException, BookTicketsExceptionException{
+    public byte[] getFlightTickets(String wsAddress, String username, String outboundFlightCode, String flightBackCode) 
+                                                                        throws IOException, BookTicketsExceptionException{
 
         String url = new String(wsAddress + "/getTickets?id="+ outboundFlightCode +"&id=" + flightBackCode);
 
@@ -89,11 +85,8 @@ public class AirlineClient {
                             .build();
         try (Response response = client.newCall(request).execute()) {
         }
-
-        client.newCall(request).execute();
     }
 
     public class AirlineErrorException extends Exception {}
     public class BookTicketsExceptionException extends Exception {}
-
 }

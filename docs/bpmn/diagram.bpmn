@@ -476,21 +476,13 @@
           <bpmn:targetRef>Property_0tr52hk</bpmn:targetRef>
         </bpmn:dataInputAssociation>
       </bpmn:serviceTask>
-      <bpmn:sequenceFlow id="Flow_1ui6fzk" sourceRef="Activity_0rvvlzr" targetRef="Activity_17b5phf" />
-      <bpmn:serviceTask id="Activity_17b5phf" name="Set flight available true">
-        <bpmn:incoming>Flow_1ui6fzk</bpmn:incoming>
-        <bpmn:outgoing>Flow_0brz62b</bpmn:outgoing>
-      </bpmn:serviceTask>
+      <bpmn:sequenceFlow id="Flow_1ui6fzk" sourceRef="Activity_0rvvlzr" targetRef="Event_0claqt1" />
       <bpmn:sequenceFlow id="Flow_07vgc9h" sourceRef="Event_0hw2ik4" targetRef="Activity_0rvvlzr" />
       <bpmn:endEvent id="Event_0claqt1">
-        <bpmn:incoming>Flow_0brz62b</bpmn:incoming>
+        <bpmn:incoming>Flow_1ui6fzk</bpmn:incoming>
       </bpmn:endEvent>
-      <bpmn:sequenceFlow id="Flow_0brz62b" sourceRef="Activity_17b5phf" targetRef="Event_0claqt1" />
     </bpmn:subProcess>
     <bpmn:sequenceFlow id="Flow_0qw4gwm" sourceRef="Event_0v1h5za" targetRef="Activity_1f2hrte" />
-    <bpmn:endEvent id="Event_1ddl836">
-      <bpmn:incoming>Flow_0az7vle</bpmn:incoming>
-    </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_0az7vle" sourceRef="Activity_1f2hrte" targetRef="Event_1ddl836" />
     <bpmn:dataStoreReference id="DataStoreReference_0cebo2e" name="Table available_flights" />
     <bpmn:sequenceFlow id="Flow_15jg9jf" sourceRef="Activity_0fto9xl" targetRef="Activity_1coowra" />
@@ -785,8 +777,8 @@
         <di:waypoint x="980" y="955" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0az7vle_di" bpmnElement="Flow_0az7vle">
-        <di:waypoint x="2690" y="960" />
-        <di:waypoint x="2792" y="960" />
+        <di:waypoint x="2540" y="960" />
+        <di:waypoint x="2622" y="960" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0qw4gwm_di" bpmnElement="Flow_0qw4gwm">
         <di:waypoint x="2108" y="960" />
@@ -1278,19 +1270,15 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1f2hrte_di" bpmnElement="Activity_1f2hrte" isExpanded="true">
-        <dc:Bounds x="2180" y="855" width="510" height="205" />
+        <dc:Bounds x="2180" y="855" width="360" height="205" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_0brz62b_di" bpmnElement="Flow_0brz62b">
-        <di:waypoint x="2550" y="960" />
-        <di:waypoint x="2602" y="960" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_07vgc9h_di" bpmnElement="Flow_07vgc9h">
         <di:waypoint x="2256" y="960" />
         <di:waypoint x="2300" y="960" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1ui6fzk_di" bpmnElement="Flow_1ui6fzk">
         <di:waypoint x="2400" y="960" />
-        <di:waypoint x="2450" y="960" />
+        <di:waypoint x="2442" y="960" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Event_0hw2ik4_di" bpmnElement="Event_0hw2ik4">
         <dc:Bounds x="2220" y="942" width="36" height="36" />
@@ -1298,14 +1286,8 @@
       <bpmndi:BPMNShape id="Activity_0rvvlzr_di" bpmnElement="Activity_0rvvlzr">
         <dc:Bounds x="2300" y="920" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0rvlcli_di" bpmnElement="Activity_17b5phf">
-        <dc:Bounds x="2450" y="920" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0claqt1_di" bpmnElement="Event_0claqt1">
-        <dc:Bounds x="2602" y="942" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1ddl836_di" bpmnElement="Event_1ddl836">
-        <dc:Bounds x="2792" y="942" width="36" height="36" />
+        <dc:Bounds x="2442" y="942" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DataStoreReference_0cebo2e_di" bpmnElement="DataStoreReference_0cebo2e">
         <dc:Bounds x="585" y="855" width="50" height="50" />

@@ -9,8 +9,10 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.UUID;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
@@ -76,13 +78,13 @@ public class OfferManager {
 
     @Inject
     private SecurityContext securityContext;
-    
 
-    public GeneratedOffer generateOffer(Flight outBound, Flight flightBack, String username) throws PersistenceException, FlightNotExistException, UserNotFoundException {    
+    public GeneratedOffer generateOffer(Flight outBound, Flight flightBack, String username)
+            throws PersistenceException, FlightNotExistException, UserNotFoundException {
         this.setFlightUnavailable(outBound);
         this.setFlightUnavailable(flightBack);
 
-        GeneratedOffer generatedOffer = new GeneratedOffer ();
+        GeneratedOffer generatedOffer = new GeneratedOffer();
         generatedOffer.setBooked(false);
         generatedOffer.setAvailable(true);
         generatedOffer.setOutboundFlight(outBound);
@@ -99,15 +101,15 @@ public class OfferManager {
         return generatedOffer;
     }
 
-    public List<Flight> checkFlightsRequirements(UserInterest ui){
-        List<Flight> matchedFlights = new ArrayList<Flight> ();
+    public List<Flight> checkFlightsRequirements(UserInterest ui) {
+        List<Flight> matchedFlights = new ArrayList<Flight>();
         List<Flight> flights = databaseManager.getAvailableFlights();
 
-        for(Flight flight1 : flights){
-            if(this.isMatched(flight1, ui.getOutboundFlightInterest())){
-                for(Flight flight2 : flights){
-                    if(flight1 != flight2 && this.isMatched(flight2, ui.getFlightBackInterest()) &&
-                    flight1.getPrice() + flight2.getPrice() <= ui.getPriceLimit()){
+        for (Flight flight1 : flights) {
+            if (this.isMatched(flight1, ui.getOutboundFlightInterest())) {
+                for (Flight flight2 : flights) {
+                    if (flight1 != flight2 && this.isMatched(flight2, ui.getFlightBackInterest())
+                            && flight1.getPrice() + flight2.getPrice() <= ui.getPriceLimit()) {
                         matchedFlights.add(flight1);
                         matchedFlights.add(flight2);
                         return matchedFlights;
@@ -119,39 +121,46 @@ public class OfferManager {
         return matchedFlights;
     }
 
-    private boolean isMatched (Flight f, FlightInterest fi) {
+    private boolean isMatched(Flight f, FlightInterest fi) {
         OffsetDateTime flightDate = f.getDepartureDateTime();
         OffsetDateTime interestDateStart = fi.getDepartureDateTime();
         OffsetDateTime interestDateEnd = interestDateStart.plusDays(1);
 
-        return f.getDepartureAirport() == fi.getDepartureAirport() && 
-                f.getArrivalAirport() == fi.getArrivalAirport() &&
-                interestDateStart.compareTo(flightDate) <=0 && 
-                interestDateEnd.compareTo(flightDate) >=0;
+        return f.getDepartureAirport() == fi.getDepartureAirport() && f.getArrivalAirport() == fi.getArrivalAirport()
+                && interestDateStart.compareTo(flightDate) <= 0 && interestDateEnd.compareTo(flightDate) >= 0;
     }
 
-    public void setFlightUnavailable(Flight f){
+    public void setFlightUnavailable(Flight f) {
         f.setAvailable(false);
         databaseManager.updateFlight(f);
     }
 
-    public void removeExpiredOffers() {
-        /*OffsetDateTime now = OffsetDateTime.now();
-        List<GeneratedOffer> expFlights = databaseManager.getAvailableFlights().stream().dropWhile(f -> f.getExpireDate().isBefore(now)).collect(Collectors.toList());
-        for (ListIterator<Flight> iter = expFlights.listIterator(); iter.hasNext(); ) {
-            Flight f = iter.next();
-            f.setAvailable(false);
-            databaseManager.updateFlight(f);
-        }*/
-    } 
+    public List<GeneratedOffer> removeExpiredOffers() {
+        OffsetDateTime now = OffsetDateTime.now();
+        List<GeneratedOffer> expFlights = databaseManager.getAvailableOffers().stream()
+                .filter(f -> f.getExpireDate().isBefore(now)).collect(Collectors.toList());
 
-    public void setUsedUserInterest(UserInterest userInterest){
+        return expFlights;
+    }
+
+    public void setUnavailableOfferFlights(List<GeneratedOffer> list) {
+        for (ListIterator<GeneratedOffer> iter = list.listIterator(); iter.hasNext();) {
+            GeneratedOffer g = iter.next();
+            g.setAvailable(false);
+            g.getOutboundFlight().setAvailable(false);
+            g.getFlightBack().setAvailable(false);
+            databaseManager.updateFlight(g.getOutboundFlight());
+            databaseManager.updateFlight(g.getFlightBack());
+            databaseManager.updateOffer(g);
+        }
+    }
+
+    public void setUsedUserInterest(UserInterest userInterest) {
         userInterest.setUsed(true);
         userInterest.getOutboundFlightInterest().setUsed(true);
         userInterest.getFlightBackInterest().setUsed(true);
         databaseManager.updateUserInterest(userInterest);
     }
-
 
     public void startConfirmOffer(UserOfferDTO request, AsyncResponse response, UriInfo uriInfo) {
         LOGGER.info("StartConfirmOffer");
@@ -172,7 +181,7 @@ public class OfferManager {
         processState.setState(PROCESS_CONFIRM_BUY_OFFER, email, token, 1);
 
         final RuntimeService runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();
-        Map<String,Object> processVariables = new HashMap<String,Object>();
+        Map<String, Object> processVariables = new HashMap<String, Object>();
         processVariables.put(USER_OFFER_REQUEST, request);
         processVariables.put(OFFER_TOKEN, token);
         processVariables.put(USERNAME, email);
@@ -188,8 +197,8 @@ public class OfferManager {
     
     public Response handleConfirmOffer(String token, String email, UserOfferDTO offer, DelegateExecution execution) throws OfferNotFoundException{
         // Control token
-        execution.setVariable(IS_VALID_TOKEN, true);               
-        execution.setVariable(IS_OFFER_EXPIRED, false);               
+        execution.setVariable(IS_VALID_TOKEN, true);
+        execution.setVariable(IS_OFFER_EXPIRED, false);
 
         if (token == null || token == "") {
             execution.setVariable(IS_VALID_TOKEN, false);               
@@ -208,13 +217,11 @@ public class OfferManager {
                     .entity(Errors.INVALID_TOKEN)
                     .build();
         }
-        
+
         OffsetDateTime now = OffsetDateTime.now();
         if (offerToReturn.getExpireDate().compareTo(now) < 0) {
-            execution.setVariable(IS_OFFER_EXPIRED, true);  
-            return Response.status(Response.Status.BAD_REQUEST.getStatusCode())
-                            .entity(Errors.OFFER_EXPIRED)
-                            .build();
+            execution.setVariable(IS_OFFER_EXPIRED, true);
+            return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).entity(Errors.OFFER_EXPIRED).build();
         }
         execution.setVariable(USER_OFFER, offerToReturn);
         return Response.status(Response.Status.OK.getStatusCode())
@@ -255,15 +262,18 @@ public class OfferManager {
 
     /**
      * Ritona la distanza tra l'aereoporto dell'offerta e línidirizzo inserito
+     * 
      * @throws DistanceServiceException
      */
     public float getDistance(AddressDTO userAddress, GeneratedOffer offer) throws DistanceServiceException {
         Float latitude = offer.getOutboundFlight().getDepartureAirport().getLatitude();
         Float longitude = offer.getOutboundFlight().getDepartureAirport().getLongitude();
-        String fullAddress = userAddress.getAddress() + ", " + userAddress.getPostCode() + " " + userAddress.getCityName() + ", " + userAddress.getCountry();
+        String fullAddress = userAddress.getAddress() + ", " + userAddress.getPostCode() + " "
+                + userAddress.getCityName() + ", " + userAddress.getCountry();
         try {
-            DistanceDTO distance = distanceClient.requestDistance(fullAddress , latitude.toString() + ',' + longitude.toString());
-            if(!distance.getStatus().equals("OK"))
+            DistanceDTO distance = distanceClient.requestDistance(fullAddress,
+                    latitude.toString() + ',' + longitude.toString());
+            if (!distance.getStatus().equals("OK"))
                 throw new DistanceServiceException();
             return distance.getValue();
         } catch (IOException | GeoserverErrorException e) {
@@ -275,7 +285,8 @@ public class OfferManager {
     public void bookAllRent(String email, AddressDTO address, GeneratedOffer offer, DelegateExecution execution) 
                                                                     throws UserNotFoundException {
         User user = databaseManager.getUser(email);
-        String userAddress = address.getAddress() + ", " + address.getPostCode() + " " + address.getCityName() + ", " + address.getCountry();
+        String userAddress = address.getAddress() + ", " + address.getPostCode() + " " + address.getCityName() + ", "
+                + address.getCountry();
         Airport airport = offer.getOutboundFlight().getDepartureAirport();
         String airportAddress = String.valueOf(airport.getLatitude()) +','+ String.valueOf(airport.getLongitude());
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
@@ -319,4 +330,3 @@ public class OfferManager {
     public class SendTicketException extends Exception {}    
    
 }
-

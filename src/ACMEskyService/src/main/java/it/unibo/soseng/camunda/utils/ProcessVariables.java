@@ -10,18 +10,16 @@ public final class ProcessVariables {
     public static final String AIRLINE_SERVICES_INDEX = "airlineService";
     public static final String AIRLINE_SERVICES = "airlineServices";
 
-
     // Interest manager
     public static final String USER_INTERESTS_REQUEST = "userInterestsRequest";
-
 
     // Confirm and buy offer
     public static final String USER_OFFER_REQUEST = "userOfferRequest";
     public static final String OFFER_TOKEN = "offerToken";
     public static final String IS_VALID_TOKEN = "isValidToken";
     public static final String IS_OFFER_EXPIRED = "isOfferExpired";
-    public static final String USER_ADDRESS = "userAddress"; 
-    public static final String USER_DISTANCE = "userDistance";  // float meters
+    public static final String USER_ADDRESS = "userAddress";
+    public static final String USER_DISTANCE = "userDistance"; // float meters
     public static final String RENT_OUTBOUND = "rentOutbound"; // BookRentResponse
     public static final String RENT_BACK = "rentBack"; // BookRentResponse
     public static final String TICKET_FILE = "ticketFile"; // byte[]
@@ -36,11 +34,11 @@ public final class ProcessVariables {
     public static final String AVAILABLE_FLIGHTS = "availableFlight";
     public static final String USER_INTERESTS = "userInterests";
     public static final String USER_INTEREST_INDEX = "userInterestsIndex";
-    public static final String CURRENT_USER_INTEREST= "currentUserInterest";
+    public static final String CURRENT_USER_INTEREST = "currentUserInterest";
     public static final String PRONTOGRAM_USERNAME = "prontogramUsername";
     public static final String THERE_IS_FLIGHTS = "thereIsFlights";
     public static final String GENERATED_OFFER = "generatedOffer";
-
+    public static final String SET_OFFER_UNAVAILABLE = "setOfferUnavailable";
 
     // Commmon
     public static final String PROCESS_ERROR = "processError";

@@ -11,10 +11,11 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 import it.unibo.soseng.logic.offer.OfferManager;
 import it.unibo.soseng.model.GeneratedOffer;
 
-import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_OFFER;;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_OFFER;
 
 @Named("changeOfferStateDelegate")
-public class ChangeOfferStateDelegate implements JavaDelegate{
+public class ChangeOfferStateDelegate implements JavaDelegate {
+
     private final static Logger LOGGER = Logger.getLogger(ChangeOfferStateDelegate.class.getName());
 
     @Inject
@@ -27,5 +28,5 @@ public class ChangeOfferStateDelegate implements JavaDelegate{
         GeneratedOffer offer = (GeneratedOffer) execution.getVariable(USER_OFFER);
         offerManager.setBooked(offer);
     }
-    
+
 }

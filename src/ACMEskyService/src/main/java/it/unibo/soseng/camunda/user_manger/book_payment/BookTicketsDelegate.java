@@ -15,7 +15,7 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 import it.unibo.soseng.camunda.utils.ProcessState;
 import it.unibo.soseng.gateway.airline.AirlineClient.BookTicketsExceptionException;
 import it.unibo.soseng.logic.airline.AirlineManager;
-import it.unibo.soseng.logic.offer.OfferManager.SendTicketException;
+import it.unibo.soseng.logic.airline.AirlineManager.SendTicketException;
 import it.unibo.soseng.model.GeneratedOffer;
 
 import static it.unibo.soseng.camunda.utils.ErrorsEvents.SEND_TICKET_ERROR;
@@ -24,7 +24,7 @@ import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_CONFIRM_BUY
 import static it.unibo.soseng.camunda.utils.ProcessVariables.RESPONSE;
 
 @Named("bookTicketsDelegate")
-public class BookTicketsDelegate implements JavaDelegate{
+public class BookTicketsDelegate implements JavaDelegate {
     private final static Logger LOGGER = Logger.getLogger(BookTicketsDelegate.class.getName());
 
     @Inject
@@ -34,7 +34,7 @@ public class BookTicketsDelegate implements JavaDelegate{
     private AirlineManager airlineManager;
 
     @Override
-    public void execute(DelegateExecution execution){
+    public void execute(DelegateExecution execution) {
         LOGGER.info("Execute BookTickets");
         GeneratedOffer offer = (GeneratedOffer) execution.getVariable(USER_OFFER);
         try{
