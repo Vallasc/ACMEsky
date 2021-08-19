@@ -1,5 +1,6 @@
 package it.unibo.soseng.camunda.user_manger.book_payment;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.logging.Logger;
 
@@ -12,6 +13,7 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 
 import it.unibo.soseng.camunda.utils.ProcessState;
+import it.unibo.soseng.gateway.airline.AirlineClient.BookTicketsExceptionException;
 import it.unibo.soseng.logic.airline.AirlineManager;
 import it.unibo.soseng.logic.offer.OfferManager.SendTicketException;
 import it.unibo.soseng.model.GeneratedOffer;
@@ -36,9 +38,13 @@ public class BookTicketsDelegate implements JavaDelegate{
         LOGGER.info("Execute BookTickets");
         GeneratedOffer offer = (GeneratedOffer) execution.getVariable(USER_OFFER);
         try{
-            airlineManager.bookOfferTicket(offer);
+            byte[] file = airlineManager.bookOfferTicket(offer);
             execution.setVariable(USER_OFFER, offer);
-        }catch(SendTicketException | IOException e){
+            String path = offer.getToken() + "_tmp1.pdf";
+            try (FileOutputStream stream = new FileOutputStream(path)) {
+                stream.write(file);
+            }
+        }catch(BookTicketsExceptionException | SendTicketException | IOException e){
             Response response = Response.status(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()).build();
             processState.setState(PROCESS_CONFIRM_BUY_OFFER, offer.getUser().getEmail(), RESPONSE, response);
             LOGGER.severe(e.toString());
