@@ -28,9 +28,6 @@ public class AirlineClient {
     final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
     @Inject
-    ProcessState processState;
-
-    @Inject
     DatabaseManager dbManager;
 
     @Inject
@@ -62,7 +59,7 @@ public class AirlineClient {
     }
 
 
-    public byte[] getFlightTickets(String wsAddress, String username, String outboundFlightCode, String flightBackCode) throws IOException{
+    public byte[] getFlightTickets(String wsAddress, String username, String outboundFlightCode, String flightBackCode) throws IOException, BookTicketsExceptionException{
 
         String url = new String(wsAddress + "/getTickets?id="+ outboundFlightCode +"&id=" + flightBackCode);
 
@@ -71,17 +68,14 @@ public class AirlineClient {
         Request request = new Request.Builder().url(url)
                             .addHeader("Content-Type", "application/pdf")
                             .build();
-        Response response = client.newCall(request).execute();
-
-        byte[] ticket = response.body().bytes();
-
-        processState.setState(PROCESS_CONFIRM_BUY_OFFER, username, "PDF", ticket);
-
-
+        byte[] ticket;
+        try (Response response = client.newCall(request).execute()) {
+            ticket = response.body().bytes();
+            if(response.code() != 200 && response.code() != 201)
+                throw new BookTicketsExceptionException();
+        }
         return ticket;
-
     }
-
 
     public void unbookFlights(GeneratedOffer offer) throws IOException{
 
@@ -93,13 +87,13 @@ public class AirlineClient {
         Request request = new Request.Builder().url(url)
                             .addHeader("Content-Type", "*/*")
                             .build();
+        try (Response response = client.newCall(request).execute()) {
+        }
 
         client.newCall(request).execute();
-
-        processState.getStateAndRemove(PROCESS_CONFIRM_BUY_OFFER, offer.getUser().getEmail(), "PDF");
-
     }
 
     public class AirlineErrorException extends Exception {}
+    public class BookTicketsExceptionException extends Exception {}
 
 }
