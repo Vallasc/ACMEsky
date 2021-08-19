@@ -2,9 +2,11 @@ package it.unibo.soseng.logic.offer;
 
 import static it.unibo.soseng.camunda.utils.ProcessVariables.RENT_BACK;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.RENT_OUTBOUND;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_ADDRESS;
 
 import java.io.IOException;
 import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -39,14 +41,11 @@ import it.unibo.soseng.model.Airport;
 import it.unibo.soseng.model.Flight;
 import it.unibo.soseng.model.FlightInterest;
 import it.unibo.soseng.model.GeneratedOffer;
+import it.unibo.soseng.model.RentService;
 import it.unibo.soseng.model.User;
 import it.unibo.soseng.model.UserInterest;
 import it.unibo.soseng.utils.Errors;
-import it.unibo.soseng.ws.generated.BookRent;
 import it.unibo.soseng.ws.generated.BookRentResponse;
-import it.unibo.soseng.ws.generated.Rent;
-import it.unibo.soseng.ws.generated.RentService1;
-import it.unibo.soseng.ws.generated.RentService2;
 
 import static it.unibo.soseng.camunda.utils.Events.PAY_OFFER;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.ASYNC_RESPONSE;
@@ -154,31 +153,37 @@ public class OfferManager {
     }
 
 
-
-
-
-    //TODO: controllare che non ci siano altri processi attivi
-    // Start Camunda process
     public void startConfirmOffer(UserOfferDTO request, AsyncResponse response, UriInfo uriInfo) {
         LOGGER.info("StartConfirmOffer");
         String email = securityContext.getCallerPrincipal().getName();
-        String token = request.getToken();
+        String token = request.getOfferToken();
+
+        try {
+            databaseManager.getOfferByTokenEmail(token, email);
+        } catch (OfferNotFoundException e) {
+            response.resume(Response.status(Response.Status.NOT_FOUND.getStatusCode()).build());
+        }
+
+        Integer processActive = (Integer) processState.getState(PROCESS_CONFIRM_BUY_OFFER, email, token);
+        if(processActive != null) {
+            response.resume(Response.status(Response.Status.CONFLICT.getStatusCode()).build());
+            return;
+        }
+        processState.setState(PROCESS_CONFIRM_BUY_OFFER, email, token, 1);
 
         final RuntimeService runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();
         Map<String,Object> processVariables = new HashMap<String,Object>();
         processVariables.put(USER_OFFER_REQUEST, request);
         processVariables.put(OFFER_TOKEN, token);
         processVariables.put(USERNAME, email);
-        processVariables.put(BUSINESS_KEY, email+PROCESS_CONFIRM_BUY_OFFER);
+        processVariables.put(BUSINESS_KEY, PROCESS_CONFIRM_BUY_OFFER + email + token);
         processState.setState(PROCESS_CONFIRM_BUY_OFFER, email, ASYNC_RESPONSE, response);
 
-        
+
         // Start the process instance
-        // TODO Iniziare processo con messaggio se si puo
-        runtimeService.createProcessInstanceByKey(PAY_OFFER)
-                    .businessKey(email+PROCESS_CONFIRM_BUY_OFFER)
-                    .setVariables(processVariables)
-                    .executeWithVariablesInReturn();
+        runtimeService.correlateMessage(PAY_OFFER, 
+                                        PROCESS_CONFIRM_BUY_OFFER + email + token,
+                                        processVariables);
     }  
     
     public Response handleConfirmOffer(String token, String email, UserOfferDTO offer, DelegateExecution execution) throws OfferNotFoundException{
@@ -188,20 +193,20 @@ public class OfferManager {
 
         if (token == null || token == "") {
             execution.setVariable(IS_VALID_TOKEN, false);               
-                return Response.status(Response.Status.BAD_REQUEST.getStatusCode())
-            .entity(Errors.INVALID_TOKEN)
-            .build();
+            return Response.status(Response.Status.BAD_REQUEST.getStatusCode())
+                    .entity(Errors.INVALID_TOKEN)
+                    .build();
         }
-        GeneratedOffer offerToReturn;
 
+        GeneratedOffer offerToReturn;
         try {
             offerToReturn = databaseManager.getOfferByTokenEmail(token, email);
 
         } catch (OfferNotFoundException e) {
             execution.setVariable(IS_VALID_TOKEN, false);               
-                return Response.status(Response.Status.NOT_FOUND.getStatusCode())
-            .entity(Errors.INVALID_TOKEN)
-            .build();
+            return Response.status(Response.Status.NOT_FOUND.getStatusCode())
+                    .entity(Errors.INVALID_TOKEN)
+                    .build();
         }
         
         OffsetDateTime now = OffsetDateTime.now();
@@ -213,18 +218,39 @@ public class OfferManager {
         }
         execution.setVariable(USER_OFFER, offerToReturn);
         return Response.status(Response.Status.OK.getStatusCode())
-        .build();
+                        .build();
     }
 
-    public void startPaymentRequest(AsyncResponse response) {
+    public void startPaymentRequest(AddressDTO address, AsyncResponse response) {
         String email = securityContext.getCallerPrincipal().getName();
-        final RuntimeService runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();
 
+        try {
+            databaseManager.getOfferByTokenEmail(address.getOfferToken(), email);
+        } catch (OfferNotFoundException e) {
+            response.resume(Response.status(Response.Status.NOT_FOUND.getStatusCode()).build());
+            return;
+        }
+
+        Integer processActive = (Integer) processState.getState(PROCESS_CONFIRM_BUY_OFFER, email, address.getOfferToken());
+        if(processActive == null){
+            response.resume(Response.status(Response.Status.METHOD_NOT_ALLOWED.getStatusCode()).build());
+            return;
+        }
+        if(processActive == 2){
+            response.resume(Response.status(Response.Status.CONFLICT.getStatusCode()).build());
+            return;
+        }
+        
+        processState.setState(PROCESS_CONFIRM_BUY_OFFER, email, address.getOfferToken(), 2);
         processState.setState(PROCESS_CONFIRM_BUY_OFFER, email, ASYNC_RESPONSE, response);
-        runtimeService.createMessageCorrelation(PAY_OFFER)
-                    .processInstanceBusinessKey(email+PROCESS_CONFIRM_BUY_OFFER)
-                    //.setVariable("var", response)
-                    .correlate();
+
+        Map<String,Object> processVariables = new HashMap<String,Object>();
+        processVariables.put(USER_ADDRESS, address);
+
+        final RuntimeService runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();
+        runtimeService.correlateMessage(PAY_OFFER, 
+                                        PROCESS_CONFIRM_BUY_OFFER + email + address.getOfferToken(),
+                                        processVariables);
     }
 
     /**
@@ -246,46 +272,50 @@ public class OfferManager {
         }
     }
 
-    public void bookAllRent(String email, AddressDTO address, GeneratedOffer offer, DelegateExecution execution) throws UserNotFoundException {
+    public void bookAllRent(String email, AddressDTO address, GeneratedOffer offer, DelegateExecution execution) 
+                                                                    throws UserNotFoundException {
         User user = databaseManager.getUser(email);
         String userAddress = address.getAddress() + ", " + address.getPostCode() + " " + address.getCityName() + ", " + address.getCountry();
         Airport airport = offer.getOutboundFlight().getDepartureAirport();
         String airportAddress = String.valueOf(airport.getLatitude()) +','+ String.valueOf(airport.getLongitude());
-        try {
-            BookRentResponse reponse = this.bookRent(RentService1.class, user, userAddress, airportAddress);
-            execution.setVariable(RENT_OUTBOUND, reponse);
-        } catch (RentServiceException e) {
-            LOGGER.info(e.toString());
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        String dateTimeOutbound = fmt.format(offer.getOutboundFlight().getDepartureDateTime());
+        String dateTimeFligntBack = fmt.format(offer.getFlightBack().getArrivalDateTime());
+
+
+        List<RentService> rentServices = databaseManager.getAllRentServices();
+        // Outbound
+        for(RentService rent : rentServices){
+            String name = rent.getEntity().getUsername();
+            BookRentResponse response = rentClient.bookRent(name, user, userAddress, airportAddress, dateTimeOutbound);
+            if(response.getStatus().equals("OK")){
+                execution.setVariable(RENT_OUTBOUND, response);
+                break;
+            }
         }
-        try {
-            BookRentResponse reponse = this.bookRent(RentService2.class, user, airportAddress, userAddress);
-            execution.setVariable(RENT_BACK, reponse);
-        } catch (RentServiceException e) {
-            LOGGER.info(e.toString());
+
+        // Flyback
+        for(RentService rent : rentServices){
+            String name = rent.getEntity().getUsername();
+            BookRentResponse response = rentClient.bookRent(name, user, airportAddress, userAddress, dateTimeFligntBack);
+            if(response.getStatus().equals("OK")){
+                execution.setVariable(RENT_BACK, response);
+                break;
+            }
         }
     }
 
-    public BookRentResponse bookRent(Class service, User user, String addressFrom, String addressTo) throws RentServiceException {
-        RentService1 rentService1 = new RentService1();
-        RentService2 rentService2 = new RentService2();
-        Rent ws;
-        if( service.getName() == "RentService1" )
-            ws = rentService1.getRentServicePort();
-        else
-            ws = rentService2.getRentServicePort();
-
-        BookRent bookRent = new BookRent();
-        bookRent.setClientName(user.getName()); 
-        bookRent.setClientSurname(user.getSurname());
-        bookRent.setFromAddress(addressFrom);
-        bookRent.setToAddress(addressTo);
-
-        return rentClient.rentRequest(ws, bookRent);
+    public void setBooked(GeneratedOffer offer){
+        offer.setBooked(true);
+        offer.setAvailable(false);
+        offer.getOutboundFlight().setBooked(true);
+        offer.getOutboundFlight().setAvailable(false);
+        offer.getFlightBack().setBooked(true);
+        offer.getFlightBack().setAvailable(false);
+        databaseManager.updateOffer(offer);
     }
 
     public class DistanceServiceException extends Exception {}
-
-    public class RentServiceException extends Exception {}
     public class SendTicketException extends Exception {}    
    
 }
