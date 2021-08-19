@@ -1,0 +1,250 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>ACMEsky invoice</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700|Montserrat:300,400,700"></link>
+  <style>
+    html{font-family:sans-serif;line-height:1.15;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}
+    body{margin:0}
+    header,section{display:block}
+    h1{font-size:2em;margin:.67em 0}
+    main{display:block}img{border-style:none}
+    details{display:block}
+    html{box-sizing:border-box;font-size:100%}
+    *{box-sizing:inherit}
+    body{margin:0;padding:0;background:#fefefe;font-family:Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;font-weight:400;line-height:1.5;color:#0a0a0a;-webkit-font-smoothing:antialiased;}img{display:inline-block;vertical-align:middle;max-width:100%;height:auto;-ms-interpolation-mode:bicubic}
+    .row{max-width:75rem;margin-right:auto;margin-left:auto;display:flex;}
+    .row .row{margin-right:-.625rem;margin-left:-.625rem}
+    @media print,screen and (min-width:40em){.row .row{margin-right:-.9375rem;margin-left:-.9375rem}}
+    @media print,screen and (min-width:64em){.row .row{margin-right:-.9375rem;margin-left:-.9375rem}}
+    .row .row.collapse{margin-right:0;margin-left:0}.row:not(.expanded) .row{max-width:none}
+    .row.collapse>.columns{padding-right:0;padding-left:0}.row.collapse>.columns>.row{margin-right:0;margin-left:0}
+    .columns{flex:1 1 0px;padding-right:.625rem;padding-left:.625rem;min-width:0}
+    @media print,screen and (min-width:40em){.columns{padding-right:.9375rem;padding-left:.9375rem}}
+    .row.row.columns{float:none;display:block}
+    .row .row.row.columns{margin-right:0;margin-left:0;padding-right:0;padding-left:0}
+    div,h1,h2,h5,p,td,th{margin:0;padding:0}p{margin-bottom:1rem;font-size:inherit;line-height:1.6;text-rendering:optimizeLegibility}
+    h1,h2,h5{font-family:Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;font-style:normal;font-weight:400;color:inherit;text-rendering:optimizeLegibility}
+    h1{font-size:1.5rem}h1,h2{line-height:1.4;margin-top:0;margin-bottom:.5rem}h2{font-size:1.25rem}h5{font-size:1.0625rem}h5{line-height:1.4;margin-top:0;margin-bottom:.5rem}
+    @media print,screen and (min-width:40em){h1{font-size:3rem}h2{font-size:2.5rem}h5{font-size:1.25rem}}.text-right{text-align:right}
+    @media print{*{background:transparent!important;box-shadow:none!important;color:#000!important;text-shadow:none!important}thead{display:table-header-group}
+    img,tr{page-break-inside:avoid}img{max-width:100%!important}@page{margin:.5cm}h2,p{orphans:3;widows:3}h2{page-break-after:avoid}}
+    .callout{position:relative;margin:0 0 1rem;padding:1rem;border:1px solid hsla(0,0%,4%,.25);border-radius:0;background-color:#fff;color:#0a0a0a}.callout>:first-child{margin-top:0}
+    .callout>:last-child{margin-bottom:0}.callout.large{padding:3rem}table{width:100%;margin-bottom:1rem;border-radius:0}table tbody,table thead{border:1px solid #f1f1f1;background-color:#fefefe}
+    table thead{background:#f8f8f8;color:#0a0a0a}table thead tr{background:transparent}table thead td,table thead th{padding:.5rem .625rem .625rem;font-weight:700;text-align:left}
+    table tbody td,table tbody th{padding:.5rem .625rem .625rem}table tbody tr:nth-child(even){border-bottom:0;background-color:#f1f1f1}
+    .top-bar{display:flex;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;
+      -webkit-box-align:center;-ms-flex-align:center;align-items:center;padding:.5rem;}
+    .top-bar{background-color:#e6e6e6}
+    @media print,screen and (min-width:40em){}
+    .align-right{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;}
+
+
+
+    @page {
+        margin: 0;
+    }
+    body {
+      font-family: "Montserrat", sans-serif;
+      font-weight: 400;
+      color: #fff;
+    }
+
+    header.top-bar h1 {
+      font-family: "Montserrat", sans-serif;
+    }
+
+    main {
+      margin-top: 4rem;
+      min-height: calc(100vh - 107px);
+    }
+    main .inner-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    table.invoice {
+      background: #fff;
+      margin-bottom: 5cm;
+    }
+    
+    table.invoice .num {
+      font-weight: 200;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-size: 0.8em;
+    }
+    table.invoice tr, table.invoice td {
+      background: #fff;
+      text-align: left;
+      font-weight: 400;
+      color: #322d28;
+    }
+    table.invoice tr.header td img {
+      max-width: 300px;
+    }
+    table.invoice tr.header td h2 {
+      text-align: right;
+      font-family: "Montserrat", sans-serif;
+      font-weight: 200;
+      font-size: 2rem;
+      color: #0067ac;
+    }
+    table.invoice tr.intro td:nth-child(2) {
+      text-align: right;
+    }
+    table.invoice tr.details > td {
+      padding-top: 4rem;
+      padding-bottom: 0;
+    }
+    table.invoice tr.details td.id, table.invoice tr.details td.qty, table.invoice tr.details th.id, table.invoice tr.details th.qty {
+      text-align: center;
+    }
+    table.invoice tr.details td:last-child, table.invoice tr.details th:last-child {
+      text-align: right;
+    }
+    table.invoice tr.details table thead, table.invoice tr.details table tbody {
+      position: relative;
+    }
+    table.invoice tr.totals td {
+      padding-top: 0;
+    }
+    table.invoice tr.totals table tr td:first-child {
+      font-weight: 500;
+    }
+    table.invoice tr.totals table tr td:last-child {
+      text-align: right;
+      font-weight: 200;
+    }
+    table.invoice tr.totals table tr:last-child td {
+      padding-bottom: 0.5em;
+    }
+    table.invoice tr.totals table tr:last-child td:last-child {
+      position: relative;
+    }
+
+    .no-border td {
+      padding: 5px;
+    }
+
+    table.invoice tr.totals table tr.total td {
+      font-size: 1.2em;
+      padding-top: 0.5em;
+      font-weight: 700;
+    }
+    table.invoice tr.totals table tr.total td:last-child {
+      font-weight: 700;
+    }
+
+    .additional-info h5 {
+      font-size: 0.8em;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #0067ac;
+    }
+    tr.line td {
+        height: 1px;
+        margin: 0px;
+        padding: 0px;
+        background-color: black;
+    }
+  </style>
+
+</head>
+
+<body>
+  <div class="callout large" style = "margin: 0px; border: 1px solid #fff;">
+  <div>
+    <table class="invoice">
+        <tr class="header">
+          <td class="">
+            <img src="http://web/imgs/airplane.png" alt="ACMEsky" style="height: 90px;">
+          </td>
+          <td class="align-right">
+            <h2>Ricevuta ACMEsky</h2>
+          </td>
+        </tr>
+        <tr class="intro">
+          <td class="">
+            Ciao, {{name}} {{surname}}.<br>
+            Grazie per il tuo ordine.
+          </td>
+          <td class="text-right">
+            <div class="num">Ordine #{{orderToken}}</div><br>
+            {{date}}
+          </td>
+        </tr>
+        <tr class="details">
+          <td colspan="2">
+            <table>
+                <tr>
+                  <th class="desc">Descrizione</th>
+                  <th class="id">Identificativo</th>
+                  <th class="amt">Subtotal</th>
+                </tr>
+                <tr class="line">
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>  
+                {{row1}}
+                {{row2}}
+                {{row3}}
+                {{row4}}
+                <tr class="line">
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>  
+            </table>
+          </td>
+        </tr>
+        <tr class="totals">
+          <td></td>
+          <td>
+            <table>
+                <tr class="subtotal">
+                  <td class="num">Subtotal</td>
+                  <td class="num">€{{subtotal}}</td>
+                </tr>
+                <tr class="subtotal">
+                  <td class="num">Costo servizio</td>
+                  <td class="num">€{{serviceCost}}</td>
+                </tr>
+                <tr class="line">
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>  
+                <tr class="total">
+                  <td>Total</td>
+                  <td>€{{total}}</td>
+                </tr>
+            </table>
+          </td>
+        </tr>
+    </table>
+
+    <section class="additional-info">
+      <div class="row">
+        <div class="columns">
+          <h5>Sede legale</h5>
+          <p>ACMEsky Inc.<br>
+            Mura Anteo Zamboni 7<br>
+            40126 Bologna (BO)<br>
+            Italia</p>
+        </div>
+        <div class="columns">
+          <h5>Info pagamento</h5>
+          <p>Credit Card<br>
+            Card Type: MasterCard<br>
+            •••• •••• •••• 1234
+          </p>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+
+</html>
