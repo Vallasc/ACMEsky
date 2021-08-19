@@ -16,38 +16,38 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.2
  * 
  */
-@WebServiceClient(name = "RentService", targetNamespace = "www.unibo.it.wsdl", wsdlLocation = "./rentService1.wsdl")
+@WebServiceClient(name = "RentService1", targetNamespace = "www.unibo.it.wsdl", wsdlLocation = "/WSDL/rentService1.wsdl")
 public class RentService1
     extends Service
 {
 
-    private final static URL RENTSERVICE_WSDL_LOCATION;
-    private final static WebServiceException RENTSERVICE_EXCEPTION;
-    private final static QName RENTSERVICE_QNAME = new QName("www.unibo.it.wsdl", "RentService");
+    private final static URL RENTSERVICE1_WSDL_LOCATION;
+    private final static WebServiceException RENTSERVICE1_EXCEPTION;
+    private final static QName RENTSERVICE1_QNAME = new QName("www.unibo.it.wsdl", "RentService1");
 
     static {
-        RENTSERVICE_WSDL_LOCATION = it.unibo.soseng.ws.generated.RentService1.class.getResource("./rentService1.wsdl");
+        RENTSERVICE1_WSDL_LOCATION = it.unibo.soseng.ws.generated.RentService1 .class.getResource("/WSDL/rentService1.wsdl");
         WebServiceException e = null;
-        if (RENTSERVICE_WSDL_LOCATION == null) {
-            e = new WebServiceException("Cannot find './rentService1.wsdl' wsdl. Place the resource correctly in the classpath.");
+        if (RENTSERVICE1_WSDL_LOCATION == null) {
+            e = new WebServiceException("Cannot find '/WSDL/rentService1.wsdl' wsdl. Place the resource correctly in the classpath.");
         }
-        RENTSERVICE_EXCEPTION = e;
+        RENTSERVICE1_EXCEPTION = e;
     }
 
     public RentService1() {
-        super(__getWsdlLocation(), RENTSERVICE_QNAME);
+        super(__getWsdlLocation(), RENTSERVICE1_QNAME);
     }
 
     public RentService1(WebServiceFeature... features) {
-        super(__getWsdlLocation(), RENTSERVICE_QNAME, features);
+        super(__getWsdlLocation(), RENTSERVICE1_QNAME, features);
     }
 
     public RentService1(URL wsdlLocation) {
-        super(wsdlLocation, RENTSERVICE_QNAME);
+        super(wsdlLocation, RENTSERVICE1_QNAME);
     }
 
     public RentService1(URL wsdlLocation, WebServiceFeature... features) {
-        super(wsdlLocation, RENTSERVICE_QNAME, features);
+        super(wsdlLocation, RENTSERVICE1_QNAME, features);
     }
 
     public RentService1(URL wsdlLocation, QName serviceName) {
@@ -81,10 +81,10 @@ public class RentService1
     }
 
     private static URL __getWsdlLocation() {
-        if (RENTSERVICE_EXCEPTION!= null) {
-            throw RENTSERVICE_EXCEPTION;
+        if (RENTSERVICE1_EXCEPTION!= null) {
+            throw RENTSERVICE1_EXCEPTION;
         }
-        return RENTSERVICE_WSDL_LOCATION;
+        return RENTSERVICE1_WSDL_LOCATION;
     }
 
 }
