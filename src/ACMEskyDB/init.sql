@@ -5197,14 +5197,15 @@ INSERT INTO public.domain_entities VALUES (2, 'airline2', 'ROLE_AIRLINE', 'salt-
 INSERT INTO public.domain_entities VALUES (3, 'bank', 'ROLE_BANK', 'salt-TODO', 'bank');
 INSERT INTO public.domain_entities VALUES (5, 'giacomo', 'ROLE_USER', 'salt-TODO', 'giacomo@acme.com');
 INSERT INTO public.domain_entities VALUES (6, 'andrea', 'ROLE_USER', 'salt-TODO', 'andrea@acme.com');
-INSERT INTO public.domain_entities VALUES (7, 'rriccardo', 'ROLE_USER', 'salt-TODO', 'riccardo@acme.com');
-ALTER SEQUENCE public.domain_entities_id_seq RESTART WITH 8;
+INSERT INTO public.domain_entities VALUES (7, 'riccardo', 'ROLE_USER', 'salt-TODO', 'riccardo@acme.com');
+INSERT INTO public.domain_entities VALUES (8, 'RentGood', 'ROLE_RENT', 'salt-TODO', 'RentGood');
+INSERT INTO public.domain_entities VALUES (9, 'JustRent', 'ROLE_RENT', 'salt-TODO', 'JustRent');
+ALTER SEQUENCE public.domain_entities_id_seq RESTART WITH 10;
 
-INSERT INTO public.users VALUES (1, 'giacomo@acme.com', 'Giacomo', 'Giacomo', 'Vallorani', 5);
-INSERT INTO public.users VALUES (2, 'andrea@acme.com', 'Andrea', 'Andrea', 'Di Ubaldo', 6);
-INSERT INTO public.users VALUES (3, 'riccardo@acme.com', 'Riccardo', 'Riccardo', 'Baratin', 7);
+INSERT INTO public.users VALUES (1, 'giacomo@acme.com', 'Giacomo', 'giacomo', 'Vallorani', 5);
+INSERT INTO public.users VALUES (2, 'andrea@acme.com', 'Andrea', 'andrea', 'Di Ubaldo', 6);
+INSERT INTO public.users VALUES (3, 'riccardo@acme.com', 'Riccardo', 'riccardo', 'Baratin', 7);
 ALTER SEQUENCE public.users_id_seq RESTART WITH 4;
-
 
 INSERT INTO public.airlines VALUES (1, 'http://national-airline:8082', 1);
 INSERT INTO public.airlines VALUES (2, 'http://international-airline:8082', 2);
@@ -5212,6 +5213,10 @@ ALTER SEQUENCE public.airlines_id_seq RESTART WITH 3;
 
 INSERT INTO public.banks VALUES (1, 'http://bank:8080', 3, '925461', '1234');
 ALTER SEQUENCE public.banks_id_seq RESTART WITH 2;
+
+INSERT INTO public.rent_services VALUES (1, 'Via della liberazione 32, Fermo (FM)', 'http://rent-service-1:8080', 8);
+INSERT INTO public.rent_services VALUES (2, 'Via Giovanni Bovio 31, Pisa (PI)', 'http://rent-service-2:8080', 9);
+ALTER SEQUENCE public.rent_services_id_seq RESTART WITH 3;
 
 --
 -- Flights data
@@ -5221,20 +5226,32 @@ INSERT INTO public.flights_interest VALUES (1, '2021-10-28 12:00:00+02', FALSE, 
 INSERT INTO public.flights_interest VALUES (2, '2021-11-8 12:00:00+02', FALSE, 3386, 2221, 1);
 INSERT INTO public.flights_interest VALUES (3, '2021-10-30 12:00:00+02', FALSE, 16, 424, 1);
 INSERT INTO public.flights_interest VALUES (4, '2021-10-25 12:00:00+02', FALSE, 424, 16, 1);
-ALTER SEQUENCE public.flights_interest_id_seq RESTART WITH 5;
+-- BLQ-AMS
+INSERT INTO public.flights_interest VALUES (5, '2021-10-28 12:00:00+02', FALSE, 16, 391, 1);
+INSERT INTO public.flights_interest VALUES (6, '2021-10-30 12:00:00+02', FALSE, 391, 16, 1);
+-- BLQ-BOS
+INSERT INTO public.flights_interest VALUES (7, '2021-11-28 12:00:00+02', FALSE, 424, 391, 1);
+INSERT INTO public.flights_interest VALUES (8, '2021-11-30 12:00:00+02', FALSE, 391, 424, 1);
+
+ALTER SEQUENCE public.flights_interest_id_seq RESTART WITH 9;
 
 
-INSERT INTO public.users_interests VALUES (1, '2021-10-1 12:00:00+02', 500, FALSE, 2, 1, 1);
-INSERT INTO public.users_interests VALUES (2, '2021-10-25 12:00:00+02', 400, FALSE, 3, 4, 1);
-ALTER SEQUENCE public.users_interests_id_seq RESTART WITH 3;
+INSERT INTO public.users_interests VALUES (1, '2021-10-1 12:00:00+02', 1300, FALSE, 2, 1, 1);
+INSERT INTO public.users_interests VALUES (2, '2021-10-25 12:00:00+02', 1500, FALSE, 3, 4, 1);
+-- BLQ-AMS
+INSERT INTO public.users_interests VALUES (3, '2021-10-25 12:00:00+02', 1500, FALSE, 6, 5, 1);
+-- BLQ-BOS
+INSERT INTO public.users_interests VALUES (4, '2021-10-25 12:00:00+02', 1300, FALSE, 8, 7, 1);
+
+ALTER SEQUENCE public.users_interests_id_seq RESTART WITH 5;
 
 
-INSERT INTO public.flights VALUES (1, '2021-10-28 22:00:00+02', TRUE, FALSE, '2021-10-28 15:00:00+02', '2021-10-26 15:00:00+02', 'XEG8F3G1', 130, 1, 2221, 3386);
-INSERT INTO public.flights VALUES (2, '2021-11-8 22:00:00+02', TRUE, FALSE, '2021-11-8 15:00:00+02', '2021-10-6 15:00:00+02', 'BEGDRG2', 130, 1, 3386, 2221);
+--INSERT INTO public.flights VALUES (1, '2021-10-28 22:00:00+02', TRUE, FALSE, '2021-10-28 15:00:00+02', '2021-10-26 15:00:00+02', 'XEG8F3G1', 130, 1, 2221, 3386);
+--INSERT INTO public.flights VALUES (2, '2021-11-8 22:00:00+02', TRUE, FALSE, '2021-11-8 15:00:00+02', '2021-10-6 15:00:00+02', 'BEGDRG2', 130, 1, 3386, 2221);
 
-INSERT INTO public.flights VALUES (3, '2021-10-28 20:00:00+00', FALSE, FALSE, '2021-10-28 13:00:00+00', '2021-10-26 13:00:00+00', 'XEG8F3G1', 130, 1, 2221, 391);
-INSERT INTO public.flights VALUES (4, '2021-11-08 20:00:00+00', FALSE, FALSE, '2021-11-08 13:00:00+00', '2021-10-06 13:00:00+00', 'BEGDRG2', 130, 1, 391, 2221);
-ALTER SEQUENCE public.flights_id_seq RESTART WITH 5;
+--INSERT INTO public.flights VALUES (3, '2021-10-28 20:00:00+00', FALSE, FALSE, '2021-10-28 13:00:00+00', '2021-10-26 13:00:00+00', 'XEG8F3G1', 600, 1, 2221, 391);
+--INSERT INTO public.flights VALUES (4, '2021-11-08 20:00:00+00', FALSE, FALSE, '2021-11-08 13:00:00+00', '2021-10-06 13:00:00+00', 'BEGDRG2', 600, 1, 391, 2221);
+--ALTER SEQUENCE public.flights_id_seq RESTART WITH 5;
 
-INSERT INTO public.generated_offers VALUES (1, TRUE, FALSE, '2021-12-12 14:39:57.388312+00', 'b62c1', 260, 4, 3, 1);
-ALTER SEQUENCE public.generated_offers_id_seq RESTART WITH 5;
+--INSERT INTO public.generated_offers VALUES (1, TRUE, FALSE, '2021-12-12 14:39:57.388312+00', 'b62c1', 1200, 4, 3, 1);
+--ALTER SEQUENCE public.generated_offers_id_seq RESTART WITH 5;
