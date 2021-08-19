@@ -26,7 +26,11 @@ public final class ProcessVariables {
     public static final String RENT_BACK = "rentBack"; // BookRentResponse
     public static final String TICKET_FILE = "ticketFile"; // byte[]
     public static final String PREMIUM_SERVICE_ERROR = "premiumServiceError";
-
+    public static final String ERRORS_IN_PAYMENT_REQ = "ErrorsPaymentReq";
+    public static final String USER_OFFER = "userOffer";
+    public static final String TICKET_PDF = "ticketPdf";
+    public static final String PAYMENT_LINK = "paymentLink";
+    public static final String PROCESS_STATE = "processState";
 
     // Offers manager
     public static final String AVAILABLE_FLIGHTS = "availableFlight";
@@ -45,12 +49,6 @@ public final class ProcessVariables {
     public static final String ASYNC_RESPONSE = "asyncResponse";
     public static final String RESPONSE = "response";
     public static final String URI_INFO = "uriInfo";
-
-
-    public static final String ERRORS_IN_PAYMENT_REQ = "ErrorsPaymentReq";
-    public static final String USER_OFFER = "userOffer";
-    public static final String PAYMENT_LINK = "paymentLink";
-    public static final String PROCESS_STATE = "processState";
 
     // Processes
     public static final String PROCESS_SAVE_INTEREST = "processSaveInterest";

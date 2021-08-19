@@ -22,7 +22,7 @@ public class ProcessState {
         return processStates.get(process + username + key);
     }
 
-    public Object getStateAndRemove(String process, String username, String key){
+    public Object getStateAndRemove(String process, String username, String key) {
         return processStates.remove(process + username + key);
     }
 }
