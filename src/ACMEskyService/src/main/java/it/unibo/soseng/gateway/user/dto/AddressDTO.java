@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class AddressDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    private String offerToken;
     private String postCode;
     private String address;
     private String cityName;
@@ -12,6 +13,14 @@ public class AddressDTO implements Serializable {
 
     public String getPostCode() {
         return postCode;
+    }
+
+    public String getOfferToken() {
+        return offerToken;
+    }
+
+    public void setOfferToken(String offerToken) {
+        this.offerToken = offerToken;
     }
 
     public String getCountry() {
