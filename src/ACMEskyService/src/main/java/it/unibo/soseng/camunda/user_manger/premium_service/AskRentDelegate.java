@@ -1,6 +1,6 @@
 package it.unibo.soseng.camunda.user_manger.premium_service;
 
-import static it.unibo.soseng.camunda.utils.ProcessVariables.GENERATED_OFFER;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_OFFER;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.USERNAME;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_ADDRESS;
 
@@ -31,7 +31,7 @@ public class AskRentDelegate implements JavaDelegate {
     public void execute(DelegateExecution execution){
         LOGGER.info("Execute AskRentDelegate");
         AddressDTO address = (AddressDTO) execution.getVariable(USER_ADDRESS);
-        GeneratedOffer offer = (GeneratedOffer) execution.getVariable(GENERATED_OFFER);
+        GeneratedOffer offer = (GeneratedOffer) execution.getVariable(USER_OFFER);
         String email = (String) execution.getVariable(USERNAME);
 
         try {

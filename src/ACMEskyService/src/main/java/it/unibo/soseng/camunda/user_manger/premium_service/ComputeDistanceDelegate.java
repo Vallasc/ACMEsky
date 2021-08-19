@@ -16,7 +16,7 @@ import it.unibo.soseng.model.GeneratedOffer;
 
 import static it.unibo.soseng.camunda.utils.ErrorsEvents.DISTANCE_ERROR;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.PREMIUM_SERVICE_ERROR;
-import static it.unibo.soseng.camunda.utils.ProcessVariables.GENERATED_OFFER;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_OFFER;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_ADDRESS;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_DISTANCE;
 
@@ -33,7 +33,7 @@ public class ComputeDistanceDelegate implements JavaDelegate {
     public void execute(DelegateExecution execution){
         LOGGER.info("Execute ComputeDistanceDelegate");
         AddressDTO address = (AddressDTO) execution.getVariable(USER_ADDRESS);
-        GeneratedOffer offer = (GeneratedOffer) execution.getVariable(GENERATED_OFFER);
+        GeneratedOffer offer = (GeneratedOffer) execution.getVariable(USER_OFFER);
         try {
             float distance = offerManager.getDistance(address, offer);
             execution.setVariable(USER_DISTANCE, distance);
