@@ -32,6 +32,7 @@ public class SendOfferDelegate implements JavaDelegate{
     String prontogramUsername = (String) execution.getVariable(PRONTOGRAM_USERNAME);
     GeneratedOffer offer = (GeneratedOffer) execution.getVariable(GENERATED_OFFER);
     NotificationDTO notification = NotificationDTO.fromOffer(offer, prontogramUsername);
+    LOGGER.info("Offer - protogramUser: " + prontogramUsername + " - offerToken: " + offer.getToken());
     try {
       prontogramClient.sendNotificationOffer(notification);
     } catch (IOException | ProntogramServiceErrorException e) {
