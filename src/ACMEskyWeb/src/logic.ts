@@ -1,6 +1,6 @@
 import { jwtToken } from "./stores"
 import { ACMESKY_HOST }  from "./env"
-import type { Airport, Interest, User } from "./types"
+import type { Airport, Interest, User, Address, PaymentResponse, Offer} from "./types"
 
 let showToast : any
 
@@ -116,9 +116,11 @@ export async function getUser() : Promise<User | null> {
     return Promise.resolve(null)
 }
 
-export async function updateUser(email: string, password: string, 
+export async function updateUser(name: string, surname: string, email: string, password: string, 
                     newPassword: string, newProntogramUsername: string) : Promise<User | null> {
     const response = await Fetch(ACMESKY_HOST + "/users/me", "PUT", {
+        name: name,
+        surname: surname,
         email: email,
         password: password,
         newPassword: newPassword,
@@ -188,4 +190,61 @@ export async function fetchInterests() : Promise<Array<Interest>> {
         return await response.json()
     } 
     return Promise.resolve([])
+}
+
+export async function confirmOffer(offerCode: string) : Promise<Boolean> {
+    const response = await Fetch(ACMESKY_HOST + "/offers/confirm", "PUT", {
+        offerToken: offerCode
+    })
+    console.log(await response)
+    if (response.status == 200) {
+        return true
+    } else if (response.status == 404) {
+        showToast("Offerta non trovata", true)
+        return false
+    } else if (response.status == 409) {
+        if(! await reset(offerCode)){
+            showToast("Hai già confermato questa offerta, aspetta 5 minuti e riprova.", true)
+            return false
+        } else {
+            return true
+        }
+    }
+    showToast("Errore interno "+ response.status, true)
+    return false
+}
+
+export async function payOffer(address: Address) : Promise<PaymentResponse | null> {
+    const response = await Fetch(ACMESKY_HOST + "/offers/paymentLink", "PUT", address)
+    let responseJson = await response.json()
+    console.log(responseJson)
+    if (response.status == 200) {
+        return responseJson
+    } else if (response.status == 404) {
+        showToast("Offerta non trovata", true)
+        return null
+    } else if (response.status == 409) {
+        showToast("Stai già pagando questa offerta, aspetta 5 minuti e riprova.", true)
+        return null
+    }
+    showToast("Errore interno "+ response.status, true)
+    return null
+}
+
+export async function reset(offerCode: string) : Promise<Boolean> {
+    const response = await Fetch(ACMESKY_HOST + "/offers/reset", "PUT", {
+        offerToken: offerCode
+    })
+    //console.log(await response.json())
+    return response.status == 200
+}
+
+export async function getOffer(offerCode: string) : Promise<Offer> {
+    const response = await Fetch(ACMESKY_HOST + "/offers/" + offerCode, "GET")
+    if (response.status == 200) {
+        let responseJson = await response.json()
+        console.log(responseJson)
+        return responseJson
+    }
+    return null
 }
