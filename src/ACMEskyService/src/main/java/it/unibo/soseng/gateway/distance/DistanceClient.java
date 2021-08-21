@@ -36,15 +36,16 @@ public class DistanceClient {
                                     .build();
 
         Call call = client.newCall(request);
-        
-        Response response = call.execute();
+
         ObjectMapper objectMapper = new ObjectMapper(); 
-        if(response.code() == 200) {
-            try (ResponseBody body = response.body()) {
-                return objectMapper.readValue(body.string(), DistanceDTO.class);
-            }
+
+        String jsonResponse;
+        try (Response response = client.newCall(request).execute()) {
+            jsonResponse = response.body().string();
+            if(response.code() != 200)
+                throw new GeoserverErrorException();
         }
-        throw new GeoserverErrorException();
+        return objectMapper.readValue(jsonResponse, DistanceDTO.class);
     }
 
     public class GeoserverErrorException extends Exception {}
