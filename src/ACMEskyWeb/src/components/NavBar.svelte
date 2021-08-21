@@ -33,6 +33,9 @@
   <Collapse {isOpen} navbar expand="md" on:update={handleUpdate}>
     <Nav navbar>
         {#if $jwtToken != null}
+            <NavItem>
+                <NavLink href="/offer" active = {pathname == "/offer"}>Acquista offerta</NavLink>
+            </NavItem>
             <Dropdown nav inNavbar >
                 <div class:link-active = {pathname == "/interest" || pathname == "/show"}>
                     <DropdownToggle nav caret tag = "a">Interessi</DropdownToggle>
@@ -43,7 +46,7 @@
                 </DropdownMenu>
             </Dropdown>
             <NavItem>
-                <NavLink href="/offer" active = {pathname == "/offer"}>Acquista offerta</NavLink>
+                <NavLink href="/offer" active = {pathname == "/offer"}>Acquisti</NavLink>
             </NavItem>
             <NavItem>
                 <NavLink href="/profile" active = {pathname == "/profile"}>Profilo</NavLink>
