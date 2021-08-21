@@ -13,7 +13,7 @@
 	import { init } from "./logic"
 
 	$: {
-		if($jwtToken == null) 
+		if($jwtToken == null)
 			navigate("/")
 	}
 
