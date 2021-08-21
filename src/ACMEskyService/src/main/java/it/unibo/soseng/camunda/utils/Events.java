@@ -6,4 +6,6 @@ public final class Events {
     public static final String START_PAY_OFFER = "StartPayOffer";
     public static final String PAY_OFFER = "PayOffer";
     public static final String PAYMENT_SUCCESSFUL = "PaymentSuccessful";
+    public static final String RESET_1 = "Reset1";
+    public static final String RESET_2 = "Reset2";
 }
