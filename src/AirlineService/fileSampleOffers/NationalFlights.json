@@ -18,7 +18,9 @@
                     "arrival_date_time": "2021-10-28T21:00:00+01:00",
                     "place": "26",
                     "price": 130.00
-                },
+                }
+            ],
+            [
                 {
                     "departure_airport_id": "PSR",
                     "arrival_airport_id": "MXP",

@@ -66,13 +66,13 @@ public class FlightOfferService {
                 .collect(Collectors.toList());
         list.forEach(i -> repo.save(i));
 
-        u.convertOffersToFlights(list);
         // richiedo il token jwt attraverso una richiesta http e la passo a
         // sendLastMinuteOffer che lo aggiungerà all'header della chiamata che fa per
         // inviare le offerte last-minute
         try {
             String jwt = auth.AuthRequest(route, user, pass);
-            sendLastMinuteOffer(list, route, jwt);
+            System.out.println(jwt.toString());
+            sendLastMinuteOffer(u.convertOffersToFlights(list), route, jwt);
         } catch (UnknownHostException e) {
             LOGGER.info("error");
         }
@@ -80,10 +80,12 @@ public class FlightOfferService {
     }
 
     public void createFlightOffers(String s) throws JsonProcessingException, IOException {
-        JsonNode n = u.GetJsonOffers(u.GetFile(s));
-        List<FlightOffer> list = u.createOffer(n).stream().filter(i -> u.DeleteExpiredOffers(i) == false)
-                .collect(Collectors.toList());
-        list.forEach(i -> repo.save(i));
+        JsonNode[] arr = u.GetJsonOffers(u.GetFile(s));
+        for (JsonNode n : arr) {
+            List<FlightOffer> list = u.createOffer(n).stream().filter(i -> u.DeleteExpiredOffers(i) == false)
+                    .collect(Collectors.toList());
+            list.forEach(i -> repo.save(i));
+        }
     }
 
     /**
@@ -119,23 +121,23 @@ public class FlightOfferService {
      * 
      * @param o l'offerta da inviare sulla route specifica
      */
-    public void sendLastMinuteOffer(List<FlightOffer> f, String route, String jwt) throws UnknownHostException {
+    public void sendLastMinuteOffer(List<Flight> f, String route, String jwt) throws UnknownHostException {
 
-        String url = route;
+        String url = route + "airlines/last_minute";
 
         // // create headers
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", jwt);
+        headers.set("Authorization ", "Bearer " + jwt);
         // // set `content-type` header
         headers.setContentType(MediaType.APPLICATION_JSON);
         // // set `accept` header
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         // // build the request
-        HttpEntity<List<FlightOffer>> entity = new HttpEntity<>(f, headers);
+        HttpEntity<List<Flight>> entity = new HttpEntity<>(f, headers);
         // // send POST request
         RestTemplate restTemplate = new RestTemplate();
 
-        restTemplate.postForEntity(url, entity, FlightOffer.class);
+        restTemplate.postForEntity(url, entity, Flight.class);
 
     }
 

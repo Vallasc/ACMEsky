@@ -86,13 +86,17 @@ public class FlightUtility {
         return n;
     }
 
-    public JsonNode GetJsonOffers(File file) throws JsonProcessingException, IOException {
+    public JsonNode[] GetJsonOffers(File file) throws JsonProcessingException, IOException {
 
         ObjectMapper mapper = new ObjectMapper();
         JsonNode root = mapper.readTree(file);
         JsonNode offers = root.get("OFFERS");
-        JsonNode n = offers.get(0);
-        return n;
+        // JsonNode n = offers.get(0);
+        JsonNode[] arr = new JsonNode[offers.size() - 1];
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = offers.get(i);
+        }
+        return arr;
     }
 
     /**
