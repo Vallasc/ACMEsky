@@ -10,6 +10,7 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import it.unibo.soseng.gateway.airline.dto.AirlineFlightOfferDTO;
 import it.unibo.soseng.logic.airline.AirlineManager;
+import it.unibo.soseng.model.Flight;
 
 @Named("saveLastMinuteOfferDelegate")
 public class SaveLastMinuteOfferDelegate implements JavaDelegate {
@@ -23,8 +24,9 @@ public class SaveLastMinuteOfferDelegate implements JavaDelegate {
     public void execute(DelegateExecution execution) {
         LOGGER.info("Execute RetrieveOffer");
 
-        List<AirlineFlightOfferDTO> airlineOffers = (List<AirlineFlightOfferDTO>) execution.getVariable(AIRLINE_FLIGHT_OFFERS);
+        List<AirlineFlightOfferDTO> airlineOffers = (List<AirlineFlightOfferDTO>) execution
+                .getVariable(AIRLINE_FLIGHT_OFFERS);
         String AirlineCompanyName = (String) execution.getVariable(AIRLINE_NAME);
-        airlineManager.handleConfirmLastMinuteOffer(AirlineCompanyName,airlineOffers);
+        airlineManager.handleConfirmLastMinuteOffer(AirlineCompanyName, airlineOffers);
     }
 }

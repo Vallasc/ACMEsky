@@ -75,11 +75,11 @@ public class AirlineManager {
             try {
                 Flight flight = new Flight();
                 flight.setAirline(databaseManager.getAirline(airlineName));
-                flight.setArrivalAirport(databaseManager.getAirport(airlineOffers.get(i).getArrivalAirportCode()));
-                flight.setDepartureAirport(databaseManager.getAirport(airlineOffers.get(i).getDepartureAirportCode()));
+                flight.setArrivalAirport(databaseManager.getAirport(airlineOffers.get(i).getArrivalCode()));
+                flight.setDepartureAirport(databaseManager.getAirport(airlineOffers.get(i).getDepartureTime()));
                 flight.setAvailable(true);
                 flight.setBooked(false);
-                flight.setFlightCode(airlineOffers.get(i).getFlightCode());
+                flight.setFlightCode(airlineOffers.get(i).getId());
                 flight.setPrice(airlineOffers.get(i).getPrice());
                 flight.setDepartureDateTime(airlineOffers.get(i).getDepartureOffsetDateTime());
                 flight.setArrivalDateTime(airlineOffers.get(i).getArrivalOffsetDateTime());
@@ -164,7 +164,8 @@ public class AirlineManager {
         }
     }
 
-    public byte[] bookOfferTicket(GeneratedOffer offer) throws IOException, SendTicketException, BookTicketsExceptionException{
+    public byte[] bookOfferTicket(GeneratedOffer offer)
+            throws IOException, SendTicketException, BookTicketsExceptionException {
 
         byte[] pdfTicket = client.getFlightTickets(offer.getOutboundFlight().getAirlineId().getWsAddress(),
                 offer.getUser().getProntogramUsername(), offer.getOutboundFlight().getFlightCode(),
