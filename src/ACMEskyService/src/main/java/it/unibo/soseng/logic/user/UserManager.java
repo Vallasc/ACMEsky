@@ -52,12 +52,7 @@ public class UserManager {
     public UserDTO getUser() throws UserNotFoundException{
         String email = securityContext.getCallerPrincipal().getName();
         User user = databaseManager.getUser(email);
-        UserDTO response = new UserDTO();
-        response.setEmail(user.getEmail());
-        response.setPassword(user.getEntity().getPassword());
-        response.setProntogramUsername(user.getProntogramUsername());
-        return response;
-
+        return UserDTO.fromUser(user);
     }
     
     public UserDTO updateUser(UserUpdateDTO request) throws InvalidCredentialsException, UserNotFoundException {
@@ -73,13 +68,13 @@ public class UserManager {
             user.getEntity().setPassword(request.getNewPassword());
         if(request.getNewProntogramUsername() != null)
             user.setProntogramUsername(request.getNewProntogramUsername());
-        
+        if(request.getNewName() != null)
+            user.setName(request.getNewName());
+        if(request.getNewSurname() != null)
+            user.setSurname(request.getNewSurname());
+
         databaseManager.updateUser(user);
-        UserDTO response = new UserDTO();
-        response.setEmail(user.getEmail());
-        response.setPassword(user.getEntity().getPassword());
-        response.setProntogramUsername(user.getProntogramUsername());
-        return response;
+        return UserDTO.fromUser(user);
     }
 
     public void deleteUser(UserDeleteDTO request) throws InvalidCredentialsException, 
