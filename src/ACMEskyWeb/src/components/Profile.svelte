@@ -5,6 +5,8 @@
     import { fade } from 'svelte/transition'
 
     let email : string
+    let name : string
+    let surname : string
     let password : string
     let newPassword : string
     let prontogramUsername : string
@@ -15,6 +17,8 @@
         let response = await getUser()
         if(response != null){
             email = response.email
+            name = response.name
+            surname = response.surname
             //password = response.password
             prontogramUsername = response.prontogramUsername
             disabled = false
@@ -33,7 +37,8 @@
 
         const {submitter: submitButton} = event;
         if(submitButton.id == "save") {
-            await updateUser(email, password, newPassword == "" ? null : newPassword, prontogramUsername)
+            await updateUser(name, surname, email, password, newPassword == "" ?
+                                             null : newPassword, prontogramUsername)
         } else if(submitButton.id == "delete"){
             await deleteUser(email, password)
             navigate("/")
@@ -46,6 +51,14 @@
     <img class="mb-3 mt-4" src="./imgs/profile.png" alt="profile" height="120" in:fade = {{duration: 200}} />
     <h1 class="h3 fw-normal">Your profile</h1>
     <form in:fade = {{duration: 200}}>
+        <div class="mb-3">
+            <label for="_" class="form-label">Nome</label>
+            <input bind:value={name} type="Text" class="form-control" >
+        </div>
+        <div class="mb-3">
+            <label for="_" class="form-label">Cognome</label>
+            <input bind:value={surname} type="Text" class="form-control" >
+        </div>
         <div class="mb-3">
             <label for="_" class="form-label">Email</label>
             <input bind:value={email} type="email" class="form-control" readonly>
