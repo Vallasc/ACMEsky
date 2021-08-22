@@ -14,8 +14,8 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 
 import it.unibo.soseng.camunda.utils.ProcessState;
 import it.unibo.soseng.gateway.airline.AirlineClient.BookTicketsExceptionException;
-import it.unibo.soseng.logic.airline.AirlineManager;
-import it.unibo.soseng.logic.airline.AirlineManager.SendTicketException;
+import it.unibo.soseng.logic.AirlineManager;
+import it.unibo.soseng.logic.AirlineManager.SendTicketException;
 import it.unibo.soseng.model.GeneratedOffer;
 
 import static it.unibo.soseng.camunda.utils.ErrorsEvents.SEND_TICKET_ERROR;
