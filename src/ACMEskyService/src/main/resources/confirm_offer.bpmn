@@ -188,7 +188,7 @@
         <bpmn:incoming>Flow_0vsdghy</bpmn:incoming>
         <bpmn:outgoing>Flow_009vhjd</bpmn:outgoing>
         <bpmn:timerEventDefinition id="TimerEventDefinition_054glz3">
-          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1M</bpmn:timeDuration>
+          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT5M</bpmn:timeDuration>
         </bpmn:timerEventDefinition>
       </bpmn:intermediateCatchEvent>
       <bpmn:sendTask id="Activity_1gyrhdh" name="Send error" camunda:delegateExpression="#{sendResponseDelegate}">
@@ -220,7 +220,7 @@
         <bpmn:incoming>Flow_1m1gsgi</bpmn:incoming>
         <bpmn:outgoing>Flow_0p182of</bpmn:outgoing>
         <bpmn:timerEventDefinition id="TimerEventDefinition_0klnuuo">
-          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1M</bpmn:timeDuration>
+          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT5M</bpmn:timeDuration>
         </bpmn:timerEventDefinition>
       </bpmn:intermediateCatchEvent>
       <bpmn:intermediateThrowEvent id="Event_144rhvv" name="Comp. tickets">
