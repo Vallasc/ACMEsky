@@ -1,7 +1,8 @@
 <script lang="ts">
     import { fade } from "svelte/transition";
+    import { flip } from 'svelte/animate';
     import { Table } from "sveltestrap";
-    import { fetchInterests } from "../logic";
+    import { fetchInterests, deleteInterests } from "../logic";
     import type { Interest } from "../types";
     import { onMount } from "svelte";
 
@@ -9,10 +10,21 @@
     let loaded : boolean = false
 
     onMount(async () => {
-        interests = await fetchInterests();
-        loaded = true;
-        console.log(interests);
+        await fetch()
+        loaded = true
+        console.log(interests)
     });
+
+    async function fetch(){
+        let interestsOut = await fetchInterests()
+        interestsOut.sort(function(a, b){return b.id-a.id});
+        interests = interestsOut
+    }
+
+    async function removeInterest(interest: Interest): Promise<void> {
+        await deleteInterests(interest.id.toString())
+        await fetch()
+    }
 </script>
 
 <div class="main">
@@ -28,17 +40,23 @@
                         <th>Data Partenza</th>
                         <th>Data Ritorno</th>
                         <th>Prezzo Limite</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    {#each interests as interest, i}
+                    {#each interests as interest, i (interest)}
                         <tr>
                             <th scope="row">{i+1}</th>
                             <td>{interest.outboundFlight.departureAirportCode}</td>
                             <td>{interest.outboundFlight.arrivalAirportCode}</td>
                             <td>{(new Date(interest.outboundFlight.departureTimestamp)).toLocaleDateString()}</td>
                             <td>{(new Date(interest.flightBack.departureTimestamp)).toLocaleDateString()}</td>
-                            <td>{interest.priceLimit}</td>
+                            <td>{interest.priceLimit}€</td>
+                            <td style="padding: 12px;">                    
+                                <button on:click={() => removeInterest(interest)} type="button" class="btn btn-outline-danger">
+                                    Elimina
+                                </button>
+                            </td>
                         </tr>
                     {/each}
                 </tbody>
@@ -57,7 +75,7 @@
     }
 
     .card {
-        max-width: 60%;
+        max-width: 80%;
         margin-bottom: 40px;
     }
 
