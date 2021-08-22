@@ -12,10 +12,19 @@ public class OfferDTO implements Serializable {
     private FlightDTO flightBack;
     private float totalPrice;
     private String token;
+    private boolean rent;
 
     
     public FlightDTO getOutboundFlight() {
         return outboundFlight;
+    }
+
+    public boolean getRent() {
+        return rent;
+    }
+
+    public void setRent(boolean rent) {
+        this.rent = rent;
     }
 
     public String getToken() {
@@ -52,6 +61,7 @@ public class OfferDTO implements Serializable {
         dto.outboundFlight = FlightDTO.fromFlight(offer.getOutboundFlight());
         dto.flightBack = FlightDTO.fromFlight(offer.getFlightBack());
         dto.totalPrice = (float) offer.getTotalPrice();
+        dto.rent = offer.getRent();
         return dto;
     }
 }
