@@ -15,8 +15,8 @@ import javax.security.enterprise.SecurityContext;
 import javax.validation.Valid;
 
 import it.unibo.soseng.gateway.airline.dto.AirlineFlightOfferDTO;
-import it.unibo.soseng.logic.airline.AirlineManager;
-import it.unibo.soseng.logic.airline.AirlineManager.BadRequestException;
+import it.unibo.soseng.logic.AirlineManager;
+import it.unibo.soseng.logic.AirlineManager.BadRequestException;
 
 import static it.unibo.soseng.security.Constants.AIRLINE;
 

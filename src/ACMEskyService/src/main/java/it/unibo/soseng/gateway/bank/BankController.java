@@ -3,7 +3,6 @@ package it.unibo.soseng.gateway.bank;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -17,7 +16,6 @@ import java.util.logging.Logger;
 import static it.unibo.soseng.security.Constants.BANK;
 
 @Path("banks")
-@RolesAllowed({BANK})
 @Produces( MediaType.APPLICATION_JSON )
 public class BankController {
     private final static Logger LOGGER = Logger.getLogger(BankController.class.getName());
@@ -26,7 +24,7 @@ public class BankController {
     BankManager bankManager;
 
     @GET
-    @PermitAll
+    @RolesAllowed({BANK})
     @Path("/confirmPayment")
     public Response confirmPayment(@QueryParam("code") String code) {
         LOGGER.info("GET confirmPayment");
