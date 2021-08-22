@@ -7,6 +7,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -20,6 +21,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import it.unibo.soseng.gateway.user.dto.UserInterestDTO;
+import it.unibo.soseng.logic.database.DatabaseManager.InterestNotFoundException;
 import it.unibo.soseng.logic.interest.InterestManager;
 import it.unibo.soseng.logic.interest.InterestManager.BadRequestException;
 
@@ -66,17 +68,26 @@ public class InterestController {
     @Produces( MediaType.APPLICATION_JSON )
     public Response getInterest(final @PathParam("id") String id) {
         LOGGER.info("GET interest " + id);
-        UserInterestDTO interests = interestManager.getUserInterest(id);
-        return Response.status(Response.Status.OK.getStatusCode()).entity(interests).build();
+        try {
+            UserInterestDTO interests = interestManager.getUserInterest(id);
+            return Response.status(Response.Status.OK.getStatusCode()).entity(interests).build();
+        } catch (InterestNotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+        }
     }
 
-    /*@DELETE
+    @DELETE
     @Path("/{id}")
     @RolesAllowed({USER})
     @Consumes( MediaType.APPLICATION_JSON )
     public Response deleteInterest(final @PathParam("id") String id) {
         LOGGER.info("DELETE interests");
-        return Response.status(Response.Status.OK.getStatusCode()).build();
-    }*/
+        try {
+            interestManager.deleteUserInterest(id);
+            return Response.status(Response.Status.OK.getStatusCode()).build();
+        } catch (InterestNotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+        }
+    }
 
 }
