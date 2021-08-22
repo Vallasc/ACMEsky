@@ -75,9 +75,9 @@
             <label for="_" class="form-label">Prontogram username</label>
             <input bind:value={prontogramUsername} type="text" class="form-control" disabled = {disabled}>
         </div>
-        <button id="save" class="w-100 mb-3 mt-3 btn btn-primary" type="submit" disabled = {disabled}>Save</button>
+        <button id="save" class="w-100 mb-3 mt-3 btn btn-primary" type="submit" disabled = {disabled}>Salva</button>
         <hr class="mb-3 dropdown-divider"/>
-        <button id="delete" class="w-100 btn btn-danger" type="submit" disabled = {disabled} >Delete account</button>
+        <button id="delete" class="w-100 btn btn-danger" type="submit" disabled = {disabled} >Elimina account</button>
     </form>
 </div>
 
