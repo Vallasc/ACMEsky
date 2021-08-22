@@ -51,6 +51,9 @@ public class GeneratedOffer implements Serializable {
 	@JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Column(name = "rent")
+    private boolean rent;
+
     public User getUser() {
         return this.user;
     }
@@ -114,6 +117,14 @@ public class GeneratedOffer implements Serializable {
 
     public void setAvailable(boolean available) {
         this.available = available;
+    }
+
+    public boolean getRent() {
+        return this.rent;
+    }
+
+    public void setRent(boolean rent) {
+        this.rent = rent;
     }
 
     public String getToken() {
