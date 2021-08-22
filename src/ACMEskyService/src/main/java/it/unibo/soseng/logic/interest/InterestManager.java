@@ -24,6 +24,7 @@ import it.unibo.soseng.gateway.user.dto.AirportDTO;
 import it.unibo.soseng.gateway.user.dto.UserInterestDTO;
 import it.unibo.soseng.logic.database.DatabaseManager;
 import it.unibo.soseng.logic.database.DatabaseManager.AirportNotFoundException;
+import it.unibo.soseng.logic.database.DatabaseManager.InterestNotFoundException;
 import it.unibo.soseng.logic.database.DatabaseManager.UserNotFoundException;
 import it.unibo.soseng.model.Airport;
 import it.unibo.soseng.model.FlightInterest;
@@ -187,10 +188,19 @@ public class InterestManager {
                 .collect(Collectors.toList());
     }
 
-    public UserInterestDTO getUserInterest(String id){
+    public UserInterestDTO getUserInterest(String id) throws InterestNotFoundException{
         String email = securityContext.getCallerPrincipal().getName();
         UserInterest interest = databaseManager.getUserInterest(email, id);
         return UserInterestDTO.from(interest);
+    }
+
+    public void deleteUserInterest(String id) throws InterestNotFoundException{
+        String email = securityContext.getCallerPrincipal().getName();
+        UserInterest interest = databaseManager.getUserInterest(email, id);
+        interest.setUsed(true);
+        interest.getFlightBackInterest().setUsed(true);
+        interest.getOutboundFlightInterest().setUsed(true);
+        databaseManager.updateUserInterest(interest);
     }
 
     public List<AirportDTO> getAirportsFromQuery(String query){
