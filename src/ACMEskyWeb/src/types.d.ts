@@ -8,6 +8,7 @@ interface Airport {
 }
 
 interface Interest {
+    id?: number
     outboundFlight : {
         departureAirportCode: string
         arrivalAirportCode: string
@@ -46,6 +47,8 @@ interface Flight {
     flightCode: string
     departureAirportCode: string
     arrivalAirportCode: string
+    departureCity: string
+    arrivalCity: string
     departureTimestamp: string
     arrivalTimestamp: string
     airlineName: string
@@ -57,4 +60,5 @@ interface Offer {
     flightBack: Flight
     totalPrice: float
     token: string
+    rent: boolean
 }
