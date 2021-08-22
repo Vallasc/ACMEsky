@@ -14,6 +14,8 @@ public class FlightDTO implements Serializable {
     private String flightCode;
     private String departureAirportCode;
     private String arrivalAirportCode;
+    private String departureCity;
+    private String arrivalCity;
     private String departureTimestamp;
     private String arrivalTimestamp;
     private float price;
@@ -21,6 +23,22 @@ public class FlightDTO implements Serializable {
 
     public String getFlightCode() {
         return flightCode;
+    }
+
+    public String getArrivalCity() {
+        return arrivalCity;
+    }
+
+    public void setArrivalCity(String arrivalCity) {
+        this.arrivalCity = arrivalCity;
+    }
+
+    public String getDepartureCity() {
+        return departureCity;
+    }
+
+    public void setDepartureCity(String departureCity) {
+        this.departureCity = departureCity;
     }
 
     public void setFlightCode(String flightCode) {
@@ -100,6 +118,8 @@ public class FlightDTO implements Serializable {
         dto.airlineName = flight.getAirlineId().getEntity().getUsername();
         dto.arrivalAirportCode = flight.getArrivalAirport().getAirportCode();
         dto.departureAirportCode = flight.getDepartureAirport().getAirportCode();
+        dto.arrivalCity = flight.getArrivalAirport().getCityName();
+        dto.departureCity = flight.getDepartureAirport().getCityName();
         dto.flightCode = flight.getFlightCode();
         dto.price = flight.getPrice();
         dto.setDepartureOffsetDateTime(flight.getDepartureDateTime());
