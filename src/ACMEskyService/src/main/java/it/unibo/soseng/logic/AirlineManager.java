@@ -1,4 +1,4 @@
-package it.unibo.soseng.logic.airline;
+package it.unibo.soseng.logic;
 
 import java.io.IOException;
 import java.time.OffsetDateTime;
