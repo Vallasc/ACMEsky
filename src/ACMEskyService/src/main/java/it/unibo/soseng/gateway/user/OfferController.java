@@ -36,6 +36,7 @@ public class OfferController {
     @Path("/confirm")
     @RolesAllowed({USER})
     @Consumes( MediaType.APPLICATION_JSON )
+    @Produces(MediaType.APPLICATION_JSON)
     public void confirmOfferToken(final @Valid UserOfferDTO request, 
                                     final @Context UriInfo uriInfo,
                                     final @Suspended AsyncResponse response) {
@@ -65,6 +66,15 @@ public class OfferController {
         offerManager.resetProcess(request, response);
     }
     
+    @GET
+    @Path("/")
+    @RolesAllowed({USER})
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getOffers() {
+        LOGGER.info("GET offers");
+        return offerManager.requestOffers();
+    }
+
     @GET
     @Path("/{token}")
     @RolesAllowed({USER})
