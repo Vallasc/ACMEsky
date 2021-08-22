@@ -6,24 +6,24 @@ import java.time.OffsetDateTime;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class AirlineFlightOfferDTO implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
 
-    private String flightCode;
-    private String departureAirportCode;
-    private String arrivalAirportCode;
-    private String departureTimestamp;
-    private String arrivalTimestamp;
-    private String expireTimestamp;
+    private String id;
+    private String departureCode;
+    private String arrivalCode;
+    private String departureTime;
+    private String arrivalTime;
+    private String expDate;
     private float price;
-    private String airlineName;
+    private String airline_id;
 
-    public String getFlightCode() {
-        return flightCode;
+    public String getId() {
+        return id;
     }
 
-    public void setFlightCode(String flightCode) {
-        this.flightCode = flightCode;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public float getPrice() {
@@ -34,67 +34,67 @@ public class AirlineFlightOfferDTO implements Serializable {
         this.price = price;
     }
 
-    public String getExpireTimestamp() {
-        return expireTimestamp;
+    public String getExpDate() {
+        return expDate;
     }
 
-    public void setExpireTimestamp(String expireTimestamp) {
-        this.expireTimestamp = expireTimestamp;
+    public void setExpDate(String expDate) {
+        this.expDate = expDate;
     }
 
-    public String getArrivalTimestamp() {
-        return arrivalTimestamp;
+    public String getArrivalTime() {
+        return arrivalTime;
     }
 
-    public void setArrivalTimestamp(String arrivalTimestamp) {
-        this.arrivalTimestamp = arrivalTimestamp;
+    public void setArrivalTime(String arrivalTime) {
+        this.arrivalTime = arrivalTime;
     }
 
-    public String getDepartureTimestamp() {
-        return departureTimestamp;
+    public String getDepartureTime() {
+        return departureTime;
     }
 
-    public void setDepartureTimestamp(String departureTimestamp) {
-        this.departureTimestamp = departureTimestamp;
+    public void setDepartureTime(String departureTime) {
+        this.departureTime = departureTime;
     }
 
-    public String getArrivalAirportCode() {
-        return arrivalAirportCode;
+    public String getArrivalCode() {
+        return arrivalCode;
     }
 
-    public void setArrivalAirportCode(String arrivalAirportCode) {
-        this.arrivalAirportCode = arrivalAirportCode;
+    public void setArrivalCode(String arrivalCode) {
+        this.arrivalCode = arrivalCode;
     }
 
-    public String getDepartureAirportCode() {
-        return departureAirportCode;
+    public String departureCode() {
+        return departureCode;
     }
 
-    public void setDepartureAirportCode(String departureAirportCode) {
-        this.departureAirportCode = departureAirportCode;
+    public void departureCode(String departureCode) {
+        this.departureCode = departureCode;
     }
 
-    public String getAirlineName() {
-        return this.airlineName;
+    public String getAirline_id() {
+        return this.airline_id;
     }
 
-    public void setAirlinename(String airlineName) {
-        this.airlineName = airlineName;
-    }
-
-    @JsonIgnore
-    public OffsetDateTime getDepartureOffsetDateTime () {
-        return OffsetDateTime.parse(this.departureTimestamp); 
+    public void setAirline_id(String airline_id) {
+        this.airline_id = airline_id;
     }
 
     @JsonIgnore
-    public OffsetDateTime getArrivalOffsetDateTime () {
-        return OffsetDateTime.parse(this.arrivalTimestamp); 
+    public OffsetDateTime getDepartureOffsetDateTime() {
+        return OffsetDateTime.parse(this.departureTime);
     }
 
     @JsonIgnore
-    public OffsetDateTime getExpiredOffsetDateTime () {
-        return OffsetDateTime.parse(this.expireTimestamp); 
+    public OffsetDateTime getArrivalOffsetDateTime() {
+        return OffsetDateTime.parse(this.arrivalTime);
+    }
+
+    @JsonIgnore
+    public OffsetDateTime getExpiredOffsetDateTime() {
+        return OffsetDateTime.parse(this.expDate);
     }
 
 }

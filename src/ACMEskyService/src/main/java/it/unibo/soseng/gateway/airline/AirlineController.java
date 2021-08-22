@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import javax.security.enterprise.SecurityContext;
 import javax.validation.Valid;
 
+import it.unibo.soseng.model.Flight;
 import it.unibo.soseng.gateway.airline.dto.AirlineFlightOfferDTO;
 import it.unibo.soseng.logic.AirlineManager;
 import it.unibo.soseng.logic.AirlineManager.BadRequestException;
@@ -23,7 +24,7 @@ import static it.unibo.soseng.security.Constants.AIRLINE;
 @Path("airlines")
 public class AirlineController {
     private final static Logger LOGGER = Logger.getLogger(AirlineController.class.getName());
-    
+
     @Inject
     AirlineManager airlineManager;
 
@@ -32,8 +33,8 @@ public class AirlineController {
 
     @POST
     @Path("/last_minute")
-    @RolesAllowed({AIRLINE})
-    @Consumes( MediaType.APPLICATION_JSON )
+    @RolesAllowed({ AIRLINE })
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response saveInterests(final @Valid List<AirlineFlightOfferDTO> offers) {
         LOGGER.info("POST last minute");
         try {
