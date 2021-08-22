@@ -191,21 +191,24 @@ public class DatabaseManager {
                 .createQuery("SELECT ui FROM UserInterest ui, User u, DomainEntity d "
                         + "WHERE d.username = :username AND u.entity = d.id AND ui.user = u.id AND ui.used = FALSE "
                         + "ORDER BY ui.id DESC")
-                .setParameter("username", username).getResultList();
+                .setParameter("username", username)
+                .getResultList();
         return result;
     }
 
-    public UserInterest getUserInterest(String username, String interestId) {
-        @SuppressWarnings("unchecked")
-        List<UserInterest> result = (List<UserInterest>) entityManager
+    public UserInterest getUserInterest(String username, String interestId) throws InterestNotFoundException {
+        try {
+            UserInterest result = (UserInterest) entityManager
                 .createQuery("SELECT ui FROM UserInterest ui, User u, DomainEntity d "
                         + "WHERE d.username = :username AND u.entity = d.id AND "
                         + "ui.user = u.id AND ui.id = :interestId")
-                .setParameter("username", username).setParameter("interestId", Long.parseLong(interestId))
-                .getResultList();
-        if (result.get(0) != null)
-            return result.get(0);
-        return null;
+                .setParameter("username", username)
+                .setParameter("interestId", Long.parseLong(interestId))
+                .getSingleResult();
+                return result;
+            } catch (NoResultException e) {
+                throw new InterestNotFoundException();
+            }
     }
 
     /*
@@ -260,6 +263,16 @@ public class DatabaseManager {
         }
     }
 
+    public List<GeneratedOffer> getOffersByEmail(String email) {
+        @SuppressWarnings("unchecked")
+        List<GeneratedOffer> offers = (List<GeneratedOffer>) entityManager
+                    .createQuery("SELECT go FROM User u, DomainEntity e, GeneratedOffer go "
+                            + "WHERE e.username = :username AND u.entity = e.id "
+                            + "AND go.user = u.id ")
+                    .setParameter("username", email).getResultList();
+        return offers;
+    }
+
     public GeneratedOffer getOfferByToken(String token) throws OfferNotFoundException {
         try {
             GeneratedOffer result = (GeneratedOffer) entityManager
@@ -288,6 +301,10 @@ public class DatabaseManager {
     }
 
     public class UserAlreadyInException extends Exception {
+        private static final long serialVersionUID = 1L;
+    }
+
+    public class InterestNotFoundException extends Exception {
         private static final long serialVersionUID = 1L;
     }
 
