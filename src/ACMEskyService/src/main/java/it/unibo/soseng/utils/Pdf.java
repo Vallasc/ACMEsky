@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import java.text.SimpleDateFormat;
 import java.util.UUID;
 import java.io.IOException;
+import java.lang.Float;
 
 import javax.ejb.Stateless;
 
@@ -59,11 +60,13 @@ public class Pdf {
             }
 
             content = content.replace("{{subtotal}}", String.format ("%.2f", offer.getTotalPrice()));
-            content = content.replace("{{serviceCost}}", "10.00");
-            content = content.replace("{{total}}", String.format ("%.2f", offer.getTotalPrice() + 10));
+            content = content.replace("{{serviceCost}}", String.format ("%.2f", Float.valueOf(Env.ACMESKY_ADDITIONAL_PRICE)));
+            content = content.replace("{{total}}", String.format ("%.2f", offer.getTotalPrice()));
 
 
-            HtmlConverter.convertToPdf(content, new FileOutputStream(offer.getToken() + "_tmp2.pdf"));
+            FileOutputStream fileOut = new FileOutputStream(offer.getToken() + "_tmp2.pdf");
+            HtmlConverter.convertToPdf(content, fileOut);
+            fileOut.close();
         } catch (Exception e) {
             LOGGER.severe(e.toString());
             e.printStackTrace();
