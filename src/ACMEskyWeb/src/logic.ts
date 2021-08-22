@@ -192,34 +192,37 @@ export async function fetchInterests() : Promise<Array<Interest>> {
     return Promise.resolve([])
 }
 
-export async function confirmOffer(offerCode: string) : Promise<Boolean> {
+export async function deleteInterests(code: string) : Promise<Boolean> {
+    const response = await Fetch(ACMESKY_HOST + "/interests/" + code, "DELETE" )
+    return response.status == 200
+}
+
+export async function confirmOffer(offerCode: string) : Promise<Offer> {
     const response = await Fetch(ACMESKY_HOST + "/offers/confirm", "PUT", {
         offerToken: offerCode
     })
-    console.log(await response)
+    
     if (response.status == 200) {
-        return true
+        return await response.json()
     } else if (response.status == 404) {
         showToast("Offerta non trovata", true)
-        return false
+        return null
     } else if (response.status == 409) {
-        if(! await reset(offerCode)){
+        //if(! await reset(offerCode)){
             showToast("Hai già confermato questa offerta, aspetta 5 minuti e riprova.", true)
-            return false
-        } else {
-            return true
-        }
+            return null
+        //} else {
+        //    return confirmOffer(offerCode)
+        //}
     }
     showToast("Errore interno "+ response.status, true)
-    return false
+    return null
 }
 
 export async function payOffer(address: Address) : Promise<PaymentResponse | null> {
     const response = await Fetch(ACMESKY_HOST + "/offers/paymentLink", "PUT", address)
-    let responseJson = await response.json()
-    console.log(responseJson)
     if (response.status == 200) {
-        return responseJson
+        return await response.json()
     } else if (response.status == 404) {
         showToast("Offerta non trovata", true)
         return null
@@ -239,12 +242,27 @@ export async function reset(offerCode: string) : Promise<Boolean> {
     return response.status == 200
 }
 
-export async function getOffer(offerCode: string) : Promise<Offer> {
+export async function fetchOffer(offerCode: string) : Promise<Offer> {
     const response = await Fetch(ACMESKY_HOST + "/offers/" + offerCode, "GET")
     if (response.status == 200) {
-        let responseJson = await response.json()
-        console.log(responseJson)
-        return responseJson
+        return await response.json()
     }
     return null
+}
+
+export async function fetchOffers() : Promise<Array<Offer>> {
+    const response = await Fetch(ACMESKY_HOST + "/offers", "GET")
+    if (response.status == 200) {
+        return await response.json()
+    }
+    return null
+}
+
+export async function downloadTickets(offer: Offer) : Promise<void> {
+    const response = await Fetch(ACMESKY_HOST + "/offers/" + offer.token + "/ticket", "GET")
+    let blob = await response.blob()
+    var a = document.createElement("a")
+    a.href = URL.createObjectURL(blob)
+    a.setAttribute("download", "ACMEsky_" + offer.token + ".pdf")
+    a.click()
 }
