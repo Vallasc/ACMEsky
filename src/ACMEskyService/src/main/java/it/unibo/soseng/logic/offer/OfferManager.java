@@ -49,6 +49,7 @@ import it.unibo.soseng.model.GeneratedOffer;
 import it.unibo.soseng.model.RentService;
 import it.unibo.soseng.model.User;
 import it.unibo.soseng.model.UserInterest;
+import it.unibo.soseng.utils.Env;
 import it.unibo.soseng.utils.Errors;
 import it.unibo.soseng.ws.generated.BookRentResponse;
 
@@ -92,11 +93,12 @@ public class OfferManager {
 
         GeneratedOffer generatedOffer = new GeneratedOffer();
         generatedOffer.setBooked(false);
+        generatedOffer.setRent(false);
         generatedOffer.setAvailable(true);
         generatedOffer.setOutboundFlight(outBound);
         generatedOffer.setFlightBack(flightBack);
         generatedOffer.setExpireDate(OffsetDateTime.now().plusHours(24));
-        generatedOffer.setTotalPrice(flightBack.getPrice() + outBound.getPrice());
+        generatedOffer.setTotalPrice(flightBack.getPrice() + outBound.getPrice() + Env.ACMESKY_ADDITIONAL_PRICE);
         User user = databaseManager.getUser(username);
         generatedOffer.setUser(user);
 
@@ -225,6 +227,12 @@ public class OfferManager {
                     .build();
         }
 
+        if(offerToReturn.getBooked() || !offerToReturn.getAvailable()){
+            return Response.status(Response.Status.NOT_FOUND.getStatusCode())
+                    .entity(Errors.INVALID_TOKEN)
+                    .build();
+        }
+
         OffsetDateTime now = OffsetDateTime.now();
         if (offerToReturn.getExpireDate().compareTo(now) < 0) {
             execution.setVariable(IS_OFFER_EXPIRED, true);
@@ -232,6 +240,7 @@ public class OfferManager {
         }
         execution.setVariable(USER_OFFER, offerToReturn);
         return Response.status(Response.Status.OK.getStatusCode())
+                        .entity(OfferDTO.fromOffer(offerToReturn))
                         .build();
     }
 
@@ -261,8 +270,6 @@ public class OfferManager {
         Map<String,Object> processVariables = new HashMap<String,Object>();
         processVariables.put(USER_ADDRESS, address);
 
-        LOGGER.severe(email);
-        LOGGER.severe(address.getOfferToken());
         final RuntimeService runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();
         runtimeService.correlateMessage(PAY_OFFER, 
                                         PROCESS_CONFIRM_BUY_OFFER + email + address.getOfferToken(),
@@ -307,6 +314,17 @@ public class OfferManager {
         } catch (OfferNotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
         }
+    }
+
+    public Response requestOffers(){
+        String email = securityContext.getCallerPrincipal().getName();
+        List<GeneratedOffer> offers = (List<GeneratedOffer>) databaseManager.getOffersByEmail(email);
+        List<OfferDTO> out = offers.stream()
+                                    .map((offer) -> OfferDTO.fromOffer(offer))
+                                    .collect(Collectors.toList());
+        return Response.status(Response.Status.OK.getStatusCode())
+                            .entity(out)
+                            .build();
     }
 
     public Response requestTicket(String token){
@@ -378,6 +396,7 @@ public class OfferManager {
                 break;
             }
         }
+        offer.setRent(true);
     }
 
     public void setBooked(GeneratedOffer offer){
