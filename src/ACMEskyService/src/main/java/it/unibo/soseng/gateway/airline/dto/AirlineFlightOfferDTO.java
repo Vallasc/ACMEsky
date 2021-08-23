@@ -11,12 +11,12 @@ public class AirlineFlightOfferDTO implements Serializable {
 
     private String id;
     private String departureCode;
-    private String arrivalCode;
     private String departureTime;
     private String arrivalTime;
+    private String arrivalCode;
     private String expDate;
+    private String airlineName;
     private float price;
-    private String airline_id;
 
     public String getId() {
         return id;
@@ -66,20 +66,20 @@ public class AirlineFlightOfferDTO implements Serializable {
         this.arrivalCode = arrivalCode;
     }
 
-    public String departureCode() {
+    public String getDepartureCode() {
         return departureCode;
     }
 
-    public void departureCode(String departureCode) {
+    public void setDepartureAirportCode(String departureCode) {
         this.departureCode = departureCode;
     }
 
-    public String getAirline_id() {
-        return this.airline_id;
+    public String getAirlineName() {
+        return this.airlineName;
     }
 
-    public void setAirline_id(String airline_id) {
-        this.airline_id = airline_id;
+    public void setAirlinename(String airline_id) {
+        this.airlineName = airline_id;
     }
 
     @JsonIgnore

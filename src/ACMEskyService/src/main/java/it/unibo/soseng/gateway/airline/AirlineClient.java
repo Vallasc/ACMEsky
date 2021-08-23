@@ -45,48 +45,48 @@ public class AirlineClient {
         String res;
         // IMPORTANTE: Non utilizzare il metodo string() piu di una volta
         try (Response response = client.newCall(request).execute()) {
+
             if (response.code() != 200)
                 throw new AirlineErrorException();
             res = response.body().string();
+            LOGGER.info("Airline response: " + res);
+
         }
-        LOGGER.info("Airline response: " + res);
+
         return res;
 
     }
 
-    public byte[] getFlightTickets(String wsAddress, String username, String outboundFlightCode, String flightBackCode) 
-                                                                        throws IOException, BookTicketsExceptionException{
+    public byte[] getFlightTickets(String wsAddress, String username, String outboundFlightCode, String flightBackCode)
+            throws IOException, BookTicketsExceptionException {
 
-        String url = new String(wsAddress + "/getTickets?id="+ outboundFlightCode +"&id=" + flightBackCode);
-
+        String url = new String(wsAddress + "/getTickets?id=" + outboundFlightCode + "&id=" + flightBackCode);
 
         OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder().url(url)
-                            .addHeader("Content-Type", "application/pdf")
-                            .build();
+        Request request = new Request.Builder().url(url).addHeader("Content-Type", "application/pdf").build();
         byte[] ticket;
         try (Response response = client.newCall(request).execute()) {
             ticket = response.body().bytes();
-            if(response.code() != 200 && response.code() != 201)
+            if (response.code() != 200 && response.code() != 201)
                 throw new BookTicketsExceptionException();
         }
         return ticket;
     }
 
-    public void unbookFlights(GeneratedOffer offer) throws IOException{
+    public void unbookFlights(GeneratedOffer offer) throws IOException {
 
-        String url = new String( offer.getOutboundFlight().getAirlineId().getWsAddress() 
-                                + "/notPurchasedOffer?id="+ offer.getOutboundFlight().getFlightCode() 
-                                +"&id=" + offer.getFlightBack().getFlightCode());
+        String url = new String(offer.getOutboundFlight().getAirlineId().getWsAddress() + "/notPurchasedOffer?id="
+                + offer.getOutboundFlight().getFlightCode() + "&id=" + offer.getFlightBack().getFlightCode());
 
         OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder().url(url)
-                            .addHeader("Content-Type", "*/*")
-                            .build();
+        Request request = new Request.Builder().url(url).addHeader("Content-Type", "*/*").build();
         try (Response response = client.newCall(request).execute()) {
         }
     }
 
-    public class AirlineErrorException extends Exception {}
-    public class BookTicketsExceptionException extends Exception {}
+    public class AirlineErrorException extends Exception {
+    }
+
+    public class BookTicketsExceptionException extends Exception {
+    }
 }
