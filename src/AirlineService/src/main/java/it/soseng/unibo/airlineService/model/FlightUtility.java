@@ -75,28 +75,33 @@ public class FlightUtility {
      * @throws JsonProcessingException
      * @throws IOException
      */
-    public JsonNode GetRandomJsonLastminute(File file) throws JsonProcessingException, IOException {
+    public List<JsonNode> GetRandomJsonLastminute(File file) throws JsonProcessingException, IOException {
 
         ObjectMapper mapper = new ObjectMapper();
+        ArrayList<JsonNode> n = new ArrayList<>();
         JsonNode root = mapper.readTree(file);
         JsonNode offers = root.get("LAST-MINUTE");
         Random r = new Random();
         int i = r.ints(1, 0, offers.size()).toArray()[0];
-        JsonNode n = offers.get(i);
+        for (int j = 0; j < offers.get(i).size(); j++) {
+            n.add(offers.get(i).get(j));
+        }
         return n;
     }
 
-    public JsonNode[] GetJsonOffers(File file) throws JsonProcessingException, IOException {
+    public List<JsonNode> GetJsonOffers(File file) throws JsonProcessingException, IOException {
 
         ObjectMapper mapper = new ObjectMapper();
+        ArrayList<JsonNode> l = new ArrayList<>();
         JsonNode root = mapper.readTree(file);
         JsonNode offers = root.get("OFFERS");
-        // JsonNode n = offers.get(0);
-        JsonNode[] arr = new JsonNode[offers.size() - 1];
-        for (int i = 0; i < arr.length; i++) {
-            arr[i] = offers.get(i);
+        for (int j = 0; j < offers.size(); j++) {
+
+            for (int i = 0; i < offers.get(j).size(); i++) {
+                l.add(offers.get(j).get(i));
+            }
         }
-        return arr;
+        return l;
     }
 
     /**
@@ -107,22 +112,20 @@ public class FlightUtility {
      * @param n oggetto JsonNode
      * @return FlightOffer corrispondente al parametro n
      */
-    public List<FlightOffer> createOffer(JsonNode n) {
+    public FlightOffer createOffer(JsonNode n) {
 
-        ArrayList<FlightOffer> a = new ArrayList<>();
-        for (JsonNode i : n) {
-            FlightOffer o = new FlightOffer();
-            o.setDepartureCode(i.get("departure_airport_id").textValue());
-            o.setDepartureTime(i.get("departure_date_time").textValue());
-            o.setArrivalCode(i.get("arrival_airport_id").textValue());
-            o.setArrivalTime(i.get("arrival_date_time").textValue());
-            o.setAirline_id(i.get("airline_name").textValue());
-            o.setPrice(i.get("price").asDouble());
-            o.setPlace(i.get("place").textValue());
-            o.setExpiryDate();
-            a.add(o);
-        }
-        return a;
+        FlightOffer o = new FlightOffer();
+
+        o.setDepartureCode(n.get("departure_airport_id").textValue());
+        o.setDepartureTime(n.get("departure_date_time").textValue());
+        o.setArrivalCode(n.get("arrival_airport_id").textValue());
+        o.setArrivalTime(n.get("arrival_date_time").textValue());
+        o.setAirline_id(n.get("airline_name").textValue());
+        o.setPrice(n.get("price").floatValue());
+        o.setPlace(n.get("place").textValue());
+        o.setExpiryDate();
+
+        return o;
     }
 
     /**
@@ -132,26 +135,18 @@ public class FlightUtility {
      * @param i
      * @return
      */
-    public Flight convertOffertToFlight(FlightOffer i) {
+    public Flight convertOfferToFlight(FlightOffer i) {
         Flight f = new Flight();
         f.setId(i.getId());
-        f.setAirline_id(i.getAirline_id());
+        f.setAirlineName(i.getAirline_id());
         f.setArrivalCode(i.getArrivalCode());
         f.setDepartureCode(i.getDepartureCode());
-        f.setDepartureTime(i.getDepartureTime());
-        f.setArrivalTime(i.getArrivalTime());
-        f.setExpDate(i.getExpiryDate());
+        f.setDepartureTime(i.getDepartureTime().toString());
+        f.setArrivalTime(i.getArrivalTime().toString());
+        f.setExpDate(i.getExpiryDate().toString());
         f.setPrice(i.getPrice());
 
         return f;
-    }
-
-    public List<Flight> convertOffersToFlights(List<FlightOffer> list) {
-        List<Flight> l = new ArrayList<>();
-        for (FlightOffer o : list) {
-            l.add(convertOffertToFlight(o));
-        }
-        return l;
     }
 
     /**

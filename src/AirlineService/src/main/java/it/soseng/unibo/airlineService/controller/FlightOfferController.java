@@ -69,7 +69,7 @@ public class FlightOfferController {
      * @throws JsonProcessingException
      * @throws IOException
      */
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 600000)
     private void sendLastMinuteOffer() throws JsonProcessingException, IOException {
         s.handleLastMinuteOffer(FILE, ACMEskyRoute, user, pass);
 

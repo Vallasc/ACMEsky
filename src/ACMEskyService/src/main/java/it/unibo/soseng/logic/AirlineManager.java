@@ -62,9 +62,9 @@ public class AirlineManager {
         ProcessInstanceWithVariables instance = runtimeService.createProcessInstanceByKey(SAVE_LAST_MINUTE)
                 .setVariables(processVariables).executeWithVariablesInReturn();
         processVariables = instance.getVariables();
-        String error = (String) processVariables.get(PROCESS_ERROR);
-        if (error != null)
-            throw new BadRequestException();
+        // String error = (String) processVariables.get(PROCESS_ERROR);
+        // if (error != null)
+        // throw new BadRequestException();
 
     }
 
@@ -74,9 +74,9 @@ public class AirlineManager {
         for (int i = 0; i < airlineOffers.size(); i++) {
             try {
                 Flight flight = new Flight();
-                flight.setAirline(databaseManager.getAirline(airlineName));
+                flight.setAirline(databaseManager.getAirline(airlineOffers.get(i).getAirlineName()));
                 flight.setArrivalAirport(databaseManager.getAirport(airlineOffers.get(i).getArrivalCode()));
-                flight.setDepartureAirport(databaseManager.getAirport(airlineOffers.get(i).getDepartureTime()));
+                flight.setDepartureAirport(databaseManager.getAirport(airlineOffers.get(i).getDepartureCode()));
                 flight.setAvailable(true);
                 flight.setBooked(false);
                 flight.setFlightCode(airlineOffers.get(i).getId());
@@ -123,6 +123,7 @@ public class AirlineManager {
             for (JsonNode node : root) {
                 Flight f = new Flight();
                 try {
+                    LOGGER.severe(node.toString());
                     f.setDepartureAirport(databaseManager.getAirport(node.get("departureCode").textValue()));
 
                     OffsetDateTime departureDateTime = OffsetDateTime.parse(node.get("departureTime").textValue());
@@ -131,7 +132,7 @@ public class AirlineManager {
 
                     OffsetDateTime arrivalDateTime = OffsetDateTime.parse(node.get("arrivalTime").textValue());
                     f.setArrivalDateTime(arrivalDateTime);
-                    f.setAirline(databaseManager.getAirline(node.get("airline_id").textValue()));
+                    f.setAirline(databaseManager.getAirline(node.get("airlineName").textValue()));
                     f.setPrice(node.get("price").floatValue());
                     OffsetDateTime expireDateTime = OffsetDateTime.parse(node.get("expDate").textValue());
                     f.setExpireDate(expireDateTime);
