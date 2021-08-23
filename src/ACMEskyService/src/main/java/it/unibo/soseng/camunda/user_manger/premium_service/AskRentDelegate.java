@@ -36,6 +36,7 @@ public class AskRentDelegate implements JavaDelegate {
 
         try {
             offerManager.bookAllRent(email, address, offer, execution);
+            execution.setVariable(USER_OFFER, offer);
         } catch (UserNotFoundException e) {
             LOGGER.info(e.toString());
         }

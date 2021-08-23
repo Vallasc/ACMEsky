@@ -1,5 +1,6 @@
 package com.ACMEbank.BankService.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -100,7 +101,11 @@ public class PaymentController {
         payment.setPayed(true);
         paymentService.updatePayment(payment);
         userService.deposit(payment.getAmount(), payment.getUserId());
-        paymentService.sendPaymentNotification(payment.getNotificationUrl(), payment.getPaymentToken());
-        return new ResponseEntity<>(Map.of("status","ok"), HttpStatus.OK);
+        try {
+            paymentService.sendPaymentNotification(payment.getNotificationUrl(), payment.getPaymentToken());
+            return new ResponseEntity<>(Map.of("status","ok"), HttpStatus.OK);
+        } catch (IOException e) {
+            return new ResponseEntity<>(Map.of("status","error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

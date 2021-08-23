@@ -4,6 +4,7 @@ import static it.unibo.soseng.camunda.utils.ProcessVariables.RENT_BACK;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.RENT_OUTBOUND;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_ADDRESS;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
@@ -18,6 +19,7 @@ import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 import javax.security.enterprise.SecurityContext;
 import javax.ws.rs.container.AsyncResponse;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
@@ -34,6 +36,7 @@ import it.unibo.soseng.gateway.distance.DistanceClient.GeoserverErrorException;
 import it.unibo.soseng.gateway.distance.dto.DistanceDTO;
 import it.unibo.soseng.gateway.rent.RentClient;
 import it.unibo.soseng.gateway.user.dto.AddressDTO;
+import it.unibo.soseng.gateway.user.dto.OfferDTO;
 import it.unibo.soseng.gateway.user.dto.UserOfferDTO;
 import it.unibo.soseng.logic.database.DatabaseManager;
 import it.unibo.soseng.logic.database.DatabaseManager.FlightNotExistException;
@@ -46,11 +49,14 @@ import it.unibo.soseng.model.GeneratedOffer;
 import it.unibo.soseng.model.RentService;
 import it.unibo.soseng.model.User;
 import it.unibo.soseng.model.UserInterest;
+import it.unibo.soseng.utils.Env;
 import it.unibo.soseng.utils.Errors;
 import it.unibo.soseng.ws.generated.BookRentResponse;
 
 import static it.unibo.soseng.camunda.utils.Events.PAY_OFFER;
 import static it.unibo.soseng.camunda.utils.Events.START_PAY_OFFER;
+import static it.unibo.soseng.camunda.utils.Events.RESET_1;
+import static it.unibo.soseng.camunda.utils.Events.RESET_2;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.ASYNC_RESPONSE;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.BUSINESS_KEY;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.IS_OFFER_EXPIRED;
@@ -87,11 +93,12 @@ public class OfferManager {
 
         GeneratedOffer generatedOffer = new GeneratedOffer();
         generatedOffer.setBooked(false);
+        generatedOffer.setRent(false);
         generatedOffer.setAvailable(true);
         generatedOffer.setOutboundFlight(outBound);
         generatedOffer.setFlightBack(flightBack);
         generatedOffer.setExpireDate(OffsetDateTime.now().plusHours(24));
-        generatedOffer.setTotalPrice(flightBack.getPrice() + outBound.getPrice());
+        generatedOffer.setTotalPrice(flightBack.getPrice() + outBound.getPrice() + Env.ACMESKY_ADDITIONAL_PRICE);
         User user = databaseManager.getUser(username);
         generatedOffer.setUser(user);
 
@@ -172,6 +179,7 @@ public class OfferManager {
             databaseManager.getOfferByTokenEmail(token, email);
         } catch (OfferNotFoundException e) {
             response.resume(Response.status(Response.Status.NOT_FOUND.getStatusCode()).build());
+            return;
         }
 
         Integer processActive = (Integer) processState.getState(PROCESS_CONFIRM_BUY_OFFER, email, token);
@@ -219,6 +227,12 @@ public class OfferManager {
                     .build();
         }
 
+        if(offerToReturn.getBooked() || !offerToReturn.getAvailable()){
+            return Response.status(Response.Status.NOT_FOUND.getStatusCode())
+                    .entity(Errors.INVALID_TOKEN)
+                    .build();
+        }
+
         OffsetDateTime now = OffsetDateTime.now();
         if (offerToReturn.getExpireDate().compareTo(now) < 0) {
             execution.setVariable(IS_OFFER_EXPIRED, true);
@@ -226,6 +240,7 @@ public class OfferManager {
         }
         execution.setVariable(USER_OFFER, offerToReturn);
         return Response.status(Response.Status.OK.getStatusCode())
+                        .entity(OfferDTO.fromOffer(offerToReturn))
                         .build();
     }
 
@@ -255,12 +270,76 @@ public class OfferManager {
         Map<String,Object> processVariables = new HashMap<String,Object>();
         processVariables.put(USER_ADDRESS, address);
 
-        LOGGER.severe(email);
-        LOGGER.severe(address.getOfferToken());
         final RuntimeService runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();
         runtimeService.correlateMessage(PAY_OFFER, 
                                         PROCESS_CONFIRM_BUY_OFFER + email + address.getOfferToken(),
                                         processVariables);
+    }
+
+    public void resetProcess(UserOfferDTO offer, AsyncResponse response){
+        final RuntimeService runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();
+        String email = securityContext.getCallerPrincipal().getName();
+        try {
+            databaseManager.getOfferByTokenEmail(offer.getOfferToken(), email);
+        } catch (OfferNotFoundException e) {
+            response.resume(Response.status(Response.Status.NOT_FOUND.getStatusCode()).build());
+            return;
+        }
+
+        Integer processActive = (Integer) processState.getState(PROCESS_CONFIRM_BUY_OFFER, email, offer.getOfferToken());
+        if(processActive == null){
+            response.resume(Response.status(Response.Status.NOT_FOUND.getStatusCode()).build());
+            return;
+        }
+        response.resume(Response.status(Response.Status.OK.getStatusCode()).build());
+        if(processActive == 1){
+            runtimeService.correlateMessage(RESET_1, PROCESS_CONFIRM_BUY_OFFER + email + offer.getOfferToken());
+        }
+        if(processActive == 2){
+            runtimeService.correlateMessage(RESET_2, PROCESS_CONFIRM_BUY_OFFER + email + offer.getOfferToken());
+        }
+    }
+
+    public Response requestOffer(String token){
+        String email = securityContext.getCallerPrincipal().getName();
+        try {
+            GeneratedOffer offer = databaseManager.getOfferByTokenEmail(token, email);
+            if(offer.getBooked()) {
+                return Response.status(Response.Status.OK.getStatusCode())
+                                .entity(OfferDTO.fromOffer(offer))
+                                .build();
+            } else {
+                return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+            }
+        } catch (OfferNotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+        }
+    }
+
+    public Response requestOffers(){
+        String email = securityContext.getCallerPrincipal().getName();
+        List<GeneratedOffer> offers = (List<GeneratedOffer>) databaseManager.getOffersByEmail(email);
+        List<OfferDTO> out = offers.stream()
+                                    .map((offer) -> OfferDTO.fromOffer(offer))
+                                    .collect(Collectors.toList());
+        return Response.status(Response.Status.OK.getStatusCode())
+                            .entity(out)
+                            .build();
+    }
+
+    public Response requestTicket(String token){
+        String email = securityContext.getCallerPrincipal().getName();
+        try {
+            GeneratedOffer offer = databaseManager.getOfferByTokenEmail(token, email);
+            if(offer.getBooked()){ 
+                File file = new File(offer.getToken() + ".pdf");
+                return Response.ok(file, MediaType.APPLICATION_OCTET_STREAM)
+                    .header("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"" )
+                    .build();
+            }
+            return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+        } catch (OfferNotFoundException e) {}
+        return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
     }
 
     /**
@@ -317,6 +396,7 @@ public class OfferManager {
                 break;
             }
         }
+        offer.setRent(true);
     }
 
     public void setBooked(GeneratedOffer offer){

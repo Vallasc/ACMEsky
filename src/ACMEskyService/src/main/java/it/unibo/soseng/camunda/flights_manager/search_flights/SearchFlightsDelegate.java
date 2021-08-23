@@ -4,7 +4,7 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 
 import it.unibo.soseng.gateway.airline.dto.InterestDTO;
-import it.unibo.soseng.logic.airline.AirlineManager;
+import it.unibo.soseng.logic.AirlineManager;
 import it.unibo.soseng.logic.database.DatabaseManager;
 import it.unibo.soseng.model.Airline;
 import it.unibo.soseng.model.Flight;

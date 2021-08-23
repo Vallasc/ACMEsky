@@ -1,60 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>ACMEbank</title>
+    <title>ACMEpay</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <div id="overlay-container" class="d-flex align-items-center" style="display:none !important">
-        <div style="margin: auto">
-            <div class="d-flex justify-content-center">
+            <div class="justify-content-center">
                 <div class="spinner-border text-light"></div>
             </div>
-            <div class="d-flex justify-content-center">
+            <div class="justify-content-center">
                 <h5 class="text-light">Loading...</h5> 
             </div>
-        </div>
     </div>
-    <div class="container-fluid px-1 px-md-2 px-lg-4 mx-auto">
-        <div class="row d-flex justify-content-center">
-            <div class="col-xl-7 col-lg-8 col-md-9 col-sm-11">
+        <div class="d-flex align-items-center">
+            <div class="col-xl-7 col-lg-8 col-md-10 col-sm-12">
                 <div class="card border-0">
                     <div class="row justify-content-center">
-                        <h3 class="mb-5">ACMEPay</h3>
+                        <h2 class="mb-5">ACMEpay</h2>
                     </div>
                     <div class="row" id="pay-container">
-                        <div class="col-sm-7 border-line pb-3">
+                        <div class="col-sm-6 border-line">
                             <div class="form-group">
-                                <p class="text-muted text-sm mb-0">Name on the card</p> <input type="text" name="name" placeholder="Name" size="15">
+                                <p class="text-muted text-sm mb-0">Name on the card</p> <input type="text" name="name" placeholder="Name Surname" size="15">
                             </div>
                             <div class="form-group">
                                 <p class="text-muted text-sm mb-0">Card Number</p>
-                                <div class="row px-3"> <input type="text" name="card-num" placeholder="0000 0000 0000 0000" size="18" id="cr_no" minlength="19" maxlength="19">
-                                    <p class="mb-0 ml-3">/</p> <img class="image ml-1" src="https://i.imgur.com/WIAP9Ku.jpg">
+                                <div class="row px-3"> <input type="text" name="card-num" placeholder="0000 0000 0000 0000" size="18" id="cr_no" minlength="18" maxlength="18">
+                                    <p class="mb-0 ml-1"></p>/</p> <img class="image" src="https://i.imgur.com/WIAP9Ku.jpg">
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" style="display: inline-block;">
                                 <p class="text-muted text-sm mb-0">Expiry date</p> <input type="text" name="exp" placeholder="MM/YY" size="6" id="exp" minlength="5" maxlength="5">
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" style="display: inline-block;margin-left: 30px;">
                                 <p class="text-muted text-sm mb-0">CVV/CVC</p> <input type="password" name="cvv" placeholder="000" size="1" minlength="3" maxlength="3">
                             </div>
                             <div class="form-group mb-0">
-                                <div class="custom-control custom-checkbox custom-control-inline"> <input id="chk1" type="checkbox" name="chk" class="custom-control-input" checked> <label for="chk1" class="custom-control-label text-muted text-sm">save my card for future payment</label> </div>
+                                <div class="custom-control custom-checkbox custom-control-inline"> <input id="chk1" type="checkbox" name="chk" class="custom-control-input" checked> <label for="chk1" class="custom-control-label text-muted text-sm">Save my card for future payment</label> </div>
                             </div>
                         </div>
-                        <div class="col-sm-5 text-sm-center justify-content-center pt-4 pb-4"> 
+                        <div class="col-sm-6 text-sm-center justify-content-center"> 
                             <small class="text-sm text-muted">Payment number</small>
-                            <h5 class="mb-5" id="payment_number">00000000</h5> 
+                            <h5 class="mb-4" id="payment_number">00000000</h5> 
                             <small class="text-sm text-muted">Description</small>
-                            <h5 class="mb-5" id="description">00000000</h5> 
+                            <h5 class="mb-4" id="description">00000000</h5> 
                             <small class="text-sm text-muted">Payment amount</small>
                             <div class="row px-3 justify-content-sm-center">
                                 <h2 class=""><span class="text-md font-weight-bold mr-2 number-color" >€</span><span class="number-color" id="payment_amount">0.00</span></h2>
@@ -63,7 +60,7 @@
                     </div>
                     <div class="row justify-content-center" id="done-container" style="display: none !important">
                         <h5 class="mb-3">Payment successful</h2>
-                        <small class="text-sm text-muted">You can close this window</small>
+                        <small class="text-sm text-muted">You can close this window now.</small>
                     </div>
                     <div class="row justify-content-center" id="invalid-container" style="display: none !important">
                         <h5 class="mb-3">Invalid payment</h2>
@@ -71,7 +68,6 @@
                 </div>
             </div>
         </div>
-    </div>
     <script>
         var payment;
         var overlayContainer = document.getElementById("overlay-container")

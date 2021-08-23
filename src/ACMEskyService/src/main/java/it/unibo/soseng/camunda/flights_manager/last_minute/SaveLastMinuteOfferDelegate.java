@@ -9,7 +9,7 @@ import javax.inject.Named;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import it.unibo.soseng.gateway.airline.dto.AirlineFlightOfferDTO;
-import it.unibo.soseng.logic.airline.AirlineManager;
+import it.unibo.soseng.logic.AirlineManager;
 
 @Named("saveLastMinuteOfferDelegate")
 public class SaveLastMinuteOfferDelegate implements JavaDelegate {

@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_17e098l" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.3.0">
   <bpmn:collaboration id="Collaboration_0hkmceq">
-    <bpmn:participant id="Participant_0e3mrb7" name="ACMEsky_FlightsManager" processRef="RemoveFlights" />
+    <bpmn:participant id="Participant_0e3mrb7" name="ACMEsky" processRef="RemoveExpiredFlights" />
   </bpmn:collaboration>
-  <bpmn:process id="RemoveFlights" isExecutable="true">
-    <bpmn:endEvent id="Event_0y4zovv">
-      <bpmn:incoming>Flow_06do8z0</bpmn:incoming>
-    </bpmn:endEvent>
+  <bpmn:process id="RemoveExpiredFlights" isExecutable="true">
     <bpmn:sequenceFlow id="Flow_06do8z0" sourceRef="Activity_0tq6913" targetRef="Event_0y4zovv" />
     <bpmn:startEvent id="Event_0i8g1jo" name="Every 12 hours">
       <bpmn:outgoing>Flow_04yvrbq</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_15g26oy">
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">R3/PT1M</bpmn:timeDuration>
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">R1/PT60M</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_04yvrbq" sourceRef="Event_0i8g1jo" targetRef="Activity_0tq6913" />
@@ -20,23 +17,23 @@
       <bpmn:outgoing>Flow_06do8z0</bpmn:outgoing>
       <bpmn:property id="Property_1y38kvt" name="__targetRef_placeholder" />
     </bpmn:serviceTask>
+    <bpmn:endEvent id="Event_0y4zovv">
+      <bpmn:incoming>Flow_06do8z0</bpmn:incoming>
+    </bpmn:endEvent>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0hkmceq">
       <bpmndi:BPMNShape id="Participant_0e3mrb7_di" bpmnElement="Participant_0e3mrb7" isHorizontal="true">
-        <dc:Bounds x="160" y="80" width="600" height="310" />
+        <dc:Bounds x="160" y="80" width="480" height="160" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_06do8z0_di" bpmnElement="Flow_06do8z0">
-        <di:waypoint x="510" y="160" />
-        <di:waypoint x="592" y="160" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_04yvrbq_di" bpmnElement="Flow_04yvrbq">
         <di:waypoint x="278" y="160" />
-        <di:waypoint x="410" y="160" />
+        <di:waypoint x="360" y="160" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="Event_0y4zovv_di" bpmnElement="Event_0y4zovv">
-        <dc:Bounds x="592" y="142" width="36" height="36" />
-      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_06do8z0_di" bpmnElement="Flow_06do8z0">
+        <di:waypoint x="460" y="160" />
+        <di:waypoint x="552" y="160" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Event_1qj2y2r_di" bpmnElement="Event_0i8g1jo">
         <dc:Bounds x="242" y="142" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -44,7 +41,10 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0tq6913_di" bpmnElement="Activity_0tq6913">
-        <dc:Bounds x="410" y="120" width="100" height="80" />
+        <dc:Bounds x="360" y="120" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0y4zovv_di" bpmnElement="Event_0y4zovv">
+        <dc:Bounds x="552" y="142" width="36" height="36" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

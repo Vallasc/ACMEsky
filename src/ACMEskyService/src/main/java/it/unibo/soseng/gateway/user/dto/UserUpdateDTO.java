@@ -16,9 +16,28 @@ public class UserUpdateDTO implements Serializable {
 
     private String newPassword;
     private String newProntogramUsername;
+    private String newName;
+    private String newSurname;
+
 
     public String getNewProntogramUsername() {
         return newProntogramUsername;
+    }
+
+    public String getNewSurname() {
+        return newSurname;
+    }
+
+    public void setNewSurname(String newSurname) {
+        this.newSurname = newSurname;
+    }
+
+    public String getNewName() {
+        return newName;
+    }
+
+    public void setNewName(String newName) {
+        this.newName = newName;
     }
 
     public String getNewPassword() {

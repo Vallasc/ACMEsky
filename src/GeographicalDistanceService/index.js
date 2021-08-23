@@ -37,11 +37,15 @@ app.get('/distance', async (req, res) => {
         console.error(err)
         res.status(400).json({error: "Internal error"})
     }
-    //console.log(JSON.stringify(distance.data))
-    let stringDistance = distance.data.rows[0].elements[0].distance.text
-    let value = distance.data.rows[0].elements[0].distance.value
-    let status = distance.data.rows[0].elements[0].status
-    res.status(200).json({status: status, distance: stringDistance, value: value})
+    console.log(JSON.stringify(distance.data))
+    if( distance.data.rows[0].elements[0].status == "OK"){
+      let stringDistance = distance.data.rows[0].elements[0].distance.text
+      let value = distance.data.rows[0].elements[0].distance.value
+      let status = distance.data.rows[0].elements[0].status
+      res.status(200).json({status: status, distance: stringDistance, value: value})
+    } else {
+      res.status(404).json({status: "ERROR"})
+    }
 
 });
 

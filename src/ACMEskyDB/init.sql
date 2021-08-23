@@ -303,7 +303,8 @@ CREATE TABLE public.generated_offers (
     total_price double precision,
     flight_back_id bigint NOT NULL,
     outbound_flight_id bigint NOT NULL,
-    user_id bigint NOT NULL
+    user_id bigint NOT NULL,
+    rent boolean
 );
 
 ALTER TABLE public.generated_offers OWNER TO soseng;
@@ -5246,12 +5247,9 @@ INSERT INTO public.users_interests VALUES (4, '2021-10-25 12:00:00+02', 1300, FA
 ALTER SEQUENCE public.users_interests_id_seq RESTART WITH 5;
 
 
---INSERT INTO public.flights VALUES (1, '2021-10-28 22:00:00+02', TRUE, FALSE, '2021-10-28 15:00:00+02', '2021-10-26 15:00:00+02', 'XEG8F3G1', 130, 1, 2221, 3386);
---INSERT INTO public.flights VALUES (2, '2021-11-8 22:00:00+02', TRUE, FALSE, '2021-11-8 15:00:00+02', '2021-10-6 15:00:00+02', 'BEGDRG2', 130, 1, 3386, 2221);
+INSERT INTO public.flights VALUES (2, '2021-10-28 20:00:00+00', FALSE, TRUE, '2021-10-28 13:00:00+00', '2021-10-26 13:00:00+00', 'XEG8F3G1', 200, 1, 2221, 391);
+INSERT INTO public.flights VALUES (1, '2021-11-08 20:00:00+00', FALSE, TRUE, '2021-11-08 13:00:00+00', '2021-10-06 13:00:00+00', 'BEGDRG22', 200, 1, 391, 2221);
+ALTER SEQUENCE public.flights_id_seq RESTART WITH 3;
 
---INSERT INTO public.flights VALUES (3, '2021-10-28 20:00:00+00', FALSE, FALSE, '2021-10-28 13:00:00+00', '2021-10-26 13:00:00+00', 'XEG8F3G1', 600, 1, 2221, 391);
---INSERT INTO public.flights VALUES (4, '2021-11-08 20:00:00+00', FALSE, FALSE, '2021-11-08 13:00:00+00', '2021-10-06 13:00:00+00', 'BEGDRG2', 600, 1, 391, 2221);
---ALTER SEQUENCE public.flights_id_seq RESTART WITH 5;
-
---INSERT INTO public.generated_offers VALUES (1, TRUE, FALSE, '2021-12-12 14:39:57.388312+00', 'b62c1', 1200, 4, 3, 1);
---ALTER SEQUENCE public.generated_offers_id_seq RESTART WITH 5;
+INSERT INTO public.generated_offers VALUES (1, FALSE, TRUE, '2021-12-12 14:39:57.388312+00', 'b62c1', 410, 2, 1, 1, FALSE);
+ALTER SEQUENCE public.generated_offers_id_seq RESTART WITH 5;

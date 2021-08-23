@@ -4,7 +4,7 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 
 import it.unibo.soseng.camunda.utils.ProcessState;
-import it.unibo.soseng.logic.airline.AirlineManager;
+import it.unibo.soseng.logic.AirlineManager;
 
 import static it.unibo.soseng.camunda.utils.ProcessVariables.ASYNC_RESPONSE;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_CONFIRM_BUY_OFFER;
