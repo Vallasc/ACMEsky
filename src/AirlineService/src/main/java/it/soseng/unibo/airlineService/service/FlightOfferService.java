@@ -3,26 +3,17 @@ package it.soseng.unibo.airlineService.service;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.hibernate.annotations.common.util.impl.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.ResourceAccessException;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.server.ResponseStatusException;
 
 import it.soseng.unibo.airlineService.model.FlightUtility;
 import it.soseng.unibo.airlineService.model.FlightOffer;
@@ -30,6 +21,11 @@ import it.soseng.unibo.airlineService.DTO.Flight;
 import it.soseng.unibo.airlineService.DTO.UserRequest;
 import it.soseng.unibo.airlineService.auth.Auth;
 import it.soseng.unibo.airlineService.repository.FlightOfferRepository;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * Questa classe definisce le caratteristiche delle offerte di volo
@@ -47,6 +43,8 @@ public class FlightOfferService {
 
     private Auth auth = new Auth();
 
+    final MediaType JSON = MediaType.get("application/json; charset=utf-8");
+
     private final static Logger LOGGER = Logger.getLogger(FlightOfferService.class.getName());
 
     /**
@@ -61,18 +59,26 @@ public class FlightOfferService {
      */
     public void handleLastMinuteOffer(String s, String route, String user, String pass)
             throws JsonProcessingException, IOException {
-        JsonNode n = u.GetRandomJsonLastminute(u.GetFile(s));
-        List<FlightOffer> list = u.createOffer(n).stream().filter(i -> u.DeleteExpiredOffers(i) == false)
-                .collect(Collectors.toList());
-        list.forEach(i -> repo.save(i));
+        List<JsonNode> n = u.GetRandomJsonLastminute(u.GetFile(s));
+        ArrayList<FlightOffer> l = new ArrayList<>();
+        for (JsonNode i : n) {
+            LOGGER.severe("1 " + i.toString());
+            FlightOffer of = u.createOffer(i);
+            l.add(of);
+            repo.save(of);
+        }
 
         // richiedo il token jwt attraverso una richiesta http e la passo a
         // sendLastMinuteOffer che lo aggiungerà all'header della chiamata che fa per
         // inviare le offerte last-minute
         try {
             String jwt = auth.AuthRequest(route, user, pass);
-            System.out.println(jwt.toString());
-            sendLastMinuteOffer(u.convertOffersToFlights(list), route, jwt);
+            ArrayList<Flight> flights = new ArrayList<>();
+            for (FlightOffer o : l) {
+
+                flights.add(u.convertOfferToFlight(o));
+            }
+            sendLastMinuteOffer(flights, route, jwt);
         } catch (UnknownHostException e) {
             LOGGER.info("error");
         }
@@ -80,12 +86,13 @@ public class FlightOfferService {
     }
 
     public void createFlightOffers(String s) throws JsonProcessingException, IOException {
-        JsonNode[] arr = u.GetJsonOffers(u.GetFile(s));
-        for (JsonNode n : arr) {
-            List<FlightOffer> list = u.createOffer(n).stream().filter(i -> u.DeleteExpiredOffers(i) == false)
-                    .collect(Collectors.toList());
-            list.forEach(i -> repo.save(i));
+        List<JsonNode> l = u.GetJsonOffers(u.GetFile(s));
+
+        for (JsonNode n : l) {
+            FlightOffer of = u.createOffer(n);
+            repo.save(of);
         }
+
     }
 
     /**
@@ -110,7 +117,7 @@ public class FlightOfferService {
         }
 
         for (FlightOffer o : map.values()) {
-            l.add(u.convertOffertToFlight(o));
+            l.add(u.convertOfferToFlight(o));
         }
 
         return l;
@@ -120,25 +127,27 @@ public class FlightOfferService {
      * invia le offerte last-minute generate precedentemente ad ACMEsky
      * 
      * @param o l'offerta da inviare sulla route specifica
+     * @throws IOException
      */
-    public void sendLastMinuteOffer(List<Flight> f, String route, String jwt) throws UnknownHostException {
+    public void sendLastMinuteOffer(List<Flight> f, String route, String jwt) throws IOException {
 
         String url = route + "airlines/last_minute";
 
-        // // create headers
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization ", "Bearer " + jwt);
-        // // set `content-type` header
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        // // set `accept` header
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        // // build the request
-        HttpEntity<List<Flight>> entity = new HttpEntity<>(f, headers);
-        // // send POST request
-        RestTemplate restTemplate = new RestTemplate();
+        ObjectMapper objectMapper = new ObjectMapper();
+        OkHttpClient client = new OkHttpClient();
 
-        restTemplate.postForEntity(url, entity, Flight.class);
+        String requestBody = objectMapper.writeValueAsString(f);
 
+        LOGGER.severe(requestBody.toString());
+
+        RequestBody body = RequestBody.create(requestBody, JSON);
+        Request request = new Request.Builder().url(url).addHeader("Content-Type", "application/json")
+                .addHeader("Authorization", "Bearer " + jwt).post(body).build();
+        try (Response response = client.newCall(request).execute()) {
+            if (response.code() != 200) {
+                response.code();
+            }
+        }
     }
 
     public List<FlightOffer> getOffers(long... l) {
