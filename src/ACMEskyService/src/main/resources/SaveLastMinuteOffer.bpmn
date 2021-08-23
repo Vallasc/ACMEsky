@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_149xtiq" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.4.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_149xtiq" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.3.0">
   <bpmn:collaboration id="Collaboration_1u8wz84">
     <bpmn:participant id="Participant_1d9q0ou" name="ACMEsky" processRef="SaveLastMinute" />
   </bpmn:collaboration>
@@ -23,7 +23,7 @@
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1u8wz84">
       <bpmndi:BPMNShape id="Participant_1d9q0ou_di" bpmnElement="Participant_1d9q0ou" isHorizontal="true">
-        <dc:Bounds x="160" y="70" width="600" height="250" />
+        <dc:Bounds x="160" y="70" width="600" height="220" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_01ygw6p_di" bpmnElement="Flow_01ygw6p">
         <di:waypoint x="520" y="177" />
