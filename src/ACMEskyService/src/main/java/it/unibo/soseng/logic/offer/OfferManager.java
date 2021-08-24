@@ -319,6 +319,7 @@ public class OfferManager {
     public Response requestOffers(){
         String email = securityContext.getCallerPrincipal().getName();
         List<GeneratedOffer> offers = (List<GeneratedOffer>) databaseManager.getOffersByEmail(email);
+        offers.removeIf(offer -> !offer.getBooked());
         List<OfferDTO> out = offers.stream()
                                     .map((offer) -> OfferDTO.fromOffer(offer))
                                     .collect(Collectors.toList());
