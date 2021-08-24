@@ -124,6 +124,22 @@
         <artifactId>html2pdf</artifactId>
         <version>3.0.4</version>
     </dependency>
+    <!-- swagger related dependencies -->
+    <dependency>
+        <groupId>io.swagger.core.v3</groupId>
+        <artifactId>swagger-jaxrs2</artifactId>
+        <version>2.1.10</version>
+    </dependency>
+    <dependency>
+        <groupId>io.swagger.core.v3</groupId>
+        <artifactId>swagger-jaxrs2-servlet-initializer</artifactId>
+        <version>2.1.10</version>
+    </dependency>
+    <dependency>
+        <groupId>io.swagger.core.v3</groupId>
+        <artifactId>swagger-annotations</artifactId>
+        <version>2.1.10</version>
+    </dependency>
     </dependencies>
   
     
@@ -163,6 +179,27 @@
             <packageName>it.unibo.soseng.ws.generated</packageName>
           </configuration>
         </plugin>-->
+
+        <!-- plugin for api data generation -->
+        <plugin>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-maven-plugin</artifactId>
+            <version>2.1.10</version>
+            <configuration>
+                <outputFileName>jaxrs-api</outputFileName>
+                <outputPath>swagger</outputPath>
+                <outputFormat>JSON</outputFormat>
+            </configuration>
+            <executions>
+                <execution>
+                  <?m2e execute onConfiguration,onIncremental?>
+                    <phase>compile</phase>
+                    <goals>
+                        <goal>resolve</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
       </plugins>
     </build>
 
