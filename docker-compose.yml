@@ -123,7 +123,6 @@ services:
         restart: always
         networks: 
             - acmesky
-
     rent-service-2:
         container_name: rent_service_2
         build: ./src/RentService
@@ -135,9 +134,22 @@ services:
         networks: 
             - acmesky
 
+#   Geo distance service
+    geodistance:
+        container_name: geodistance_container
+        build: ./src/GeographicalDistanceService
+        env_file:
+            - ./src/GeographicalDistanceService/.env
+        ports:
+            - "8040:80"
+        restart: always
+        networks: 
+            - acmesky
+
+#   Swagger UI
     swagger-ui:
         container_name: swagger_ui
-        build: ./
+        build: ./src/SwaggerUI
         ports:
             - "8000:80"
         restart: always
