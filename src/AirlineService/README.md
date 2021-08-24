@@ -21,7 +21,7 @@ http://localhost:8061/swagger-ui.html
     width="900"
     height="900"
     src="
-    https://vallasc.github.io/ACMEsky/docs/swagger-ui/AirlineService.html?src=https://vallasc.github.io/ACMEsky/src/AirlineService/swagger.json
+    https://vallasc.github.io/ACMEsky/src/SwaggerUI/index.html?src=https://vallasc.github.io/ACMEsky/src/AirlineService/swagger.json
     ">
 </iframe>
 
