@@ -1,0 +1,55 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.19.5/swagger-ui.css" >
+    <style>
+      .topbar {
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="swagger-ui">
+        Load json file from get ?src=https://yourfile.com/
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.19.5/swagger-ui-bundle.js"> </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.19.5/swagger-ui-standalone-preset.js"> </script>
+    <script>
+      var src = window.location.search.match(/(\?|&)src\=([^&]*)/)
+      if(src != null)
+        src = decodeURIComponent(src[2])
+      else
+        src = "open-api.json"
+
+      var token = window.location.search.match(/(\?|&)token\=([^&]*)/)
+      if(token != null)
+        token = decodeURIComponent(token[2])
+      else 
+        token = ""
+
+      window.onload = function() {
+        const ui = SwaggerUIBundle({
+          url: src,
+          dom_id: '#swagger-ui',
+          deepLinking: true,
+          presets: [
+            SwaggerUIBundle.presets.apis,
+            SwaggerUIStandalonePreset
+          ],
+          plugins: [
+            SwaggerUIBundle.plugins.DownloadUrl
+          ],
+          layout: "StandaloneLayout",
+          requestInterceptor: (req) => {
+            req.headers.Authorization = "Bearer " + token
+            return req
+          }
+        })
+     
+        window.ui = ui
+      }
+
+  </script>
+  </body>
+</html>
