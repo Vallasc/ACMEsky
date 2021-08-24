@@ -135,6 +135,15 @@ services:
         networks: 
             - acmesky
 
+    swagger-ui:
+        container_name: swagger_ui
+        build: ./
+        ports:
+            - "8000:80"
+        restart: always
+        networks: 
+            - acmesky
+
 networks:
     acmesky:
         name: acmesky-net
