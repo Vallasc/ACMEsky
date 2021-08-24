@@ -186,13 +186,13 @@
             <artifactId>swagger-maven-plugin</artifactId>
             <version>2.1.10</version>
             <configuration>
-                <outputFileName>jaxrs-api</outputFileName>
+                <outputFileName>open-api</outputFileName>
                 <outputPath>swagger</outputPath>
                 <outputFormat>JSON</outputFormat>
             </configuration>
             <executions>
                 <execution>
-                  <?m2e execute onConfiguration,onIncremental?>
+                  <?m2e ignore?>
                     <phase>compile</phase>
                     <goals>
                         <goal>resolve</goal>
