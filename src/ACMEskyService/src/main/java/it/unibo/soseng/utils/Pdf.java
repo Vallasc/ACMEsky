@@ -4,7 +4,6 @@ import it.unibo.soseng.model.GeneratedOffer;
 import it.unibo.soseng.ws.generated.BookRentResponse;
 
 import java.nio.charset.StandardCharsets;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.logging.Logger;
@@ -63,10 +62,10 @@ public class Pdf {
             content = content.replace("{{serviceCost}}", String.format ("%.2f", Float.valueOf(Env.ACMESKY_ADDITIONAL_PRICE)));
             content = content.replace("{{total}}", String.format ("%.2f", offer.getTotalPrice()));
 
-
-            FileOutputStream fileOut = new FileOutputStream(offer.getToken() + "_tmp2.pdf");
-            HtmlConverter.convertToPdf(content, fileOut);
-            fileOut.close();
+            PdfWriter writer = new PdfWriter(offer.getToken() + "_tmp2.pdf");
+            HtmlConverter.convertToPdf(content, writer);
+            writer.flush();
+            writer.close();
         } catch (Exception e) {
             LOGGER.severe(e.toString());
             e.printStackTrace();

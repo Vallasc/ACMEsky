@@ -1,6 +1,8 @@
 version: '3.9'
 
 services:
+
+#   ACMEsky sevices
     acmesky:
         container_name: acmesky_container
         build: ./src/ACMEskyService
@@ -13,7 +15,6 @@ services:
         restart: unless-stopped
         depends_on:
             - postgres
-
     postgres:
         container_name: postgres_container
         build: ./src/ACMEskyDB
@@ -26,7 +27,6 @@ services:
         networks:
             - acmesky
         restart: unless-stopped
-
     web:
         container_name: acmesky_web
         build: ./src/ACMEskyWeb
@@ -40,27 +40,126 @@ services:
         depends_on:
             - acmesky
 
-#    pgadmin:
-#        container_name: pgadmin_container
-#        image: dpage/pgadmin4:5.4
-#        env_file:
-#            - ./src/ACMEskyDB/.env
-#        volumes:
-#            - pgadmin:/root/.pgadmin
-#        ports:
-#            - "5050:80"
-#        networks:
-#            - acmesky
-#        restart: unless-stopped
-#        depends_on:
-#            - postgres
-            
+#   Arline sevices
+    national-airline:
+        container_name: national-service
+        build: ./src/AirlineService
+        env_file: ./src/AirlineService/AirlineCredentialsEnvFiles/CredentialsAirline1.env
+        volumes: 
+            - ./src/AirlineService/db:/db
+            - ./src/AirlineService/fileSampleOffers/NationalFlights.json:/list/list.json
+        ports:
+            - 8060:8082
+        networks:
+            - acmesky
+        restart: always
+    international-airline:
+        container_name: international-service
+        build: ./src/AirlineService
+        env_file: ./src/AirlineService/AirlineCredentialsEnvFiles/CredentialsAirline2.env
+        volumes:
+            - ./src/AirlineService/db:/db
+            - ./src/AirlineService/fileSampleOffers/InternationalFlights.json:/list/list.json
+        ports:
+            - 8061:8082
+        networks: 
+            - acmesky
+        restart: always
+
+#   Bank
+    bank:
+        container_name: bank_container
+        build: ./src/BankService
+        env_file:
+            - ./src/BankService/.env
+        ports:
+            - "8070:8080"
+        networks:
+            - acmesky
+        restart: always
+
+#   Prontogram
+    prontogram_frontend:
+        container_name: prontogram_frontend_container
+        build: ./src/Prontogram/front-end
+        ports:
+            - "8051:80"
+        restart: always
+        networks: 
+            - acmesky
+    prontogram:
+        container_name: prontogram_service_container
+        build: ./src/Prontogram/back-end
+        ports:
+            - "8050:8000"
+        restart: always
+        networks: 
+            - acmesky
+        depends_on:
+            - mongo
+    mongo:
+        container_name: mongo_container
+        image: mongo
+        restart: always
+        environment:
+            - MONGO_INITDB_ROOT_USERNAME=soseng
+            - MONGO_INITDB_ROOT_PASSWORD=adminadmin
+            - MONGO_INITDB_DATABASE=Prontogram
+        networks: 
+            - acmesky
+        volumes:
+            - mongodb-data:/data/db
+        ports: 
+            - 27017:27017
+
+#   Rent Service
+    rent-service-1:
+        container_name: rent_service_1
+        build: ./src/RentService
+        environment:
+            - SERVICE_NAME=RentService1
+        ports:
+            - "8030:8080"
+        restart: always
+        networks: 
+            - acmesky
+    rent-service-2:
+        container_name: rent_service_2
+        build: ./src/RentService
+        environment:
+            - SERVICE_NAME=RentService2
+        ports:
+            - "8032:8080"
+        restart: always
+        networks: 
+            - acmesky
+
+#   Geo distance service
+    geodistance:
+        container_name: geodistance_container
+        build: ./src/GeographicalDistanceService
+        env_file:
+            - ./src/GeographicalDistanceService/.env
+        ports:
+            - "8040:80"
+        restart: always
+        networks: 
+            - acmesky
+
+#   Swagger UI
+    swagger-ui:
+        container_name: swagger_ui
+        build: ./src/SwaggerUI
+        ports:
+            - "8000:80"
+        restart: always
+        networks: 
+            - acmesky
+
 networks:
     acmesky:
-        driver: bridge
         name: acmesky-net
 
 volumes:
-
     postgres:
-#    pgadmin:
+    mongodb-data:

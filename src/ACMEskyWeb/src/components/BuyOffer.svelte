@@ -66,7 +66,8 @@
         if(offer == null){
             timeout = setTimeout(getOffer, 2000);
         } else { 
-            payWindow.close()
+            if(payWindow != null)
+                payWindow.close()
             step = 3
             loading = false
         }

@@ -5,7 +5,7 @@ include "rent.iol"
 outputPort RentOutput {
   Location: "socket://localhost:8080"
   Protocol: soap {
-    .wsdl = "./rentServiceTest.wsdl"
+    .wsdl = "./rentService.wsdl"
     .wsdl.port = "Rent"
     .dropRootValue = true
   }

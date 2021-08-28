@@ -16,12 +16,12 @@ public class UserInterestDTO implements Serializable {
     @NotNull
     private FlightInterestDTO outboundFlight;
 
-    @NotNull //TODO puo essere eliminato e lasciata solo la data
+    @NotNull
     private FlightInterestDTO flightBack;
 
     @NotNull
     @Min(10)
-    @Max(1000)
+    @Max(10000)
     private double priceLimit;
 
     public long getId() {
