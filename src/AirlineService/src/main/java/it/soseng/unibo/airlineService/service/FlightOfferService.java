@@ -62,7 +62,6 @@ public class FlightOfferService {
         List<JsonNode> n = u.GetRandomJsonLastminute(u.GetFile(s));
         ArrayList<FlightOffer> l = new ArrayList<>();
         for (JsonNode i : n) {
-            LOGGER.severe("1 " + i.toString());
             FlightOffer of = u.createOffer(i);
             l.add(of);
             repo.save(of);
@@ -73,12 +72,17 @@ public class FlightOfferService {
         // inviare le offerte last-minute
         try {
             String jwt = auth.AuthRequest(route, user, pass);
+            l.removeIf(o -> u.DeleteExpiredOffers(o));
             ArrayList<Flight> flights = new ArrayList<>();
             for (FlightOffer o : l) {
 
                 flights.add(u.convertOfferToFlight(o));
             }
-            sendLastMinuteOffer(flights, route, jwt);
+
+            if (!flights.isEmpty()) {
+                sendLastMinuteOffer(flights, route, jwt);
+
+            }
         } catch (UnknownHostException e) {
             LOGGER.info("error");
         }
@@ -90,7 +94,10 @@ public class FlightOfferService {
 
         for (JsonNode n : l) {
             FlightOffer of = u.createOffer(n);
-            repo.save(of);
+            if (!u.DeleteExpiredOffers(of)) {
+
+                repo.save(of);
+            }
         }
 
     }
@@ -137,8 +144,6 @@ public class FlightOfferService {
         OkHttpClient client = new OkHttpClient();
 
         String requestBody = objectMapper.writeValueAsString(f);
-
-        LOGGER.severe(requestBody.toString());
 
         RequestBody body = RequestBody.create(requestBody, JSON);
         Request request = new Request.Builder().url(url).addHeader("Content-Type", "application/json")
