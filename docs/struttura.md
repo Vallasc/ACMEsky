@@ -3,6 +3,11 @@
 In questa sezione si presenta la struttura del progetto, specificando per ciascun servizio le tecnologie impiegate e la struttura scelta per l'implementazione.
 
 
+![struttura acmesky](struttura/structure1.png)
+
+![struttura totale](struttura/structure2.png)
+
+
 ## ACMEsky
 
 - ACMEskyWeb: servizio sviluppato con SvelteJS, framework opensource per il frontend 
