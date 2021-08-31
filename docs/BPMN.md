@@ -1,6 +1,6 @@
-# Documentazione bpmn
+# Diagramma BPMN
 
-In questa sezione della documentazione si descrive il diagramma BPMN del progetto, in cui si mostra come i servizi ed ACMEsky interagiscono tra loro al fine di realizzare le funzionalità richieste dalla consegna del progetto. Per una migliore specificità e gestione della documentazione il diagramma verrà diviso in parti relative alle varie azioni degli attori, come ad esempio la registrazione dell'interesse utente, la ricerca offerte di volo, salvataggio di quelle last-minute, gestione delle offerte e pagamento, ecc.
+In questa sezione della documentazione si descrive il diagramma BPMN del progetto, in cui si mostra come i servizi ed ACMEsky interagiscono tra loro al fine di realizzare le funzionalità richieste. Per una migliore specificità e gestione della documentazione il diagramma verrà diviso in parti relative alle varie azioni degli attori, come ad esempio: la registrazione dell'interesse utente, la ricerca offerte di volo, salvataggio di quelle last-minute, gestione delle offerte e pagamento, ecc.
 
 ## Registrazione dell'interesse dell'utente
 
@@ -13,13 +13,13 @@ ACMEsky salva i voli di interesse nel suo Database, in particolare nella tabella
 
 ![registrazione_voli_last-minute](bpmn/img/SaveLast-minute.png)
 
-In questa parte si descrive il processo di ricezione e salvataggio dei voli last-minute. I servizi di Airline Service mandano voli last-minute appena creati ad ACMEsky, la quale salva ciascuno di essi nel suo Database, nello specifico nella relazione available_flights.
+In questa parte si descrive il processo di ricezione e salvataggio dei voli last-minute. I servizi di Airline Service mandano voli last-minute appena creati ad ACMEsky, la quale salva ciascuno di essi nel database, nello specifico nella tabella available_flights.
 
 ## Rimozione dei voli scaduti
 
 ![removing_expired_flights](bpmn/img/RemovingExpiredFlights.png)
 
-Il processo di cancellazione dei voli scaduti presenti nel Database avviene ogni 12 ore. I voli scaduti sono quei voli che hanno la data di scadenza è antecedente a quella in cui si effettua l'operazione di cancellazione. La cancellazione non comporta l'eliminazione effettiva del record che rappresenta quel volo, bensì un cambiamento di stato che porta ACMEsky a non considerare più quel volo come disponibile.
+Il processo di cancellazione dei voli scaduti presenti nel Database avviene ogni 12 ore. I voli scaduti sono quei voli la cui data di scadenza è antecedente a quella in cui si effettua l'operazione di cancellazione. La cancellazione non comporta l'eliminazione effettiva del record che rappresenta quel volo, bensì un cambiamento di stato che porta ACMEsky a non considerare più quel volo come disponibile.
 
 ## Rimozione delle offerte scadute
 
@@ -51,13 +51,13 @@ In questa parte del diagramma si illustra la conferma di acquisto dell'offerta d
 
 L'App di Prontogram notifica l'utente del fatto che c'è un'offerta i cui voli di partenza e ritorno corrispondono ai voli di interesse da lui richiesti e termina il suo flusso. L'utente riceve l'offerta e può decidere se confermarla o meno attraverso l'invio di un token legato all'offerta stessa. ACMEsky recupera l'offerta corrispondente al token e si occupa di verificarne la validità, ovvero di controllare che il tempo di accettazione dell'offerta non sia terminato. In caso positivo si verifica se l'offerta di volo non è ancora scaduta e se anche in questo caso l'esito è positivo si invia all'utente la conferma di accettazione dell'offerta, altrimenti lo si informa dell'esito negativo dovuto alla scadenza dell'offerta o del token ed il flusso termina con un errore.
 
-## Pagamento dei voli
+### Pagamento dei voli
 
 ![book_payment](bpmn/img/BookPayment.png)
 
 Il processo di pagamento inizia con una richiesta di pagamento del biglietto relativo all'offerta accettata. ACMEsky a questo punto si prende l'onere di prenotare i biglietti facendone richiesta all'Airline Service che offre i voli dell'offerta, la quale invierà in risposta i biglietti. Se c'è un errore relativo all'impossibilità di prenotare l'offerta poichè al servizio di Airline risulta che l'offerta sia già stata acquistata o per qualsiasi altro problema, si invia un messaggio di errore all'utente ed il flusso termina. Se invece la prenotazione va a buon fine e ACMEsky dispone dei biglietti chiederà il link di pagamento a Bank Service, la quale glielo invierà in risposta appena possibile, ovvero la cancellazione della prenotazione. Il link viene sottoposto all'utente a meno di eventuali problemi che se presenti porterebbero alla compensazione dei biglietti precedentemente prenotati. L'utente sceglierà se pagare o meno. Se è intenzionato a pagare effettua il pagamento e riceverà risposta da Bank Service per comunicargli l'esito del pagamento. Bank Service comunica l'esito anche ad ACMEsky la quale potrà decidere in base ad esso di chiudere il flusso di pagamento oppure occuparsi delle compensazioni. Se il pagamento non è avvenuto con successo si effettua la compensazione del biglietto, altrimenti se il servizio della banca non risponde entro 5 minuti dal pagamento si procede alla compensazione dei biglietti e alla compensazione del pagamento, ovvero all'emissione di un coupon spendibile dall'utente per acquistare nuove offerte di volo. In tal caso il flusso termina con un errore. Un errore nel pagamento (flusso ACMEsky) comporta il termine del flusso dell'utente.
 
-## Servizi Premium voli
+### Servizi Premium voli
 
 ![premium_service](bpmn/img/PremiumService.png)
 
