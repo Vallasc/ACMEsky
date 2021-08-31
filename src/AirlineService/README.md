@@ -11,8 +11,7 @@ mvn package
 ### Create and run on Docker-compose container
 
 ```sh
-docker-compose build
-docker-compose up
+docker-compose up --build
 ```
 
 ### API:
