@@ -1,1 +1,746 @@
-{"openapi":"3.0.1","paths":{"/airlines/last_minute":{"post":{"operationId":"saveInterests","requestBody":{"content":{"application/json":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/AirlineFlightOfferDTO"}}}}},"responses":{"default":{"description":"default response","content":{"*/*":{}}}}}},"/auth":{"post":{"operationId":"authenticate","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/AuthRequestDTO"}}}},"responses":{"default":{"description":"default response","content":{"application/json":{}}}}}},"/auth/refresh":{"put":{"operationId":"refresh","responses":{"default":{"description":"default response","content":{"application/json":{}}}}}},"/banks/confirmPayment":{"get":{"operationId":"confirmPayment","parameters":[{"name":"code","in":"query","schema":{"type":"string"}}],"responses":{"default":{"description":"default response","content":{"application/json":{}}}}}},"/airports/{code}":{"get":{"operationId":"getAirport","parameters":[{"name":"code","in":"path","required":true,"schema":{"type":"string"}}],"responses":{"default":{"description":"default response","content":{"application/json":{}}}}}},"/airports":{"get":{"operationId":"getAirports","parameters":[{"name":"query","in":"query","schema":{"type":"string"}}],"responses":{"default":{"description":"default response","content":{"application/json":{}}}}}},"/interests/{id}":{"get":{"operationId":"getInterest","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"string"}}],"responses":{"default":{"description":"default response","content":{"application/json":{}}}}},"delete":{"operationId":"deleteInterest","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"string"}}],"responses":{"default":{"description":"default response","content":{"*/*":{}}}}}},"/interests":{"get":{"operationId":"getInterests","responses":{"default":{"description":"default response","content":{"application/json":{}}}}},"post":{"operationId":"saveInterests_1","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/UserInterestDTO"}}}},"responses":{"default":{"description":"default response","content":{"*/*":{}}}}}},"/offers/confirm":{"put":{"operationId":"confirmOfferToken","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/UserOfferDTO"}}}},"responses":{"default":{"description":"default response","content":{"application/json":{}}}}}},"/offers/{token}":{"get":{"operationId":"getOffer","parameters":[{"name":"token","in":"path","required":true,"schema":{"type":"string"}}],"responses":{"default":{"description":"default response","content":{"application/json":{}}}}}},"/offers":{"get":{"operationId":"getOffers","responses":{"default":{"description":"default response","content":{"application/json":{}}}}}},"/offers/{token}/ticket":{"get":{"operationId":"getTickets","parameters":[{"name":"token","in":"path","required":true,"schema":{"type":"string"}}],"responses":{"default":{"description":"default response","content":{"application/octet-stream":{}}}}}},"/offers/paymentLink":{"put":{"operationId":"requestPaymentLink","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/AddressDTO"}}}},"responses":{"default":{"description":"default response","content":{"application/json":{}}}}}},"/offers/reset":{"put":{"operationId":"resetProcess","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/UserOfferDTO"}}}},"responses":{"default":{"description":"default response","content":{"*/*":{}}}}}},"/users":{"post":{"operationId":"createUser","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/UserSignUpDTO"}}}},"responses":{"default":{"description":"default response","content":{"*/*":{}}}}}},"/users/me":{"get":{"operationId":"getUser","responses":{"default":{"description":"default response","content":{"application/json":{}}}}},"put":{"operationId":"updateUser","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/UserUpdateDTO"}}}},"responses":{"default":{"description":"default response","content":{"application/json":{}}}}},"delete":{"operationId":"deleteUser","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/UserDeleteDTO"}}}},"responses":{"default":{"description":"default response","content":{"*/*":{}}}}}}},"components":{"schemas":{"AirlineFlightOfferDTO":{"type":"object","properties":{"id":{"type":"string"},"departureCode":{"type":"string"},"departureTime":{"type":"string"},"arrivalTime":{"type":"string"},"arrivalCode":{"type":"string"},"expDate":{"type":"string"},"airlineName":{"type":"string"},"price":{"type":"number","format":"float"},"departureAirportCode":{"type":"string","writeOnly":true},"airlinename":{"type":"string","writeOnly":true}}},"AuthRequestDTO":{"required":["password","username"],"type":"object","properties":{"username":{"type":"string"},"password":{"type":"string"}}},"FlightInterestDTO":{"required":["arrivalAirportCode","departureAirportCode","departureTimestamp"],"type":"object","properties":{"departureAirportCode":{"type":"string"},"arrivalAirportCode":{"type":"string"},"departureTimestamp":{"type":"string"}}},"UserInterestDTO":{"required":["flightBack","outboundFlight","priceLimit"],"type":"object","properties":{"id":{"type":"integer","format":"int64"},"outboundFlight":{"$ref":"#/components/schemas/FlightInterestDTO"},"flightBack":{"$ref":"#/components/schemas/FlightInterestDTO"},"priceLimit":{"maximum":10000,"minimum":10,"type":"number","format":"double"}}},"UserOfferDTO":{"required":["offerToken"],"type":"object","properties":{"offerToken":{"type":"string"}}},"AddressDTO":{"type":"object","properties":{"offerToken":{"type":"string"},"postCode":{"type":"string"},"address":{"type":"string"},"cityName":{"type":"string"},"country":{"type":"string"}}},"UserSignUpDTO":{"required":["name","password","prontogramUsername","surname"],"type":"object","properties":{"email":{"type":"string"},"password":{"type":"string"},"name":{"type":"string"},"surname":{"type":"string"},"prontogramUsername":{"type":"string"}}},"UserDeleteDTO":{"required":["password"],"type":"object","properties":{"email":{"type":"string"},"password":{"type":"string"}}},"UserUpdateDTO":{"required":["password"],"type":"object","properties":{"email":{"type":"string"},"password":{"type":"string"},"newPassword":{"type":"string"},"newProntogramUsername":{"type":"string"},"newName":{"type":"string"},"newSurname":{"type":"string"}}}}}}
+{
+    "openapi": "3.0.1",
+    "paths": {
+      "/airlines/last_minute": {
+        "post": {
+          "summary": "salva le offerte last-minute sul DB",
+          "description": "Questa risorsa è riservata esclusivamente agli AirlineServices, quindi i servizi dovranno presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. La chiamata a questa risorsa richiede come parametro una lista di oggetti AirlineFlightOfferDTO che verrà passata ad un metodo che avvierà un task di Camunda che si occuperà di convertire la lista di DTO in oggetti Flight da salvare in DB.",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "operationId": "saveInterests",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AirlineFlightOfferDTO"
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "default": {
+              "description": "default response",
+              "content": {
+                "*/*": {}
+              }
+            }
+          }
+        }
+      },
+      "/auth": {
+        "post": {
+          "summary": "salva le offerte last-minute sul DB",
+          "description": "Questa risorsa è riservata esclusivamente agli AirlineServices, quindi i servizi dovranno presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. La chiamata a questa risorsa richiede come parametro una lista di oggetti AirlineFlightOfferDTO che verrà passata ad un metodo che avvierà un task di Camunda che si occuperà di convertire la lista di DTO in oggetti Flight da salvare in DB.",
+          "operationId": "authenticate",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthRequestDTO"
+                }
+              }
+            }
+          },
+          "responses": {
+            "default": {
+              "description": "default response",
+              "content": {
+                "application/json": {}
+              }
+            }
+          }
+        }
+      },
+      "/auth/refresh": {
+        "put": {
+          "operationId": "refresh",
+          "responses": {
+            "default": {
+              "description": "default response",
+              "content": {
+                "application/json": {}
+              }
+            }
+          }
+        }
+      },
+      "/banks/confirmPayment": {
+        "get": {
+          "summary": "informa ACMEskyService del pagamento andato a buon fine",
+          "description": "Questa risorsa è riservata esclusivamente agli BankServices, quindi i servizi dovranno presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. La chiamata a questa risorsa richiede come parametro il token dell'offerta di volo acquistata dall'utente per informare ACMEskyService del fatto che l'offerta è stata acquistata.",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "operationId": "confirmPayment",
+          "parameters": [
+            {
+              "name": "code",
+              "in": "query",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "default": {
+              "description": "default response",
+              "content": {
+                "application/json": {}
+              }
+            }
+          }
+        }
+      },
+      "/airports/{code}": {
+        "get": {
+          "summary": "suggerisce aereoporti all'utente in base al codice inserito",
+          "description": "Questa risorsa è riservata esclusivamente al servizio ACMEskyWeb, che dovrà presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. Il servizio web di ACMEsky chiama questa risorsa passando la query di ricerca dell'aereoporto per recuperare l'aereoporto di partenza e di arrivo dei voli sulla base dei suggerimenti inseriti dagli utenti nei rispettivi form della pagina.",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "operationId": "getAirport",
+          "parameters": [
+            {
+              "name": "code",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "default": {
+              "description": "default response",
+              "content": {
+                "application/json": {}
+              }
+            }
+          }
+        }
+      },
+      "/airports": {
+        "get": {
+          "summary": "suggerisce aereoporti all'utente in base ai caratteri inseriti",
+          "description": "Questa risorsa è riservata esclusivamente al servizio ACMEskyWeb, che dovrà presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. Il servizio web di ACMEsky chiama questa risorsa passando la query di ricerca dell'aereoporto per recuperare la lista dei suggerimenti per gli aereoporti di partenza e di arrivo dei voli sulla base dei caratteri inseriti dagli utenti nei rispettivi form della pagina al momento della ricerca.",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "operationId": "getAirports",
+          "parameters": [
+            {
+              "name": "query",
+              "in": "query",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "default": {
+              "description": "default response",
+              "content": {
+                "application/json": {}
+              }
+            }
+          }
+        }
+      },
+      "/interests/{id}": {
+        "get": {
+          "summary": "restituisce l'offerta di volo di interesse dell'utente con l'id passato",
+          "description": "Questa risorsa è riservata esclusivamente al servizio ACMEskyWeb, che dovrà presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. ACMEskyWeb chiama questa risorsa per recuperare l'offerta di interesse corrispondente all'identificativo passato come parametro del path della richiesta.",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "operationId": "getInterest",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "default": {
+              "description": "default response",
+              "content": {
+                "application/json": {}
+              }
+            }
+          }
+        },
+        "delete": {
+          "summary": "cancella l'offerta di volo di interesse dell'utente con l'id passato",
+          "description": "Questa risorsa è riservata esclusivamente al servizio ACMEskyWeb, che dovrà presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. ACMEskyWeb chiama questa risorsa per cancellare l'offerta di interesse con lo stesso identificativo di quello passato come parametro del path della richiesta.",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "operationId": "deleteInterest",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "default": {
+              "description": "default response",
+              "content": {
+                "*/*": {}
+              }
+            }
+          }
+        }
+      },
+      "/interests": {
+        "get": {
+          "summary": "restituisce tutte le offerte di volo richieste dall'utente",
+          "description": "Questa risorsa è riservata esclusivamente al servizio ACMEskyWeb, che dovrà presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. Il servizio web di ACMEsky chiama questa risorsa senza parametri per recuperare la lista di tutte le offerte di interesse dell'utente che si è autenticato su ACMEskyWeb.",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "operationId": "getInterests",
+          "responses": {
+            "default": {
+              "description": "default response",
+              "content": {
+                "application/json": {}
+              }
+            }
+          }
+        },
+        "post": {
+          "summary": "registra l'offerta di volo di interesse dell'utente fornita come parametro",
+          "description": "Questa risorsa è riservata esclusivamente al servizio ACMEskyWeb, che dovrà presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. Il servizio web di ACMEsky chiama questa risorsa con un oggetto DTO dell'offerta di volo di interesse dell'utente per consentire ad ACMEskyService di registrare l'interesse dell'utente in DB.",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "operationId": "saveInterests_1",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserInterestDTO"
+                }
+              }
+            }
+          },
+          "responses": {
+            "default": {
+              "description": "default response",
+              "content": {
+                "*/*": {}
+              }
+            }
+          }
+        }
+      },
+      "/offers/confirm": {
+        "put": {
+          "summary": "informa ACMEsky che l'utente ha confermato l'offerta con il token passato come parametro",
+          "description": "Questa risorsa è riservata esclusivamente al servizio ACMEskyWeb, che dovrà presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. Il servizio web di ACMEsky chiama questa risorsa con un oggetto DTO dell'offerta di volo di interesse dell'utente come parametro per informare ACMEskyService del fatto che l'utente ha confermato l'offerta proposta inserendone il token.",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "operationId": "confirmOfferToken",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserOfferDTO"
+                }
+              }
+            }
+          },
+          "responses": {
+            "default": {
+              "description": "default response",
+              "content": {
+                "application/json": {}
+              }
+            }
+          }
+        }
+      },
+      "/offers/{token}": {
+        "get": {
+          "summary": "suggerisce aereoporti all'utente in base ai caratteri inseriti",
+          "description": "Questa risorsa è riservata esclusivamente al servizio ACMEskyWeb, che dovrà presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. Il servizio web di ACMEsky chiama questa risorsa passando la query di ricerca dell'aereoporto per recuperare la lista dei suggerimenti per gli aereoporti di partenza e di arrivo dei voli sulla base dei caratteri inseriti dagli utenti nei rispettivi form della pagina al momento della ricerca.",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "operationId": "getOffer",
+          "parameters": [
+            {
+              "name": "token",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "default": {
+              "description": "default response",
+              "content": {
+                "application/json": {}
+              }
+            }
+          }
+        }
+      },
+      "/offers": {
+        "get": {
+          "summary": "suggerisce aereoporti all'utente in base ai caratteri inseriti",
+          "description": "Questa risorsa è riservata esclusivamente al servizio ACMEskyWeb, che dovrà presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. Il servizio web di ACMEsky chiama questa risorsa passando la query di ricerca dell'aereoporto per recuperare la lista dei suggerimenti per gli aereoporti di partenza e di arrivo dei voli sulla base dei caratteri inseriti dagli utenti nei rispettivi form della pagina al momento della ricerca.",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "operationId": "getOffers",
+          "responses": {
+            "default": {
+              "description": "default response",
+              "content": {
+                "application/json": {}
+              }
+            }
+          }
+        }
+      },
+      "/offers/{token}/ticket": {
+        "get": {
+          "summary": "suggerisce aereoporti all'utente in base ai caratteri inseriti",
+          "description": "Questa risorsa è riservata esclusivamente al servizio ACMEskyWeb, che dovrà presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. Il servizio web di ACMEsky chiama questa risorsa passando la query di ricerca dell'aereoporto per recuperare la lista dei suggerimenti per gli aereoporti di partenza e di arrivo dei voli sulla base dei caratteri inseriti dagli utenti nei rispettivi form della pagina al momento della ricerca.",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "operationId": "getTickets",
+          "parameters": [
+            {
+              "name": "token",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "default": {
+              "description": "default response",
+              "content": {
+                "application/octet-stream": {}
+              }
+            }
+          }
+        }
+      },
+      "/offers/paymentLink": {
+        "put": {
+          "summary": "suggerisce aereoporti all'utente in base ai caratteri inseriti",
+          "description": "Questa risorsa è riservata esclusivamente al servizio ACMEskyWeb, che dovrà presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. Il servizio web di ACMEsky chiama questa risorsa passando la query di ricerca dell'aereoporto per recuperare la lista dei suggerimenti per gli aereoporti di partenza e di arrivo dei voli sulla base dei caratteri inseriti dagli utenti nei rispettivi form della pagina al momento della ricerca.",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "operationId": "requestPaymentLink",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddressDTO"
+                }
+              }
+            }
+          },
+          "responses": {
+            "default": {
+              "description": "default response",
+              "content": {
+                "application/json": {}
+              }
+            }
+          }
+        }
+      },
+      "/offers/reset": {
+        "put": {
+          "summary": "suggerisce aereoporti all'utente in base ai caratteri inseriti",
+          "description": "Questa risorsa è riservata esclusivamente al servizio ACMEskyWeb, che dovrà presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. Il servizio web di ACMEsky chiama questa risorsa passando la query di ricerca dell'aereoporto per recuperare la lista dei suggerimenti per gli aereoporti di partenza e di arrivo dei voli sulla base dei caratteri inseriti dagli utenti nei rispettivi form della pagina al momento della ricerca.",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "operationId": "resetProcess",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserOfferDTO"
+                }
+              }
+            }
+          },
+          "responses": {
+            "default": {
+              "description": "default response",
+              "content": {
+                "*/*": {}
+              }
+            }
+          }
+        }
+      },
+      "/users": {
+        "post": {
+          "summary": "suggerisce aereoporti all'utente in base ai caratteri inseriti",
+          "description": "Questa risorsa è riservata esclusivamente al servizio ACMEskyWeb, che dovrà presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. Il servizio web di ACMEsky chiama questa risorsa passando la query di ricerca dell'aereoporto per recuperare la lista dei suggerimenti per gli aereoporti di partenza e di arrivo dei voli sulla base dei caratteri inseriti dagli utenti nei rispettivi form della pagina al momento della ricerca.",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "operationId": "createUser",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserSignUpDTO"
+                }
+              }
+            }
+          },
+          "responses": {
+            "default": {
+              "description": "default response",
+              "content": {
+                "*/*": {}
+              }
+            }
+          }
+        }
+      },
+      "/users/me": {
+        "get": {
+          "summary": "suggerisce aereoporti all'utente in base ai caratteri inseriti",
+          "description": "Questa risorsa è riservata esclusivamente al servizio ACMEskyWeb, che dovrà presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. Il servizio web di ACMEsky chiama questa risorsa passando la query di ricerca dell'aereoporto per recuperare la lista dei suggerimenti per gli aereoporti di partenza e di arrivo dei voli sulla base dei caratteri inseriti dagli utenti nei rispettivi form della pagina al momento della ricerca.",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "operationId": "getUser",
+          "responses": {
+            "default": {
+              "description": "default response",
+              "content": {
+                "application/json": {}
+              }
+            }
+          }
+        },
+        "put": {
+          "summary": "suggerisce aereoporti all'utente in base ai caratteri inseriti",
+          "description": "Questa risorsa è riservata esclusivamente al servizio ACMEskyWeb, che dovrà presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. Il servizio web di ACMEsky chiama questa risorsa passando la query di ricerca dell'aereoporto per recuperare la lista dei suggerimenti per gli aereoporti di partenza e di arrivo dei voli sulla base dei caratteri inseriti dagli utenti nei rispettivi form della pagina al momento della ricerca.",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "operationId": "updateUser",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserUpdateDTO"
+                }
+              }
+            }
+          },
+          "responses": {
+            "default": {
+              "description": "default response",
+              "content": {
+                "application/json": {}
+              }
+            }
+          }
+        },
+        "delete": {
+          "summary": "suggerisce aereoporti all'utente in base ai caratteri inseriti",
+          "description": "Questa risorsa è riservata esclusivamente al servizio ACMEskyWeb, che dovrà presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. Il servizio web di ACMEsky chiama questa risorsa passando la query di ricerca dell'aereoporto per recuperare la lista dei suggerimenti per gli aereoporti di partenza e di arrivo dei voli sulla base dei caratteri inseriti dagli utenti nei rispettivi form della pagina al momento della ricerca.",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "operationId": "deleteUser",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDeleteDTO"
+                }
+              }
+            }
+          },
+          "responses": {
+            "default": {
+              "description": "default response",
+              "content": {
+                "*/*": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "securitySchemes": {
+        "bearerAuth": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      },
+      "schemas": {
+        "AirlineFlightOfferDTO": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "departureCode": {
+              "type": "string"
+            },
+            "departureTime": {
+              "type": "string"
+            },
+            "arrivalTime": {
+              "type": "string"
+            },
+            "arrivalCode": {
+              "type": "string"
+            },
+            "expDate": {
+              "type": "string"
+            },
+            "airlineName": {
+              "type": "string"
+            },
+            "price": {
+              "type": "number",
+              "format": "float"
+            },
+            "departureAirportCode": {
+              "type": "string",
+              "writeOnly": true
+            },
+            "airlinename": {
+              "type": "string",
+              "writeOnly": true
+            }
+          }
+        },
+        "AuthRequestDTO": {
+          "required": [
+            "password",
+            "username"
+          ],
+          "type": "object",
+          "properties": {
+            "username": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            }
+          }
+        },
+        "FlightInterestDTO": {
+          "required": [
+            "arrivalAirportCode",
+            "departureAirportCode",
+            "departureTimestamp"
+          ],
+          "type": "object",
+          "properties": {
+            "departureAirportCode": {
+              "type": "string"
+            },
+            "arrivalAirportCode": {
+              "type": "string"
+            },
+            "departureTimestamp": {
+              "type": "string"
+            }
+          }
+        },
+        "UserInterestDTO": {
+          "required": [
+            "flightBack",
+            "outboundFlight",
+            "priceLimit"
+          ],
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "outboundFlight": {
+              "$ref": "#/components/schemas/FlightInterestDTO"
+            },
+            "flightBack": {
+              "$ref": "#/components/schemas/FlightInterestDTO"
+            },
+            "priceLimit": {
+              "maximum": 10000,
+              "minimum": 10,
+              "type": "number",
+              "format": "double"
+            }
+          }
+        },
+        "UserOfferDTO": {
+          "required": [
+            "offerToken"
+          ],
+          "type": "object",
+          "properties": {
+            "offerToken": {
+              "type": "string"
+            }
+          }
+        },
+        "AddressDTO": {
+          "type": "object",
+          "properties": {
+            "offerToken": {
+              "type": "string"
+            },
+            "postCode": {
+              "type": "string"
+            },
+            "address": {
+              "type": "string"
+            },
+            "cityName": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            }
+          }
+        },
+        "UserSignUpDTO": {
+          "required": [
+            "name",
+            "password",
+            "prontogramUsername",
+            "surname"
+          ],
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "surname": {
+              "type": "string"
+            },
+            "prontogramUsername": {
+              "type": "string"
+            }
+          }
+        },
+        "UserDeleteDTO": {
+          "required": [
+            "password"
+          ],
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            }
+          }
+        },
+        "UserUpdateDTO": {
+          "required": [
+            "password"
+          ],
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            },
+            "newPassword": {
+              "type": "string"
+            },
+            "newProntogramUsername": {
+              "type": "string"
+            },
+            "newName": {
+              "type": "string"
+            },
+            "newSurname": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
