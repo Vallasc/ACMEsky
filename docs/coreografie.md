@@ -1,6 +1,6 @@
 # Coreografie
 
-### Nomenclatura
+## Nomenclatura
 
 | Nome | Sigla | Commento |
 |-|-| -|
@@ -14,7 +14,8 @@
 
 &nbsp;
 
-### Coreografia complessiva del sistema
+## Coreografia complessiva del sistema
+
 ```fsharp
 // Query dei voli (ripetuta per tutte le compagnie aeree)
 // Viene ripetuta per ogni compagnia aerea collegata ad ACMEsky
@@ -30,12 +31,12 @@
 |
 
 // Registrazione interesse dell'utente (ripetuta per tutti gli  utenti)
-// requestInterest: messaggio di richiesta con A/R o solo A
+// requestInterest: messaggio di richiesta con A/R
 ( requestInterest: USERₓ -> ACME )* 
 |   
 
 // Notifica dell'offerta all'utente
-// offerToken: mesaagio di offerta A/R o A
+// offerToken: mesaagio di offerta A/R
 // notifyUser: messaggio di notifica di Prontogram
 ( offerToken: ACME -> PTG ; notifyUser: PTG -> USERₓ )*
 |
@@ -48,13 +49,12 @@
         // ACMEsky conferma che l'offerta è disponibile
         // responseOfferOk: messaggio di conferma offerta
         // requestPaymentLink: richiesta di pagamento da parte dell'utente
-        // bookTickets: prenota e riceve i biglietti 
         (   
             responseOfferOk: ACME -> USERₓ ;
             requestPaymentLink: USERₓ -> ACME ; // REQUEST1
-            bookTickets: ACME -> AIRₖ ;
             (   
                 // Tickets ok
+                // bookTickets: prenota i biglietti 
                 // responseTickets: biglietti prenotati
                 // requestBankLink: richiesta creazione link di pagamento
                 // responselink: link di pagamento generato dalla banca
@@ -62,6 +62,7 @@
                 // payment: pagamento attraverso il link generato
                 // responsePayment: stato del pagamento
                 (
+                    bookTickets: ACME -> AIRₖ ;
                     responseTickets: AIRₖ -> ACME ;
                     requestBankLink: ACME -> BANK ; 
                     responselink: BANK -> ACME ;
@@ -76,7 +77,7 @@
 
                             // Controllo Premium service
                             (
-                                // Richiesta a Geodistance se costo > 1000
+                                // Richiesta a Geodistance se costo > 1000€
                                 1 
                                 + 
                                 // requestDistance: richiesta calcolo della distanza
@@ -84,14 +85,18 @@
                                 (
                                     requestDistance: ACME -> GEO ; 
                                     responseDistance: GEO -> ACME ; 
-                                    (   // Richiesta alla compagnia di noleggio
+                                    (   // Richiesta alla compagnia di noleggio se distanza <30Km
                                         1 
                                         +  
-                                        // requestRent: richiesta noleggio veicoli
-                                        // responseRent: risposta nolleggio
+                                        // requestRent1: richiesta noleggio veicoli 1
+                                        // responseRent1: risposta nolleggio 1
+                                        // requestRent2: richiesta noleggio veicoli 2
+                                        // responseRent2: risposta nolleggio 2
                                         (
-                                            requestRent: ACME -> RENTₜ ; 
-                                            responseRent: RENTₜ-> ACME 
+                                            requestRent1: ACME -> RENTₜ₁ ; 
+                                            responseRent1: RENTₜ₁-> ACME ;
+                                            requestRent2: ACME -> RENTₜ₂ ; 
+                                            responseRent2: RENTₜ₂-> ACME 
                                         )
                                     )
                                 )
@@ -99,11 +104,12 @@
                         )
                         +
                         (
-                        // Errore nel pagamento
-                        // failedPaymentBank: pagamento fallito
-                        // unbookTickets: cancella la prenotazione dei biglietti
-                        failedPaymentBank: BANK -> ACME ;
-                        unbookTickets: ACME -> AIRₖ
+                            // Errore nel pagamento
+                            // unbookTickets: cancella la prenotazione dei biglietti
+                            // emitCoupon: pagamento fallito
+                            unbookTickets: ACME -> AIRₖ
+                            emitCoupon: ACME -> BANK ;
+
                         )
                     ) ;
                     // L'utente richiede i biglietti
@@ -125,6 +131,12 @@
         responseOfferError: ACME -> USERₓ
     )
 )
+
+// Richiesta ticket
+// getInvoice: mesaagio di richiesta ricevuta dell'offerta pagata
+// invoice: messaggio con la ricevuta del viaggio
+( getInvoice: USERₓ -> ACME ; invoice: ACME -> USERₓ )*
+
 ```
 ## Verifica condizioni connectedness delle coreografie
 <!--Analizzando la coreografia si nota che essa fa parte del caso asincrono. -->
@@ -170,7 +182,13 @@ Non è connessa, ma non è un problema in quanto PTG  e USERₓ per scelta imple
 &nbsp;
 
 
-### Proiezioni
+## Proiezioni
+
+### ACMEsky
+```fsharp
+
+```
+
 
 
 
@@ -189,30 +207,6 @@ Non è connessa, ma non è un problema in quanto PTG  e USERₓ per scelta imple
 
 
 Semantica sincrona
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ### Corr
