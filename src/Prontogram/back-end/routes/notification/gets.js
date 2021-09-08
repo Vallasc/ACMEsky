@@ -3,7 +3,7 @@ const Notification = require('../../models/notification');
 const verify = require ('../verifyToken');
 
 //Get notification by Id
-router.get ('/findOne/:notificationId', async (req, res) => {
+router.get ('/:notificationId', async (req, res) => {
     
     try {
         const notification = await Notification.findById (req.params.notificationId);

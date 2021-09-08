@@ -19,15 +19,6 @@ Prontogram's web-application
     ">
 </iframe>
 
-### API:
-http://localhost:8080/swagger-ui.html
-
-## DB console
-http://localhost:8080/h2
-URL: jdbc:h2:./db/bankdb
-user: sa
-passw: 
-
 ## Documentation
 
 Prontogram è una applicazione web che riceve le offerte dei voli da ACMEsky, attraverso un sistema di notifiche web.

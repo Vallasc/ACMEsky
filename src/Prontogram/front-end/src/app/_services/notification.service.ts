@@ -30,7 +30,7 @@ export class NotificationService {
     }
 
     getById(id: string) {
-        return  this.http.get<Notification>(`${environment.apiUrl}/notification/findOne/${id}`);
+        return  this.http.get<Notification>(`${environment.apiUrl}/notification/${id}`);
     }
 
     update(id, params) {

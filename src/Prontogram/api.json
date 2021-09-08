@@ -38,7 +38,7 @@
     "http"
   ],
   "paths": {
-    "/user/new": {
+    "/user": {
       "post": {
         "tags": [
           "user"
@@ -296,6 +296,49 @@
         }
       }
     },
+    "/subscription/all": {
+      "get": {
+        "tags": [
+          "subscription"
+        ],
+        "summary": "Finds all subscriptions in the DB",
+        "description": "Multiple status values can be provided with comma separated strings",
+        "operationId": "findAllSubscriptions",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Status values that need to be considered for filter",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "available",
+                "pending",
+                "sold"
+              ],
+              "default": "available"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Subscription"
+            }
+          },
+          "400": {
+            "description": "Invalid status value"
+          }
+        }
+      }
+    },
     "/subscription/new": {
       "post": {
         "tags": [
@@ -328,7 +371,7 @@
         }
       }
     },
-    "/subscription/{info}": {
+    "/subscription/{subendpoint}": {
       "delete": {
         "tags": [
           "subscription"
@@ -347,7 +390,7 @@
             "type": "string"
           },
           {
-            "name": "info",
+            "name": "subendpoint",
             "in": "path",
             "description": "subscription endPoint to delete",
             "required": true,
@@ -364,7 +407,7 @@
         }
       }
     },
-    "/notification/new": {
+    "/notification": {
       "post": {
         "tags": [
           "notification"
@@ -396,7 +439,7 @@
         }
       }
     },
-    "/notification/findOne/{id}": {
+    "/notification/{notificationId}": {
       "delete": {
         "tags": [
           "notification"
@@ -415,7 +458,7 @@
             "type": "string"
           },
           {
-            "name": "id",
+            "name": "notificationId",
             "in": "path",
             "description": "notification Id to delete",
             "required": true,
@@ -452,7 +495,7 @@
             "type": "string"
           },
           {
-            "name": "id",
+            "name": "notificationId",
             "in": "path",
             "description": "Notification object that needs to be added to the store",
             "required": true,
@@ -490,7 +533,7 @@
             "type": "string"
           },
           {
-            "name": "id",
+            "name": "notificationId",
             "in": "path",
             "description": "ID of notification to return",
             "required": true,
@@ -513,7 +556,7 @@
         }
       }
     },
-    "/notification/{user_id}": {
+    "/notification/all/{username}": {
       "get": {
         "tags": [
           "notification"
@@ -526,7 +569,7 @@
         ],
         "parameters": [
           {
-            "name": "user_id",
+            "name": "username",
             "in": "path",
             "description": "ID of user to return",
             "required": true,
