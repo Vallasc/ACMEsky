@@ -8,7 +8,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
-import it.unibo.soseng.logic.database.DatabaseManager;
+
+import it.unibo.soseng.logic.DatabaseManager;
 import it.unibo.soseng.model.UserInterest;
 
 @Named("initializeOfferServiceDelegate")

@@ -10,8 +10,8 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 
 import it.unibo.soseng.gateway.user.dto.AddressDTO;
-import it.unibo.soseng.logic.offer.OfferManager;
-import it.unibo.soseng.logic.offer.OfferManager.DistanceServiceException;
+import it.unibo.soseng.logic.OfferManager;
+import it.unibo.soseng.logic.OfferManager.DistanceServiceException;
 import it.unibo.soseng.model.GeneratedOffer;
 
 import static it.unibo.soseng.camunda.utils.ErrorsEvents.DISTANCE_ERROR;

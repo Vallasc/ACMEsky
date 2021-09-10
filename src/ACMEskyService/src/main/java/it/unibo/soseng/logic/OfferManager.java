@@ -1,4 +1,4 @@
-package it.unibo.soseng.logic.offer;
+package it.unibo.soseng.logic;
 
 import static it.unibo.soseng.camunda.utils.ProcessVariables.RENT_BACK;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.RENT_OUTBOUND;
@@ -38,10 +38,9 @@ import it.unibo.soseng.gateway.rent.RentClient;
 import it.unibo.soseng.gateway.user.dto.AddressDTO;
 import it.unibo.soseng.gateway.user.dto.OfferDTO;
 import it.unibo.soseng.gateway.user.dto.UserOfferDTO;
-import it.unibo.soseng.logic.database.DatabaseManager;
-import it.unibo.soseng.logic.database.DatabaseManager.FlightNotExistException;
-import it.unibo.soseng.logic.database.DatabaseManager.OfferNotFoundException;
-import it.unibo.soseng.logic.database.DatabaseManager.UserNotFoundException;
+import it.unibo.soseng.logic.DatabaseManager.FlightNotExistException;
+import it.unibo.soseng.logic.DatabaseManager.OfferNotFoundException;
+import it.unibo.soseng.logic.DatabaseManager.UserNotFoundException;
 import it.unibo.soseng.model.Airport;
 import it.unibo.soseng.model.Flight;
 import it.unibo.soseng.model.FlightInterest;

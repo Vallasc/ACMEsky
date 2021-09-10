@@ -1,7 +1,6 @@
-package it.unibo.soseng.logic.database;
+package it.unibo.soseng.logic;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
@@ -27,7 +26,7 @@ import it.unibo.soseng.model.UserInterest;
 @TransactionManagement(value = TransactionManagementType.CONTAINER)
 public class DatabaseManager {
 
-    private final static Logger LOGGER = Logger.getLogger(DatabaseManager.class.getName());
+    //private final static Logger LOGGER = Logger.getLogger(DatabaseManager.class.getName());
 
     @PersistenceContext(unitName = "primary")
     private EntityManager entityManager;

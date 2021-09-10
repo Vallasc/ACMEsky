@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.unibo.soseng.gateway.airline.dto.InterestDTO;
 import it.unibo.soseng.logic.AirlineManager;
-import it.unibo.soseng.logic.database.DatabaseManager;
+import it.unibo.soseng.logic.DatabaseManager;
 import it.unibo.soseng.model.GeneratedOffer;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;

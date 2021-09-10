@@ -2,9 +2,10 @@ package it.unibo.soseng.camunda.offers_manager;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
-import it.unibo.soseng.logic.database.DatabaseManager;
-import it.unibo.soseng.logic.database.DatabaseManager.FlightNotExistException;
-import it.unibo.soseng.logic.offer.OfferManager;
+
+import it.unibo.soseng.logic.DatabaseManager;
+import it.unibo.soseng.logic.OfferManager;
+import it.unibo.soseng.logic.DatabaseManager.FlightNotExistException;
 import it.unibo.soseng.model.Flight;
 import it.unibo.soseng.model.UserInterest;
 

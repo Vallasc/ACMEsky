@@ -14,9 +14,9 @@ import javax.inject.Inject;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 
-import it.unibo.soseng.logic.interest.InterestManager;
 import it.unibo.soseng.camunda.utils.ProcessState;
 import it.unibo.soseng.gateway.user.dto.UserInterestDTO;
+import it.unibo.soseng.logic.InterestManager;
 
 @Named("saveInterestsDelegate")
 public class SaveInterestsDelegate implements JavaDelegate {

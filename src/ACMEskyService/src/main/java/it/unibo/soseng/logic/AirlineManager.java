@@ -24,9 +24,8 @@ import it.unibo.soseng.gateway.airline.AirlineClient.AirlineErrorException;
 import it.unibo.soseng.gateway.airline.AirlineClient.BookTicketsExceptionException;
 import it.unibo.soseng.gateway.airline.dto.AirlineFlightOfferDTO;
 import it.unibo.soseng.gateway.airline.dto.InterestDTO;
-import it.unibo.soseng.logic.database.DatabaseManager;
-import it.unibo.soseng.logic.database.DatabaseManager.AirlineNotFoundException;
-import it.unibo.soseng.logic.database.DatabaseManager.AirportNotFoundException;
+import it.unibo.soseng.logic.DatabaseManager.AirlineNotFoundException;
+import it.unibo.soseng.logic.DatabaseManager.AirportNotFoundException;
 import it.unibo.soseng.model.Flight;
 import it.unibo.soseng.model.FlightInterest;
 import it.unibo.soseng.model.GeneratedOffer;
@@ -34,7 +33,6 @@ import it.unibo.soseng.model.GeneratedOffer;
 import static it.unibo.soseng.camunda.utils.Events.SAVE_LAST_MINUTE;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.AIRLINE_FLIGHT_OFFERS;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.AIRLINE_NAME;
-import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_ERROR;
 
 @Stateless
 public class AirlineManager {

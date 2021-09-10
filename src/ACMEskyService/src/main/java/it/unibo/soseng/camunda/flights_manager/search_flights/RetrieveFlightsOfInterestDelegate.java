@@ -3,7 +3,7 @@ package it.unibo.soseng.camunda.flights_manager.search_flights;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 
-import it.unibo.soseng.logic.database.DatabaseManager;
+import it.unibo.soseng.logic.DatabaseManager;
 
 import static it.unibo.soseng.camunda.utils.ProcessVariables.INTEREST_FLIGHTS_LIST;
 

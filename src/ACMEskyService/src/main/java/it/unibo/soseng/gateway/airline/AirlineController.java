@@ -14,6 +14,9 @@ import javax.inject.Inject;
 import javax.security.enterprise.SecurityContext;
 import javax.validation.Valid;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
 import it.unibo.soseng.gateway.airline.dto.AirlineFlightOfferDTO;
 import it.unibo.soseng.logic.AirlineManager;
 import it.unibo.soseng.logic.AirlineManager.BadRequestException;
@@ -30,10 +33,18 @@ public class AirlineController {
     @Inject
     SecurityContext securityContext;
 
+    /**
+     * Riceve i voli last minute
+     */
     @POST
     @Path("/last_minute")
     @RolesAllowed({ AIRLINE })
     @Consumes(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Riceve i voli last-minute", 
+                description = "Permette ricevere i voli last minute dall compagnia aerea. Risorsa disponibile alle compagnie aeree registrate.")
+    @ApiResponse(responseCode = "200", description = "Richiesta elaborata correttamente")
+    @ApiResponse(responseCode = "400", description = "Parametri della richiesta non corretti")
+    @ApiResponse(responseCode = "401", description = "Entità non autorizzta")
     public Response saveInterests(final @Valid List<AirlineFlightOfferDTO> offers) {
         LOGGER.info("POST last minute");
         try {

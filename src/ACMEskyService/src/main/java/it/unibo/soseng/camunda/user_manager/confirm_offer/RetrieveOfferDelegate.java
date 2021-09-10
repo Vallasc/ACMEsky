@@ -15,8 +15,8 @@ import javax.inject.Inject;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 
-import it.unibo.soseng.logic.database.DatabaseManager.OfferNotFoundException;
-import it.unibo.soseng.logic.offer.OfferManager;
+import it.unibo.soseng.logic.OfferManager;
+import it.unibo.soseng.logic.DatabaseManager.OfferNotFoundException;
 import it.unibo.soseng.camunda.utils.ProcessState;
 import it.unibo.soseng.gateway.user.dto.UserOfferDTO;
 

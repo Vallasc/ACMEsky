@@ -13,9 +13,8 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 
 import it.unibo.soseng.gateway.user.dto.AddressDTO;
-import it.unibo.soseng.logic.database.DatabaseManager.UserNotFoundException;
-import it.unibo.soseng.logic.offer.OfferManager;
-
+import it.unibo.soseng.logic.OfferManager;
+import it.unibo.soseng.logic.DatabaseManager.UserNotFoundException;
 import it.unibo.soseng.model.GeneratedOffer;
 
 @Named("askRentDelegate")

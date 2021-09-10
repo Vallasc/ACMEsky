@@ -9,7 +9,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import it.unibo.soseng.logic.bank.BankManager;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import it.unibo.soseng.logic.BankManager;
 
 import java.util.logging.Logger;
 
@@ -23,9 +25,19 @@ public class BankController {
     @Inject
     BankManager bankManager;
 
+    /**
+     * Conferma dell'avvenuto pagamento da parte della banca
+     * @param code
+     * @return
+     */
     @GET
     @RolesAllowed({BANK})
     @Path("/confirmPayment")
+    @Operation(summary = "Conferma pagamento", 
+                description = "conferma dell'avvenuto pagamento da parte della banca. Risorsa esclusiva della banca.")
+    @ApiResponse(responseCode = "200", description = "Richiesta elaborata correttamente")
+    @ApiResponse(responseCode = "400", description = "Parametri della richiesta non corretti")
+    @ApiResponse(responseCode = "401", description = "Entità non autorizzta")
     public Response confirmPayment(@QueryParam("code") String code) {
         LOGGER.info("GET confirmPayment");
         LOGGER.info("code "+code);
