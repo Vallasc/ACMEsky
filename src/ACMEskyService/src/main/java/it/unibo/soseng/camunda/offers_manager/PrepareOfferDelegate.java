@@ -15,9 +15,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.PersistenceException;
 
-import it.unibo.soseng.logic.database.DatabaseManager.FlightNotExistException;
-import it.unibo.soseng.logic.database.DatabaseManager.UserNotFoundException;
-import it.unibo.soseng.logic.offer.OfferManager;
+import it.unibo.soseng.logic.OfferManager;
+import it.unibo.soseng.logic.DatabaseManager.FlightNotExistException;
+import it.unibo.soseng.logic.DatabaseManager.UserNotFoundException;
 import it.unibo.soseng.model.Flight;
 import it.unibo.soseng.model.GeneratedOffer;
 import it.unibo.soseng.model.UserInterest;

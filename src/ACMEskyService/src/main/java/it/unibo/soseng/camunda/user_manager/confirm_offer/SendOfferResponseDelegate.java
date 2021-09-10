@@ -1,4 +1,4 @@
-package it.unibo.soseng.camunda.user_manger.confirm_offer;
+package it.unibo.soseng.camunda.user_manager.confirm_offer;
 
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.camunda.bpm.engine.delegate.DelegateExecution;

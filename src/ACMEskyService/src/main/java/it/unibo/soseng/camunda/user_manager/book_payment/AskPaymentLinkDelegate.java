@@ -1,4 +1,4 @@
-package it.unibo.soseng.camunda.user_manger.book_payment;
+package it.unibo.soseng.camunda.user_manager.book_payment;
 
 import java.util.logging.Logger;
 
@@ -15,9 +15,9 @@ import it.unibo.soseng.gateway.bank.BankClient.BankAuthRequestException;
 import it.unibo.soseng.gateway.bank.BankClient.RequestPaymentLinkException;
 import it.unibo.soseng.gateway.bank.dto.PaymentLinkRequestDTO;
 import it.unibo.soseng.gateway.user.dto.PaymentLinkResponseDTO;
-import it.unibo.soseng.logic.bank.BankManager;
-import it.unibo.soseng.logic.database.DatabaseManager;
-import it.unibo.soseng.logic.database.DatabaseManager.BankNotFoundException;
+import it.unibo.soseng.logic.BankManager;
+import it.unibo.soseng.logic.DatabaseManager;
+import it.unibo.soseng.logic.DatabaseManager.BankNotFoundException;
 import it.unibo.soseng.model.Bank;
 import it.unibo.soseng.model.GeneratedOffer;
 

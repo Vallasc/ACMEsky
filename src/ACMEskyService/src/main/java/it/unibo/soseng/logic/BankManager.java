@@ -1,10 +1,9 @@
-package it.unibo.soseng.logic.bank;
+package it.unibo.soseng.logic;
 
 import java.io.IOException;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
-import javax.security.enterprise.SecurityContext;
 
 import org.camunda.bpm.engine.ProcessEngines;
 import org.camunda.bpm.engine.RuntimeService;
@@ -15,15 +14,13 @@ import it.unibo.soseng.gateway.bank.BankClient.RequestPaymentLinkException;
 import it.unibo.soseng.gateway.bank.dto.AuthRequestDTO;
 import it.unibo.soseng.gateway.bank.dto.PaymentLinkDTO;
 import it.unibo.soseng.gateway.bank.dto.PaymentLinkRequestDTO;
-import it.unibo.soseng.logic.database.DatabaseManager;
-import it.unibo.soseng.logic.database.DatabaseManager.OfferNotFoundException;
+import it.unibo.soseng.logic.DatabaseManager.OfferNotFoundException;
 import it.unibo.soseng.model.Airport;
 import it.unibo.soseng.model.Bank;
 import it.unibo.soseng.model.GeneratedOffer;
 
 import static it.unibo.soseng.camunda.utils.Events.PAYMENT_SUCCESSFUL;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_CONFIRM_BUY_OFFER;
-import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_OFFER;
 
 
 public class BankManager {

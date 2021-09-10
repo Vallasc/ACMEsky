@@ -1,28 +1,25 @@
-package it.unibo.soseng.logic.user;
+package it.unibo.soseng.logic;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 import javax.security.enterprise.SecurityContext;
 
-import it.unibo.soseng.gateway.user.dto.UserDeleteDTO;
 import it.unibo.soseng.gateway.user.dto.UserDTO;
 import it.unibo.soseng.gateway.user.dto.UserSignUpDTO;
 import it.unibo.soseng.gateway.user.dto.UserUpdateDTO;
-import it.unibo.soseng.logic.database.DatabaseManager;
-import it.unibo.soseng.logic.database.DatabaseManager.UserAlreadyInException;
-import it.unibo.soseng.logic.database.DatabaseManager.UserNotFoundException;
+import it.unibo.soseng.logic.DatabaseManager.UserAlreadyInException;
+import it.unibo.soseng.logic.DatabaseManager.UserNotFoundException;
 import it.unibo.soseng.model.DomainEntity;
 import it.unibo.soseng.model.User;
 
 import static it.unibo.soseng.security.Constants.USER;
 
 import java.util.UUID;
-import java.util.logging.Logger;
 
 @Stateless
 public class UserManager {
-    private final static Logger LOGGER = Logger.getLogger(UserManager.class.getName());
+    //private final static Logger LOGGER = Logger.getLogger(UserManager.class.getName());
 
     @Inject
     private DatabaseManager databaseManager;
@@ -77,18 +74,9 @@ public class UserManager {
         return UserDTO.fromUser(user);
     }
 
-    public void deleteUser(UserDeleteDTO request) throws InvalidCredentialsException, 
-                                                                PersistenceException, UserNotFoundException {
+    public void deleteUser() throws InvalidCredentialsException, PersistenceException, UserNotFoundException {
         String name = securityContext.getCallerPrincipal().getName();
-        if(!name.equals(request.getEmail()))
-            throw new InvalidCredentialsException();
-
         User user = databaseManager.getUser(name);
-
-        if(!user.getEntity().getPassword().equals(request.getPassword()))
-            throw new InvalidCredentialsException();
-
-        
         databaseManager.removeUser(user);
     }
 

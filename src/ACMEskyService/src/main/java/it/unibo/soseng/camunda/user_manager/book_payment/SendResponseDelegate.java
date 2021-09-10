@@ -1,4 +1,4 @@
-package it.unibo.soseng.camunda.user_manger.book_payment;
+package it.unibo.soseng.camunda.user_manager.book_payment;
 
 import static it.unibo.soseng.camunda.utils.ProcessVariables.ASYNC_RESPONSE;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.RESPONSE;

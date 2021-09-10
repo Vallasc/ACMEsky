@@ -1,4 +1,4 @@
-package it.unibo.soseng.camunda.user_manger.book_payment;
+package it.unibo.soseng.camunda.user_manager.book_payment;
 
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -10,7 +10,7 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 
 import it.unibo.soseng.logic.AirlineManager;
-import it.unibo.soseng.logic.database.DatabaseManager;
+import it.unibo.soseng.logic.DatabaseManager;
 import it.unibo.soseng.model.GeneratedOffer;
 
 import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_OFFER;

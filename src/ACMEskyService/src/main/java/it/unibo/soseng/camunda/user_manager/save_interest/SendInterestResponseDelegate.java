@@ -1,4 +1,4 @@
-package it.unibo.soseng.camunda.user_manger.save_interest;
+package it.unibo.soseng.camunda.user_manager.save_interest;
 
 import static it.unibo.soseng.camunda.utils.ProcessVariables.ASYNC_RESPONSE;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_SAVE_INTEREST;

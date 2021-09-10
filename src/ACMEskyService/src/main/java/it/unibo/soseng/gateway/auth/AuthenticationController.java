@@ -21,10 +21,16 @@ import javax.ws.rs.core.Response.Status;
 
 import javax.security.enterprise.credential.UsernamePasswordCredential;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
 import it.unibo.soseng.gateway.auth.dto.AuthRequestDTO;
 import it.unibo.soseng.gateway.auth.dto.AuthResponseDTO;
-import it.unibo.soseng.logic.database.DatabaseManager;
-import it.unibo.soseng.logic.database.DatabaseManager.EntityNotFoundException;
+import it.unibo.soseng.logic.DatabaseManager;
+import it.unibo.soseng.logic.DatabaseManager.EntityNotFoundException;
 import it.unibo.soseng.model.DomainEntity;
 import it.unibo.soseng.security.TokenProvider;
 
@@ -53,9 +59,20 @@ public class AuthenticationController {
     @Inject
     private DatabaseManager databaseManager;
 
+    /**
+     * Richiesta di autenticazione
+     * @param request oggetto con username e password
+     * @return risposta con token jwt
+     */
     @POST
     @Path("/")
     @PermitAll
+    @Operation(summary = "Autenticazione", 
+                description = "Permette di autenticarsi nel sistema, viene restituito un JWT. Risorsa disponibile a tutte le entità del sistema.")
+    @ApiResponse(responseCode = "200", description = "Richiesta elaborata correttamente",
+                content = @Content( array = @ArraySchema(schema = @Schema(implementation = AuthResponseDTO.class))))
+    @ApiResponse(responseCode = "400", description = "Parametri della richiesta non corretti")
+    @ApiResponse(responseCode = "401", description = "Entità non autorizzta")
     public Response authenticate(final @Valid AuthRequestDTO request) {
         LOG.log(Level.INFO, "Authenticate user {0}", request.getUsername());
 
@@ -78,9 +95,18 @@ public class AuthenticationController {
         }
     }
 
+    /**
+     * Refresh del JWT
+     * @return
+     */
     @PUT
     @Path("/refresh")
     @RolesAllowed({BANK, AIRLINE, USER})
+    @Operation(summary = "Refresh JWT", 
+                description = "Permette di richiedere un nuovo token utilizzando uno ancora non scaduto. Risorsa disponibile a tutte le entità del sistema.")
+    @ApiResponse(responseCode = "200", description = "Richiesta elaborata correttamente",
+                    content = @Content( array = @ArraySchema(schema = @Schema(implementation = AuthResponseDTO.class))))
+    @ApiResponse(responseCode = "401", description = "Entità non autorizzta")
     public Response refresh() {
 
         String username  = securityContext.getCallerPrincipal().getName();

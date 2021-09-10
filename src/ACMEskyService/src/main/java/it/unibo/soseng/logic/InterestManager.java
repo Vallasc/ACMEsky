@@ -1,4 +1,4 @@
-package it.unibo.soseng.logic.interest;
+package it.unibo.soseng.logic;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeParseException;
@@ -22,10 +22,9 @@ import org.camunda.bpm.engine.runtime.ProcessInstanceWithVariables;
 import it.unibo.soseng.camunda.utils.ProcessState;
 import it.unibo.soseng.gateway.user.dto.AirportDTO;
 import it.unibo.soseng.gateway.user.dto.UserInterestDTO;
-import it.unibo.soseng.logic.database.DatabaseManager;
-import it.unibo.soseng.logic.database.DatabaseManager.AirportNotFoundException;
-import it.unibo.soseng.logic.database.DatabaseManager.InterestNotFoundException;
-import it.unibo.soseng.logic.database.DatabaseManager.UserNotFoundException;
+import it.unibo.soseng.logic.DatabaseManager.AirportNotFoundException;
+import it.unibo.soseng.logic.DatabaseManager.InterestNotFoundException;
+import it.unibo.soseng.logic.DatabaseManager.UserNotFoundException;
 import it.unibo.soseng.model.Airport;
 import it.unibo.soseng.model.FlightInterest;
 import it.unibo.soseng.model.User;

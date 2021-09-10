@@ -1,4 +1,4 @@
-package it.unibo.soseng.camunda.user_manger;
+package it.unibo.soseng.camunda.user_manager;
 
 import java.io.File;
 import java.io.IOException;

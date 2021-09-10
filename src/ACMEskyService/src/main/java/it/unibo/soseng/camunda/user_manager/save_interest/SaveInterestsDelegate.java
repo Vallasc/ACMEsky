@@ -1,4 +1,4 @@
-package it.unibo.soseng.camunda.user_manger.save_interest;
+package it.unibo.soseng.camunda.user_manager.save_interest;
 
 import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_SAVE_INTEREST;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.RESPONSE;
@@ -14,9 +14,9 @@ import javax.inject.Inject;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 
-import it.unibo.soseng.logic.interest.InterestManager;
 import it.unibo.soseng.camunda.utils.ProcessState;
 import it.unibo.soseng.gateway.user.dto.UserInterestDTO;
+import it.unibo.soseng.logic.InterestManager;
 
 @Named("saveInterestsDelegate")
 public class SaveInterestsDelegate implements JavaDelegate {

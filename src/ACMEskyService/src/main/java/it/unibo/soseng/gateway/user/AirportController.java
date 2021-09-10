@@ -14,12 +14,21 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
 import it.unibo.soseng.gateway.user.dto.AirportDTO;
-import it.unibo.soseng.logic.database.DatabaseManager.AirportNotFoundException;
-import it.unibo.soseng.logic.interest.InterestManager;
+import it.unibo.soseng.logic.InterestManager;
+import it.unibo.soseng.logic.DatabaseManager.AirportNotFoundException;
 
 import static it.unibo.soseng.security.Constants.USER;
 
+/**
+ * 
+ */
 @Path("airports")
 public class AirportController {
     
@@ -29,10 +38,21 @@ public class AirportController {
     private InterestManager interestManager;
 
 
+    /**
+     * Restituisce la lista degli aereoporti filtrati dato il 
+     * parametro query
+     * @param query filtro
+     * @return risposta con codice + lista degli aereoporti
+     */
     @GET
     @Path("/")
     @RolesAllowed({USER})
     @Produces( MediaType.APPLICATION_JSON )
+    @Operation(summary = "Lista degli areoporti filtrati", 
+                description = "Restituisce la lista degli aereoporti filtrati dato il parametro query. Risorsa esclusiva dell'utente.")
+    @ApiResponse(responseCode = "200", description = "Richiesta non corretta",
+                content = @Content( array = @ArraySchema(schema = @Schema(implementation = AirportDTO.class))))
+    @ApiResponse(responseCode = "401", description = "Entità non autorizzta")
     public Response getAirports(@QueryParam("query") String query) {
         LOGGER.info("GET airports query");
         if(query != null && query.trim().length() > 0){
@@ -42,10 +62,22 @@ public class AirportController {
         return Response.status(Response.Status.OK.getStatusCode()).entity(new ArrayList<>()).build();
     }
 
+    /**
+     * Restituisce l'areoporto dato il codice
+     * @param code codice areoporto
+     * @return riposta con codice + oggetto areoporto
+     */
     @GET
     @Path("/{code}")
     @RolesAllowed({USER})
     @Produces( MediaType.APPLICATION_JSON )
+    @Operation(summary = "Get areoporto", 
+                description = "Restituisce l'areoporto dato il codice. Risorsa esclusiva dell'utente.")
+    @ApiResponse(responseCode = "200", description = "Richiesta elaborata correttamente",
+                content = @Content( schema = @Schema(implementation = AirportDTO.class)))
+    @ApiResponse(responseCode = "400", description = "Parametri della richiesta non corretti")
+    @ApiResponse(responseCode = "401", description = "Entità non autorizzta")
+    @ApiResponse(responseCode = "404", description = "Areoporto non trovato")
     public Response getAirport(@PathParam("code") String code) {
         LOGGER.info("GET airport ");
         try {
