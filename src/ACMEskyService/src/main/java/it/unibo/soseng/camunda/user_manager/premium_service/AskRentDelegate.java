@@ -1,4 +1,4 @@
-package it.unibo.soseng.camunda.user_manger.premium_service;
+package it.unibo.soseng.camunda.user_manager.premium_service;
 
 import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_OFFER;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.USERNAME;
@@ -18,7 +18,6 @@ import it.unibo.soseng.logic.offer.OfferManager;
 
 import it.unibo.soseng.model.GeneratedOffer;
 
-
 @Named("askRentDelegate")
 public class AskRentDelegate implements JavaDelegate {
 
@@ -26,9 +25,9 @@ public class AskRentDelegate implements JavaDelegate {
 
     @Inject
     OfferManager offerManager;
-    
+
     @Override
-    public void execute(DelegateExecution execution){
+    public void execute(DelegateExecution execution) {
         LOGGER.info("Execute AskRentDelegate");
         AddressDTO address = (AddressDTO) execution.getVariable(USER_ADDRESS);
         GeneratedOffer offer = (GeneratedOffer) execution.getVariable(USER_OFFER);
@@ -41,5 +40,5 @@ public class AskRentDelegate implements JavaDelegate {
             LOGGER.info(e.toString());
         }
     }
-  
+
 }

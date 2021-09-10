@@ -1,4 +1,4 @@
-package it.unibo.soseng.camunda.user_manger.confirm_offer;
+package it.unibo.soseng.camunda.user_manager.confirm_offer;
 
 import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_CONFIRM_BUY_OFFER;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.RESPONSE;
@@ -20,20 +20,19 @@ import it.unibo.soseng.logic.offer.OfferManager;
 import it.unibo.soseng.camunda.utils.ProcessState;
 import it.unibo.soseng.gateway.user.dto.UserOfferDTO;
 
-
 @Named("retrieveOfferDelegate")
 public class RetrieveOfferDelegate implements JavaDelegate {
 
     private final static Logger LOGGER = Logger.getLogger(RetrieveOfferDelegate.class.getName());
 
-    @Inject 
+    @Inject
     OfferManager offerManager;
 
     @Inject
     private ProcessState processState;
 
     @Override
-    public void execute(DelegateExecution execution) throws OfferNotFoundException{
+    public void execute(DelegateExecution execution) throws OfferNotFoundException {
         LOGGER.info("Execute RetrieveOffer");
         UserOfferDTO offerRequest = (UserOfferDTO) execution.getVariable(USER_OFFER_REQUEST);
         String token = (String) execution.getVariable(OFFER_TOKEN);
@@ -41,5 +40,5 @@ public class RetrieveOfferDelegate implements JavaDelegate {
         Response response = offerManager.handleConfirmOffer(token, email, offerRequest, execution);
         processState.setState(PROCESS_CONFIRM_BUY_OFFER, email, RESPONSE, response);
     }
-  
+
 }

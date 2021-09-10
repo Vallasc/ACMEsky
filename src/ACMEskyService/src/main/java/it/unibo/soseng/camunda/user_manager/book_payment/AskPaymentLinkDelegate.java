@@ -1,4 +1,4 @@
-package it.unibo.soseng.camunda.user_manger.book_payment;
+package it.unibo.soseng.camunda.user_manager.book_payment;
 
 import java.util.logging.Logger;
 
@@ -69,15 +69,13 @@ public class AskPaymentLinkDelegate implements JavaDelegate {
             throw new BpmnError(RESPONSE_PAYMENT_LINK_ERROR);
         }
         execution.setVariable(PAYMENT_LINK, link);
-        
+
         PaymentLinkResponseDTO linkResponse = new PaymentLinkResponseDTO();
         linkResponse.setPaymentLink(link);
         linkResponse.setOfferCode(offer.getToken());
-        
-        Response response = Response.status(Response.Status.OK.getStatusCode())
-                                    .entity(linkResponse)
-                                    .build();
+
+        Response response = Response.status(Response.Status.OK.getStatusCode()).entity(linkResponse).build();
         processState.setState(PROCESS_CONFIRM_BUY_OFFER, offer.getUser().getEmail(), RESPONSE, response);
     }
-    
+
 }

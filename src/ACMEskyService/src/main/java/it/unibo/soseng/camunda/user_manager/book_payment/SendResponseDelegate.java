@@ -1,4 +1,4 @@
-package it.unibo.soseng.camunda.user_manger.book_payment;
+package it.unibo.soseng.camunda.user_manager.book_payment;
 
 import static it.unibo.soseng.camunda.utils.ProcessVariables.ASYNC_RESPONSE;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.RESPONSE;
@@ -23,13 +23,15 @@ public class SendResponseDelegate implements JavaDelegate {
 
     @Inject
     ProcessState processState;
+
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         LOGGER.info("Execute SendResponseDelegate");
 
         String email = (String) execution.getVariable(USERNAME);
         Response response = (Response) processState.getStateAndRemove(PROCESS_CONFIRM_BUY_OFFER, email, RESPONSE);
-        AsyncResponse asyncResponse = (AsyncResponse) processState.getStateAndRemove(PROCESS_CONFIRM_BUY_OFFER, email, ASYNC_RESPONSE);
+        AsyncResponse asyncResponse = (AsyncResponse) processState.getStateAndRemove(PROCESS_CONFIRM_BUY_OFFER, email,
+                ASYNC_RESPONSE);
         asyncResponse.resume(response);
     }
 

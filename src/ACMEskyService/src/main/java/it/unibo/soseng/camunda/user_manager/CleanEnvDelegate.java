@@ -1,4 +1,4 @@
-package it.unibo.soseng.camunda.user_manger;
+package it.unibo.soseng.camunda.user_manager;
 
 import java.util.logging.Logger;
 
@@ -15,9 +15,8 @@ import static it.unibo.soseng.camunda.utils.ProcessVariables.USERNAME;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_OFFER;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_CONFIRM_BUY_OFFER;
 
-
 @Named("cleanEnvDelegate")
-public class CleanEnvDelegate implements JavaDelegate{
+public class CleanEnvDelegate implements JavaDelegate {
     private final static Logger LOGGER = Logger.getLogger(CleanEnvDelegate.class.getName());
 
     @Inject
@@ -31,5 +30,5 @@ public class CleanEnvDelegate implements JavaDelegate{
 
         processState.getStateAndRemove(PROCESS_CONFIRM_BUY_OFFER, email, offer.getToken());
     }
-    
+
 }

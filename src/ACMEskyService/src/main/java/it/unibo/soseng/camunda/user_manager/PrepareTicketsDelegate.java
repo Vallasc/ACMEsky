@@ -1,4 +1,4 @@
-package it.unibo.soseng.camunda.user_manger;
+package it.unibo.soseng.camunda.user_manager;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,30 +26,30 @@ public class PrepareTicketsDelegate implements JavaDelegate {
     Pdf pdfUtil;
 
     @Override
-    public void execute(DelegateExecution execution){
+    public void execute(DelegateExecution execution) {
         LOGGER.info("Execute PrepareTicketsDelegate");
 
         GeneratedOffer offer = (GeneratedOffer) execution.getVariable(USER_OFFER);
         BookRentResponse rentOutbound = (BookRentResponse) execution.getVariable(RENT_OUTBOUND);
         BookRentResponse rentBack = (BookRentResponse) execution.getVariable(RENT_BACK);
-        
-        // Produce  i biglietti con la ricevuta
+
+        // Produce i biglietti con la ricevuta
         pdfUtil.makePdf(offer, rentOutbound, rentBack);
         try {
-            pdfUtil.mergePdf(offer.getToken()+"_tmp2.pdf", offer.getToken()+"_tmp1.pdf", offer.getToken()+".pdf");
+            pdfUtil.mergePdf(offer.getToken() + "_tmp2.pdf", offer.getToken() + "_tmp1.pdf", offer.getToken() + ".pdf");
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         // Clean tmp file
         try {
-            File tmp = new File(offer.getToken()+"_tmp1.pdf"); 
+            File tmp = new File(offer.getToken() + "_tmp1.pdf");
             tmp.delete();
         } catch (Exception e) {
             e.printStackTrace();
         }
         try {
-            File tmp = new File(offer.getToken()+"_tmp2.pdf"); 
+            File tmp = new File(offer.getToken() + "_tmp2.pdf");
             tmp.delete();
         } catch (Exception e) {
             e.printStackTrace();

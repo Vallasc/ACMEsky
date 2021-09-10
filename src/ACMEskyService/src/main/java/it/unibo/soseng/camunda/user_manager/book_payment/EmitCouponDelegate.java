@@ -1,4 +1,4 @@
-package it.unibo.soseng.camunda.user_manger.book_payment;
+package it.unibo.soseng.camunda.user_manager.book_payment;
 
 import java.util.logging.Logger;
 
@@ -8,7 +8,7 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 
 @Named("emitCouponDelegate")
-public class EmitCouponDelegate implements JavaDelegate{
+public class EmitCouponDelegate implements JavaDelegate {
 
     private final static Logger LOGGER = Logger.getLogger(EmitCouponDelegate.class.getName());
 
@@ -17,5 +17,5 @@ public class EmitCouponDelegate implements JavaDelegate{
         LOGGER.info("Execute EmitCouponDelegate");
 
     }
-    
+
 }

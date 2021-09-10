@@ -1,4 +1,4 @@
-package it.unibo.soseng.camunda.user_manger.book_payment;
+package it.unibo.soseng.camunda.user_manager.book_payment;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -37,14 +37,14 @@ public class BookTicketsDelegate implements JavaDelegate {
     public void execute(DelegateExecution execution) {
         LOGGER.info("Execute BookTickets");
         GeneratedOffer offer = (GeneratedOffer) execution.getVariable(USER_OFFER);
-        try{
+        try {
             byte[] file = airlineManager.bookOfferTicket(offer);
             execution.setVariable(USER_OFFER, offer);
             String path = offer.getToken() + "_tmp1.pdf";
             try (FileOutputStream stream = new FileOutputStream(path)) {
                 stream.write(file);
             }
-        }catch(BookTicketsExceptionException | SendTicketException | IOException e){
+        } catch (BookTicketsExceptionException | SendTicketException | IOException e) {
             Response response = Response.status(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()).build();
             processState.setState(PROCESS_CONFIRM_BUY_OFFER, offer.getUser().getEmail(), RESPONSE, response);
             LOGGER.severe(e.toString());
