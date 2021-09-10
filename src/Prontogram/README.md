@@ -13,20 +13,11 @@ Prontogram's web-application
 
 <iframe title="API"
     width="900"
-    height="900"
+    height="1800"
     src="
     https://vallasc.github.io/ACMEsky/src/SwaggerUI/index.html?src=https://vallasc.github.io/ACMEsky/src/Prontogram/api.json
     ">
 </iframe>
-
-### API:
-http://localhost:8080/swagger-ui.html
-
-## DB console
-http://localhost:8080/h2
-URL: jdbc:h2:./db/bankdb
-user: sa
-passw: 
 
 ## Documentation
 
