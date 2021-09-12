@@ -2,9 +2,8 @@
 
 ## Nomenclatura
 
-
 | Nome                | Sigla            | Commento                                |
-| --------------------- | ------------------ | ----------------------------------------- |
+| - | - | - |
 | ACME                | ACME             |                                         |
 | Airline company     | AIR<sub>k</sub>  | Indica la k-esima compagnia aerea       |
 | Rent company        | RENT<sub>t</sub> | Indica la t-esima compagnia di noleggio |
@@ -137,11 +136,13 @@
 
 ```
 
+&nbsp;
+
 ## Verifica condizioni connectedness delle coreografie
 
 <!--Analizzando la coreografia si nota che essa fa parte del caso asincrono. -->
 
-Per stabilire la connectedness, e anche per una migliore lettura, la coreografia è stata divisa in 5 blocchi:
+Per stabilire la connectedness, e anche per una migliore lettura, la coreografia è stata divisa in 6 blocchi:
 
 1. __Query dei voli__
 2. __Ricezione offerte last-minute__
@@ -194,12 +195,12 @@ E' connessa anche per l'iterazione in quanto il ricevente in ___invoice___ è il
 
 &nbsp;
 
-## Conferma dell'offerta e pagamento
+### Conferma dell'offerta e pagamento
 
 ```fsharp
 1. ( confirmOffer: USERₓ -> ACME ; 
 ```
-E' connessa in quanto il ricevente di ___confirmOffer___ è il mittente di __(3)__ e di __(23)__.
+E' connessa in quanto il ricevente di ___confirmOffer___ è il mittente di __(3)__ e di __(25)__.
 ```fsharp
 2.   ( 
 3.     ( responseOfferOk: ACME -> USERₓ ; requestPaymentLink: USERₓ -> ACME ;
@@ -239,84 +240,30 @@ E' connessa per la sequenza perché il destinatario di ___requestRent1___ è il 
 
 ```fsharp
 19.             ) + ( errorPaymentBank: BANK -> ACME ; 
-                      unbookTickets: ACME -> AIRₖ ; unbookTicketsResponse: AIRₖ -> ACME ; 
-                      emitCoupon: ACME -> BANK ; emitCouponResponse: BANK -> ACME
+20.                   unbookTickets: ACME -> AIRₖ ; unbookTicketsResponse: AIRₖ -> ACME ; 
+21.                   emitCoupon: ACME -> BANK ; emitCouponResponse: BANK -> ACME
                 )
 ```
 E' connessa per la sequenza perché il destinatario di ___errorPaymentBank___ è il mittente di ___unbookTickets___, il destinatario di ___unbookTickets___ è il mittente di ___unbookTicketsResponse___, il destinatario di ___emitCoupon___ è il mittente di ___emitCouponResponse___.
 
 ```fsharp
-20.           )
-21.         ) + errorTickets: ACME -> USERₓ
+22           )
+23.         ) + errorTickets: ACME -> USERₓ
 ```
-E' connessa per la choice perchè i mittenti di __(6)__ e di __(21)__ sono gli stessi.
+E' connessa per la choice perchè i mittenti di __(6)__ e di __(23)__ sono gli stessi.
 ```fsharp
-22.       )
-23.     ) + responseOfferError: ACME -> USERₓ
-24.   ) 
+24.       )
+25.     ) + responseOfferError: ACME -> USERₓ
+26.   ) 
 ```
-E' connessa per la choice i sender di __(3)__ e di __(23)__ sono gli stessi.
+E' connessa per la choice i sender di __(3)__ e di __(25)__ sono gli stessi.
 ```fsharp
-25. )*
+27. )*
 ```
 
-La coreografia è connessa per l'iterazione in quanto __(21)__ e __(23)__ terminano con il ricevente __USER__ che è il mittente di __(1)__, mentre __(20)__ termina con __ACME__ che è connessa con __(1)__ secondo il pattern Receiver.
+La coreografia è connessa per l'iterazione in quanto __(23)__ e __(25)__ terminano con il ricevente __USER__ che è il mittente di __(1)__, mentre __(22)__ termina con __ACME__ che è connessa con __(1)__ secondo il pattern Receiver.
 
 &nbsp;
-
-
-1. __Query dei voli__
-2. __Ricezione offerte last-minute__
-3. __Registrazione interesse dell'utente__
-4. __Notifica dell'offerta all'utente__
-5. __Conferma dell'offerta e pagamento__
-
-```fsharp
-
-( queryFlights: ACME -> AIRₖ ; responseFlights: AIRₖ -> ACME )* 
-
-( sendLastMinute: AIRₖ -> ACME ; repsponseLastMinute: ACME -> AIRₖ )*
-
-( requestInterest: USERₓ -> ACME ; responseInterest: ACME -> USERₓ )* 
-
-( offerToken: ACME -> PTG ; notifyUser: PTG -> USERₓ ; 
-  notifyResponse: USERₓ -> PTG ; messageSended: PTG -> ACME )*
-
-( getInvoice: USERₓ -> ACME ; invoice: ACME -> USERₓ )*
-
-( confirmOffer: USERₓ -> ACME ; 
-    ((responseOfferOk: ACME -> USERₓ ; requestPaymentLink: USERₓ -> ACME ;
-            ((
-                bookTickets: ACME -> AIRₖ ;
-                responseTickets: AIRₖ -> ACME ;
-                requestBankLink: ACME -> BANK ; 
-                responselink: BANK -> ACME ;
-                paymentLink: ACME -> USERₓ ;
-                payment: USERₓ -> BANK ;
-                ((
-                    successPaymentBank: BANK -> ACME ;
-                    ( 1 + (
-                            requestDistance: ACME -> GEO ; 
-                            responseDistance: GEO -> ACME ; 
-                            ( 1 + (
-                                    requestRent1: ACME -> RENTₜ₁ ; 
-                                    responseRent1: RENTₜ₁-> ACME ;
-                                    requestRent2: ACME -> RENTₜ₂ ; 
-                                    responseRent2: RENTₜ₂-> ACME 
-                                    )
-                            )
-                            )
-                    )
-                ) + (
-                    unbookTickets: ACME -> AIRₖ ;
-                    emitCoupon: ACME -> BANK 
-                )) 
-            ) + errorTickets: ACME -> USERₓ
-            )
-        )  + responseOfferError: ACME -> USERₓ
-    )
-)*
-```
 
 ## Proiezioni
 
@@ -349,18 +296,16 @@ proj(RichiestaRicevuta, ACME) =
 ```
 ```fsharp
 proj(AcquistoOfferta, ACME) = 
-
   ( confirmOffer@USERₓ ; 
     (
       (responseOfferOk@USERₓ ; requestPaymentLink@USERₓ ;
         (
-          (
-            ___________
+          ( ___________
             bookTickets@AIRₖ ; responseTickets@AIRₖ ;
             ______________
             requestBankLink@BANK ; responselink@BANK ;
             ___________
-            paymentLink@USERₓ ; 1 
+            paymentLink@USERₓ ; 1 ;
             (
               (
                 successPaymentBank@BANK ;
@@ -371,17 +316,291 @@ proj(AcquistoOfferta, ACME) =
                          ____________
                          requestRent2@RENTₜ₂ ; responseRent2@RENTₜ₂ 
                   ))
-                ))
-              ) + (
-                _____________       ___________
-                unbookTickets@AIRₖ ; emitCoupon@BANK
-              )
+                ))  _____________        __________
+              ) + ( unbookTickets@AIRₖ ; emitCoupon@BANK )
             )
               ____________
           ) + errorTickets@USERₓ
         )
           __________________
       ) + responseOfferError@USERₓ
+    )
+  )*
+```
+
+### Utente
+
+```fsharp
+proj(QueryDeiVoli, USERₓ) = 
+  ( 1 ; 1 )*
+```
+```fsharp
+proj(RicezioneOfferteLastMinute, USERₓ) = 
+  ( 1 ; 1 )*
+```
+```fsharp
+proj(RegistrazioneInteresse, USERₓ) = 
+    _______________
+  ( requestInterest@ACME ; responseInterest@ACME )*
+```
+```fsharp
+proj(NotificaOfferta, USERₓ) = 
+                         ______________
+  ( 1 ; notifyUser@PTG ; notifyResponse@PTG ; 1 )*
+```
+```fsharp
+proj(RichiestaRicevuta, USERₓ) = 
+    __________
+  ( getInvoice@ACME ; invoice@ACME )*
+```
+```fsharp
+proj(AcquistoOfferta, USERₓ) = 
+    ____________
+  ( confirmOffer@ACME ; 
+    (                          __________________
+      ( responseOfferOk@ACME ; requestPaymentLink@ACME ;
+        (
+          ( 1 ; 1 ; 1 ; 1 ; paymentLink@ACME ; payment@BANK ;
+            (
+              (
+                1 ;
+                ( 1 + ( 1 ; 1 ;
+                  ( 1 + ( 1 ; 1 ; 1 ; 1 ) )
+                ))
+              ) + ( 1 ; 1 )
+            )
+          ) + errorTickets@ACME
+        )
+      ) + responseOfferError@ACME
+    )
+  )*
+```
+
+### Airline
+
+```fsharp
+proj(QueryDeiVoli, AIRₖ) = 
+                        _______________
+  ( queryFlights@ACME ; responseFlights@ACME )*
+```
+```fsharp
+proj(RicezioneOfferteLastMinute, AIRₖ) = 
+    ______________
+  ( sendLastMinute@ACME ; repsponseLastMinute@ACME )*
+```
+```fsharp
+proj(RegistrazioneInteresse, AIRₖ) = 
+  ( 1 ; 1 )*
+```
+```fsharp
+proj(NotificaOfferta, AIRₖ) = 
+  ( 1 ; 1 ; 1 ; 1 )*
+```
+```fsharp
+proj(RichiestaRicevuta, AIRₖ) =
+  ( 1 ; 1 )*
+```
+```fsharp
+proj(AcquistoOfferta, AIRₖ) =
+  ( 1 ; 
+    (
+      (1 ; 1 ;
+        (
+          (                    _______________
+            bookTickets@ACME ; responseTickets@ACME ;
+            1 ; 1 ; 1 ; 1 ;
+            (
+              ( 1 ;
+                ( 1 + ( 1 ; 1 ;
+                  ( 1 + ( 1 ; 1 ; 1 ; 1) )
+                ))
+              ) + ( unbookTickets@ACME ; 1 )
+            )
+          ) + 1
+        )
+      ) + 1
+    )
+  )*
+```
+
+### Prontogram
+
+```fsharp
+proj(QueryDeiVoli, PTG) = 
+  ( 1 ; 1 )*
+```
+```fsharp
+proj(RicezioneOfferteLastMinute, PTG) =
+  ( 1 ; 1 )*
+```
+```fsharp
+proj(RegistrazioneInteresse, PTG) = 
+  ( 1 ; 1 )*
+```
+```fsharp
+proj(NotificaOfferta, PTG) = 
+                      __________
+  ( offerToken@ACME ; notifyUser@USERₓ ; 
+                           _____________
+    notifyResponse@USERₓ ; messageSended@ACME )*
+```
+```fsharp
+proj(RichiestaRicevuta, PTG) =
+  ( 1 ; 1 )*
+```
+```fsharp
+proj(AcquistoOfferta, PTG) = 
+  ( 1 ; 
+    (
+      ( 1 ; 1 ;
+        (
+          ( 1 ; 1 ; 1 ; 1 ; 1 ; 1 ;
+            (
+              ( 1 ;
+                ( 1 + ( 1 ; 1 ;
+                  ( 1 + ( 1 ; 1  ; 1 ; 1 ) )
+                ))
+              ) + ( 1 ; 1 )
+            )
+          ) + 1
+        )
+      ) + 1
+    )
+  )*
+```
+
+### Bank
+
+```fsharp
+proj(QueryDeiVoli, BANK) = 
+  ( 1 ; 1 )*
+```
+```fsharp
+proj(RicezioneOfferteLastMinute, BANK) = 
+  ( 1 ; 1 )*
+```
+```fsharp
+proj(RegistrazioneInteresse, BANK) = 
+  ( 1 ; 1 )*
+```
+```fsharp
+proj(NotificaOfferta, BANK) = 
+  ( 1 ; 1 ; 1 ; 1 )*
+```
+```fsharp
+proj(RichiestaRicevuta, BANK) = 
+  ( 1 ; 1 )*
+```
+```fsharp
+proj(AcquistoOfferta, BANK) = 
+  ( 1 ; 
+    (
+      ( 1 ; 1 ;
+        (
+          ( 1 ; 1 ;
+                                   ____________
+            requestBankLink@ACME ; responselink@ACME ; 
+            1 ; payment@USERₓ ;
+            (
+              ( __________________
+                successPaymentBank@ACME ;
+                        _______________
+                ( 1 + ( 1 ; 1 ;
+                  ( 1 + ( 1 ; 1  ; 1 ; 1 ) )
+                ))
+              ) + ( 1 ; emitCoupon@ACME )
+            )
+          ) + 1
+        )
+      ) + 1
+    )
+  )*
+```
+
+### Geodistance service
+
+```fsharp
+proj(QueryDeiVoli, GEO) = 
+  ( 1 ; 1 )*
+```
+```fsharp
+proj(RicezioneOfferteLastMinute, GEO) = 
+  ( 1 ; 1 )*
+```
+```fsharp
+proj(RegistrazioneInteresse, GEO) = 
+  ( 1 ; 1 )*
+```
+```fsharp
+proj(NotificaOfferta, GEO) = 
+  ( 1 ; 1 ; 1 ; 1 )*
+```
+```fsharp
+proj(RichiestaRicevuta, GEO) = 
+  ( 1 ; 1 )*
+```
+```fsharp
+proj(AcquistoOfferta, GEO) = 
+  ( 1 ; 
+    (
+      ( 1 ; 1 ;
+        (
+          ( 1 ; 1 ; 1 ; 1 ; 1 ; 1 ;
+            (
+              ( 1 ;
+                                               ________________
+                ( 1 + ( requestDistance@ACME ; responseDistance@ACME ;
+                  ( 1 + ( 1 ; 1 ; 1 ; 1 ) )
+                ))
+              ) + ( 1 ; 1 )
+            )
+          ) + 1
+        )
+      ) + 1
+    )
+  )*
+```
+
+### Rent company
+
+```fsharp
+proj(QueryDeiVoli, RENTₜ₁) = 
+  ( 1 ; 1 )*
+```
+```fsharp
+proj(RicezioneOfferteLastMinute, RENTₜ₁) = 
+  ( 1 ; 1 )*
+```
+```fsharp
+proj(RegistrazioneInteresse, RENTₜ₁) = 
+  ( 1 ; 1 )*
+```
+```fsharp
+proj(NotificaOfferta, RENTₜ₁) = 
+  ( 1 ; 1 ; 1 ; 1 )*
+```
+```fsharp
+proj(RichiestaRicevuta, RENTₜ₁) = 
+  ( 1 ; 1 )*
+```
+```fsharp
+proj(AcquistoOfferta, RENTₜ₁) = 
+  ( 1 ; 
+    (
+      ( 1 ; 1 ;
+        (
+          ( 1 ; 1 ; 1 ; 1 ; 1 ; 1 ;
+            (
+              ( 1 ;
+                ( 1 + ( 1 ; 1 ;               _____________
+                  ( 1 + ( requestRent1@ACME ; responseRent1@ACME ;
+                          1 ; 1 ) )
+                ))
+              ) + ( 1 ; 1 )
+            )
+          ) + 1
+        )
+      ) + 1
     )
   )*
 ```
