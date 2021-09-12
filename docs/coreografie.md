@@ -2,15 +2,16 @@
 
 ## Nomenclatura
 
-| Nome | Sigla | Commento |
-|-|-| -|
-| ACME | ACME | |
-| Airline company | AIR<sub>k</sub> | Indica la k-esima compagnia aerea |
-| Rent company | RENT<sub>t</sub> | Indica la t-esima compagnia di noleggio |
-|Prontogram | PTG | |
-|Bank | BANK | |
-|Geodistance service | GEO | |
-|USER | USER<sub>x</sub> | Indica l'x-esimo utente |
+
+| Nome                | Sigla            | Commento                                |
+| --------------------- | ------------------ | ----------------------------------------- |
+| ACME                | ACME             |                                         |
+| Airline company     | AIR<sub>k</sub>  | Indica la k-esima compagnia aerea       |
+| Rent company        | RENT<sub>t</sub> | Indica la t-esima compagnia di noleggio |
+| Prontogram          | PTG              |                                         |
+| Bank                | BANK             |                                         |
+| Geodistance service | GEO              |                                         |
+| USER                | USER<sub>x</sub> | Indica l'x-esimo utente                 |
 
 &nbsp;
 
@@ -27,18 +28,29 @@
 // Ricezione offerte last minute (ripetuta per tutte le compagnie aeree)
 // Viene ripetuta per ogni compagnia aerea collegata ad ACMEsky
 // sendLastMinute: invia le offerte last minute
-( sendLastMinute: AIRₖ -> ACME )*
+// repsponseLastMinute: risposta successo o fallimento
+( sendLastMinute: AIRₖ -> ACME ; repsponseLastMinute: ACME -> AIRₖ )*
 |
 
 // Registrazione interesse dell'utente (ripetuta per tutti gli  utenti)
 // requestInterest: messaggio di richiesta con A/R
-( requestInterest: USERₓ -> ACME )* 
+// responseInterest: risposta successo o fallimento
+( requestInterest: USERₓ -> ACME ; responseInterest: ACME -> USERₓ )* 
 |   
 
 // Notifica dell'offerta all'utente
 // offerToken: mesaagio di offerta A/R
 // notifyUser: messaggio di notifica di Prontogram
-( offerToken: ACME -> PTG ; notifyUser: PTG -> USERₓ )*
+// notifyResponse: risposta da parte dell'utene dell'avvenuta ricezione
+// messageSended: risposta da parte di prontogram dell'avvenuto invio
+( offerToken: ACME -> PTG ; notifyUser: PTG -> USERₓ ; 
+  notifyResponse: USERₓ -> PTG ; messageSended: PTG -> ACME )*
+|
+
+// Richiesta ticket
+// getInvoice: mesaagio di richiesta ricevuta dell'offerta pagata
+// invoice: messaggio con la ricevuta del viaggio
+( getInvoice: USERₓ -> ACME ; invoice: ACME -> USERₓ )*
 |
 
 // Conferma dell'offerta e pagamento
@@ -51,7 +63,7 @@
         // requestPaymentLink: richiesta di pagamento da parte dell'utente
         (   
             responseOfferOk: ACME -> USERₓ ;
-            requestPaymentLink: USERₓ -> ACME ; // REQUEST1
+            requestPaymentLink: USERₓ -> ACME ;
             (   
                 // Tickets ok
                 // bookTickets: prenota i biglietti 
@@ -60,15 +72,13 @@
                 // responselink: link di pagamento generato dalla banca
                 // paymentLink: link di pagamento generato dalla banca
                 // payment: pagamento attraverso il link generato
-                // responsePayment: stato del pagamento
                 (
                     bookTickets: ACME -> AIRₖ ;
                     responseTickets: AIRₖ -> ACME ;
                     requestBankLink: ACME -> BANK ; 
                     responselink: BANK -> ACME ;
-                    paymentLink: ACME -> USERₓ ; // RESPONSE1
+                    paymentLink: ACME -> USERₓ ;
                     payment: USERₓ -> BANK ;
-                    responsePayment: BANK -> USERₓ ;
                     (
                         // Pagamento avvenuto con successo
                         // successPaymentBank: esito pagamento
@@ -107,22 +117,15 @@
                             // Errore nel pagamento
                             // unbookTickets: cancella la prenotazione dei biglietti
                             // emitCoupon: pagamento fallito
-                            unbookTickets: ACME -> AIRₖ
-                            emitCoupon: ACME -> BANK ;
-
+                            unbookTickets: ACME -> AIRₖ ;
+                            emitCoupon: ACME -> BANK 
                         )
-                    ) ;
-                    // L'utente richiede i biglietti
-                    // requestTickets: l'utente richiede i biglietti
-                    // ticketSummary: summary tickets o errore
-                    requestTickets : USERₓ -> ACME ; // REQUEST2
-                    ticketSummary : ACME -> USERₓ // RESPONSE2
-
+                    ) 
                 )
                 // Errore nella prenotazione dei biglietti
                 // errorTickets: errore volo non disponibile
                 +
-                errorTickets: ACME -> USERₓ // RESPONSE1
+                errorTickets: ACME -> USERₓ
             )
         )
         +
@@ -130,147 +133,255 @@
         // responseOfferError: errore offerta
         responseOfferError: ACME -> USERₓ
     )
-)
-
-// Richiesta ticket
-// getInvoice: mesaagio di richiesta ricevuta dell'offerta pagata
-// invoice: messaggio con la ricevuta del viaggio
-( getInvoice: USERₓ -> ACME ; invoice: ACME -> USERₓ )*
+)*
 
 ```
+
 ## Verifica condizioni connectedness delle coreografie
+
 <!--Analizzando la coreografia si nota che essa fa parte del caso asincrono. -->
+
 Per stabilire la connectedness, e anche per una migliore lettura, la coreografia è stata divisa in 5 blocchi:
+
+1. __Query dei voli__
+2. __Ricezione offerte last-minute__
+3. __Registrazione interesse dell'utente__
+4. __Notifica dell'offerta all'utente__
+5. __Richiesta della tickets dell'offerta__
+5. __Conferma dell'offerta e pagamento__
+
+Essendo queste sotto-coreografie eseguite in parallelo non ci sono condizioni da rispettare, pertanto, si è passati a valutare la corretteza di ogni singolo blocco.
+
+#### Query dei voli
+
+```fsharp
+( queryFlights: ACME -> AIRₖ ; responseFlights: AIRₖ -> ACME )*
+```
+E' connessa per la sequenza in quanto il ricevente in ___queryFlights___ è il mittente di ___responseFlights___.
+E' connessa anche per l'iterazione in quanto il ricevente in ___responseFlights___ è il mittente di ___queryFlights___.
+
+#### Ricezione offerte last-minute
+
+```fsharp
+( sendLastMinute: AIRₖ -> ACME ; repsponseLastMinute: ACME -> AIRₖ )*
+```
+E' connessa in quanto il ricevente in ___sendLastMinute___ è il mittente di ___repsponseLastMinute___.
+E' connessa anche per l'iterazione in quanto il ricevente in ___repsponseLastMinute___ è il mittente di ___sendLastMinute___.
+
+#### Registrazione interesse dell'utente
+
+```fsharp
+( requestInterest: USERₓ -> ACME ; responseInterest: ACME -> USERₓ )* 
+```
+E' connessa in quanto il ricevente in ___requestInterest___ è il mittente di ___responseInterest___.
+E' connessa anche per l'iterazione in quanto il ricevente in ___responseInterest___ è il mittente di ___requestInterest___.
+
+#### Notifica dell'offerta all'utente
+
+```fsharp
+( offerToken: ACME -> PTG ; notifyUser: PTG -> USERₓ ; notifyResponse: USERₓ -> PTG ; messageSended: PTG -> ACME )*
+```
+E' connessa in quanto il ricevente in ___offerToken___ è il mittente di ___notifyUser___, il ricevente in ___notifyUser___ è il mittente di ___notifyResponse___, il ricevente in ___notifyResponse___ è il mittente di ___messageSended___.
+E' connessa anche per l'iterazione in quanto il ricevente in ___messageSended___ è il mittente di ___offerToken___.
+
+### Richiesta ricevuta dell'offerta
+
+```fsharp
+( getInvoice: USERₓ -> ACME ; invoice: ACME -> USERₓ )*
+```
+E' connessa in quanto il ricevente in ___getInvoice___ è il mittente di ___invoice___.
+E' connessa anche per l'iterazione in quanto il ricevente in ___invoice___ è il mittente di ___getInvoice___.
+
+&nbsp;
+
+## Conferma dell'offerta e pagamento
+
+```fsharp
+1. ( confirmOffer: USERₓ -> ACME ; 
+```
+E' connessa in quanto il ricevente di ___confirmOffer___ è il mittente di __(3)__ e di __(23)__.
+```fsharp
+2.   ( 
+3.     ( responseOfferOk: ACME -> USERₓ ; requestPaymentLink: USERₓ -> ACME ;
+```
+E' connessa per la sequenza in quanto il ricevente di ___requestPaymentLink___ è il mittente di __(6)__.
+```fsharp
+4.       (   
+5.         (
+6.           bookTickets: ACME -> AIRₖ ; responseTickets: AIRₖ -> ACME ;
+7.           requestBankLink: ACME -> BANK ; responselink: BANK -> ACME ;
+8.           paymentLink: ACME -> USERₓ ;
+9.           payment: USERₓ -> BANK ;
+```
+E' connessa per la sequenza in quanto il ricevente di ___bookTickets___ è il mittente di ___responseTickets___, il ricevente di ___requestBankLink___ è il mittente di ___responselink___, il ricevente di ___responselink___ è il mittente di ___paymentLink___ e il ricevente di ___paymentLink___ è il mittente di ___payment___.
+
+Inoltre, è connessa per la choice perché il destinatario di ___payment___ è il mittente di __(11)__ e di __(19)__
+
+```fsharp
+10.          ( 
+11.            ( successPaymentBank: BANK -> ACME ;
+```
+E' connessa per la choice perché il destinatario di ___successPaymentBank___ è il mittente di __(13)__
+```fsharp
+12.              ( 1 + 
+13.                ( requestDistance: ACME -> GEO ; responseDistance: GEO -> ACME ; 
+```
+E' connessa per la sequenza perché il destinatario di ___requestDistance___ è il mittente di ___responseDistance___.
+E' connessa per la choice perché il destinatario di ___responseDistance___ è il mittente di __(14)__
+```fsharp
+14.                  ( 1 + ( requestRent1: ACME -> RENTₜ₁ ; responseRent1: RENTₜ₁-> ACME ; 
+15.                          requestRent2: ACME -> RENTₜ₂ ; responseRent2: RENTₜ₂-> ACME )
+16.                  )
+17.                 )
+18.               )
+```
+E' connessa per la sequenza perché il destinatario di ___requestRent1___ è il mittente di ___responseRent1___, il destinatario di ___responseRent1___ è il mittente di ___requestRent2___ e il destinatario di ___requestRent2___ è il mittente di ___responseRent2___.
+
+```fsharp
+19.             ) + ( errorPaymentBank: BANK -> ACME ; 
+                      unbookTickets: ACME -> AIRₖ ; unbookTicketsResponse: AIRₖ -> ACME ; 
+                      emitCoupon: ACME -> BANK ; emitCouponResponse: BANK -> ACME
+                )
+```
+E' connessa per la sequenza perché il destinatario di ___errorPaymentBank___ è il mittente di ___unbookTickets___, il destinatario di ___unbookTickets___ è il mittente di ___unbookTicketsResponse___, il destinatario di ___emitCoupon___ è il mittente di ___emitCouponResponse___.
+
+```fsharp
+20.           )
+21.         ) + errorTickets: ACME -> USERₓ
+```
+E' connessa per la choice perchè i mittenti di __(6)__ e di __(21)__ sono gli stessi.
+```fsharp
+22.       )
+23.     ) + responseOfferError: ACME -> USERₓ
+24.   ) 
+```
+E' connessa per la choice i sender di __(3)__ e di __(23)__ sono gli stessi.
+```fsharp
+25. )*
+```
+
+La coreografia è connessa per l'iterazione in quanto __(21)__ e __(23)__ terminano con il ricevente __USER__ che è il mittente di __(1)__, mentre __(20)__ termina con __ACME__ che è connessa con __(1)__ secondo il pattern Receiver.
+
+&nbsp;
+
+
 1. __Query dei voli__
 2. __Ricezione offerte last-minute__
 3. __Registrazione interesse dell'utente__
 4. __Notifica dell'offerta all'utente__
 5. __Conferma dell'offerta e pagamento__
 
-Essendo queste sotto-coreografie eseguite in parallelo non ci sono condizioni da rispettare, pertanto, si è passati a valutare la corretteza di ogni singolo blocco.
-#### Query dei voli
 ```fsharp
+
 ( queryFlights: ACME -> AIRₖ ; responseFlights: AIRₖ -> ACME )* 
-```
-E' connessa in quanto il ricevente in ___queryFlights___ è il mittente di ___responseFlights___.
 
-#### Ricezione offerte last-minute
-```fsharp
-( sendLastMinute: AIRₖ -> ACME )*
-```
-Non è connessa, ma non è un problema in quanto ACME per scelta implementativa rimane in attesa di una richiesta.SBAGLIATO
+( sendLastMinute: AIRₖ -> ACME ; repsponseLastMinute: ACME -> AIRₖ )*
 
-#### Registrazione interesse dell'utente
-```fsharp
-( requestInterest: USERₓ -> ACME )* 
-```
-Non è connessa, ma non è un problema in quanto ACME per scelta implementativa rimane in attesa di una richiesta. SBAGLIATO
+( requestInterest: USERₓ -> ACME ; responseInterest: ACME -> USERₓ )* 
 
-#### Notifica dell'offerta all'utente
-```fsharp
-( offerToken: ACME -> PTG ; notifyUser: PTG -> USERₓ )*
-```
-Non è connessa, ma non è un problema in quanto PTG  e USERₓ per scelta implementativa rimangono sempre in attesa di richieste.SBAGLIATO
+( offerToken: ACME -> PTG ; notifyUser: PTG -> USERₓ ; 
+  notifyResponse: USERₓ -> PTG ; messageSended: PTG -> ACME )*
 
-#### Conferma dell'offerta e pagamento
-```fsharp
-( offerToken: ACME -> PTG ; notifyUser: PTG -> USERₓ )*
-```
-\
-\
-\
-&nbsp;
+( getInvoice: USERₓ -> ACME ; invoice: ACME -> USERₓ )*
 
+( confirmOffer: USERₓ -> ACME ; 
+    ((responseOfferOk: ACME -> USERₓ ; requestPaymentLink: USERₓ -> ACME ;
+            ((
+                bookTickets: ACME -> AIRₖ ;
+                responseTickets: AIRₖ -> ACME ;
+                requestBankLink: ACME -> BANK ; 
+                responselink: BANK -> ACME ;
+                paymentLink: ACME -> USERₓ ;
+                payment: USERₓ -> BANK ;
+                ((
+                    successPaymentBank: BANK -> ACME ;
+                    ( 1 + (
+                            requestDistance: ACME -> GEO ; 
+                            responseDistance: GEO -> ACME ; 
+                            ( 1 + (
+                                    requestRent1: ACME -> RENTₜ₁ ; 
+                                    responseRent1: RENTₜ₁-> ACME ;
+                                    requestRent2: ACME -> RENTₜ₂ ; 
+                                    responseRent2: RENTₜ₂-> ACME 
+                                    )
+                            )
+                            )
+                    )
+                ) + (
+                    unbookTickets: ACME -> AIRₖ ;
+                    emitCoupon: ACME -> BANK 
+                )) 
+            ) + errorTickets: ACME -> USERₓ
+            )
+        )  + responseOfferError: ACME -> USERₓ
+    )
+)*
+```
 
 ## Proiezioni
 
 ### ACMEsky
-```fsharp
 
+```fsharp
+proj(QueryDeiVoli, ACME) = 
+    ____________
+  ( queryFlights@AIRₖ ; responseFlights@AIRₖ )*
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Semantica sincrona
-
-
-### Corr
 ```fsharp
+proj(RicezioneOfferteLastMinute, ACME) = 
+                          __________________
+  ( sendLastMinute@AIRₖ ; repsponseLastMinute@AIRₖ )*
+```
+```fsharp
+proj(RegistrazioneInteresse, ACME) = 
+                            ________________
+  ( requestInterest@USERₓ ; responseInterest@USERₓ )*
+```
+```fsharp
+proj(NotificaOfferta, ACME) = 
+    __________
+  ( offerToken@PTG ; 1 ; 1 ; messageSended@PTG )*
+```
+```fsharp
+proj(RichiestaRicevuta, ACME) = 
+                       _______
+  ( getInvoice@USERₓ ; invoice@USERₓ )*
+```
+```fsharp
+proj(AcquistoOfferta, ACME) = 
 
-
-
-
-
-(( query: ACME -> AIRₖ ; response: AIRₖ -> ACME)* | (sendLastMinute: AIRₖ -> ACME )* ) |
-
-// sequenza query: b-> a; response: a-> b
-// sincrono corretto perchè prima riceve poi invia 
-// condizioni di sender, receiver e disjoint rispettate
-// sequenza corretta pertanto anche iteration è corretta.
-
-// sequenza sendLastMinute: a -> b; 
-// sequenza corretta poiché atomica, pertanto anche iteration è corretta.
-|
-( 
-    request: USERₓ -> ACME 
-    // sequenza (request: c -> b)* | (..)*
-)*
-| 
-( 
-    (foundOffer: ACME -> PTG ; notifyUSERₓ: PTG -> USERₓ ; 
-     // sequenza (foundOffer: b -> d ; notifyUSERₓ: d -> c ; (..)) + 1
-    ( 
-        (confirmOffer: USERₓ -> ACME ; 
-         //sequenza confirmOffer: c -> b; (..) 
-            (successResponse: ACME -> USERₓ ; informAIRₖ: ACME -> AIRₖ;
-            // sequenza (successResponse: b -> c; informAIRₖ: b -> a; (..))  + failResponse: b -> c;
-            ( 
-                (confirmAvailableFlight: AIRₖ -> ACME; confirmFlightToUSERₓ: ACME -> USERₓ;
-                // sequenza confirmAvailableFlight: a -> b; confirmFlightToUSERₓ: b -> c; 
-                askBankLink: ACME -> BANK ; responseLink: BANK -> ACME ; sendBANK: ACME -> USERₓ ; payment: USERₓ -> BANK ;  
-                // sequenza askBankLink: b -> e ; responseLink: e -> b ; sendBANK: b -> c ; payment: c -> e ; (..) + (flightNotAvailable: a -> b; FlightNotAvailableError: b -> c)
-                    (
-                        (successPayment: BANK -> ACME; confirmSuccessPayment: ACME -> USERₓ ; payTickets: ACME -> BANK ; receiveTickets: AIRₖ -> ACME ;
-                        // sequenza (successPayment: e -> b ; confirmSuccessPayment: b -> c ; payTickets: b -> c ; receiveTickets: a -> b ; (..)); successOrder: b -> c ;  +  
-                        // (failPayment: e -> b; failOrder: b -> c )
-                            ( 
-                                1 + 
-                                (askForDistance: ACME -> GEO ; distanceResponse: GEO -> ACME; 
-                                // sequenza 1 + (askForDistance: b -> f ; distanceResponse: f -> b;(..)) 
-                                    ( 
-                                        1 +  (askForRent: ACME -> RENTₜ; responseForRent: RENTₜ-> ACME )
-                                        // sequenza 1 + (askForRent: b -> g; responseForRent: g-> b )
-                                    )
-                                )
-                            )
-                        ); successOrder: ACME -> USERₓ; 
-                    )
-                    +
-                    (failPayment: BANK -> ACME; failOrder: ACME -> USERₓ )
-                )
-                + 
-                (flightNotAvailable: AIRₖ -> ACME; FlightNotAvailableError: ACME -> USERₓ)
+  ( confirmOffer@USERₓ ; 
+    (
+      (responseOfferOk@USERₓ ; requestPaymentLink@USERₓ ;
+        (
+          (
+            ___________
+            bookTickets@AIRₖ ; responseTickets@AIRₖ ;
+            ______________
+            requestBankLink@BANK ; responselink@BANK ;
+            ___________
+            paymentLink@USERₓ ; 1 
+            (
+              (
+                successPaymentBank@BANK ;
+                        _______________
+                ( 1 + ( requestDistance@GEO ; responseDistance@GEO ;
+                         ____________
+                  ( 1 + (requestRent1@RENTₜ₁ ; responseRent1@RENTₜ₁ ;
+                         ____________
+                         requestRent2@RENTₜ₂ ; responseRent2@RENTₜ₂ 
+                  ))
+                ))
+              ) + (
+                _____________       ___________
+                unbookTickets@AIRₖ ; emitCoupon@BANK
+              )
             )
-            +
-            failResponse: ACME -> USERₓ 
+              ____________
+          ) + errorTickets@USERₓ
         )
-    )) 
-    + 
-    1
-)*
+          __________________
+      ) + responseOfferError@USERₓ
+    )
+  )*
 ```
