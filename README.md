@@ -1,3 +1,4 @@
+<!--
 ---
 stylesheet: https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.10.0/github-markdown.min.css
 body_class: markdown-body
@@ -12,6 +13,7 @@ pdf_options:
   scale: 1.6
 
 ---
+-->
 
 # ACMEsky
 
@@ -52,6 +54,7 @@ In questo caso ACMESky fa uso di diverse compagnie di noleggio con autista con c
 
 * Servizi
     * [ACMEsky](src/ACMEskyService/)
+        * [Service](src/ACMEskyService/)
         * [Database](src/ACMEskyDB/)
         * [Web](src/ACMEskyWeb/)
     * [AirlineService](src/AirlineService/)
