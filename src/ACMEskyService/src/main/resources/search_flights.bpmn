@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1gxy7hi" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.3.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1gxy7hi" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.4.0">
   <bpmn:collaboration id="Collaboration_1lrn8of">
     <bpmn:documentation>Search_flights</bpmn:documentation>
     <bpmn:participant id="Participant_0zyvds3" name="ACMEsky" processRef="SearchFlights" />
@@ -17,7 +17,7 @@
       <bpmn:incoming>Flow_17bs2nx</bpmn:incoming>
       <bpmn:outgoing>Flow_0vewk6t</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:startEvent id="Event_0owtm5c" name="Every 12 hours">
+    <bpmn:startEvent id="Event_0owtm5c" name="Every 6 hours">
       <bpmn:outgoing>Flow_17bs2nx</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_0zzfnkq">
         <bpmn:timeCycle xsi:type="bpmn:tFormalExpression">R1/PT3M</bpmn:timeCycle>
@@ -91,7 +91,7 @@
       <bpmndi:BPMNShape id="Event_0owtm5c_di" bpmnElement="Event_0owtm5c">
         <dc:Bounds x="222" y="187" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="206" y="230" width="74" height="14" />
+          <dc:Bounds x="209" y="230" width="68" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0rvkgla_di" bpmnElement="Activity_0xtd07v" isExpanded="true">
@@ -119,6 +119,9 @@
         <di:waypoint x="1062" y="210" />
         <di:waypoint x="1114" y="210" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_0mmkxnu_di" bpmnElement="Event_0mmkxnu">
+        <dc:Bounds x="522" y="192" width="36" height="36" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0wvn3m2_di" bpmnElement="Event_0wvn3m2">
         <dc:Bounds x="1114" y="192" width="36" height="36" />
       </bpmndi:BPMNShape>
@@ -130,9 +133,6 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0ct2ss4_di" bpmnElement="Activity_0ct2ss4">
         <dc:Bounds x="962" y="170" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0mmkxnu_di" bpmnElement="Event_0mmkxnu">
-        <dc:Bounds x="522" y="192" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1yggkf3_di" bpmnElement="Event_1yggkf3">
         <dc:Bounds x="874" y="152" width="36" height="36" />

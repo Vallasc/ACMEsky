@@ -2,12 +2,14 @@
 Prontogram's web-application 
 
 ### How to build
-
+cd front-end
+npm install
+ng build --prod  
 ### How to run
+cd static 
+http-server 
 #### docker
-
-### How tobuild
-
+docker-compose up --build
 ### API
 [API link](https://vallasc.github.io/ACMEsky/src/SwaggerUI/index.html?src=https://vallasc.github.io/ACMEsky/src/Prontogram/api.json)
 
