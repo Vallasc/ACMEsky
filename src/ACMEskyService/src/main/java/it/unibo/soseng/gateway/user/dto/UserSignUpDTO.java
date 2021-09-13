@@ -5,9 +5,17 @@ import java.io.Serializable;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
+/**
+ * Le istanze di questa classe descrivono i DTO che consentono all'utente di
+ * registrarsi
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
 public class UserSignUpDTO implements Serializable {
     private static final long serialVersionUID = 1L;
-    
+
     @Email(message = "Email should be valid")
     private String email;
 

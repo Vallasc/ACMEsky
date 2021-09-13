@@ -14,6 +14,15 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
+/**
+ * Descrive le richieste che ACMEsky effettua verso il servizio di
+ * geolocalizzazione per conoscere le distanze tra gli indirizzi degli utenti e
+ * quelli degli aereoporti.
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
 @Stateless
 public class DistanceClient {
     private final static Logger LOGGER = Logger.getLogger(DistanceClient.class.getName());
@@ -22,31 +31,35 @@ public class DistanceClient {
 
     OkHttpClient client = new OkHttpClient();
 
+    /**
+     * consente di richiedere la distanza tra due indirizzi
+     * 
+     * @param from
+     * @param to
+     * @return
+     * @throws IOException
+     * @throws GeoserverErrorException
+     */
     public DistanceDTO requestDistance(String from, String to) throws IOException, GeoserverErrorException {
 
-        String url = HttpUrl.parse(BASE_URL + "/distance")
-                            .newBuilder()
-                            .addQueryParameter("from", from)
-                            .addQueryParameter("to", to)
-                            .build()
-                            .toString();
+        String url = HttpUrl.parse(BASE_URL + "/distance").newBuilder().addQueryParameter("from", from)
+                .addQueryParameter("to", to).build().toString();
 
-        Request request = new Request.Builder()
-                                    .url(url)
-                                    .build();
+        Request request = new Request.Builder().url(url).build();
 
         Call call = client.newCall(request);
 
-        ObjectMapper objectMapper = new ObjectMapper(); 
+        ObjectMapper objectMapper = new ObjectMapper();
 
         String jsonResponse;
         try (Response response = client.newCall(request).execute()) {
             jsonResponse = response.body().string();
-            if(response.code() != 200)
+            if (response.code() != 200)
                 throw new GeoserverErrorException();
         }
         return objectMapper.readValue(jsonResponse, DistanceDTO.class);
     }
 
-    public class GeoserverErrorException extends Exception {}
+    public class GeoserverErrorException extends Exception {
+    }
 }

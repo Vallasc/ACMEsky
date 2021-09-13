@@ -1,5 +1,15 @@
 package it.unibo.soseng.camunda.utils;
 
+/**
+ * La lista di tutte le variabili impiegate per raccogliere i dati che i task
+ * durante si scambiano tra loro per consentirne il funzionamento e offrire le
+ * funzionalità richieste.
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
+
 // METTERE I NOMI DELLE VARIBILI CON INIZIALE MINUSCOLA
 public final class ProcessVariables {
     // Flights manager

@@ -4,8 +4,17 @@ import java.io.Serializable;
 
 import it.unibo.soseng.model.GeneratedOffer;
 
+/**
+ * Le istanze di questa classe descrivono le offerte di volo che combaciano con
+ * quelle richieste dagli utenti come Data Transfer Object da utilizzare nei
+ * corpi delle richieste rivolte ai servizi esterni
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
 public class OfferDTO implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
 
     private FlightDTO outboundFlight;
@@ -14,7 +23,6 @@ public class OfferDTO implements Serializable {
     private String token;
     private boolean rent;
 
-    
     public FlightDTO getOutboundFlight() {
         return outboundFlight;
     }
@@ -55,7 +63,7 @@ public class OfferDTO implements Serializable {
         this.outboundFlight = outboundFlight;
     }
 
-    public static OfferDTO fromOffer(GeneratedOffer offer){
+    public static OfferDTO fromOffer(GeneratedOffer offer) {
         OfferDTO dto = new OfferDTO();
         dto.token = offer.getToken();
         dto.outboundFlight = FlightDTO.fromFlight(offer.getOutboundFlight());

@@ -21,32 +21,49 @@ import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+/**
+ * JavaDelegate associato al task "Search flights" del diagramma BPMN
+ * search_flights.bpmn. Cerca all'ennesima AirlineService i voli richiesti
+ * dall'utente
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
+
 @Named("searchFlightsDelegate")
-public class SearchFlightsDelegate implements JavaDelegate{
-  private final static Logger LOGGER = Logger.getLogger(SearchFlightsDelegate.class.getName()); 
+public class SearchFlightsDelegate implements JavaDelegate {
+  private final static Logger LOGGER = Logger.getLogger(SearchFlightsDelegate.class.getName());
 
-    @Inject
-    AirlineManager manager;
+  @Inject
+  AirlineManager manager;
 
-    @Inject
-    DatabaseManager dbManager;
+  @Inject
+  DatabaseManager dbManager;
 
-    @Override
-    public void execute(DelegateExecution execution) {
-      LOGGER.info ("Execute searchFlightsDelegate");
+  /**
+   * Recupera la lista dei voli di interesse da cercare, li converte in oggetti
+   * InterestDTO e li passa nel body della richiesta che manda a ciascuna
+   * compagnia aerea, aumenta l'indice delle compagnie aeree per cercare i voli
+   * richiesti all'AirlineService successivo nella lista e assegna i voli ottenuti
+   * alla variabile FLIGHTS_TO_SAVE
+   */
+  @Override
+  public void execute(DelegateExecution execution) {
+    LOGGER.info("Execute searchFlightsDelegate");
 
-      @SuppressWarnings (value="unchecked")
-      List<Airline> airlines = (List<Airline>) execution.getVariable(AIRLINE_SERVICES);
-      Airline a = airlines.get((int) execution.getVariable(AIRLINE_SERVICES_INDEX));
+    @SuppressWarnings(value = "unchecked")
+    List<Airline> airlines = (List<Airline>) execution.getVariable(AIRLINE_SERVICES);
+    Airline a = airlines.get((int) execution.getVariable(AIRLINE_SERVICES_INDEX));
 
-      @SuppressWarnings (value="unchecked")
-      List<FlightInterest> interestsList = (List<FlightInterest>) execution.getVariable(INTEREST_FLIGHTS_LIST);
-      List<InterestDTO> listDTO = manager.convertIntToIntDTO(interestsList);
-      List<Flight> retrieveFlights;
-      retrieveFlights = manager.retrieveFlightsList(listDTO, a.getWsAddress());
-      int index = (int) execution.getVariable(AIRLINE_SERVICES_INDEX) + 1;
-      execution.setVariable(AIRLINE_SERVICES_INDEX, index);
-    
-      execution.setVariable(FLIGHTS_TO_SAVE, retrieveFlights);
-    }
+    @SuppressWarnings(value = "unchecked")
+    List<FlightInterest> interestsList = (List<FlightInterest>) execution.getVariable(INTEREST_FLIGHTS_LIST);
+    List<InterestDTO> listDTO = manager.convertIntToIntDTO(interestsList);
+    List<Flight> retrieveFlights;
+    retrieveFlights = manager.retrieveFlightsList(listDTO, a.getWsAddress());
+    int index = (int) execution.getVariable(AIRLINE_SERVICES_INDEX) + 1;
+    execution.setVariable(AIRLINE_SERVICES_INDEX, index);
+
+    execution.setVariable(FLIGHTS_TO_SAVE, retrieveFlights);
+  }
 }

@@ -18,6 +18,14 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * Questa classe definisce le richieste che ACMEsky invia alle compagnie aeree
+ * per raggiungere i propri obiettivi
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
 public class AirlineClient {
 
     private final static Logger LOGGER = Logger.getLogger(AirlineClient.class.getName());
@@ -30,6 +38,17 @@ public class AirlineClient {
     @Inject
     AirlineManager airManager;
 
+    /**
+     * Invia i voli di interesse alla compagnia aerea, raggiungibile tramite
+     * l'indirizzo, per recuperare i voli che combaciano con essi
+     * 
+     * @param listDTO
+     * @param wsAddress
+     * @return
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws AirlineErrorException
+     */
     public String getFlightList(List<InterestDTO> listDTO, String wsAddress)
             throws IOException, InterruptedException, AirlineErrorException {
 
@@ -57,8 +76,20 @@ public class AirlineClient {
 
     }
 
+    /**
+     * Recupera i biglietti dei voli richiesti ed effettua la prenotazione degli
+     * stessi effettuando una chiamata ad una risorsa degli AirlineService.
+     * 
+     * @param wsAddress
+     * @param username
+     * @param outboundFlightCode
+     * @param flightBackCode
+     * @return
+     * @throws IOException
+     * @throws BookTicketsExceptionException
+     */
     public byte[] getFlightTickets(String wsAddress, String username, String outboundFlightCode, String flightBackCode)
-            throws IOException, BookTicketsExceptionException {
+            throws IOException, BookTicketsException {
 
         String url = new String(wsAddress + "/getTickets?id=" + outboundFlightCode + "&id=" + flightBackCode);
 
@@ -68,11 +99,19 @@ public class AirlineClient {
         try (Response response = client.newCall(request).execute()) {
             ticket = response.body().bytes();
             if (response.code() != 200 && response.code() != 201)
-                throw new BookTicketsExceptionException();
+                throw new BookTicketsException();
         }
         return ticket;
     }
 
+    /**
+     * Cancella la prenotazione dei voli dell'offerta passata come argomento tramite
+     * una richiesta HTTP ad una risorsa delle compagnie aeree destinata per questo
+     * scopo
+     * 
+     * @param offer
+     * @throws IOException
+     */
     public void unbookFlights(GeneratedOffer offer) throws IOException {
 
         String url = new String(offer.getOutboundFlight().getAirlineId().getWsAddress() + "/notPurchasedOffer?id="
@@ -87,6 +126,6 @@ public class AirlineClient {
     public class AirlineErrorException extends Exception {
     }
 
-    public class BookTicketsExceptionException extends Exception {
+    public class BookTicketsException extends Exception {
     }
 }

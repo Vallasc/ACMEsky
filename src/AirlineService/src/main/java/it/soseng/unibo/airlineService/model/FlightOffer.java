@@ -47,9 +47,6 @@ public class FlightOffer {
   @Column(name = "expire_offer", columnDefinition = "TIMESTAMP WITH TIME ZONE")
   private OffsetDateTime expiryDate;
 
-  @Column(name = "flag")
-  private boolean soldFlag = false;
-
   public FlightOffer() {
   }
 
@@ -107,14 +104,6 @@ public class FlightOffer {
    */
   public OffsetDateTime getExpiryDate() {
     return this.expiryDate;
-  }
-
-  /**
-   * @return boolean il valore del campo soldFlag che indica se il volo è già
-   *         stato venduto o no
-   */
-  public boolean getSoldFlag() {
-    return this.soldFlag;
   }
 
   /**
@@ -184,13 +173,6 @@ public class FlightOffer {
   public void setExpiryDate() {
     OffsetDateTime expiryDate = departureTime.minusDays(7);
     this.expiryDate = expiryDate;
-  }
-
-  /**
-   * imposta il flag relativo all'acquisto o meno dell'offerta
-   */
-  public void setSoldFlag(boolean value) {
-    this.soldFlag = value;
   }
 
   /**

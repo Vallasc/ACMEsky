@@ -28,5 +28,6 @@ Il servizio che simula delle semplici compagnie aeree. Sono state sviluppate con
 ## GeographicalDistanceService
 
 ## Prontogram
+Web-application che permette all'utente di ricevere le notifiche delle offerte dei voli dai servizi di ACMEsky. L'aaplicativo è stato sviluppato in
 
 ## RentService(s)

@@ -7,8 +7,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import it.unibo.soseng.model.Flight;
 
+/**
+ * Le istanze di questa classe descrivono i voli delle offerte come Data
+ * Transfer Object da utilizzare nei corpi delle richieste rivolte ai servizi
+ * esterni
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
+
 public class FlightDTO implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
 
     private String flightCode;
@@ -94,26 +104,26 @@ public class FlightDTO implements Serializable {
     }
 
     @JsonIgnore
-    public OffsetDateTime getDepartureOffsetDateTime () {
-        return OffsetDateTime.parse(this.departureTimestamp); 
+    public OffsetDateTime getDepartureOffsetDateTime() {
+        return OffsetDateTime.parse(this.departureTimestamp);
     }
 
     @JsonIgnore
-    public OffsetDateTime getArrivalOffsetDateTime () {
-        return OffsetDateTime.parse(this.arrivalTimestamp); 
+    public OffsetDateTime getArrivalOffsetDateTime() {
+        return OffsetDateTime.parse(this.arrivalTimestamp);
     }
 
     @JsonIgnore
-    public void setDepartureOffsetDateTime (OffsetDateTime departurDateTime) {
+    public void setDepartureOffsetDateTime(OffsetDateTime departurDateTime) {
         this.departureTimestamp = departurDateTime.toString();
     }
 
     @JsonIgnore
-    public void setArrivalOffsetDateTime (OffsetDateTime arrivalDateTime) {
+    public void setArrivalOffsetDateTime(OffsetDateTime arrivalDateTime) {
         this.arrivalTimestamp = arrivalDateTime.toString();
     }
 
-    public static FlightDTO fromFlight(Flight flight){
+    public static FlightDTO fromFlight(Flight flight) {
         FlightDTO dto = new FlightDTO();
         dto.airlineName = flight.getAirlineId().getEntity().getUsername();
         dto.arrivalAirportCode = flight.getArrivalAirport().getAirportCode();

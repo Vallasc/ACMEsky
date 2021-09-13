@@ -2,6 +2,15 @@ package it.unibo.soseng.gateway.distance.dto;
 
 import java.io.Serializable;
 
+/**
+ * Gli oggetti istanziati da questa classe descrivono le distanze dagli
+ * indirizzi degli aereoporti dei voli e agli indirizzi degli utenti che hanno
+ * acquistato l'offerta
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
 public class DistanceDTO implements Serializable {
     private float value;
     private String distance;

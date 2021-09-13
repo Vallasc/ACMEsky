@@ -10,6 +10,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import it.unibo.soseng.model.FlightInterest;
 
+/**
+ * Le istanze di questa classe descrivono i voli che compongono le offerte di
+ * volo di interesse degli utenti come Data Transfer Object da utilizzare nei
+ * corpi delle richieste rivolte ai servizi esterni
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
 public class FlightInterestDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -22,7 +31,8 @@ public class FlightInterestDTO implements Serializable {
     @NotNull
     private String departureTimestamp;
 
-    public FlightInterestDTO() {}
+    public FlightInterestDTO() {
+    }
 
     public String getDepartureAirportCode() {
         return departureAirportCode;
@@ -31,7 +41,6 @@ public class FlightInterestDTO implements Serializable {
     public void setDepartureAirportCode(String departureAirportCode) {
         this.departureAirportCode = departureAirportCode;
     }
-
 
     public String getDepartureTimestamp() {
         return departureTimestamp;
@@ -44,7 +53,7 @@ public class FlightInterestDTO implements Serializable {
     public String getArrivalAirportCode() {
         return arrivalAirportCode;
     }
-    
+
     public void setArrivalAirportCode(String arrivalAirportCode) {
         this.arrivalAirportCode = arrivalAirportCode;
     }
@@ -59,11 +68,11 @@ public class FlightInterestDTO implements Serializable {
         departureTimestamp = departureOffsetDateTime.toString();
     }
 
-    public static FlightInterestDTO from(FlightInterest flightInterest){
+    public static FlightInterestDTO from(FlightInterest flightInterest) {
         FlightInterestDTO dto = new FlightInterestDTO();
-        dto.setArrivalAirportCode( flightInterest.getArrivalAirport().getAirportCode() );
-        dto.setDepartureAirportCode( flightInterest.getDepartureAirport().getAirportCode() );
-        dto.setDepartureOffsetDateTime( flightInterest.getDepartureDateTime() );
+        dto.setArrivalAirportCode(flightInterest.getArrivalAirport().getAirportCode());
+        dto.setDepartureAirportCode(flightInterest.getDepartureAirport().getAirportCode());
+        dto.setDepartureOffsetDateTime(flightInterest.getDepartureDateTime());
         return dto;
     }
 }

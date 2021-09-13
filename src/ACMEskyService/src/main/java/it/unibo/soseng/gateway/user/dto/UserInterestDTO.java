@@ -8,9 +8,18 @@ import javax.validation.constraints.NotNull;
 
 import it.unibo.soseng.model.UserInterest;
 
+/**
+ * Le istanze di questa classe descrivono le offerte di interesse degli utenti
+ * come Data Transfer Object da utilizzare nei corpi delle richieste rivolte ai
+ * servizi esterni
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
 public class UserInterestDTO implements Serializable {
     private static final long serialVersionUID = 1L;
-    
+
     private long id;
 
     @NotNull
@@ -39,11 +48,10 @@ public class UserInterestDTO implements Serializable {
     public void setPriceLimit(double priceLimit) {
         this.priceLimit = priceLimit;
     }
-    
+
     public FlightInterestDTO getOutboundFlight() {
         return outboundFlight;
     }
-
 
     public void setOutboundFlight(FlightInterestDTO outboundFlight) {
         this.outboundFlight = outboundFlight;
@@ -57,11 +65,11 @@ public class UserInterestDTO implements Serializable {
         this.flightBack = flightBack;
     }
 
-    public static UserInterestDTO from(UserInterest userInterest){
+    public static UserInterestDTO from(UserInterest userInterest) {
         UserInterestDTO dto = new UserInterestDTO();
-        dto.setId( userInterest.getId() );
-        dto.setOutboundFlight( FlightInterestDTO.from(userInterest.getOutboundFlightInterest()) );
-        dto.setFlightBack( FlightInterestDTO.from( userInterest.getFlightBackInterest() ) );
+        dto.setId(userInterest.getId());
+        dto.setOutboundFlight(FlightInterestDTO.from(userInterest.getOutboundFlightInterest()));
+        dto.setFlightBack(FlightInterestDTO.from(userInterest.getFlightBackInterest()));
         dto.setPriceLimit(userInterest.getPriceLimit());
         return dto;
     }

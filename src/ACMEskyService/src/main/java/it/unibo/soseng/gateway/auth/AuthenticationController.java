@@ -37,10 +37,20 @@ import it.unibo.soseng.security.TokenProvider;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 import static it.unibo.soseng.security.Constants.BANK;
 import static it.unibo.soseng.security.Constants.AIRLINE;
 import static it.unibo.soseng.security.Constants.USER;
+
+/**
+ * La classe che definisce le route messe a disposizione dal servizio per
+ * consentire agli attori esterni di autenticarsi e fare richieste con il token
+ * ricevuto sulle risorse che riguardono il loro ruolo. Quando il token scade è
+ * possibile averne uno valido in qualunque momento
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
 @Path("auth")
 @Consumes({ MediaType.APPLICATION_JSON })
 @Produces({ MediaType.APPLICATION_JSON })
@@ -61,16 +71,15 @@ public class AuthenticationController {
 
     /**
      * Richiesta di autenticazione
+     * 
      * @param request oggetto con username e password
      * @return risposta con token jwt
      */
     @POST
     @Path("/")
     @PermitAll
-    @Operation(summary = "Autenticazione", 
-                description = "Permette di autenticarsi nel sistema, viene restituito un JWT. Risorsa disponibile a tutte le entità del sistema.")
-    @ApiResponse(responseCode = "200", description = "Richiesta elaborata correttamente",
-                content = @Content( array = @ArraySchema(schema = @Schema(implementation = AuthResponseDTO.class))))
+    @Operation(summary = "Autenticazione", description = "Permette di autenticarsi nel sistema, viene restituito un JWT. Risorsa disponibile a tutte le entità del sistema.")
+    @ApiResponse(responseCode = "200", description = "Richiesta elaborata correttamente", content = @Content(array = @ArraySchema(schema = @Schema(implementation = AuthResponseDTO.class))))
     @ApiResponse(responseCode = "400", description = "Parametri della richiesta non corretti")
     @ApiResponse(responseCode = "401", description = "Entità non autorizzta")
     public Response authenticate(final @Valid AuthRequestDTO request) {
@@ -97,19 +106,18 @@ public class AuthenticationController {
 
     /**
      * Refresh del JWT
+     * 
      * @return
      */
     @PUT
     @Path("/refresh")
-    @RolesAllowed({BANK, AIRLINE, USER})
-    @Operation(summary = "Refresh JWT", 
-                description = "Permette di richiedere un nuovo token utilizzando uno ancora non scaduto. Risorsa disponibile a tutte le entità del sistema.")
-    @ApiResponse(responseCode = "200", description = "Richiesta elaborata correttamente",
-                    content = @Content( array = @ArraySchema(schema = @Schema(implementation = AuthResponseDTO.class))))
+    @RolesAllowed({ BANK, AIRLINE, USER })
+    @Operation(summary = "Refresh JWT", description = "Permette di richiedere un nuovo token utilizzando uno ancora non scaduto. Risorsa disponibile a tutte le entità del sistema.")
+    @ApiResponse(responseCode = "200", description = "Richiesta elaborata correttamente", content = @Content(array = @ArraySchema(schema = @Schema(implementation = AuthResponseDTO.class))))
     @ApiResponse(responseCode = "401", description = "Entità non autorizzta")
     public Response refresh() {
 
-        String username  = securityContext.getCallerPrincipal().getName();
+        String username = securityContext.getCallerPrincipal().getName();
         LOG.log(Level.INFO, "Refresh user {0}", username);
 
         DomainEntity entity;

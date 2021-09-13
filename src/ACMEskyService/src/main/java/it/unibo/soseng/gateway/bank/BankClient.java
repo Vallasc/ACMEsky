@@ -17,15 +17,34 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * Questa classe definisce le richieste che ACMEsky invia ai BankService per
+ * raggiungere i propri obiettivi
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
 public class BankClient {
     private final static Logger LOGGER = Logger.getLogger(BankClient.class.getName());
 
     final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
-    public String auth(String wsAddress, AuthRequestDTO authRequest) throws IOException, InterruptedException, 
-                                                                    BankAuthRequestException, JsonProcessingException, 
-                                                                    JsonMappingException {
-        String url = wsAddress+"/auth";
+    /**
+     * consente di effettuare richieste di autenticazione alla banca
+     * 
+     * @param wsAddress
+     * @param authRequest
+     * @return
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws BankAuthRequestException
+     * @throws JsonProcessingException
+     * @throws JsonMappingException
+     */
+    public String auth(String wsAddress, AuthRequestDTO authRequest) throws IOException, InterruptedException,
+            BankAuthRequestException, JsonProcessingException, JsonMappingException {
+        String url = wsAddress + "/auth";
 
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -33,51 +52,59 @@ public class BankClient {
         RequestBody body = RequestBody.create(jsonRequest, JSON);
 
         OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                                    .url(url)
-                                    .addHeader("Content-Type", "application/json")
-                                    .post(body)
-                                    .build();
+        Request request = new Request.Builder().url(url).addHeader("Content-Type", "application/json").post(body)
+                .build();
 
         String jsonResponse;
         try (Response response = client.newCall(request).execute()) {
             jsonResponse = response.body().string();
-            if(response.code() != 200)
+            if (response.code() != 200)
                 throw new BankAuthRequestException();
         }
         AuthResponseDTO response = objectMapper.readValue(jsonResponse, AuthResponseDTO.class);
-        return response.getJwtToken();	
+        return response.getJwtToken();
     }
 
-
-    public PaymentLinkDTO requestPaymentLink (String wsAddress, String token, PaymentLinkRequestDTO linkRequest) 
-                                                                        throws IOException, InterruptedException, 
-                                                                                RequestPaymentLinkException,  JsonProcessingException, 
-                                                                                JsonMappingException {
-        String url = wsAddress+"/payments";
+    /**
+     * consente di richiedere il link di pagamento con opportuno oggetto DTO
+     * descritto in precedenza
+     * 
+     * @param wsAddress
+     * @param token
+     * @param linkRequest
+     * @return
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws RequestPaymentLinkException
+     * @throws JsonProcessingException
+     * @throws JsonMappingException
+     */
+    public PaymentLinkDTO requestPaymentLink(String wsAddress, String token, PaymentLinkRequestDTO linkRequest)
+            throws IOException, InterruptedException, RequestPaymentLinkException, JsonProcessingException,
+            JsonMappingException {
+        String url = wsAddress + "/payments";
 
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonRequest = objectMapper.writeValueAsString(linkRequest);
         RequestBody body = RequestBody.create(jsonRequest, JSON);
 
         OkHttpClient client = new OkHttpClient();
-        okhttp3.Request request = new okhttp3.Request.Builder()
-                                    .url(url)
-                                    .addHeader("Content-Type", "application/json")
-                                    .addHeader("Authorization", "Bearer " + token)
-                                    .post(body)
-                                    .build();
+        okhttp3.Request request = new okhttp3.Request.Builder().url(url).addHeader("Content-Type", "application/json")
+                .addHeader("Authorization", "Bearer " + token).post(body).build();
 
         String jsonResponse;
         try (Response response = client.newCall(request).execute()) {
             jsonResponse = response.body().string();
-            if(response.code() != 200 && response.code() != 201)
+            if (response.code() != 200 && response.code() != 201)
                 throw new RequestPaymentLinkException();
         }
         PaymentLinkDTO response = objectMapper.readValue(jsonResponse, PaymentLinkDTO.class);
         return response;
     }
-    
-    public class BankAuthRequestException extends Exception {}
-    public class RequestPaymentLinkException extends Exception {}
+
+    public class BankAuthRequestException extends Exception {
+    }
+
+    public class RequestPaymentLinkException extends Exception {
+    }
 }

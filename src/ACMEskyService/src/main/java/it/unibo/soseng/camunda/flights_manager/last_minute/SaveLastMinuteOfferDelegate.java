@@ -11,6 +11,16 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 import it.unibo.soseng.gateway.airline.dto.AirlineFlightOfferDTO;
 import it.unibo.soseng.logic.AirlineManager;
 
+/**
+ * JavaDelegate associato al task del diagramma BPMN SaveLastMinuteOffer.bpmn,
+ * la cui esecuzione porta al salvataggio dell'offerta last-minute inviata dalla
+ * compagnia aerea
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
+
 @Named("saveLastMinuteOfferDelegate")
 public class SaveLastMinuteOfferDelegate implements JavaDelegate {
 
@@ -19,6 +29,12 @@ public class SaveLastMinuteOfferDelegate implements JavaDelegate {
     @Inject
     AirlineManager airlineManager;
 
+    /**
+     * Il metodo termina la procedura di salvataggio della lista delle offerte
+     * last-minute passate da AirlineService avviata dal controller di Airline,
+     * impostando le variabili d'ambiente della lista di AirlineFlightOfferDTO e del
+     * nome della compagnia aerea
+     */
     @Override
     public void execute(DelegateExecution execution) {
         LOGGER.info("Execute RetrieveOffer");
