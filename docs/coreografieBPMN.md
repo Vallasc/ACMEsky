@@ -42,3 +42,6 @@ Il diagramma descrive come l'utente, ACMEsky, il servizio bancario, la compagnia
 ![coreografia-BPMN completa](coreografia-BPMN/img/request_ticket.png)
 
 Il diagramma descrive come l'utente richiede ad ACMEsky di visualizzare e ottenere il biglietto precedentemente acquistato. Quindi l'utente specifica il biglietto a cui è interessato inviando il codice dell'offerta di volo ed ACMEsky recupera il biglietto corrispondente al codice in formato PDF.
+
+&nbsp;
+<div class="page-break"></div>

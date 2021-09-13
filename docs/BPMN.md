@@ -70,3 +70,6 @@ In questa fase ci si occupa di un eventuale applicazione del servizio premium al
 ![prepare_tickets](bpmn/img/PrepareTickets.png)
 
 Arrivati a questo punto si cambierà lo stato dell'offerta riguardante l'acquisto e si prepareranno i biglietti che l'utente potrà scaricare. Il flusso termina per ACMEsky. L'utente può in qualunque momento richiedere i biglietti ad ACMEsky, la quale glieli restituirà. Il flusso termina sia per ACMEsky che per l'utente.
+
+&nbsp;
+<div class="page-break"></div>
