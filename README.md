@@ -42,7 +42,6 @@ In questo caso ACMESky fa uso di diverse compagnie di noleggio con autista con c
 ## Vincoli al problema
 
 - Le offerte generate provengono dalla stessa compagnia aerea
-- I dati del viaggiatore vengono presi dall'account precedentemente registrato
 - Non viene gestito lo scambio di denaro dalla banca alla compagnia aerea 
 - Se uno dei servizi per la gestione del calcolo premium non risponde i voli vengono acquistati senza servizi accesori
 - Ogni attore deve essere autenticato per poter interagire con ACMEsky
