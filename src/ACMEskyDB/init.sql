@@ -5215,7 +5215,7 @@ ALTER SEQUENCE public.airlines_id_seq RESTART WITH 3;
 INSERT INTO public.banks VALUES (1, 'http://bank:8080', 3, '925461', '1234');
 ALTER SEQUENCE public.banks_id_seq RESTART WITH 2;
 
-INSERT INTO public.rent_services VALUES (1, 'Via della liberazione 32, Fermo (FM)', 'http://rent-service-1:8080', 8);
+INSERT INTO public.rent_services VALUES (1, 'Via Mura Anteo Zamboni 7, 40126 Bologna', 'http://rent-service-1:8080', 8);
 INSERT INTO public.rent_services VALUES (2, 'Via Giovanni Bovio 31, Pisa (PI)', 'http://rent-service-2:8080', 9);
 ALTER SEQUENCE public.rent_services_id_seq RESTART WITH 3;
 
