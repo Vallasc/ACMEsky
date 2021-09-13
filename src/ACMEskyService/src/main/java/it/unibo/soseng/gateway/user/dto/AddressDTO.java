@@ -60,4 +60,8 @@ public class AddressDTO implements Serializable {
     public void setPostCode(String postCode) {
         this.postCode = postCode;
     }
+
+    public String toString() {
+        return address + ", " + postCode + " " + cityName + ", " + country;
+    }
 }
