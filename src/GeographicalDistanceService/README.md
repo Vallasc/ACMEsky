@@ -6,10 +6,9 @@ npm install
 node index.js -p 8080
 ```
 
-### Create and run on Docker container
+### Create and run on Docker container using Docker Compose
 ```sh
-docker build -t distance_service .
-docker run --rm -d -p 8082:8080/tcp distance_service
+docker-compose up
 ```
 
 ### API:

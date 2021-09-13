@@ -1,3 +1,4 @@
+
 # Coreografie
 
 ## Nomenclatura
@@ -94,7 +95,7 @@
                                 (
                                     requestDistance: ACME -> GEO ; 
                                     responseDistance: GEO -> ACME ; 
-                                    (   // Richiesta alla compagnia di noleggio se distanza <30Km
+                                    ( // Richiesta a Rent service se distanza <30Km
                                         1 
                                         +  
                                         // requestRent1: richiesta noleggio veicoli 1
@@ -604,3 +605,4 @@ proj(AcquistoOfferta, RENTₜ₁) =
     )
   )*
 ```
+&nbsp;

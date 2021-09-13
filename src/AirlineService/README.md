@@ -1,54 +1,5 @@
 # AirlineService
 
-A demo version of AirlineService
-
-### Build fat Jar:
-
-```sh
-mvn package
-```
-
-### Create and run on Docker-compose container
-
-```sh
-docker-compose up --build
-```
-
-### API:
-
-```sh
-http://localhost:8060/swagger-ui.html
-http://localhost:8061/swagger-ui.html
-```
-
-<iframe title="API"
-    width="900"
-    height="900"
-    src="
-    https://vallasc.github.io/ACMEsky/src/SwaggerUI/index.html?src=https://vallasc.github.io/ACMEsky/src/AirlineService/swagger.json
-    ">
-</iframe>
-
-## DB console service 1
-
-```sh
-http://localhost:8060/h2
-URL: jdbc:h2:file:./db/db
-user: sa
-passw:
-```
-
-## DB console service 2
-
-```sh
-http://localhost:8061/h2
-URL: jdbc:h2:file:./db/db
-user: sa
-passw:
-```
-
-## Documentation
-
 Airline Service è il servizio che genera e invia ad ACMEsky i voli last-minute e quei voli che hanno una corrispondenza con i voli di interesse degli utenti raccolti da ACMEsky stessa. I voli vengono generati non appena il servizio viene attivato e inviati ad ACMEsky su richiesta dei clienti, mentre i voli last-minute vengono generati e passati ogni 10 minuti indipendentemente dalla presenza di voli di interesse ad essi corrispondenti.
 Il servizio manda i biglietti relativi ai voli per cui gli utenti manifestano la volontà di acquistare tramite il servizio di ACMEskyWeb e infine ne cambia lo stato di disponibilità. In caso di mancato acquisto ACMEsky chiamerà l'opportuna risorsa per comunicare l'esito negativo del pagamento e cambiare lo stato dei voli coinvolti per renderli nuovamente disponibili.
 Al momento sono attive 2 istanze di AirlineService che comunicano con ACMEsky, ovvero national_airline e international_airline.
@@ -85,8 +36,53 @@ Tutti gli URI riferiti ai vari container che ospitano i servizi di AirlineServic
 
 ### Risorse e descrizione
 
-| Risorsa                 | Descrizione                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| POST/ getFlights        | Questa risorsa consente di richiedere i voli che corrispondono ai voli di richiesta degli utenti passati come parametro. Infatti prende in input una lista di oggetti JSON che vengono deserializzati grazie a Jackson Json in oggetti di tipo UserRequest e cerca nella repository le offerte che hanno gli stessi aereoporti di partenza e arrivo e la stessa data di partenza (non si considera l'orario, infatti si cerca tutti i voli disponibili per l'intero giorno di andata). Se queste non sono offerte last-minute e non sono già state acquistate da altri utenti, vengono convertite in oggetti Flight e poi inviate in risposta alla chiamata, altrimenti no. |
-| POST/ notPurchasedOffer | Le chiamate a questa risorsa consentono di cambiare lo stato delle offerte di volo che non vengono acquistate in seguito ad eventuali errori da parte di ACMEsky, in modo da renderle nuovamente disponibili.                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| GET/ getTickets         | Le chiamate a questa risorsa che hanno come parametro la lista di identificatori delle offerte che l'utente ha intenzion di acquistare consentono di ricevere i biglietti dei voli in formato pdf. Nello specifico si cambia lo stato di acquisto delle offerte corrispondenti ai voli che si vuole acquistare e si restituisce un file che elenca e descrive brevemente le caratteristiche dei voli. Infine si imposta il tipo del contenuto del risultato, ovvero un pdf, e gli header che stabiliscono che vi un file in allegato alla risposta.                                                                                                                         |
+| Risorsa | Descrizione |
+| - | - |
+| POST /getFlights | Questa risorsa consente di richiedere i voli che corrispondono ai voli di richiesta degli utenti passati come parametro. Infatti prende in input una lista di oggetti JSON che vengono deserializzati grazie a Jackson Json in oggetti di tipo UserRequest e cerca nella repository le offerte che hanno gli stessi aereoporti di partenza e arrivo e la stessa data di partenza (non si considera l'orario, infatti si cerca tutti i voli disponibili per l'intero giorno di andata). Se queste non sono offerte last-minute e non sono già state acquistate da altri utenti, vengono convertite in oggetti Flight e poi inviate in risposta alla chiamata, altrimenti no. |
+| POST /notPurchasedOffer | Le chiamate a questa risorsa consentono di cambiare lo stato delle offerte di volo che non vengono acquistate in seguito ad eventuali errori da parte di ACMEsky, in modo da renderle nuovamente disponibili. |
+| GET /getTickets | Le chiamate a questa risorsa che hanno come parametro la lista di identificatori delle offerte che l'utente ha intenzion di acquistare consentono di ricevere i biglietti dei voli in formato pdf. Nello specifico si cambia lo stato di acquisto delle offerte corrispondenti ai voli che si vuole acquistare e si restituisce un file che elenca e descrive brevemente le caratteristiche dei voli. Infine si imposta il tipo del contenuto del risultato, ovvero un pdf, e gli header che stabiliscono che vi un file in allegato alla risposta. |
+
+### Build fat Jar:
+
+```sh
+mvn package
+```
+
+### Build e run con Docker compose
+
+```sh
+docker-compose up --build
+```
+
+### API:
+
+```sh
+http://localhost:8060/swagger-ui.html
+http://localhost:8061/swagger-ui.html
+```
+
+<iframe title="API"
+    width="900"
+    height="1100"
+    src="
+    https://vallasc.github.io/ACMEsky/src/SwaggerUI/index.html?src=https://vallasc.github.io/ACMEsky/src/AirlineService/swagger.json
+    ">
+</iframe>
+
+## Credenziali database
+
+### DB console service 1
+```sh
+http://localhost:8060/h2
+URL: jdbc:h2:file:./db/db
+user: sa
+passw:
+```
+
+### DB console service 2
+```sh
+http://localhost:8061/h2
+URL: jdbc:h2:file:./db/db
+user: sa
+passw:
+```

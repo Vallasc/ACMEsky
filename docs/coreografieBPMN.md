@@ -1,1 +1,2 @@
+
 # Diagramma delle coreografie BPMN
