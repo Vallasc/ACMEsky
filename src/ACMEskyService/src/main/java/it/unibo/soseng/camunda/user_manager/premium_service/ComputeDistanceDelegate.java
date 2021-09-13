@@ -41,7 +41,7 @@ public class ComputeDistanceDelegate implements JavaDelegate {
     /**
      * Il metodo recupera l'indirizzo dell'utente e degli aereoporti di partenza e
      * arrivo dei voli, calcola la distanza e nel caso positivo, la assegna alla
-     * variabile di Camunda e stabilisce che non ci sono problemi, altrimenti
+     * variabile di processo e stabilisce che non ci sono problemi, altrimenti
      * restituisce un errore.
      */
     @Override

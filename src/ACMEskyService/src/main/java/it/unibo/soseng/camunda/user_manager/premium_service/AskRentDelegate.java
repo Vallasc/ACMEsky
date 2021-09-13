@@ -3,6 +3,7 @@ package it.unibo.soseng.camunda.user_manager.premium_service;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_OFFER;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.USERNAME;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_ADDRESS;
+import static it.unibo.soseng.camunda.utils.ProcessVariables.NEAREST_RENT;
 
 import java.util.logging.Logger;
 
@@ -16,6 +17,7 @@ import it.unibo.soseng.gateway.user.dto.AddressDTO;
 import it.unibo.soseng.logic.OfferManager;
 import it.unibo.soseng.logic.DatabaseManager.UserNotFoundException;
 import it.unibo.soseng.model.GeneratedOffer;
+import it.unibo.soseng.model.RentService;
 
 /**
  * JavaDelegate associato al task "Ask for rent" del diagramma BPMN
@@ -46,9 +48,10 @@ public class AskRentDelegate implements JavaDelegate {
         AddressDTO address = (AddressDTO) execution.getVariable(USER_ADDRESS);
         GeneratedOffer offer = (GeneratedOffer) execution.getVariable(USER_OFFER);
         String email = (String) execution.getVariable(USERNAME);
+        RentService nearest = (RentService) execution.getVariable(NEAREST_RENT);
 
         try {
-            offerManager.bookAllRent(email, address, offer, execution);
+            offerManager.bookAllRent(email, address, offer, nearest, execution);
             execution.setVariable(USER_OFFER, offer);
         } catch (UserNotFoundException e) {
             LOGGER.info(e.toString());
