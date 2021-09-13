@@ -1,7 +1,10 @@
+
 # AirlineService
 
-Airline Service è il servizio che genera e invia ad ACMEsky i voli last-minute e quei voli che hanno una corrispondenza con i voli di interesse degli utenti raccolti da ACMEsky stessa. I voli vengono generati non appena il servizio viene attivato e inviati ad ACMEsky su richiesta dei clienti, mentre i voli last-minute vengono generati e passati ogni 10 minuti indipendentemente dalla presenza di voli di interesse ad essi corrispondenti.
-Il servizio manda i biglietti relativi ai voli per cui gli utenti manifestano la volontà di acquistare tramite il servizio di ACMEskyWeb e infine ne cambia lo stato di disponibilità. In caso di mancato acquisto ACMEsky chiamerà l'opportuna risorsa per comunicare l'esito negativo del pagamento e cambiare lo stato dei voli coinvolti per renderli nuovamente disponibili.
+Airline Service è il servizio che genera e invia ad ACMEsky i voli last-minute e quei voli che hanno una corrispondenza con i voli di interesse degli utenti. I voli vengono generati non appena il servizio viene attivato mentre i voli last-minute vengono generati e inviati ogni 10 minuti ad ACMEsky.
+
+Il servizio manda i biglietti relativi ai voli che ACMEsky decide di acquistare. In caso di mancato acquisto ACMEsky chiamerà l'opportuna risorsa per comunicare l'esito negativo del pagamento e cambiare lo stato dei voli coinvolti per renderli nuovamente disponibili.
+
 Al momento sono attive 2 istanze di AirlineService che comunicano con ACMEsky, ovvero national_airline e international_airline.
 La prima istanza offre voli da e verso aereoporti nazionali, mentre la seconda offre voli da aereoporti nazionali o internazionali verso quelli internazionali. Per il resto i due servizi si comportano allo stesso modo (generazione delle offerte di volo, creazione e invio automatico nel caso siano offerte last-minute, gestione dei voli acquistati dagli utenti, invio dei biglietti, ecc.). Le due istanze vengono create grazie a Docker.
 
@@ -43,19 +46,20 @@ Tutti gli URI riferiti ai vari container che ospitano i servizi di AirlineServic
 | GET /getTickets | Le chiamate a questa risorsa che hanno come parametro la lista di identificatori delle offerte che l'utente ha intenzion di acquistare consentono di ricevere i biglietti dei voli in formato pdf. Nello specifico si cambia lo stato di acquisto delle offerte corrispondenti ai voli che si vuole acquistare e si restituisce un file che elenca e descrive brevemente le caratteristiche dei voli. Infine si imposta il tipo del contenuto del risultato, ovvero un pdf, e gli header che stabiliscono che vi un file in allegato alla risposta. |
 
 ### Build fat Jar:
-
 ```sh
 mvn package
 ```
+### Come eseguire
+```sh
+mvnw spring-boot:run
+```
 
 ### Build e run con Docker compose
-
 ```sh
 docker-compose up --build
 ```
 
 ### API:
-
 ```sh
 http://localhost:8060/swagger-ui.html
 http://localhost:8061/swagger-ui.html
@@ -86,3 +90,5 @@ URL: jdbc:h2:file:./db/db
 user: sa
 passw:
 ```
+
+<div class="page-break"></div>

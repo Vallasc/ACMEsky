@@ -1,4 +1,5 @@
 <!--
+
 ---
 stylesheet: https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.10.0/github-markdown.min.css
 body_class: markdown-body
@@ -11,14 +12,16 @@ pdf_options:
   margin: 25mm 15mm
   printBackground: true
   scale: 1.6
-
 ---
+
 -->
 
 # ACMEsky
 
 Progetto di Ingegneria del Software Orientata ai Servizi
 A.A. 2020/2021
+
+La documentazione web è disponibile al link https://vallasc.github.io/ACMEsky/docs/
 ## Descrizione del dominio e del problema
 ACMESky offre un servizio di che permette ai clienti di specificare, attraverso un portale web, il proprio interesse a trasferimenti aerei di andata e ritorno che si tengano in un periodo definito e ad un costo inferiore ad un certo limite impostato.
 
@@ -64,6 +67,7 @@ In questo caso ACMESky fa uso di diverse compagnie di noleggio con autista con c
     * [GeographicalDistance](src/GeographicalDistanceService/)
 
 TODO Spostare in STRUTTURA
+
 | Service | Port |
 | - | - |
 | ACMEsky | - |
