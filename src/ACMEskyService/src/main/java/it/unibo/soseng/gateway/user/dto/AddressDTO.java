@@ -2,6 +2,16 @@ package it.unibo.soseng.gateway.user.dto;
 
 import java.io.Serializable;
 
+/**
+ * Le istanze di questa classe descrivono gli indirizzi degli utenti come Data
+ * Transfer Object che i servizi esterni utilizzano per trasferire dati nelle
+ * richieste come
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
+
 public class AddressDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -42,11 +52,11 @@ public class AddressDTO implements Serializable {
     public void setCityName(String cityName) {
         this.cityName = cityName;
     }
-    
+
     public void setAddress(String address) {
         this.address = address;
     }
-    
+
     public void setPostCode(String postCode) {
         this.postCode = postCode;
     }

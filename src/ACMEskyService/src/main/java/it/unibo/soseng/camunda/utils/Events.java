@@ -1,5 +1,13 @@
 package it.unibo.soseng.camunda.utils;
 
+/**
+ * Tutti gli eventi che si verificano durante l'esecuzione dei task dei
+ * processi.
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
 public final class Events {
     public static final String SAVE_LAST_MINUTE = "SaveLastMinute";
     public static final String SAVE_INTERESTS = "SaveInterest";

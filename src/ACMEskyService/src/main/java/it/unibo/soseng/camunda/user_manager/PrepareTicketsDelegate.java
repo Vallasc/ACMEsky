@@ -18,6 +18,15 @@ import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_OFFER;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.RENT_OUTBOUND;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.RENT_BACK;
 
+/**
+ * JavaDelegate associato al task "Prepare tickets" del diagramma BPMN
+ * confirm_offer.bpmn. Questo task prepara l'offerta di volo aggiungendo tutte
+ * le specifiche dei servizi aggiuntivi e trasformarli in pdf.
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
 @Named("prepareTicketsDelegate")
 public class PrepareTicketsDelegate implements JavaDelegate {
     private final static Logger LOGGER = Logger.getLogger(PrepareTicketsDelegate.class.getName());
@@ -25,6 +34,11 @@ public class PrepareTicketsDelegate implements JavaDelegate {
     @Inject
     Pdf pdfUtil;
 
+    /**
+     * crea il biglietto in formato pdf dell'offerta di volo inserendo tutte le
+     * informazioni sui voli e sui servizi aggiuntivi recuperandole dalle variabili
+     * di Camunda a cui sono state assegnate nei task precedenti.
+     */
     @Override
     public void execute(DelegateExecution execution) {
         LOGGER.info("Execute PrepareTicketsDelegate");

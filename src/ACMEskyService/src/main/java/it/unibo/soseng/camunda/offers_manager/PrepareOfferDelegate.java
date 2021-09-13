@@ -1,4 +1,5 @@
 package it.unibo.soseng.camunda.offers_manager;
+
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
@@ -24,34 +25,43 @@ import it.unibo.soseng.model.UserInterest;
 
 import java.util.logging.Logger;
 
-
+/**
+ * JavaDelegate associato al task "Prepare offer" del diagramma BPMN
+ * offer_manager.bpmn. Questo task genera un offerta formata dai voli richiesti
+ * nell'offerta di interesse dell'utente attualmente disponibili.
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
 @Named("prepareOfferDelegate")
-public class PrepareOfferDelegate implements JavaDelegate{
-    private final static Logger LOGGER = Logger.getLogger(PrepareOfferDelegate.class.getName()); 
-    
-    @Inject
-    OfferManager offerManager;
+public class PrepareOfferDelegate implements JavaDelegate {
+  private final static Logger LOGGER = Logger.getLogger(PrepareOfferDelegate.class.getName());
 
-    @Override
-    public void execute(DelegateExecution execution) {
-      LOGGER.info ("Execute prepareOfferDelegate");
+  @Inject
+  OfferManager offerManager;
 
-      @SuppressWarnings (value="unchecked")
-      List<Flight> matchedFlights = (List<Flight>) execution.getVariable(AVAILABLE_FLIGHTS);
-      UserInterest userinterest = (UserInterest) execution.getVariable(CURRENT_USER_INTEREST);
-      try{
-        String username = (String) execution.getVariable(USERNAME);
-        GeneratedOffer offer = offerManager.generateOffer(matchedFlights.get(0), matchedFlights.get(1), username);
-        offerManager.setUsedUserInterest(userinterest);
-        execution.setVariable(GENERATED_OFFER, offer);
-      } catch (FlightNotExistException | PersistenceException | UserNotFoundException e){
-        execution.setVariable(PROCESS_ERROR,  e.toString());
-        throw new BpmnError(PREPARE_OFFER_ERROR);
-      }
-    } 
+  /**
+   * Genera l'offerta di volo con i voli richiesti dall'utente presenti
+   * nell'offerta di interesse aggiornandone lo stato in modo da evitare di
+   * richiedere nuovamente gli stessi voli alle compagnie aeree nelle successive
+   * ricerche.
+   */
+  @Override
+  public void execute(DelegateExecution execution) {
+    LOGGER.info("Execute prepareOfferDelegate");
+
+    @SuppressWarnings(value = "unchecked")
+    List<Flight> matchedFlights = (List<Flight>) execution.getVariable(AVAILABLE_FLIGHTS);
+    UserInterest userinterest = (UserInterest) execution.getVariable(CURRENT_USER_INTEREST);
+    try {
+      String username = (String) execution.getVariable(USERNAME);
+      GeneratedOffer offer = offerManager.generateOffer(matchedFlights.get(0), matchedFlights.get(1), username);
+      offerManager.setUsedUserInterest(userinterest);
+      execution.setVariable(GENERATED_OFFER, offer);
+    } catch (FlightNotExistException | PersistenceException | UserNotFoundException e) {
+      execution.setVariable(PROCESS_ERROR, e.toString());
+      throw new BpmnError(PREPARE_OFFER_ERROR);
+    }
+  }
 }
-
-
-
-
-

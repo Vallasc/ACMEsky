@@ -12,16 +12,29 @@ import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+/**
+ * JavaDelegate associato al task "Retrieve flights of interest from DB" del
+ * diagramma BPMN search_flights.bpmn. Recupera la lista dei voli di interesse
+ * degli utenti per fare la ricerca
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
+
 @Named("retrieveFlightsOfInterestDelegate")
-public class RetrieveFlightsOfInterestDelegate implements JavaDelegate{
-    private final static Logger LOGGER = Logger.getLogger(RetrieveFlightsOfInterestDelegate.class.getName()); 
+public class RetrieveFlightsOfInterestDelegate implements JavaDelegate {
+    private final static Logger LOGGER = Logger.getLogger(RetrieveFlightsOfInterestDelegate.class.getName());
 
     @Inject
     private DatabaseManager dbManager;
-    
+
+    /**
+     * Assegna alla variabile di Camunda la lista dei voli di interesse
+     */
     @Override
-    public void execute(DelegateExecution execution){
-        LOGGER.info ("Execute retrieveFlightsOfInterestDelegate");
+    public void execute(DelegateExecution execution) {
+        LOGGER.info("Execute retrieveFlightsOfInterestDelegate");
         execution.setVariable(INTEREST_FLIGHTS_LIST, dbManager.retrieveFlightInterests());
     }
 }

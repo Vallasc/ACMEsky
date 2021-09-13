@@ -18,6 +18,15 @@ import it.unibo.soseng.camunda.utils.ProcessState;
 import it.unibo.soseng.gateway.user.dto.UserInterestDTO;
 import it.unibo.soseng.logic.InterestManager;
 
+/**
+ * JavaDelegate associato al task "Save flights of interest" del diagramma BPMN
+ * save_interest.bpmn. Il task salva l'offerta di interesse ricevuta dall'utente
+ * nel db.
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
 @Named("saveInterestsDelegate")
 public class SaveInterestsDelegate implements JavaDelegate {
 
@@ -29,6 +38,12 @@ public class SaveInterestsDelegate implements JavaDelegate {
     @Inject
     private ProcessState processState;
 
+    /**
+     * recupera l'offerta di volo di interesse dell'utente e il suo username in modo
+     * da associarlo all'offerta, poi effettua il salvataggio dell'offerta sul DB
+     * del servizio e gestisce la richiesta dell'utente salvandone lo stato
+     * sull'apposita variabile di processo.
+     */
     @Override
     public void execute(DelegateExecution execution) {
         LOGGER.info("Execute SaveInterests");

@@ -20,6 +20,16 @@ import it.unibo.soseng.logic.DatabaseManager.OfferNotFoundException;
 import it.unibo.soseng.camunda.utils.ProcessState;
 import it.unibo.soseng.gateway.user.dto.UserOfferDTO;
 
+/**
+ * JavaDelegate associato al task "Retrieve offer" del diagramma BPMN
+ * confirm_offer.bpmn. Questo task si occupa di iniziare la procedura di
+ * recuperare la richiesta dell'utente e verificare che l'offerta di volo sia
+ * ancora valida prima di prima di continuare il flusso di esecuzione.
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
 @Named("retrieveOfferDelegate")
 public class RetrieveOfferDelegate implements JavaDelegate {
 
@@ -31,6 +41,12 @@ public class RetrieveOfferDelegate implements JavaDelegate {
     @Inject
     private ProcessState processState;
 
+    /**
+     * Recupera il token dell'offerta che vuole acquistare, l'username e la
+     * richiesta dell'utente. In seguito verifica lo stato della richiesta e lo
+     * imposta come stato del processo
+     * 
+     */
     @Override
     public void execute(DelegateExecution execution) throws OfferNotFoundException {
         LOGGER.info("Execute RetrieveOffer");

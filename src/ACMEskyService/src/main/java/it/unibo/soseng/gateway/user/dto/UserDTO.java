@@ -4,9 +4,19 @@ import java.io.Serializable;
 
 import it.unibo.soseng.model.User;
 
+/**
+ * Le istanze di questa classe descrivono le entità degli utenti su ACMEsky come
+ * Data Transfer Object da utilizzare nei corpi delle richieste rivolte ai
+ * servizi esterni
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
+
 public class UserDTO implements Serializable {
     private static final long serialVersionUID = 1L;
-    
+
     private String email;
     private String name;
     private String surname;
@@ -48,7 +58,7 @@ public class UserDTO implements Serializable {
     public String getEmail() {
         return email;
     }
-    
+
     public void setEmail(String email) {
         this.email = email;
     }

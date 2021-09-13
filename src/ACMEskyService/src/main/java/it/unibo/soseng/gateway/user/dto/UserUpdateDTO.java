@@ -5,9 +5,16 @@ import java.io.Serializable;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
+/**
+ * Le istanze di questa classe consentono all'utente di aggiornare la password
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
 public class UserUpdateDTO implements Serializable {
     private static final long serialVersionUID = 1L;
-    
+
     @Email(message = "Email should be valid")
     private String email;
 
@@ -18,7 +25,6 @@ public class UserUpdateDTO implements Serializable {
     private String newProntogramUsername;
     private String newName;
     private String newSurname;
-
 
     public String getNewProntogramUsername() {
         return newProntogramUsername;

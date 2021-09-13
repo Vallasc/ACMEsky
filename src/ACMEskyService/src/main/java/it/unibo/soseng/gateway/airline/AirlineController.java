@@ -23,6 +23,15 @@ import it.unibo.soseng.logic.AirlineManager.BadRequestException;
 
 import static it.unibo.soseng.security.Constants.AIRLINE;
 
+/**
+ * Questa classe presenta le route a cui i servizi delle compagnie aeree
+ * registrate sul DB possono effettuare richieste per raggiugere vari obiettivi
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
+
 @Path("airlines")
 public class AirlineController {
     private final static Logger LOGGER = Logger.getLogger(AirlineController.class.getName());
@@ -34,14 +43,13 @@ public class AirlineController {
     SecurityContext securityContext;
 
     /**
-     * Riceve i voli last minute
+     * Riceve i voli last minute e ne avvia la procedura di salvataggio
      */
     @POST
     @Path("/last_minute")
     @RolesAllowed({ AIRLINE })
     @Consumes(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Riceve i voli last-minute", 
-                description = "Permette ricevere i voli last minute dall compagnia aerea. Risorsa disponibile alle compagnie aeree registrate.")
+    @Operation(summary = "Riceve i voli last-minute", description = "Permette ricevere i voli last minute dall compagnia aerea. Risorsa disponibile alle compagnie aeree registrate.")
     @ApiResponse(responseCode = "200", description = "Richiesta elaborata correttamente")
     @ApiResponse(responseCode = "400", description = "Parametri della richiesta non corretti")
     @ApiResponse(responseCode = "401", description = "Entità non autorizzta")

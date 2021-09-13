@@ -4,6 +4,15 @@ import java.io.Serializable;
 
 import it.unibo.soseng.model.GeneratedOffer;
 
+/**
+ * Gli oggetti istanziati da questa classe rappresentano le notifiche che
+ * ACMEsky vuole inviare agli utenti
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
+
 public class NotificationDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -35,40 +44,22 @@ public class NotificationDTO implements Serializable {
         return this.info;
     }
 
-    public static NotificationDTO fromOffer(GeneratedOffer offer, String prontogramUsername){
+    public static NotificationDTO fromOffer(GeneratedOffer offer, String prontogramUsername) {
         NotificationDTO notification = new NotificationDTO();
-        String message = 
-            "<h3>ACMEsky ha una nuova offerta per te!</h3><br/><br/>" +
-            "<table>" +
-                "<tr>" +
-                    "<th>Codice offerta</th>" +
-                    "<th> " + offer.getToken() + "</th>" +
-                "</tr>" +
-                "<tr>" +
-                    "<th>Areoporto di partenza</th>" +
-                    "<th> (" + offer.getOutboundFlight().getDepartureAirport().getAirportCode() + ")</th>" +
-                "</tr>" +
-                "<tr>" +
-                    "<th>Areoporto di arrivo</th>" +
-                    "<th> (" + offer.getOutboundFlight().getArrivalAirport().getAirportCode() + ")</th>" +
-                "</tr>" +
-                "<tr>" +
-                    "<th>Data e ora andata</th>" +
-                    "<th> " + offer.getOutboundFlight().getDepartureDateTime().toString() + "</th>" +
-                "</tr>" +
-                "<tr>" +
-                    "<th>Data e ora ritorno</th>" +
-                    "<th> " + offer.getFlightBack().getDepartureDateTime().toString() + "</th>" +
-                "</tr>" +
-                "<tr>" +
-                    "<th>Prezzo totale</th>" +
-                    "<th> " + String.format ("%.2f", offer.getTotalPrice()) + "€</th>" +
-                "</tr>" +
-            "</table>";
+        String message = "<h3>ACMEsky ha una nuova offerta per te!</h3><br/><br/>" + "<table>" + "<tr>"
+                + "<th>Codice offerta</th>" + "<th> " + offer.getToken() + "</th>" + "</tr>" + "<tr>"
+                + "<th>Areoporto di partenza</th>" + "<th> ("
+                + offer.getOutboundFlight().getDepartureAirport().getAirportCode() + ")</th>" + "</tr>" + "<tr>"
+                + "<th>Areoporto di arrivo</th>" + "<th> ("
+                + offer.getOutboundFlight().getArrivalAirport().getAirportCode() + ")</th>" + "</tr>" + "<tr>"
+                + "<th>Data e ora andata</th>" + "<th> " + offer.getOutboundFlight().getDepartureDateTime().toString()
+                + "</th>" + "</tr>" + "<tr>" + "<th>Data e ora ritorno</th>" + "<th> "
+                + offer.getFlightBack().getDepartureDateTime().toString() + "</th>" + "</tr>" + "<tr>"
+                + "<th>Prezzo totale</th>" + "<th> " + String.format("%.2f", offer.getTotalPrice()) + "€</th>" + "</tr>"
+                + "</table>";
         notification.setMessage(message);
         notification.setUsername(prontogramUsername);
         notification.setInfo("Nuova offerta per te!\n Codice " + offer.getToken());
         return notification;
     }
 }
-

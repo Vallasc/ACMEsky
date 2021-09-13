@@ -22,6 +22,18 @@ import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+/**
+ * JavaDelegate associato al task "Check available flights matching user
+ * interest" del diagramma BPMN offer_manager.bpmn. Quando si attiva il task
+ * ACMEsky controlla se tra i voli proposti dalle compagnie aeree vi sono quelli
+ * che combaciano con i voli delle offerte di interesse degli utenti, e questo
+ * per ogni offerta richiesta.
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
+
 @Named("checkAvailableFlightsDelegate")
 public class CheckAvailableFlightsDelegate implements JavaDelegate {
     private final static Logger LOGGER = Logger.getLogger(CheckAvailableFlightsDelegate.class.getName());
@@ -32,6 +44,14 @@ public class CheckAvailableFlightsDelegate implements JavaDelegate {
     @Inject
     OfferManager offerManager;
 
+    /**
+     * Il metodo recupera la lista dei voli di interesse e assegna l'ennesima
+     * offerta ad una variabile, successivamente aumenta la variabile usata come
+     * indice per poter acquisire l'offerta successiva nella prossima chiamata del
+     * metodo. Infine prende i voli che combaciano con quelli dell'ennesima offerta
+     * di interesse presente nella lista delle offerte richieste e li assegna alla
+     * variabile AVAILABLE_FLIGHTS.
+     */
     @Override
     public void execute(DelegateExecution execution) throws FlightNotExistException {
         LOGGER.info("Execute checkAvailableFlightsDelegate");

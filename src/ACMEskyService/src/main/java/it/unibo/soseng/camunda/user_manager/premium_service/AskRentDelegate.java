@@ -17,6 +17,16 @@ import it.unibo.soseng.logic.OfferManager;
 import it.unibo.soseng.logic.DatabaseManager.UserNotFoundException;
 import it.unibo.soseng.model.GeneratedOffer;
 
+/**
+ * JavaDelegate associato al task "Ask for rent" del diagramma BPMN
+ * confirm_offer.bpmn. L'esecuzione di questo task va ad effettuare le
+ * prenotazioni per il servizio di rent per i voli di andata e ritorno
+ * dell'offerta.
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
 @Named("askRentDelegate")
 public class AskRentDelegate implements JavaDelegate {
 
@@ -25,6 +35,11 @@ public class AskRentDelegate implements JavaDelegate {
     @Inject
     OfferManager offerManager;
 
+    /**
+     * Raccoglie le informazioni sull'indirizzo dell'utente, il suo username,
+     * l'offerta che ha acquistato e infine aggiunge le informazioni sul servizio di
+     * rent che applica ai voli di andata e ritorno dell'offerta.
+     */
     @Override
     public void execute(DelegateExecution execution) {
         LOGGER.info("Execute AskRentDelegate");

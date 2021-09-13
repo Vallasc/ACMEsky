@@ -5,6 +5,14 @@ import java.time.OffsetDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/**
+ * La classe che descrive i voli last-minute inviati dagli AirlineService nella
+ * speranza di trovare dei voli di interesse che corrispondono ad essi.
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
 public class AirlineFlightOfferDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -16,6 +16,15 @@ import javax.ws.rs.core.Response;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 
+/**
+ * JavaDelegate associato al task "Send payment link" del diagramma BPMN
+ * confirm_offer.bpmn. In questo task il servizio invia il link di pagamento
+ * all'utente
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
 @Named("sendResponseDelegate")
 public class SendResponseDelegate implements JavaDelegate {
 
@@ -24,6 +33,11 @@ public class SendResponseDelegate implements JavaDelegate {
     @Inject
     ProcessState processState;
 
+    /**
+     * ACMEskyService recupera l'email dell'utente, lo stato del processo di
+     * conferma e acquisto dell'offerta e infine risponde alla richiesta in sospeso
+     * di ACMEskyWeb facendo riprendere il processo di pagamento.
+     */
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         LOGGER.info("Execute SendResponseDelegate");

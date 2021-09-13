@@ -27,6 +27,15 @@ import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_OFFER;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.PROCESS_CONFIRM_BUY_OFFER;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.RESPONSE;
 
+/**
+ * JavaDelegate associato al task "Ask bank for payment link" del diagramma BPMN
+ * confirm_offer.bpmn. Questo task una volta eseguito chiede alla banca il link
+ * di pagamento da consegnare all'utente per effettuare il pagamento.
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
 @Named("askPaymentLinkDelegate")
 public class AskPaymentLinkDelegate implements JavaDelegate {
 
@@ -42,6 +51,11 @@ public class AskPaymentLinkDelegate implements JavaDelegate {
     @Inject
     BankManager bankManager;
 
+    /**
+     * ACMEsky richiede al servizio bancario il link di pagamento mediante una
+     * richiesta HTTP e riceve, se non ci sono eventuali errori, il link per il
+     * pagamento che viene assegnato ad una variabile.
+     */
     @Override
     public void execute(DelegateExecution execution) {
         LOGGER.info("Execute AskPaymentLinkDelegate");

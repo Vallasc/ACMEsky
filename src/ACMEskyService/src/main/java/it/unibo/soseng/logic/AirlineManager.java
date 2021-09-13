@@ -21,7 +21,7 @@ import javax.security.enterprise.SecurityContext;
 
 import it.unibo.soseng.gateway.airline.AirlineClient;
 import it.unibo.soseng.gateway.airline.AirlineClient.AirlineErrorException;
-import it.unibo.soseng.gateway.airline.AirlineClient.BookTicketsExceptionException;
+import it.unibo.soseng.gateway.airline.AirlineClient.BookTicketsException;
 import it.unibo.soseng.gateway.airline.dto.AirlineFlightOfferDTO;
 import it.unibo.soseng.gateway.airline.dto.InterestDTO;
 import it.unibo.soseng.logic.DatabaseManager.AirlineNotFoundException;
@@ -163,8 +163,7 @@ public class AirlineManager {
         }
     }
 
-    public byte[] bookOfferTicket(GeneratedOffer offer)
-            throws IOException, SendTicketException, BookTicketsExceptionException {
+    public byte[] bookOfferTicket(GeneratedOffer offer) throws IOException, SendTicketException, BookTicketsException {
 
         byte[] pdfTicket = client.getFlightTickets(offer.getOutboundFlight().getAirlineId().getWsAddress(),
                 offer.getUser().getProntogramUsername(), offer.getOutboundFlight().getFlightCode(),

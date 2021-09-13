@@ -17,8 +17,16 @@ import java.util.logging.Logger;
 
 import static it.unibo.soseng.security.Constants.BANK;
 
+/**
+ * Questa classe presenta le route a cui i servizi bancari registrati sul DB
+ * possono effettuare richieste per raggiugere i loro obiettivi
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
 @Path("banks")
-@Produces( MediaType.APPLICATION_JSON )
+@Produces(MediaType.APPLICATION_JSON)
 public class BankController {
     private final static Logger LOGGER = Logger.getLogger(BankController.class.getName());
 
@@ -27,20 +35,20 @@ public class BankController {
 
     /**
      * Conferma dell'avvenuto pagamento da parte della banca
+     * 
      * @param code
      * @return
      */
     @GET
-    @RolesAllowed({BANK})
+    @RolesAllowed({ BANK })
     @Path("/confirmPayment")
-    @Operation(summary = "Conferma pagamento", 
-                description = "conferma dell'avvenuto pagamento da parte della banca. Risorsa esclusiva della banca.")
+    @Operation(summary = "Conferma pagamento", description = "conferma dell'avvenuto pagamento da parte della banca. Risorsa esclusiva della banca.")
     @ApiResponse(responseCode = "200", description = "Richiesta elaborata correttamente")
     @ApiResponse(responseCode = "400", description = "Parametri della richiesta non corretti")
     @ApiResponse(responseCode = "401", description = "Entità non autorizzta")
     public Response confirmPayment(@QueryParam("code") String code) {
         LOGGER.info("GET confirmPayment");
-        LOGGER.info("code "+code);
+        LOGGER.info("code " + code);
         bankManager.paymentSuccess(code);
         return Response.status(Response.Status.OK.getStatusCode()).build();
     }

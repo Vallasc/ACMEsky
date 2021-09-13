@@ -11,6 +11,15 @@ import it.unibo.soseng.ws.generated.Rent;
 import it.unibo.soseng.ws.generated.RentService1;
 import it.unibo.soseng.ws.generated.RentService2;
 
+/**
+ * Questa classe elenca le richieste che il servizio effettua verso il servizio
+ * di Rent.
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
+
 @Stateless
 public class RentClient {
     private final static Logger LOGGER = Logger.getLogger(RentClient.class.getName());
@@ -19,13 +28,25 @@ public class RentClient {
         return rentService.bookRent(request);
     }
 
-    public BookRentResponse bookRent(String service, User user, String addressFrom, String addressTo, 
-                                                                                    String arrivalDateTime){
+    /**
+     * prenota i trasferimenti degli utenti dal loro indirizzo di residenza a quello
+     * dell'aereoporto di partenza per l'andata, ma anche per trasferimenti di
+     * ritorno
+     * 
+     * @param service
+     * @param user
+     * @param addressFrom
+     * @param addressTo
+     * @param arrivalDateTime
+     * @return
+     */
+    public BookRentResponse bookRent(String service, User user, String addressFrom, String addressTo,
+            String arrivalDateTime) {
         RentService1 rentService1;
         RentService2 rentService2;
         Rent ws;
 
-        if( service == "RentGood" ){
+        if (service == "RentGood") {
             rentService1 = new RentService1();
             ws = rentService1.getRentServicePort();
         } else {
@@ -34,7 +55,7 @@ public class RentClient {
         }
 
         BookRent bookRent = new BookRent();
-        bookRent.setClientName(user.getName()); 
+        bookRent.setClientName(user.getName());
         bookRent.setClientSurname(user.getSurname());
         bookRent.setFromAddress(addressFrom);
         bookRent.setToAddress(addressTo);

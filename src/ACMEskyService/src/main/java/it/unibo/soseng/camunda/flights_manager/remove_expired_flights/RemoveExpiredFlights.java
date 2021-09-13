@@ -10,6 +10,16 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 
 import it.unibo.soseng.logic.AirlineManager;
 
+/**
+ * JavaDelegate associato al task del diagramma BPMN
+ * remove_expired_flights.bpmn, la cui esecuzione porta alla rimozione delle
+ * offerte scadute, ovvero al cambiamento dello stato di disponibilità
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
+
 @Named("removeExpiredFlightsDelegate")
 public class RemoveExpiredFlights implements JavaDelegate {
 
@@ -18,12 +28,14 @@ public class RemoveExpiredFlights implements JavaDelegate {
     @Inject
     AirlineManager airlineManager;
 
+    /**
+     * Modifica lo stato di tutti i voli scaduti fino ad ora modificandone lo stato
+     * da disponibile a non disponibile
+     */
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         LOGGER.info("RemoveFlights is working");
         airlineManager.removeExpiredFlights();
     }
 
-    
-    
 }

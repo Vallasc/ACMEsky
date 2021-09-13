@@ -4,6 +4,15 @@ import java.io.Serializable;
 
 import it.unibo.soseng.model.Airport;
 
+/**
+ * Le istanze di questa classe descrivono gli aereoporti come Data Transfer
+ * Object da utilizzare nei corpi delle richieste rivolte ai servizi esterni
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
+
 public class AirportDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -44,7 +53,7 @@ public class AirportDTO implements Serializable {
         this.cityName = cityName;
     }
 
-    public static AirportDTO from(Airport airport){
+    public static AirportDTO from(Airport airport) {
         AirportDTO response = new AirportDTO();
         response.setCode(airport.getAirportCode());
         response.setName(airport.getName());
