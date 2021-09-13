@@ -164,7 +164,7 @@ public class FlightUtility {
             if (!filteredList.contains(req)) {
                 // ricerca per giorno, range 12 ore prima e dopo l'orario di richiesta
                 list.addAll(repo.searchFlightOffers(req.departure, req.arrival).stream()
-                        .filter(w -> LastMinuteCheck(w) == false && w.getSoldFlag() != true)
+                        .filter(w -> LastMinuteCheck(w) == false)
                         .filter(w -> w.getDepartureTime().isAfter(req.getDepartureOffsetDateTime().minusHours(12))
                                 && w.getDepartureTime().isBefore(req.getDepartureOffsetDateTime().plusHours(12)))
                         .collect(Collectors.toList()));
@@ -183,32 +183,6 @@ public class FlightUtility {
             return true;
         }
         return false;
-    }
-
-    /**
-     * cancella l'offerta di volo corrispondente all'id fornito come parametro
-     * 
-     * @param id
-     */
-    public void soldFlights(FlightOfferRepository repo, long... id) {
-        for (long i : id) {
-            if (repo.existsById(i)) {
-                repo.findById(i).get().setSoldFlag(true);
-            }
-        }
-    }
-
-    /**
-     * cancella l'offerta di volo corrispondente all'id fornito come parametro
-     * 
-     * @param id
-     */
-    public void unsoldFlights(FlightOfferRepository repo, long... id) {
-        for (long i : id) {
-            if (repo.existsById(i)) {
-                repo.findById(i).get().setSoldFlag(false);
-            }
-        }
     }
 
 }

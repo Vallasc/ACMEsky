@@ -93,18 +93,6 @@ public class FlightOfferController {
     }
 
     /**
-     * si occupa di impostare il soldFlag con il valore false dell'offerta di volo
-     * quando risulta che l'offerta non sia stata acquistata per un eventuale errore
-     * (viene chiamata dopo il tentativo di pagamento dell'utente)
-     * 
-     * @param id che viene passato per identificare l'offerta da eliminare
-     */
-    @PostMapping("/notPurchasedOffer")
-    public void unsoldFlight(@RequestParam(name = "id") long... id) {
-        s.unsoldFlights(id);
-    }
-
-    /**
      * invia i biglietti in formato pdf relativi a quelle offerte che hanno il
      * valore degli id corrispondenti a quelli passati attraverso i parametri
      * 
@@ -116,19 +104,16 @@ public class FlightOfferController {
     public String sendTickets(HttpServletResponse response, @RequestParam(name = "id") long... id)
             throws DocumentException {
         try {
-            if (s.checkUnsoldFlights(id) == true) {
 
-                Path file = Paths.get(p.generatePdf(id).getAbsolutePath());
-                if (Files.exists(file)) {
-                    response.setContentType("application/pdf");
-                    response.addHeader("Content-Disposition", "attachment; filename=" + file.getFileName());
-                    Files.copy(file, response.getOutputStream());
-                    response.getOutputStream().flush();
-                }
-                return new String("ok");
-            } else {
-                return new String("error: flights have already been sold");
+            Path file = Paths.get(p.generatePdf(id).getAbsolutePath());
+            if (Files.exists(file)) {
+                response.setContentType("application/pdf");
+                response.addHeader("Content-Disposition", "attachment; filename=" + file.getFileName());
+                Files.copy(file, response.getOutputStream());
+                response.getOutputStream().flush();
             }
+            return new String("ok");
+
         } catch (IOException ex) {
             ex.printStackTrace();
         }
