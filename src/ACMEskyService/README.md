@@ -16,7 +16,7 @@ docker-compose up --build
 
 <iframe title="API"
     width="900"
-    height="2600"
+    height="2700"
     src="
     https://vallasc.github.io/ACMEsky/src/SwaggerUI/index.html?src=https://vallasc.github.io/ACMEsky/src/SwaggerUI/open-api.json
     ">
