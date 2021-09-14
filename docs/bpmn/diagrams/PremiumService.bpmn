@@ -57,7 +57,7 @@
         <bpmn:errorEventDefinition id="ErrorEventDefinition_1m9fvn4" errorRef="Error_022et9r" />
       </bpmn:boundaryEvent>
       <bpmn:sequenceFlow id="Flow_1lthwfc" sourceRef="Event_12f75qp" targetRef="Event_1fkekx4" />
-      <bpmn:sequenceFlow id="Flow_0urzk1e" name="Price &#62; 1000" sourceRef="Gateway_1egx2n1" targetRef="Activity_15cfcmh">
+      <bpmn:sequenceFlow id="Flow_0urzk1e" name="Price &#62; 1000€" sourceRef="Gateway_1egx2n1" targetRef="Activity_15cfcmh">
         <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${userOffer.getTotalPrice()&gt;1000}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_0i046ff" sourceRef="Activity_15cfcmh" targetRef="Gateway_0b3ykru" />
@@ -68,7 +68,7 @@
       <bpmn:sequenceFlow id="Flow_0vk7cxd" name="Distance &#62;= 30Km" sourceRef="Gateway_0b3ykru" targetRef="Gateway_05dygdm">
         <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${userDistance&gt;=30000}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
-      <bpmn:sequenceFlow id="Flow_0b7zh7a" name="Price &#60;= 1000" sourceRef="Gateway_1egx2n1" targetRef="Gateway_05dygdm">
+      <bpmn:sequenceFlow id="Flow_0b7zh7a" name="Price &#60;= 1000€" sourceRef="Gateway_1egx2n1" targetRef="Gateway_05dygdm">
         <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${userOffer.getTotalPrice()&lt;=1000}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_1adcyna" sourceRef="Activity_1incpvl" targetRef="Activity_1dk7ucs" />
@@ -104,7 +104,7 @@
         <di:waypoint x="1220" y="180" />
         <di:waypoint x="1220" y="225" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="417" y="193" width="69" height="14" />
+          <dc:Bounds x="414" y="193" width="75" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0vk7cxd_di" bpmnElement="Flow_0vk7cxd">
@@ -135,7 +135,7 @@
         <di:waypoint x="390" y="330" />
         <di:waypoint x="490" y="330" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="410" y="303" width="63" height="14" />
+          <dc:Bounds x="407" y="303" width="69" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1lthwfc_di" bpmnElement="Flow_1lthwfc">

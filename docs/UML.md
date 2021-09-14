@@ -1,21 +1,17 @@
+
 # Diagrammi UML
 
-In questa sezione della documentazione viene descritta la modellazzione della "Service Oriented Architecture" (SOA) di cui fa parte l'organizzazione ACMESky, sotto forma di diagrammi UML. Quest'ultimi sono stati implementati utilizzando il profilo TinySOA.
+In questa sezione della documentazione vengono mostrati i diagrammi UML, il cui scopo principale è quello di descrivere le interazioni che vi sono tra i vari servizi che fanno parte della SOA, attraverso l'utilizzo di ***capability*** e ***interface***. I diagrammi sono stati implementati utilizzando il profilo TinySOA.
 
-Lo scopo principale dei digrammi UML di seguito descritti, consiste nel riportare le interazioni che vi sono tra i vari servizi che fanno parte della SOA, attraverso l'esposizione di *capability* e interfacce che le espongono.
-
-Nei diagrammi UML vengono riportati tre diverse tipologie di servizi:
-
-* **Task**: espone le *capability* facenti parte dei processi interni all'organizzazione;
-
-* **Entity**: fa riferimento ad una singola attività, possibilmente automatizzata (ad esempio: il salvataggio di un record all'interno di un Database);
-
-* **Utility**: sono simili ai task, però non appartengono al dominio del problema (ad esempio: utilizzo di capability legate a servizi esterni).
+Nei diagrammi UML sono riportate tre diverse tipologie di servizi:
+* __Task__: espone le *capability* facenti parte dei processi interni all'organizzazione;
+* __Entity__: fa riferimento ad una singola attività, possibilmente automatizzata;
+* __Utility__: sono simili ai task, però non appartengono al dominio del problema.
 
 ### Richiesta voli
 ![Richiesta voli](UML/img/diagram1.png)
-Nel diagramma riportato qui sopra vengono descritte le *capabilty* inerenti alla richiesta voli. In particolare per il ruolo di ACMESky vengono esposte le seguenti *capability*: *FlightsManagement* e *DatabaseManagement* le quali vengono esposte da due interfacce *Flights* e *DataBase*.
-La capability *FlightsManagement* ha lo scopo di interrogare e ricevere le offerte di voli dalle compagnie aeree. Mentre la capability *DatabaseManagement* si occupa di salvare le offerte ricevute dalle compagnie aeree nella base dati di ACMESky.
+Nel diagramma riportato qui sopra vengono descritte le *capabilty* inerenti alla richiesta voli. In particolare per il ruolo di ACMESky vengono esposte le seguenti *capability*: *FlightsManagement* e *DatabaseManagement* le quali vengono esposte da due interfacce *Flights* e *Database*.
+La capability *FlightsManagement* ha lo scopo di interrogare e ricevere le offerte di voli dalle compagnie aeree. Mentre, la capability *DatabaseManagement* si occupa di salvare le offerte ricevute dalle compagnie aeree nella base dati.
 
 ### Ricezione offerte last-minute
 ![Ricezione offerte last-minute](UML/img/diagram2.png)
@@ -58,4 +54,5 @@ In particolare per il ruolo di ACMESky vengono esposte le seguenti *capability*:
 La capability *PremiumServiceManagement* si occupa di controllare tutte le condizioni per poter attivare il servizio premium, pertanto controlla se il prezzo dei tickets, la distanza dall'aeroporto e l'eventuale prenotazione di un servizio di trasporto.
 Infine la capability  *OrderManagement* ha il compito di inviare i tickets all'utente.
 
-
+&nbsp;
+<div class="page-break"></div>

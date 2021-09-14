@@ -1,5 +1,6 @@
 
 # Coreografie
+In questa sezione vengono mostrate le coreografie.
 
 ## Nomenclatura
 
@@ -141,14 +142,13 @@
 )*
 
 ```
-
+---
 &nbsp;
 
 ## Verifica condizioni connectedness delle coreografie
 
-<!--Analizzando la coreografia si nota che essa fa parte del caso asincrono. -->
-
-Per stabilire la connectedness, e anche per una migliore lettura, la coreografia è stata divisa in 6 blocchi:
+Analizzando la coreografia si nota che essa fa parte del caso asincrono.
+Per stabilire la connectedness, e per una migliore lettura, la coreografia è stata divisa in 6 blocchi:
 
 1. __Query dei voli__
 2. __Ricezione offerte last-minute__
@@ -274,6 +274,7 @@ E' connessa per la choice i sender di __(3)__ e di __(27)__ sono gli stessi.
 
 La coreografia è connessa per l'iterazione in quanto __(25)__ e __(27)__ terminano con il ricevente __USER__ che è il mittente di __(1)__, mentre __(24)__ termina con __ACME__ che è connessa con __(1)__ secondo il pattern Receiver.
 
+---
 &nbsp;
 
 ## Proiezioni
@@ -622,5 +623,6 @@ proj(AcquistoOfferta, RENTₜ) =
     )
   )*
 ```
+
 &nbsp;
 <div class="page-break"></div>

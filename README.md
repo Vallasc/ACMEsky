@@ -1,20 +1,16 @@
-<!--
-
----
+<!---
 stylesheet: https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.10.0/github-markdown.min.css
 body_class: markdown-body
 css: |-
   .page-break { page-break-after: always; }
-  .markdown-body { font-size: 13px; }
+  .markdown-body { font-size: 14px; }
   .markdown-body pre > code { white-space: pre-wrap; }
+  .hidden { display: none }
 pdf_options:
   format: a4
   margin: 25mm 15mm
   printBackground: true
-  scale: 1.6
----
-
--->
+--->
 
 # ACMEsky
 
@@ -45,6 +41,11 @@ In questo caso ACMESky fa uso di diverse compagnie di noleggio con autista con c
 - Non viene gestito lo scambio di denaro dalla banca alla compagnia aerea 
 - Se uno dei servizi per la gestione del calcolo premium non risponde i voli vengono acquistati senza servizi accesori
 - Ogni attore deve essere autenticato per poter interagire con ACMEsky
+
+La soa è composta dai seguenti servizi:
+
+TODO
+TODO
 
 ## Struttura della relazione
 * [Coreografie](docs/coreografie)
