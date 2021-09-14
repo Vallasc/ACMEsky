@@ -19,7 +19,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import it.unibo.soseng.gateway.user.dto.AirportDTO;
 import it.unibo.soseng.logic.InterestManager;
 import it.unibo.soseng.logic.DatabaseManager.AirportNotFoundException;
@@ -38,6 +38,7 @@ import static it.unibo.soseng.security.Constants.USER;
  */
 
 @Path("airports")
+@SecurityRequirement(name = "bearerAuth")
 public class AirportController {
 
     private final static Logger LOGGER = Logger.getLogger(AirportController.class.getName());

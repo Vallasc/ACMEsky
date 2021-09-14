@@ -16,7 +16,7 @@ import javax.validation.Valid;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import it.unibo.soseng.gateway.airline.dto.AirlineFlightOfferDTO;
 import it.unibo.soseng.logic.AirlineManager;
 import it.unibo.soseng.logic.AirlineManager.BadRequestException;
@@ -33,6 +33,7 @@ import static it.unibo.soseng.security.Constants.AIRLINE;
  */
 
 @Path("airlines")
+@SecurityRequirement(name = "bearerAuth")
 public class AirlineController {
     private final static Logger LOGGER = Logger.getLogger(AirlineController.class.getName());
 

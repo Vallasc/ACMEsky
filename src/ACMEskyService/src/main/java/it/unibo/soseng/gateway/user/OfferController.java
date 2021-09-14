@@ -23,6 +23,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import it.unibo.soseng.gateway.user.dto.AddressDTO;
 import it.unibo.soseng.gateway.user.dto.OfferDTO;
 import it.unibo.soseng.gateway.user.dto.UserOfferDTO;
@@ -35,6 +36,7 @@ import static it.unibo.soseng.security.Constants.USER;
  * degli utenti
  */
 @Path("offers")
+@SecurityRequirement(name = "bearerAuth")
 public class OfferController {
     
     private final static Logger LOGGER = Logger.getLogger(OfferController.class.getName());
