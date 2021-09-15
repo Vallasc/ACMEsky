@@ -1,6 +1,7 @@
 
 # Diagramma delle coreografie BPMN
-In questa sezione vengono mostrate le coreografie BPMN  che descrivono l'interazione tra i diversi attori.
+In questa sezione vengono mostrate le coreografie BPMN che mostrano le interazioni tra i processi relativi ai diversi
+partecipanti.
 
 ## Diagramma completo
 

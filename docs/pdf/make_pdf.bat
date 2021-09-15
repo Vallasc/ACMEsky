@@ -1,12 +1,14 @@
 cd..
 type title.md ^
 ..\README.md ^
+index.md ^
 coreografie.md ^
 BPMN.md ^
 coreografieBPMN.md ^
 UML.md ^
 struttura.md ^
 esecuzione.md ^
+servizi.md ^
 ..\src\ACMEskyService\README.md ^
 ..\src\ACMEskyDB\README.md ^
 ..\src\ACMEskyWeb\README.md ^

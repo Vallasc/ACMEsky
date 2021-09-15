@@ -1,9 +1,10 @@
 
 # Diagramma BPMN
-In questa sezione della documentazione viene descritto il diagramma BPMN della _Service Oriented Architecture_ (SOA), nel quale viene mostrato come i servizi interagiscono con ACMEsky al fine di realizzare le funzionalità richieste.
+In questa sezione della documentazione viene descritto il diagramma BPMN che rappresenta il comportamento dei processi
+per ciò che concerne il flusso di controllo.
 
 ## Diagramma completo
-![total](bpmn/img/total.png)
+![total](bpmn/img/Total.png)
 
  Per una migliore specificità e gestione della documentazione il diagramma verrà diviso in parti relative alle varie azioni degli attori, come ad esempio: la registrazione dell'interesse utente, la ricerca dei voli, salvataggio dei voli last-minute, gestione delle offerte, pagamento, ecc.
 
@@ -63,7 +64,7 @@ L'utente riceve l'offerta e può decidere se confermarla o meno attraverso l'inv
 __ACMEsky__ recupera l'offerta corrispondente al token e si occupa di verificarne la validità, ovvero, di controllare che il tempo di accettazione dell'offerta non sia terminato. In caso positivo si verifica se l'offerta non sia scaduta e anche in questo caso se l'esito è positivo si invia all'utente la conferma di accettazione dell'offerta.
 In caso contrario lo si informa dell'esito negativo dovuto alla scadenza dell'offerta o del token non valido ed il processo termina con un errore.
 
-### Pagamento dei voli
+### Pagamento dell'offerta
 
 ![book_payment](bpmn/img/BookPayment.png)
 

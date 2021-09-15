@@ -1,8 +1,9 @@
-# ACMEskyDB
 
-ACMEsky si interfaccia virutalmente ad un database il quale utilizza PostgreSQL come DBMS.
+# ACMEsky Database
+
+ACMEsky si interfaccia ad un database PostgreSQL.
 Il file docker-compose contiene tuto il necessario per far partire un'istanza del database con le tabelle e i dati inizializzati.
-Nel dettaglio, alla prima esecuzione, viene eseguito il file init.sql che contiene lo schema del database e i record iniziali per far partire ACMEsky da zero.
+Nello specifico, alla prima esecuzione, viene eseguito il file init.sql che contiene lo schema del database e i record iniziali per far partire ACMEsky da zero.
 
 ## Database schema
 
@@ -118,5 +119,6 @@ La relazione ***banks*** fa riferimento ai servizi bancari. Il campo ***id*** è
 
 La tabella ***rent_services*** fa riferimento ai servizi di noleggio per accompagnare l'utente, eventualmente, all'aereoporto. Il campo ***id*** è l'identificativo del servizio nella relazione (Chiave primaria), ***entity_id*** si riferisce all'identificativo del noleggio nella tabella ***domain_entities*** (Chiave esterna), e il campo ***ws_address*** rappresenta l'indirizzo del servizio con cui si possono fare richieste attraverso chiamate alle varie route messe a disposizione dal servizio stesso.
 
+\
+\
 &nbsp;
-<div class="page-break"></div>

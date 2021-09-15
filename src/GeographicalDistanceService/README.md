@@ -1,5 +1,5 @@
 
-# Geographical Distance Service
+# Geographical distance service
 Servizio che si occupa di calcolare la distanza tra due punti specificati tramite indirizzo o coordinate geografiche.
 Internamente utilizza le api di distancematrix.ai per il calcolo delle distanze.
 
@@ -24,6 +24,6 @@ node index.js -p 8080
 ```sh
 docker-compose up
 ```
-
+\
+\
 &nbsp;
-<div class="page-break"></div>

@@ -1,4 +1,5 @@
-# Istruzioni per l'esecuzione di tutti servizi
+
+# Istruzioni per l'esecuzione dello stack di servizi
 
 ## Prerequisiti
 

@@ -7,12 +7,12 @@ In questa sezione vengono mostrate le coreografie che descrivono l'interazione t
 | Nome                | Sigla            | Commento                                |
 | - | - | - |
 | ACME                | ACME             |                                         |
-| Airline company     | AIR<sub>k</sub>  | Indica la k-esima compagnia aerea       |
-| Rent company        | RENT<sub>t</sub> | Indica la t-esima compagnia di noleggio |
+| Airline service     | AIR<sub>k</sub>  | Indica la k-esima compagnia aerea       |
+| Rental service      | RENT<sub>t</sub> | Indica la t-esima compagnia di noleggio |
 | Prontogram          | PTG              |                                         |
-| Bank                | BANK             |                                         |
+| Bank service        | BANK             |                                         |
 | Geodistance service | GEO              |                                         |
-| USER                | USER<sub>x</sub> | Indica l'x-esimo utente                 |
+| User                | USER<sub>x</sub> | Indica l'x-esimo utente                 |
 
 &nbsp;
 
@@ -65,6 +65,7 @@ In questa sezione vengono mostrate le coreografie che descrivono l'interazione t
     (   
       responseOfferOk: ACME -> USERₓ ;
       requestPaymentLink: USERₓ -> ACME ;
+      bookTickets: ACME -> AIRₖ ;
       (   
         // Tickets ok
         // bookTickets: prenota i biglietti 
@@ -74,8 +75,6 @@ In questa sezione vengono mostrate le coreografie che descrivono l'interazione t
         // paymentLink: link di pagamento generato dalla banca
         // payment: pagamento attraverso il link generato
         (
-          bookTickets: ACME -> AIRₖ ;
-          () TODO
           responseTickets: AIRₖ -> ACME ;
           requestBankLink: ACME -> BANK ; 
           responselink: BANK -> ACME ;
@@ -130,9 +129,13 @@ In questa sezione vengono mostrate le coreografie che descrivono l'interazione t
           ) 
         )
         // Errore nella prenotazione dei biglietti
+        // flightNotFound: volo non trovato
         // errorTickets: errore volo non disponibile
         +
-        errorTickets: ACME -> USERₓ
+        (
+          flightNotFound: AIRₖ -> ACME ;
+          errorTickets: ACME -> USERₓ
+        )
       )
     )
     +
@@ -200,7 +203,6 @@ E' connessa anche per l'iterazione in quanto il ricevente in ___messageSended___
 E' connessa in quanto il ricevente in ___getInvoice___ è il mittente di ___invoice___.
 E' connessa anche per l'iterazione in quanto il ricevente in ___invoice___ è il mittente di ___getInvoice___.
 
-&nbsp;
 
 ### Conferma dell'offerta e pagamento
 
@@ -210,18 +212,18 @@ E' connessa anche per l'iterazione in quanto il ricevente in ___invoice___ è il
 E' connessa in quanto il ricevente di ___confirmOffer___ è il mittente di __(3)__ e di __(27)__.
 ```fsharp
 2.   ( 
-3.     ( responseOfferOk: ACME -> USERₓ ; requestPaymentLink: USERₓ -> ACME ;
+3.     ( responseOfferOk: ACME -> USERₓ ; requestPaymentLink: USERₓ -> ACME ; bookTickets: ACME -> AIRₖ
 ```
-E' connessa per la sequenza in quanto il ricevente di ___requestPaymentLink___ è il mittente di __(6)__.
+E' connessa per la sequenza in quanto il ricevente di ___requestPaymentLink___ è il mittente di ___bookTickets___.
 ```fsharp
 4.       (   
 5.         (
-6.           bookTickets: ACME -> AIRₖ ; responseTickets: AIRₖ -> ACME ;
+6.           responseTickets: AIRₖ -> ACME ;
 7.           requestBankLink: ACME -> BANK ; responselink: BANK -> ACME ;
 8.           paymentLink: ACME -> USERₓ ;
 9.           payment: USERₓ -> BANK ;
 ```
-E' connessa per la sequenza in quanto il ricevente di ___bookTickets___ è il mittente di ___responseTickets___, il ricevente di ___requestBankLink___ è il mittente di ___responselink___, il ricevente di ___responselink___ è il mittente di ___paymentLink___ e il ricevente di ___paymentLink___ è il mittente di ___payment___.
+E' connessa per la sequenza in quanto il ricevente di ___responseTickets___ è il mittente di ___requestBankLink___, il ricevente di ___requestBankLink___ è il mittente di ___responselink___, il ricevente di ___responselink___ è il mittente di ___paymentLink___ e il ricevente di ___paymentLink___ è il mittente di ___payment___.
 
 Inoltre, è connessa per la choice perché il destinatario di ___payment___ è il mittente di __(11)__ e di __(21)__
 
@@ -260,9 +262,10 @@ E' connessa per la sequenza perché il destinatario di ___errorPaymentBank___ è
 
 ```fsharp
 24.           )
-25.         ) + errorTickets: ACME -> USERₓ
+25.         ) + ( flightNotFound: AIRₖ -> ACME ; errorTickets: ACME -> USERₓ )
 ```
 E' connessa per la choice perchè i mittenti di __(6)__ e di __(25)__ sono gli stessi.
+E' connessa per la sequenza perché il destinatario di ___flightNotFound___ è il mittente di ___errorTickets___.
 ```fsharp
 26.       )
 27.     ) + responseOfferError: ACME -> USERₓ
@@ -309,11 +312,11 @@ proj(RichiestaRicevuta, ACME) =
 ```fsharp
 proj(AcquistoOfferta, ACME) = 
   ( confirmOffer@USERₓ ; 
-    (
-      (responseOfferOk@USERₓ ; requestPaymentLink@USERₓ ;
+    (                                                     ___________
+      (responseOfferOk@USERₓ ; requestPaymentLink@USERₓ ; bookTickets@AIRₖ
         (
-          ( ___________
-            bookTickets@AIRₖ ; responseTickets@AIRₖ ;
+          ( 
+            responseTickets@AIRₖ ;
             ______________
             requestBankLink@BANK ; responselink@BANK ;
             ___________
@@ -333,8 +336,8 @@ proj(AcquistoOfferta, ACME) =
                 ) ) _____________        __________
               ) + ( unbookTickets@AIRₖ ; emitCoupon@BANK )
             )
-              ____________
-          ) + errorTickets@USERₓ
+                                  ____________
+          ) + flightNotFound@AIRₖ errorTickets@USERₓ 
         )
           __________________
       ) + responseOfferError@USERₓ
@@ -372,9 +375,9 @@ proj(AcquistoOfferta, USERₓ) =
     ____________
   ( confirmOffer@ACME ; 
     (                          __________________
-      ( responseOfferOk@ACME ; requestPaymentLink@ACME ;
+      ( responseOfferOk@ACME ; requestPaymentLink@ACME ; 1 ;
         (
-          ( 1 ; 1 ; 1 ; 1 ; paymentLink@ACME ; payment@BANK ;
+          ( 1 ; 1 ; 1 ; paymentLink@ACME ; payment@BANK ;
             (
               (
                 1 ;
@@ -383,7 +386,7 @@ proj(AcquistoOfferta, USERₓ) =
                 ))
               ) + ( 1 ; 1 )
             )
-          ) + errorTickets@ACME
+          ) + ( 1 ; errorTickets@ACME )
         )
       ) + responseOfferError@ACME
     )
@@ -418,10 +421,10 @@ proj(RichiestaRicevuta, AIRₖ) =
 proj(AcquistoOfferta, AIRₖ) =
   ( 1 ; 
     (
-      (1 ; 1 ;
+      (1 ; 1 ; bookTickets@ACME ;
         (
-          (                    _______________
-            bookTickets@ACME ; responseTickets@ACME ;
+          ( _______________
+            responseTickets@ACME ;
             1 ; 1 ; 1 ; 1 ;
             (
               ( 1 ;
@@ -429,8 +432,8 @@ proj(AcquistoOfferta, AIRₖ) =
                   ( 1 + (( 1 ; 1)* ; 1 ; 1 ; 1 ; 1 ))
                 ))
               ) + ( unbookTickets@ACME ; 1 )
-            )
-          ) + 1
+            )   _______________
+          ) + ( responseTickets@ACME ; 1 )
         )
       ) + 1
     )
@@ -466,9 +469,9 @@ proj(RichiestaRicevuta, PTG) =
 proj(AcquistoOfferta, PTG) = 
   ( 1 ; 
     (
-      ( 1 ; 1 ;
+      ( 1 ; 1 ; 1 ;
         (
-          ( 1 ; 1 ; 1 ; 1 ; 1 ; 1 ;
+          ( 1 ; 1 ; 1 ; 1 ; 1 ;
             (
               ( 1 ;
                 ( 1 + ( 1 ; 1 ;
@@ -476,7 +479,7 @@ proj(AcquistoOfferta, PTG) =
                 ))
               ) + ( 1 ; 1 )
             )
-          ) + 1
+          ) + ( 1 ; 1 )
         )
       ) + 1
     )
@@ -509,11 +512,10 @@ proj(RichiestaRicevuta, BANK) =
 proj(AcquistoOfferta, BANK) = 
   ( 1 ; 
     (
-      ( 1 ; 1 ;
+      ( 1 ; 1 ; 1 ;
         (
-          ( 1 ; 1 ;
-                                   ____________
-            requestBankLink@ACME ; responselink@ACME ; 
+          (                            ____________
+            1 ; requestBankLink@ACME ; responselink@ACME ; 
             1 ; payment@USERₓ ;
             (
               ( __________________
@@ -524,7 +526,7 @@ proj(AcquistoOfferta, BANK) =
                 ))
               ) + ( 1 ; emitCoupon@ACME )
             )
-          ) + 1
+          ) + ( 1 ; 1 )
         )
       ) + 1
     )
@@ -557,9 +559,9 @@ proj(RichiestaRicevuta, GEO) =
 proj(AcquistoOfferta, GEO) = 
   ( 1 ; 
     (
-      ( 1 ; 1 ;
+      ( 1 ; 1 ; 1 ;
         (
-          ( 1 ; 1 ; 1 ; 1 ; 1 ; 1 ;
+          ( 1 ; 1 ; 1 ; 1 ; 1 ;
             (
               ( 1 ;
                                                ________________
@@ -570,7 +572,7 @@ proj(AcquistoOfferta, GEO) =
                 ))
               ) + ( 1 ; 1 )
             )
-          ) + 1
+          ) + ( 1 ; 1 )
         )
       ) + 1
     )
@@ -603,9 +605,9 @@ proj(RichiestaRicevuta, RENTₜ) =
 proj(AcquistoOfferta, RENTₜ) = 
   ( 1 ; 
     (
-      ( 1 ; 1 ;
+      ( 1 ; 1 ; 1 ;
         (
-          ( 1 ; 1 ; 1 ; 1 ; 1 ; 1 ;
+          ( 1 ; 1 ; 1 ; 1 ; 1 ;
             (
               ( 1 ;
                 ( 1 + ( 1 ; 1 ;  
@@ -617,7 +619,7 @@ proj(AcquistoOfferta, RENTₜ) =
                 ))
               ) + ( 1 ; 1 )
             )
-          ) + 1
+          ) + ( 1 ; 1 )
         )
       ) + 1
     )
