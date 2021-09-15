@@ -34,19 +34,21 @@ Per rendere il tutto più portatile ed indipendente possibili si custodisce il D
 
 ## AirlineService(s)
 
-Il servizio che simula delle semplici compagnie aeree. Sono state sviluppate con Spring Boot, framework di Java per realizzare applicazioni web e servizi REST con facilità. Per creare e gestire più servizi di compagnia aerea si è scelto di utilizzare Docker, il quale consente di creare e gestire simultaneamente più istanze di un'applicazione attraverso il file di docker-compose. Al momento i servizi di Airline Service sono due: uno che offre voli nazionali e uno che offre voli internazionali, ma modificando il docker-compose è possibile aggiungerne di nuovi o rimuovere quelli già presenti.
+Il servizio che simula delle semplici compagnie aeree. Al momento i servizi di Airline Service sono due: uno che offre voli nazionali e uno che offre voli internazionali, ma modificando il docker-compose è possibile aggiungerne di nuovi o rimuovere quelli già presenti.
 
 
 ## BankService
 Bank è il servizio con cui ACMEsky si interfaccia per la gestione dei pagamenti.
 ACMEsky richiede a Bank i link di pagamento che poi verrano utilizzati dall'utente per pagare. Inoltre una volta effettuato il pagamento invia un messaggio ad ACMEsky con la relativa conferma.
 
-## GeographicalDistance
+
+## GeographicalDistanceService
+Geographical Distance Service è il servizio di geolocalizzazione che calcola la distanza tra due indirizzi.
 
 ## Prontogram
-Web-application che permette all'utente di ricevere le notifiche delle offerte dei voli dai servizi di ACMEsky. L'aaplicativo è stato sviluppato in
+Web-application che permette all'utente di ricevere le notifiche delle offerte dei voli dai servizi di ACMEsky. L'applicativo è stato sviluppato in Angular per quanto riguarda la parte front-end e in node.ja per quanto riguarda la parte back-end (server).
 
 ## RentService(s)
-
+Rent Service è il servizio che offre la possibilità di accompagnare l'utente dal suo indirizzo domicilio all'aeroporto di partenza gratuitamente.
 &nbsp;
 <div class="page-break"></div>
