@@ -38,8 +38,10 @@ Il servizio che simula delle semplici compagnie aeree. Sono state sviluppate con
 
 
 ## BankService
+Bank è il servizio con cui ACMEsky si interfaccia per la gestione dei pagamenti.
+ACMEsky richiede a Bank i link di pagamento che poi verrano utilizzati dall'utente per pagare. Inoltre una volta effettuato il pagamento invia un messaggio ad ACMEsky con la relativa conferma.
 
-## GeographicalDistanceService
+## GeographicalDistance
 
 ## Prontogram
 Web-application che permette all'utente di ricevere le notifiche delle offerte dei voli dai servizi di ACMEsky. L'aaplicativo è stato sviluppato in
