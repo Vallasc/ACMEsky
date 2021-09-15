@@ -50,5 +50,23 @@ Web-application che permette all'utente di ricevere le notifiche delle offerte d
 
 ## RentService(s)
 Rent Service è il servizio che offre la possibilità di accompagnare l'utente dal suo indirizzo domicilio all'aeroporto di partenza gratuitamente.
+
+## Porte assegnate ai servizi Docker
+
+| Service | Port |
+| - | - |
+| ACMEsky | - |
+| web | 80 |
+| api | 8080 |
+| Postgres | 5050 |
+| BankService | 8070 |
+| AirlineNationalService | 8060 |
+| AirlineService | 8061 |
+| ProntogramService | 8050 |
+| ProntogramFrontEnd | 8051 |
+| GeocraphicalService | 8040 |
+| RentService1 | 8030 |
+| RentService2 | 8032 |
+
 &nbsp;
 <div class="page-break"></div>

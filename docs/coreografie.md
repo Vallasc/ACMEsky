@@ -1,6 +1,6 @@
 
 # Coreografie
-In questa sezione vengono mostrate le coreografie.
+In questa sezione vengono mostrate le coreografie che descrivono l'interazione tra i diversi attori.
 
 ## Nomenclatura
 
@@ -75,6 +75,7 @@ In questa sezione vengono mostrate le coreografie.
         // payment: pagamento attraverso il link generato
         (
           bookTickets: ACME -> AIRₖ ;
+          () TODO
           responseTickets: AIRₖ -> ACME ;
           requestBankLink: ACME -> BANK ; 
           responselink: BANK -> ACME ;

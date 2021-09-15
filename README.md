@@ -30,7 +30,7 @@ In questo caso ACMESky fa uso di diverse compagnie di noleggio con autista con c
 - Non viene gestito lo scambio di denaro dalla banca alla compagnia aerea; 
 - Se uno dei servizi per la gestione del calcolo premium non risponde i voli vengono acquistati senza servizi accesori;
 
-La *SOA* (Service-Oriented Architecture) è composta dai seguenti servizi:
+Il progetto è composta dai seguenti servizi:
 - **ACMEsky**:
 - **Airline Service**:
 - **Bank Service**:
@@ -57,22 +57,5 @@ La *SOA* (Service-Oriented Architecture) è composta dai seguenti servizi:
     * [Prontogram](src/Prontogram/)
     * [RentService](src/RentService/)
     * [GeographicalDistance](src/GeographicalDistanceService/)
-
-TODO Spostare in STRUTTURA
-
-| Service | Port |
-| - | - |
-| ACMEsky | - |
-| web | 80 |
-| api | 8080 |
-| Postgres | 5050 |
-| BankService | 8070 |
-| AirlineNationalService | 8060 |
-| AirlineService | 8061 |
-| ProntogramService | 8050 |
-| ProntogramFrontEnd | 8051 |
-| GeocraphicalService | 8040 |
-| RentService1 | 8030 |
-| RentService2 | 8032 |
 
 <div class="page-break"></div>
