@@ -142,7 +142,7 @@ In questa sezione vengono mostrate le coreografie.
 )*
 
 ```
----
+
 &nbsp;
 
 ## Verifica condizioni connectedness delle coreografie
@@ -274,7 +274,6 @@ E' connessa per la choice i sender di __(3)__ e di __(27)__ sono gli stessi.
 
 La coreografia è connessa per l'iterazione in quanto __(25)__ e __(27)__ terminano con il ricevente __USER__ che è il mittente di __(1)__, mentre __(24)__ termina con __ACME__ che è connessa con __(1)__ secondo il pattern Receiver.
 
----
 &nbsp;
 
 ## Proiezioni

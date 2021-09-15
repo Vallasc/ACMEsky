@@ -32,6 +32,5 @@ Web-application che permette all'utente di ricevere le notifiche delle offerte d
 
 ## RentService(s)
 
-
 &nbsp;
 <div class="page-break"></div>

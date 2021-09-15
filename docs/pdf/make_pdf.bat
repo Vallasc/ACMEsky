@@ -1,5 +1,6 @@
 cd..
-type ..\README.md ^
+type title.md ^
+..\README.md ^
 coreografie.md ^
 BPMN.md ^
 coreografieBPMN.md ^
