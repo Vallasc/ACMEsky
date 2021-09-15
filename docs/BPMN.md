@@ -13,7 +13,6 @@ Quindi, ad un certo intervallo e per ciascun __Airline Service__, __ACMEsky__ re
 I voli presenti nella risposta vengono salvati all'interno del database (tabella _available_flights_). 
 Se il timer della richiesta scade, per cause dovute ad __Airline Service__, il sottoprocesso termina e si passa ad un'altra compagnia.
 
----
 
 ## Registrazione delle offerte last-minute
 
@@ -21,7 +20,6 @@ Se il timer della richiesta scade, per cause dovute ad __Airline Service__, il s
 
 In questa parte si descrive il processo di ricezione e salvataggio dei voli last-minute. I servizi di __Airline Service__ mandano voli last-minute appena creati ad __ACMEsky__, la quale salva ciascuno di essi nel database, nello specifico nella tabella _available_flights_.
 
----
 
 ## Match voli con interesse utente
 
@@ -31,7 +29,6 @@ La generazione delle offerte di volo viene fatta ad un certo intervallo di tempo
 
 Ogni ora, per ciascun offerta di interesse, __ACMEsky__ cerca tra i voli disponibili presenti nel database (tabella _available_flights_), se c'è una corrispondenza con l'interesse dell'utente allora prepara l'offerta, la salva nel database e la invia all'utente attraverso __Prontogram__. In caso negativo semplicemente il flusso termina passando all'interesse successivo.
 
----
 
 ## Registrazione dell'interesse dell'utente
 
@@ -41,7 +38,6 @@ Il seguente diagramma descrive il processo di raccolta e registrazione degli int
 __ACMEsky__ salva i voli di interesse nel suo database, in particolare, nella tabella _flights_interest_ e in _users_interests_, che contiene l'interesse per uno specifico viaggio. 
 Infine, __ACMEsky__ invia la conferma di avvenuta creazione.
 
----
 
 ## Conferma di acquisto, applicazione servizi premium e preparazione biglietti
 
@@ -76,7 +72,6 @@ Se il servizio della banca non risponde entro 5 minuti dalla generazione del lin
 
 In questa fase, se vengono rispettate le condizioni, vengono applicati all'offerta i servizi premium. Inizialmente __ACMEsky__ controlla il prezzo dell'offerta, se questo supera i mille euro invia una richiesta al servizio di __Geolocalizzazione__ per calcolare la distanza dell'utente dall'areoporto. Nel caso in cui la distanza sia superiore ai 30 km si richiede al __Rent Service__ più vicino se c'è la possibilità di offrire all'utente un trasferimento dal suo domicilio all'aereoporto. Questa operazione viene ripetuta sia all'andata che al ritorno, e in tal caso modificherà i biglietti includendo tutte le informazioni dei due trasferimenti. In caso la distanza sia inferiore ai 30Km o il prezzo dell'offerta sia inferiore a 1000€ non verrà richiesto nessun servizio.
 
----
 
 ## Invio Biglietti
 
@@ -84,7 +79,6 @@ In questa fase, se vengono rispettate le condizioni, vengono applicati all'offer
 
 Arrivati a questo punto viene cambiato lo stato dell'offerta e viene preparato il pdf contenente i biglietti che l'utente potrà scaricare. L'utente può in qualunque momento richiedere i biglietti che ha acquistato.
 
----
 
 ## Rimozione dei voli scaduti
 
@@ -92,7 +86,6 @@ Arrivati a questo punto viene cambiato lo stato dell'offerta e viene preparato i
 
 Il processo di cancellazione dei voli scaduti presenti nel database avviene ogni 12 ore. I voli scaduti sono quei voli la cui data di scadenza è antecedente a quella in cui si effettua l'operazione di cancellazione. La cancellazione non comporta l'eliminazione effettiva del record che rappresenta quel volo, bensì un cambiamento di stato che porta ACMEsky a non considerare più quel volo come disponibile.
 
----
 
 ## Rimozione delle offerte scadute
 
@@ -100,6 +93,6 @@ Il processo di cancellazione dei voli scaduti presenti nel database avviene ogni
 
 Il processo di cancellazione delle offerte scadute presenti nel Database avviene ogni 12 ore. Le offerte di volo scadute comprendono i voli di andata e ritorno. Le offerte scadute sono quelle la cui data di scadenza del volo di partenza è antecedente a quella in cui si effettua l'operazione di cancellazione. La cancellazione non comporta l'eliminazione effettiva del record, bensì, un cambiamento di stato che porta ACMEsky a non considerare più i voli dell'offerta (e l'offerta in sè) come disponibili.
 
----
+
 &nbsp;
 <div class="page-break"></div>
