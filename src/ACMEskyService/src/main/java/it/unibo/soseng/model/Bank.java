@@ -12,12 +12,20 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+/**
+ * descrive i servizi bancari, specificandone i campi con cui vengono registrati
+ * in DB nella propria tabella banks
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
 @Entity
 @Table(name = "banks")
 public class Bank implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -36,7 +44,6 @@ public class Bank implements Serializable {
     @Column(name = "login_password", nullable = false)
     private String loginPassword;
 
-
     public long getId() {
         return this.id;
     }
@@ -45,13 +52,13 @@ public class Bank implements Serializable {
         this.id = id;
     }
 
-	public DomainEntity getEntity() {
-		return this.entity;
-	}
+    public DomainEntity getEntity() {
+        return this.entity;
+    }
 
-	public void setEntity(DomainEntity entity) {
-		this.entity = entity;
-	}
+    public void setEntity(DomainEntity entity) {
+        this.entity = entity;
+    }
 
     public String getWsAddress() {
         return this.wsAddress;

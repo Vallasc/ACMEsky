@@ -9,31 +9,39 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * descrive le entità degli attori che interagiscono tra loro per il corretto
+ * funzionamento del sistema specificandone i campi con cui vengono registrati
+ * sul DB nella tabella domain_entities
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
 @Entity
-@Table(name="domain_entities")
+@Table(name = "domain_entities")
 public class DomainEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", nullable = false)
+	private long id;
 
-    @Column(name = "username", nullable = false, unique = true)
-    private String username;
+	@Column(name = "username", nullable = false, unique = true)
+	private String username;
 
-    @Column(name = "password", nullable = false)
-    private String password;
+	@Column(name = "password", nullable = false)
+	private String password;
 
-    @Column(name = "salt", nullable = false)
-    private String salt;
+	@Column(name = "salt", nullable = false)
+	private String salt;
 
-    @Column(name = "role", nullable = false)
-    private String role;
+	@Column(name = "role", nullable = false)
+	private String role;
 
-
-    public long getId() {
+	public long getId() {
 		return this.id;
 	}
 
@@ -41,7 +49,7 @@ public class DomainEntity implements Serializable {
 		this.id = id;
 	}
 
-    public String getUsername() {
+	public String getUsername() {
 		return this.username;
 	}
 
@@ -49,7 +57,7 @@ public class DomainEntity implements Serializable {
 		this.username = username;
 	}
 
-    public String getPassword() {
+	public String getPassword() {
 		return this.password;
 	}
 
@@ -57,7 +65,7 @@ public class DomainEntity implements Serializable {
 		this.password = password;
 	}
 
-    public String getSalt() {
+	public String getSalt() {
 		return this.salt;
 	}
 
@@ -65,7 +73,7 @@ public class DomainEntity implements Serializable {
 		this.salt = salt;
 	}
 
-    public String getRole() {
+	public String getRole() {
 		return this.role;
 	}
 

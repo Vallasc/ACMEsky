@@ -1,6 +1,5 @@
 package it.soseng.unibo.airlineService.repository;
 
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,9 +14,14 @@ import it.soseng.unibo.airlineService.model.FlightOffer;
  */
 public interface FlightOfferRepository extends JpaRepository<FlightOffer, Long> {
 
-    // @Query(value = "SELECT * FROM FLIGHT_OFFERS o WHERE o.DEPARTURE_AIRPORT_CODE
-    // = ?1 AND O.ARRIVAL_AIRPORT_CODE = ?2 AND o.DEPARTURE_DATE_TIME >= ?3 AND
-    // o.DEPARTURE_DATE_TIME < ?4 ", nativeQuery = true)
+    /**
+     * query di ricerca dei voli con l'aereoporto di partenza e arrivo passati come
+     * argomenti della funzione
+     * 
+     * @param departure
+     * @param arrival
+     * @return
+     */
     @Query(value = "SELECT * FROM FLIGHT_OFFERS o WHERE o.DEPARTURE_AIRPORT_CODE = ?1 AND O.ARRIVAL_AIRPORT_CODE = ?2 ", nativeQuery = true)
     public ArrayList<FlightOffer> searchFlightOffers(String departure, String arrival);
 

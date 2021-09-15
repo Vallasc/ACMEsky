@@ -40,102 +40,127 @@ import static it.unibo.soseng.camunda.utils.ProcessVariables.URI_INFO;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.USERNAME;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.USER_INTERESTS_REQUEST;
 
+/**
+ * Logica che utilizza le classi del model e del gateway per gestire gli
+ * interessi degli utenti
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
+
 @Stateless
 public class InterestManager {
-    
+
     private final static Logger LOGGER = Logger.getLogger(InterestManager.class.getName());
 
     @Inject
     private DatabaseManager databaseManager;
-    
+
     @Inject
     private SecurityContext securityContext;
 
     @Inject
     private ProcessState processState;
 
-    // Start Camunda process
-    public void startSaveUserInterests(UserInterestDTO request, AsyncResponse response, UriInfo uriInfo) 
-                                                                throws BadRequestException{
+    /**
+     * Start Camunda process
+     * 
+     * avvia la procedura di salvataggio dell'offerta di volo di interesse
+     * dell'utente generando il processo Camunda che si occuperà di salvarla in DB
+     * 
+     * @param request
+     * @param response
+     * @param uriInfo
+     * @throws BadRequestException
+     */
+    public void startSaveUserInterests(UserInterestDTO request, AsyncResponse response, UriInfo uriInfo)
+            throws BadRequestException {
 
         LOGGER.info("StartSaveUserInterests");
         String email = securityContext.getCallerPrincipal().getName();
 
         final RuntimeService runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();
-        
-        Map<String,Object> processVariables = new HashMap<String,Object>();
+
+        Map<String, Object> processVariables = new HashMap<String, Object>();
         processVariables.put(USER_INTERESTS_REQUEST, request);
         processVariables.put(USERNAME, email);
         processState.setState(PROCESS_SAVE_INTEREST, email, URI_INFO, uriInfo);
         processState.setState(PROCESS_SAVE_INTEREST, email, ASYNC_RESPONSE, response);
-  
+
         // Start the process instance
         ProcessInstanceWithVariables instance = runtimeService.createProcessInstanceByKey(SAVE_INTERESTS)
-                                                                .setVariables(processVariables)
-                                                                .executeWithVariablesInReturn();
+                .setVariables(processVariables).executeWithVariablesInReturn();
         processVariables = instance.getVariables();
         String error = (String) processVariables.get(PROCESS_ERROR);
-        if(error != null)
+        if (error != null)
             throw new BadRequestException();
-    }   
+    }
 
-    public Response handleUserInterests(String username, UserInterestDTO interest){
+    /**
+     * effettua i controlli necessari sull'offerta di volo da salvare in DB
+     * 
+     * @param username
+     * @param interest
+     * @return
+     */
+    public Response handleUserInterests(String username, UserInterestDTO interest) {
         // Control date time
         OffsetDateTime now = OffsetDateTime.now();
         OffsetDateTime outboundDateTime = interest.getOutboundFlight().getDepartureOffsetDateTime();
         OffsetDateTime flightBackDateTime = interest.getFlightBack().getDepartureOffsetDateTime();
         flightBackDateTime = flightBackDateTime.minusDays(1);
-        if(outboundDateTime.compareTo(flightBackDateTime) > 0) {
-            return Response.status(Response.Status.BAD_REQUEST.getStatusCode())
-                            .entity(Errors.DATE_ERROR)
-                            .build();
+        if (outboundDateTime.compareTo(flightBackDateTime) > 0) {
+            return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).entity(Errors.DATE_ERROR).build();
         }
 
-        if( outboundDateTime.compareTo(now) < 0 ) {
-            return Response.status(Response.Status.BAD_REQUEST.getStatusCode())
-                .entity(Errors.DATE_TO_EARLY)
-                .build();
+        if (outboundDateTime.compareTo(now) < 0) {
+            return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).entity(Errors.DATE_TO_EARLY).build();
         }
 
         OffsetDateTime end = now.plusDays(Env.INTEREST_WINDOW);
-        if( outboundDateTime.compareTo(end) > 0 ) {
-            return Response.status(Response.Status.BAD_REQUEST.getStatusCode())
-                .entity(Errors.DATE_TO_LATE)
-                .build();
+        if (outboundDateTime.compareTo(end) > 0) {
+            return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).entity(Errors.DATE_TO_LATE).build();
         }
         // Control Airport codes
-        if( interest.getOutboundFlight().getArrivalAirportCode().compareTo(
-            interest.getFlightBack().getDepartureAirportCode()) != 0 ||
-            interest.getOutboundFlight().getDepartureAirportCode().compareTo(
-            interest.getFlightBack().getArrivalAirportCode()) != 0 ) {
-                return Response.status(Response.Status.BAD_REQUEST.getStatusCode())
-                    .entity(Errors.AIRPORT_CODE_ERROR)
+        if (interest.getOutboundFlight().getArrivalAirportCode()
+                .compareTo(interest.getFlightBack().getDepartureAirportCode()) != 0
+                || interest.getOutboundFlight().getDepartureAirportCode()
+                        .compareTo(interest.getFlightBack().getArrivalAirportCode()) != 0) {
+            return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).entity(Errors.AIRPORT_CODE_ERROR)
                     .build();
         }
-        
+
         try {
             UserInterest userInterest = this.saveUserInterests(username, interest);
-            
+
             UriInfo uriInfo = (UriInfo) processState.getState(PROCESS_SAVE_INTEREST, username, URI_INFO);
-            return Response.status(Response.Status.CREATED.getStatusCode())
-                    .header("Location", String.format("%s/%s", uriInfo.getAbsolutePath().toString(), userInterest.getId()))
-                    .build();
+            return Response.status(Response.Status.CREATED.getStatusCode()).header("Location",
+                    String.format("%s/%s", uriInfo.getAbsolutePath().toString(), userInterest.getId())).build();
         } catch (AirportNotFoundException e) {
-            return Response.status(Response.Status.BAD_REQUEST.getStatusCode())
-                            .entity(Errors.AIRPORT_NOT_FOUND)
-                            .build();
+            return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).entity(Errors.AIRPORT_NOT_FOUND)
+                    .build();
         } catch (UserNotFoundException e) {
-            return Response.status(Response.Status.BAD_REQUEST.getStatusCode())
-                            .entity(Errors.USER_NOT_FOUND)
-                            .build();
-        } catch (DateTimeParseException e){
-            return Response.status(Response.Status.BAD_REQUEST.getStatusCode())
-                            .entity(Errors.DATE_FORMAT_ERROR)
-                            .build();
+            return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).entity(Errors.USER_NOT_FOUND).build();
+        } catch (DateTimeParseException e) {
+            return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).entity(Errors.DATE_FORMAT_ERROR)
+                    .build();
         }
     }
 
-    public UserInterest saveUserInterests(String username, UserInterestDTO request) throws AirportNotFoundException, UserNotFoundException, DateTimeParseException {
+    /**
+     * prepara l'offerta di interesse dell'utente generando gli oggetti dei campi
+     * che la formano e ne richiede il salvataggio al DbManager
+     * 
+     * @param username
+     * @param request
+     * @return
+     * @throws AirportNotFoundException
+     * @throws UserNotFoundException
+     * @throws DateTimeParseException
+     */
+    public UserInterest saveUserInterests(String username, UserInterestDTO request)
+            throws AirportNotFoundException, UserNotFoundException, DateTimeParseException {
 
         // Check airport
         Airport airportOut1 = databaseManager.getAirport(request.getOutboundFlight().getDepartureAirportCode());
@@ -145,7 +170,7 @@ public class InterestManager {
         Airport airportBack2 = databaseManager.getAirport(request.getFlightBack().getArrivalAirportCode());
 
         String email = securityContext.getCallerPrincipal().getName();
-        
+
         // Get User
         User user = databaseManager.getUser(email);
 
@@ -179,21 +204,38 @@ public class InterestManager {
         return interest;
     }
 
-    public List<UserInterestDTO> getUserInterests(){
+    /**
+     * recupera la lista di offerte di interesse degli utenti dal DB e la converte
+     * in una lista composta dai corrispondenti oggetti DTO
+     * 
+     * @return
+     */
+    public List<UserInterestDTO> getUserInterests() {
         String email = securityContext.getCallerPrincipal().getName();
         List<UserInterest> interests = databaseManager.getUserInterests(email);
-        return interests.stream()
-                .map( interest -> UserInterestDTO.from(interest) )
-                .collect(Collectors.toList());
+        return interests.stream().map(interest -> UserInterestDTO.from(interest)).collect(Collectors.toList());
     }
 
-    public UserInterestDTO getUserInterest(String id) throws InterestNotFoundException{
+    /**
+     * recupera l'offerta di volo di interesse con l'identificativo specificato
+     * 
+     * @param id
+     * @return
+     * @throws InterestNotFoundException
+     */
+    public UserInterestDTO getUserInterest(String id) throws InterestNotFoundException {
         String email = securityContext.getCallerPrincipal().getName();
         UserInterest interest = databaseManager.getUserInterest(email, id);
         return UserInterestDTO.from(interest);
     }
 
-    public void deleteUserInterest(String id) throws InterestNotFoundException{
+    /**
+     * elimina l'offerta di volo di interesse con l'identificativo specificato
+     * 
+     * @param id
+     * @throws InterestNotFoundException
+     */
+    public void deleteUserInterest(String id) throws InterestNotFoundException {
         String email = securityContext.getCallerPrincipal().getName();
         UserInterest interest = databaseManager.getUserInterest(email, id);
         interest.setUsed(true);
@@ -202,14 +244,27 @@ public class InterestManager {
         databaseManager.updateUserInterest(interest);
     }
 
-    public List<AirportDTO> getAirportsFromQuery(String query){
+    /**
+     * recupera la lista di aereoporti a partire dalla query specificata come
+     * argomento della funzione
+     * 
+     * @param query
+     * @return
+     */
+    public List<AirportDTO> getAirportsFromQuery(String query) {
         List<Airport> airports = databaseManager.getAirportsFromQuery(query);
-        return airports.stream()
-                .map( airport -> AirportDTO.from(airport) )
-                .collect(Collectors.toList());
+        return airports.stream().map(airport -> AirportDTO.from(airport)).collect(Collectors.toList());
     }
 
-    public AirportDTO getAirport(String code) throws AirportNotFoundException{
+    /**
+     * recupera l'oggetto DTO dell'aereoporto con il codice specificato come
+     * argomento della funzione
+     * 
+     * @param code
+     * @return
+     * @throws AirportNotFoundException
+     */
+    public AirportDTO getAirport(String code) throws AirportNotFoundException {
         Airport airport = databaseManager.getAirport(code);
         return AirportDTO.from(airport);
     }

@@ -17,9 +17,18 @@ import static it.unibo.soseng.security.Constants.USER;
 
 import java.util.UUID;
 
+/**
+ * Logica che gestisce gli utenti che vogliono interagire con ACMEsky
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
+
 @Stateless
 public class UserManager {
-    //private final static Logger LOGGER = Logger.getLogger(UserManager.class.getName());
+    // private final static Logger LOGGER =
+    // Logger.getLogger(UserManager.class.getName());
 
     @Inject
     private DatabaseManager databaseManager;
@@ -27,6 +36,12 @@ public class UserManager {
     @Inject
     private SecurityContext securityContext;
 
+    /**
+     * genera l'oggetto utente e lo salva in DB
+     * 
+     * @param request
+     * @throws UserAlreadyInException
+     */
     public void createUser(UserSignUpDTO request) throws UserAlreadyInException {
         User user = new User();
         user.setProntogramUsername(request.getProntogramUsername());
@@ -41,39 +56,59 @@ public class UserManager {
         String salt = UUID.randomUUID().toString().substring(0, 4);
         entity.setSalt(salt);
         user.setEntity(entity);
-        
+
         databaseManager.createUser(user);
     }
 
-  
-    public UserDTO getUser() throws UserNotFoundException{
+    /**
+     * recupera l'utente che si è appena autenticato su ACMEskyWeb
+     * 
+     * @return
+     * @throws UserNotFoundException
+     */
+    public UserDTO getUser() throws UserNotFoundException {
         String email = securityContext.getCallerPrincipal().getName();
         User user = databaseManager.getUser(email);
         return UserDTO.fromUser(user);
     }
-    
+
+    /**
+     * aggiorna le informazioni dell'utente che si è autenticato su ACMEskyWeb
+     * 
+     * @param request
+     * @return
+     * @throws InvalidCredentialsException
+     * @throws UserNotFoundException
+     */
     public UserDTO updateUser(UserUpdateDTO request) throws InvalidCredentialsException, UserNotFoundException {
         String name = securityContext.getCallerPrincipal().getName();
-        if(!name.equals(request.getEmail()))
+        if (!name.equals(request.getEmail()))
             throw new InvalidCredentialsException();
 
         User user = databaseManager.getUser(name);
 
-        if(!user.getEntity().getPassword().equals(request.getPassword()))
+        if (!user.getEntity().getPassword().equals(request.getPassword()))
             throw new InvalidCredentialsException();
-        if(request.getNewPassword() != null)
+        if (request.getNewPassword() != null)
             user.getEntity().setPassword(request.getNewPassword());
-        if(request.getNewProntogramUsername() != null)
+        if (request.getNewProntogramUsername() != null)
             user.setProntogramUsername(request.getNewProntogramUsername());
-        if(request.getNewName() != null)
+        if (request.getNewName() != null)
             user.setName(request.getNewName());
-        if(request.getNewSurname() != null)
+        if (request.getNewSurname() != null)
             user.setSurname(request.getNewSurname());
 
         databaseManager.updateUser(user);
         return UserDTO.fromUser(user);
     }
 
+    /**
+     * elimina l'utente che si è autenticato su ACMEskyWeb
+     * 
+     * @throws InvalidCredentialsException
+     * @throws PersistenceException
+     * @throws UserNotFoundException
+     */
     public void deleteUser() throws InvalidCredentialsException, PersistenceException, UserNotFoundException {
         String name = securityContext.getCallerPrincipal().getName();
         User user = databaseManager.getUser(name);

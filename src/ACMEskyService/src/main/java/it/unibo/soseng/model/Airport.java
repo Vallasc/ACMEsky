@@ -9,38 +9,47 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * descrive le entità degli aereoporti nazionali ed internazionali in codice
+ * IATA specificandone i campi con cui vengono registrate sul DB nella tabella
+ * airports
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
+
 @Entity
-@Table(name="airports")
+@Table(name = "airports")
 public class Airport implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", nullable = false)
+    @Column(name = "id", nullable = false)
     private long id;
 
     @Column(name = "code", nullable = false, unique = true)
     private String code;
 
-    @Column(name = "name", nullable = false) 
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "city_name", nullable = false) 
+    @Column(name = "city_name", nullable = false)
     private String cityName;
 
-    @Column(name = "country_code", nullable = false) 
+    @Column(name = "country_code", nullable = false)
     private String countryCode;
 
-    @Column(name = "timezone", nullable = false) 
+    @Column(name = "timezone", nullable = false)
     private int timezone;
 
-    @Column(name = "latitude", nullable = false) 
+    @Column(name = "latitude", nullable = false)
     private float latitude;
 
-    @Column(name = "longitude", nullable = false) 
+    @Column(name = "longitude", nullable = false)
     private float longitude;
-
 
     public Airport(String code, String name, String cityName, String countryCode, int timezone, float latitude,
             float longitude) {
@@ -53,7 +62,8 @@ public class Airport implements Serializable {
         this.longitude = longitude;
     }
 
-    public Airport(){};
+    public Airport() {
+    };
 
     public long getId() {
         return id;

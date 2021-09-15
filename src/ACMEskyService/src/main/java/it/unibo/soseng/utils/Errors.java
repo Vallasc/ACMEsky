@@ -1,5 +1,13 @@
 package it.unibo.soseng.utils;
 
+/**
+ * classe che elenca i possibili errori che le funzioni di ACMEsky possono
+ * restituire
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
 public class Errors {
     public static final String DATE_FORMAT_ERROR = "Incorrect datetime format. Example 2007-04-05T14:30Z";
     public static final String DATE_ERROR = "Date and time error";

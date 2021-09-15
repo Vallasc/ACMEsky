@@ -28,7 +28,8 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
- * Questa classe definisce le caratteristiche delle offerte di volo
+ * Questa classe offre le funzionalità che vengono invocate quando i servizi
+ * esterni fanno richiesta alle route del controller.
  * 
  * @author Andrea Di Ubaldo andrea.diubaldo@studio.unibo.it
  */
@@ -36,6 +37,9 @@ import okhttp3.Response;
 @Transactional
 public class FlightOfferService {
 
+    /**
+     * repository delle offerte di volo
+     */
     @Autowired
     private FlightOfferRepository repo;
 
@@ -48,10 +52,9 @@ public class FlightOfferService {
     private final static Logger LOGGER = Logger.getLogger(FlightOfferService.class.getName());
 
     /**
-     * genera una lista di offerte di volo randomicamente che viene cancellata se
-     * scaduta prima di essere salvata sul DB, converte l'offerta in volo e lo manda
-     * attraverso sendLastMinuteOffer se l'offerta risulta essere last-minute
-     * rispetto alla data in cui l'offerta viene creata
+     * genera una lista di offerte di volo last-minute randomicamente, le salva in
+     * Db e richiede un token valido ad ACMEsky per inviargli i voli generati non
+     * scaduti
      * 
      * @return FlightOffer che viene salvata nella rispettiva tabella del db
      * @throws JsonProcessingException
@@ -67,9 +70,6 @@ public class FlightOfferService {
             repo.save(of);
         }
 
-        // richiedo il token jwt attraverso una richiesta http e la passo a
-        // sendLastMinuteOffer che lo aggiungerà all'header della chiamata che fa per
-        // inviare le offerte last-minute
         try {
             String jwt = auth.AuthRequest(route, user, pass);
             l.removeIf(o -> u.DeleteExpiredOffers(o));
@@ -89,6 +89,13 @@ public class FlightOfferService {
 
     }
 
+    /**
+     * genera tutte le offerte di volo non last-minute presenti nell'array OFFERS
+     * 
+     * @param s
+     * @throws JsonProcessingException
+     * @throws IOException
+     */
     public void createFlightOffers(String s) throws JsonProcessingException, IOException {
         List<JsonNode> l = u.GetJsonOffers(u.GetFile(s));
 
