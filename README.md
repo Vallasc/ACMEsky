@@ -1,9 +1,6 @@
 
 # ACMEsky
-
-Progetto di Ingegneria del Software Orientata ai Servizi 
-
-A.A. 2020/2021
+Progetto di Ingegneria del Software Orientata ai Servizi A.A. 2020/2021
 
 La documentazione web è disponibile al link https://vallasc.github.io/ACMEsky/docs/
 

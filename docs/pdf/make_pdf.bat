@@ -16,5 +16,6 @@ servizi.md ^
 ..\src\BankService\README.md ^
 ..\src\Prontogram\README.md ^
 ..\src\RentService\README.md ^
-..\src\GeographicalDistanceService\README.md > total.md
-npx md-to-pdf total.md
+..\src\GeographicalDistanceService\README.md > doc.md
+call npx md-to-pdf doc.md
+move doc.pdf ..\doc.pdf
