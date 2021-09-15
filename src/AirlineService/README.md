@@ -1,9 +1,5 @@
 # Airline service
 
-A demo version of AirlineService
-
-## Introduzione
-
 Airline Service è il servizio che genera e invia ad ACMEsky i voli last-minute e quei voli che hanno una corrispondenza con i voli di interesse degli utenti raccolti da ACMEsky stessa. I voli vengono generati dopo circa 10 minuti che il servizio viene attivato e inviati ad ACMEsky su richiesta dei clienti, mentre i voli last-minute vengono generati e passati ogni 10 minuti indipendentemente dalla presenza di voli di interesse ad essi corrispondenti.
 
 Il servizio manda i biglietti relativi ai voli per cui gli utenti manifestano la volontà di acquistare tramite il servizio di ACMEskyWeb.
@@ -34,44 +30,35 @@ Inoltre è presente un package repository che contiene un interfaccia che estend
 Nella directory resources vi sono le risorse necessarie per realizzare i biglietti aerei, ovvero il template "Ticket_template" e la sottodirectory "pdf-resources" che ospita la cartella css contentente un css impiegato dal template.
 |
 
-### URI
-
-Tutti gli URI riferiti ai vari container che ospitano i servizi di AirlineService sono i seguenti:
-
-- http://localhost:8060 per airlineservice_national
-- http://localhost:8061 per airlineservice_international
-
 ### API:
+Il file OpenAPI è disponibile al seguente [link](https://vallasc.github.io/ACMEsky/src/AirlineService/swagger.json)
 
-```sh
-http://localhost:8060/swagger-ui.html
-http://localhost:8061/swagger-ui.html
-```
 
 <iframe title="API"
     width="900"
-    height="1100"
+    height="850"
     class="hidden"
     src="
     https://vallasc.github.io/ACMEsky/src/SwaggerUI/index.html?src=https://vallasc.github.io/ACMEsky/src/AirlineService/swagger.json
     ">
 </iframe>
 
-### Risorse e descrizione
+&nbsp;
 
-| Risorsa          | Descrizione                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| POST /getFlights | Questa risorsa consente di richiedere i voli che corrispondono ai voli di richiesta degli utenti passati come parametro. Infatti prende in input una lista di oggetti JSON che vengono deserializzati grazie a Jackson Json in oggetti di tipo UserRequest e cerca nella repository le offerte che hanno gli stessi aereoporti di partenza e arrivo e la stessa data di partenza (non si considera l'orario, infatti si cerca tutti i voli disponibili per l'intero giorno di andata). Se queste non sono offerte last-minute e non sono già state acquistate da altri utenti, vengono convertite in oggetti Flight e poi inviate in risposta alla chiamata, altrimenti no. |
-| GET /getTickets  | Le chiamate a questa risorsa che hanno come parametro la lista di identificatori delle offerte che l'utente ha intenzion di acquistare consentono di ricevere i biglietti dei voli in formato pdf. Nello specifico si cambia lo stato di acquisto delle offerte corrispondenti ai voli che si vuole acquistare e si restituisce un file che elenca e descrive brevemente le caratteristiche dei voli. Infine si imposta il tipo del contenuto del risultato, ovvero un pdf, e gli header che stabiliscono che vi un file in allegato alla risposta.                                                                                                                         |
+## Risorse
+| Risorsa | Descrizione |
+| - | - |
+| POST `/getFlights` | Questa risorsa consente di cercare i voli passati come parametro. Prende in input una lista di oggetti JSON che vengono deserializzati grazie a Jackson Json in oggetti di tipo UserRequest e cerca nella repository le offerte che hanno gli stessi aereoporti di partenza e arrivo e la stessa data di partenza (non si considera l'orario, infatti si cerca tutti i voli disponibili per l'intero giorno di andata). Se queste non sono offerte last-minute e non sono già state acquistate da altri utenti, vengono convertite in oggetti Flight e poi inviate in risposta alla chiamata, altrimenti no. |
+| GET `/getTickets`  | Le chiamate a questa risorsa che hanno come parametro la lista di identificatori delle offerte che l'utente ha intenzion di acquistare consentono di ricevere i biglietti dei voli in formato pdf. Nello specifico si cambia lo stato di acquisto delle offerte corrispondenti ai voli che si vuole acquistare e si restituisce un file che elenca e descrive brevemente le caratteristiche dei voli. Infine si imposta il tipo del contenuto del risultato, ovvero un pdf, e gli header che stabiliscono che vi un file in allegato alla risposta. |
+
+## Esecuzione 
 
 ### Build fat Jar:
-
 ```sh
 mvn package
 ```
 
-### Build e run con Docker compose
-
+### Come eseguire con Docker compose
 ```sh
 docker-compose up --build
 ```
@@ -95,6 +82,10 @@ URL: jdbc:h2:file:./db/db
 user: sa
 passw:
 ```
+### URI
+Gli URI riferiti ai vari container che ospitano i servizi di AirlineService sono:
+- http://localhost:8060 per airlineservice_national
+- http://localhost:8061 per airlineservice_international
 
 \
 \

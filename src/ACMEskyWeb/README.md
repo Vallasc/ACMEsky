@@ -5,6 +5,7 @@ ACMEsky Web è una single webpage application che viene utilizzata dall'utente p
 ## Tecnologie utilizzate
 - Svelte
 - Typescript
+- Bootstrap
 
 ## Esecuzione
 

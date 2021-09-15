@@ -12,9 +12,8 @@ Per la gestione dei dati è stato utlizzato *H2*, un DBMS leggero che permette d
 
 
 ## API:
-```sh
-https://vallasc.github.io/ACMEsky/src/BankService/openapi.json
-```
+Il file OpenAPI è disponibile al seguente [link](https://vallasc.github.io/ACMEsky/src/BankService/openapi.json)
+
 
 <iframe title="API"
     width="900"
@@ -25,7 +24,7 @@ https://vallasc.github.io/ACMEsky/src/BankService/openapi.json
     ">
 </iframe>
 
-## Risorse e descrizione
+## Risorse
 
 | Risorsa | Descrizione |
 | - | - |
@@ -35,7 +34,8 @@ https://vallasc.github.io/ACMEsky/src/BankService/openapi.json
 | GET `/payments` | Risorsa che restituisce la lista dei link di pagamento associati all'utente. |
 | POST `/auth` | Risorsa per autenticarsi nel sistema, restituisce un JWT che dovrà essere inserito in tutte le richieste. |
 
-## Build
+
+## Esecuzione
 
 ### Build fat Jar:
 ```sh
@@ -47,7 +47,7 @@ mvn package
 mvnw spring-boot:run
 ```
 
-### Build e run con Docker compose
+### Come eseguire con Docker Compose
 ```sh
 docker-compose up --build
 ```
