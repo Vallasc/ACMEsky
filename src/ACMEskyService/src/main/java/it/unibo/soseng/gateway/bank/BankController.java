@@ -11,6 +11,7 @@ import javax.ws.rs.core.Response;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import it.unibo.soseng.logic.BankManager;
 
 import java.util.logging.Logger;
@@ -26,7 +27,7 @@ import static it.unibo.soseng.security.Constants.BANK;
  * @author Riccardo Baratin
  */
 @Path("banks")
-@Produces(MediaType.APPLICATION_JSON)
+@SecurityRequirement(name = "bearerAuth")
 public class BankController {
     private final static Logger LOGGER = Logger.getLogger(BankController.class.getName());
 
@@ -41,6 +42,7 @@ public class BankController {
      */
     @GET
     @RolesAllowed({ BANK })
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/confirmPayment")
     @Operation(summary = "Conferma pagamento", description = "conferma dell'avvenuto pagamento da parte della banca. Risorsa esclusiva della banca.")
     @ApiResponse(responseCode = "200", description = "Richiesta elaborata correttamente")

@@ -415,8 +415,7 @@ public class OfferManager {
     public float getDistance(AddressDTO userAddress, GeneratedOffer offer) throws DistanceServiceException {
         Float latitude = offer.getOutboundFlight().getDepartureAirport().getLatitude();
         Float longitude = offer.getOutboundFlight().getDepartureAirport().getLongitude();
-        String fullAddress = userAddress.getAddress() + ", " + userAddress.getPostCode() + " "
-                + userAddress.getCityName() + ", " + userAddress.getCountry();
+        String fullAddress = userAddress.toString();
         try {
             DistanceDTO distance = distanceClient.requestDistance(fullAddress,
                     latitude.toString() + ',' + longitude.toString());
@@ -430,41 +429,58 @@ public class OfferManager {
     }
 
     /**
+     * recupera il servizio rent più vicino all'indirizzo dell'utente passato come
+     * parametro
+     * 
+     * @param userAddress
+     * @return
+     */
+    public RentService getNearestRent(AddressDTO userAddress) {
+
+        List<RentService> rentServices = databaseManager.getAllRentServices();
+        RentService nearest = null;
+        float minDistance = Float.MAX_VALUE;
+        for (RentService rent : rentServices) {
+            try {
+                DistanceDTO distance = distanceClient.requestDistance(userAddress.toString(), rent.getAddress());
+                if (!distance.getStatus().equals("OK"))
+                    continue;
+                if (distance.getValue() < minDistance) {
+                    nearest = rent;
+                    minDistance = distance.getValue();
+                }
+            } catch (IOException | GeoserverErrorException e) {
+                LOGGER.severe(e.toString());
+            }
+        }
+        return nearest;
+
+    }
+
+    /**
      * si occupa della prenotazione del servizio di rent per il volo di andata e
      * ritorno dell'offerta dell'utente il cui indirizzo e la cui email è
      * specificata come argomento della funzione
      */
-    public void bookAllRent(String email, AddressDTO address, GeneratedOffer offer, DelegateExecution execution)
-            throws UserNotFoundException {
+    public void bookAllRent(String email, AddressDTO address, GeneratedOffer offer, RentService rent,
+            DelegateExecution execution) throws UserNotFoundException {
         User user = databaseManager.getUser(email);
-        String userAddress = address.getAddress() + ", " + address.getPostCode() + " " + address.getCityName() + ", "
-                + address.getCountry();
+        String userAddress = address.toString();
         Airport airport = offer.getOutboundFlight().getDepartureAirport();
         String airportAddress = String.valueOf(airport.getLatitude()) + ',' + String.valueOf(airport.getLongitude());
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         String dateTimeOutbound = fmt.format(offer.getOutboundFlight().getDepartureDateTime());
         String dateTimeFligntBack = fmt.format(offer.getFlightBack().getArrivalDateTime());
-
-        List<RentService> rentServices = databaseManager.getAllRentServices();
         // Outbound
-        for (RentService rent : rentServices) {
-            String name = rent.getEntity().getUsername();
-            BookRentResponse response = rentClient.bookRent(name, user, userAddress, airportAddress, dateTimeOutbound);
-            if (response.getStatus().equals("OK")) {
-                execution.setVariable(RENT_OUTBOUND, response);
-                break;
-            }
+        String name = rent.getEntity().getUsername();
+        BookRentResponse response = rentClient.bookRent(name, user, userAddress, airportAddress, dateTimeOutbound);
+        if (response.getStatus().equals("OK")) {
+            execution.setVariable(RENT_OUTBOUND, response);
         }
-
         // Flyback
-        for (RentService rent : rentServices) {
-            String name = rent.getEntity().getUsername();
-            BookRentResponse response = rentClient.bookRent(name, user, airportAddress, userAddress,
-                    dateTimeFligntBack);
-            if (response.getStatus().equals("OK")) {
-                execution.setVariable(RENT_BACK, response);
-                break;
-            }
+        response = rentClient.bookRent(name, user, airportAddress, userAddress, dateTimeFligntBack);
+        if (response.getStatus().equals("OK")) {
+            execution.setVariable(RENT_BACK, response);
         }
         offer.setRent(true);
     }

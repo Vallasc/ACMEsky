@@ -1,27 +1,4 @@
 # ProntoGram
-Prontogram's web-application 
-
-### How to build
-cd front-end
-npm install
-ng build --prod  
-### How to run
-cd static 
-http-server 
-#### docker
-docker-compose up --build
-### API
-[API link](https://vallasc.github.io/ACMEsky/src/SwaggerUI/index.html?src=https://vallasc.github.io/ACMEsky/src/Prontogram/api.json)
-
-<iframe title="API"
-    width="900"
-    height="1800"
-    src="
-    https://vallasc.github.io/ACMEsky/src/SwaggerUI/index.html?src=https://vallasc.github.io/ACMEsky/src/Prontogram/api.json
-    ">
-</iframe>
-
-## Documentation
 
 Prontogram è una applicazione web che riceve le offerte dei voli da ACMEsky, attraverso un sistema di notifiche web.
 Le offerte ricevute vengono generate da ACMEsky, dopo che l'utente ha inserito su ACMEsky le preferenze su dei voli di proprio interesse.
@@ -30,11 +7,11 @@ L'istanza dell'offerta ricevuta è in formato JSON, più precisamente è un arra
 L'applicazione web di Prontogram si divide in due parti: front-end e back-end. Entrambe vengono istanziate grazie a Docker, in particolare al docker-compose.
 La parte back-end rappresenta il server di Prontogram e si occupa di gestire tutte le chiamate delle API da e verso la parte client di Prontogram. Mentre la parte fornt-end si occupa di creare l'interfaccia grafica e gestire le iterazioni da parte dell'utente.
 
-## Panoramica
 
-### Informazioni generali su tecnologie e scelte progettuali del servizio
+## Informazioni generali su tecnologie e scelte progettuali del servizio
 Come precedentemente enunciato, Prontogram si divide in due parti rispettivamente, parte front-end e parte back-end. Ognuna di queste è stata implementata utilizzando tecnologie e pattern strutturali diversi. 
-FORNT-END
+
+## Front-end
 La parte front-end è stata realizzata con il framework Angular, il quale consente di scomporre l'interfaccia utente in blocchi gestibili e di separare l'interfaccia utente dall'implementazione rendendo la generazione di pagine lato server molto più semplice. L'architettura modulare di Angular consente di strutturare al meglio un'applicazione e permette di semplificare il processo di creazione di SPA (Single page application).
 La parte front-end di Prontogram è stata implementata in tre macro componenti:
 - AccountComponent : componente che gestisce la parte di login e registrazione dell'utente;
@@ -44,11 +21,23 @@ Per quanto riguarda le tecnologie usate per implementare il sistema di notifiche
 - Chiave pubblica: viene utilizzata come identificatore univoco del server per iscrivere l'utente alle notifiche inviate da quest'ultimo;
 - Chiave privata : deve essere tenuta segreta (a differenza della chiave pubblica) e viene utilizzata dall'application server per firmare i messaggi, prima di inviarli al servizio Push per la consegna del messaggio.
 
-BACK-END
+### Back-end
 La parte back-end di Prontogram è stata realizzata utilizzando Node.js, un runtime system open source multipiattaforma orientato agli eventi per l'esecuzione di codice JavaScript. Più nello specifico è stato utilizzato Express.js un web framework per Node.js, il quale offre strumenti di base per creare più velocemente applicazioni in Node. Express.js ha permesso di realizzare un server abbastanza facilmente andando a generare le route (URL) utilizzate da ACMEsky e Prontogram durante le chiamate REST.
 Il package models include la classe per la definizione della notifica di un'offerta, ovvero notification, la classe per la definizione dell'utente, ovvero user, e la classe per la definizione della sottoscrizione al server, ovvero subscription.
 Inoltre è presente un package routes il quale contiene tutti i path/percorsi per gestire le chiamate alle API del server.
 Per salvare i dati ricevuti e inviati dal server è stato utilizzato MongoDB un DBMS non relazionale, orientato ai documenti. 
+
+### API
+[API link](https://vallasc.github.io/ACMEsky/src/SwaggerUI/index.html?src=https://vallasc.github.io/ACMEsky/src/Prontogram/api.json)
+
+<iframe title="API"
+    width="900"
+    height="1850"
+    class="hidden"
+    src="
+    https://vallasc.github.io/ACMEsky/src/SwaggerUI/index.html?src=https://vallasc.github.io/ACMEsky/src/Prontogram/api.json
+    ">
+</iframe>
 
 ### Risorse e descrizione
 
@@ -70,10 +59,26 @@ Per salvare i dati ricevuti e inviati dal server è stato utilizzato MongoDB un 
 
 ### URI
 Tutti gli URI riferiti ai vari container che ospitano i servizi di Prontogram sono i seguenti:
-```txt
+```sh
 - http://localhost:8050 per Prontogram back-end
 - http://localhost:8051 per Prontogram front-end
 - http://localhost:8052 per MongoDB 
 ```
+### How to build
+```sh
+cd front-end
+npm install
+ng build --prod  
+```
 
+### How to run
+```sh
+cd static 
+http-server 
+```
+
+### Run on Docker Compose
+```sh
+docker-compose up --build
+```
 

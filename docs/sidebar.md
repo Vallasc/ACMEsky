@@ -4,11 +4,15 @@
 * [Coreografie BPMN](docs/coreografieBPMN)
 * [UML](docs/UML)
 * [Struttura SOA](docs/struttura)
+* [Esecuzione](docs/esecuzione)
 
 * Servizi
-    * [ACMEsky](src/ACMEskyService/)
+    * ACMEsky
+        * [Service](src/ACMEskyService/)
         * [Database](src/ACMEskyDB/)
         * [Web](src/ACMEskyWeb/)
-    * [BankService](src/BankService/)
     * [AirlineService](src/AirlineService/)
+    * [BankService](src/BankService/)
     * [Prontogram](src/Prontogram/)
+    * [RentService](src/RentService/)
+    * [GeographicalDistance](src/GeographicalDistanceService/)

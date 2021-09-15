@@ -1,72 +1,105 @@
+
 # Diagramma BPMN
 
-In questa sezione della documentazione si descrive il diagramma BPMN del progetto, in cui si mostra come i servizi ed ACMEsky interagiscono tra loro al fine di realizzare le funzionalità richieste. Per una migliore specificità e gestione della documentazione il diagramma verrà diviso in parti relative alle varie azioni degli attori, come ad esempio: la registrazione dell'interesse utente, la ricerca offerte di volo, salvataggio di quelle last-minute, gestione delle offerte e pagamento, ecc.
+In questa sezione della documentazione viene descritto il diagramma BPMN della _Service Oriented Architecture_ (SOA), nel quale viene mostrato come i servizi ed __ACMEsky__ interagiscono tra loro al fine di realizzare le funzionalità richieste. Per una migliore specificità e gestione della documentazione il diagramma verrà diviso in parti relative alle varie azioni degli attori, come ad esempio: la registrazione dell'interesse utente, la ricerca dei voli, salvataggio di quelle last-minute, gestione delle offerte e pagamento, ecc.
 
-## Registrazione dell'interesse dell'utente
+## Ricerca voli
 
-![register_user_interest](bpmn/img/RegisterUserInterest.png)
+![search_flights](bpmn/img/SearchFlights.png)
 
-Il seguente diagramma descrive il processo di raccolta e registrazione dei voli di interesse degli utenti. Un utente descrive i suoi voli di interesse, specificando città/aereoporto di partenza, città/aereoporto di arrivo, data di partenza e ritorno del volo, e quota massima di spesa. Infatti le offerte di volo sono sempre formate dal volo di andata ed dal volo di ritorno.
-ACMEsky salva i voli di interesse nel suo Database, in particolare nella tabella "flights_interest" vengono salvati i voli che formano l'offerta di interesse e in "users_interests" l'offerta di interesse vera e propria. Infine invia la conferma di avvenuta creazione dei voli di interesse.
+La ricerca delle dei voli alle viene ripetuta con un certo intervallo di tempo, per evitare sovraccaricare i sistemi. Per questo i voli delle offerte di interesse degli utenti vengono salvate sul DB per _"bufferizzarle"_, in modo da non perderle ed utilizzarle per cercare i voli delle compagnie aeree. L'intervallo di tempo è variabile da 1 ora a pochi minuti poichè si cerca un compromesso tra un sistema efficiente e un sistema che non faccia aspettare troppo l'utente.
+
+Quindi, ad un certo intervallo e per ciascun __Airline Service__, __ACMEsky__ recupera i voli di interesse degli utenti dal suo Database ed effettua una ricerca mirata dei voli compatibili con essi attraverso una chiamata ad una risorsa dei servizi di volo. 
+I voli presenti nella risposta vengono salvati all'interno del database (tabella _available_flights_). 
+Se il timer della richiesta scade, per cause dovute ad __Airline Service__, il sottoprocesso termina e si passa ad un'altra compagnia.
+
+---
 
 ## Registrazione delle offerte last-minute
 
 ![registrazione_voli_last-minute](bpmn/img/SaveLast-minute.png)
 
-In questa parte si descrive il processo di ricezione e salvataggio dei voli last-minute. I servizi di Airline Service mandano voli last-minute appena creati ad ACMEsky, la quale salva ciascuno di essi nel database, nello specifico nella tabella available_flights.
+In questa parte si descrive il processo di ricezione e salvataggio dei voli last-minute. I servizi di __Airline Service__ mandano voli last-minute appena creati ad __ACMEsky__, la quale salva ciascuno di essi nel database, nello specifico nella tabella _available_flights_.
 
-## Rimozione dei voli scaduti
-
-![removing_expired_flights](bpmn/img/RemovingExpiredFlights.png)
-
-Il processo di cancellazione dei voli scaduti presenti nel Database avviene ogni 12 ore. I voli scaduti sono quei voli la cui data di scadenza è antecedente a quella in cui si effettua l'operazione di cancellazione. La cancellazione non comporta l'eliminazione effettiva del record che rappresenta quel volo, bensì un cambiamento di stato che porta ACMEsky a non considerare più quel volo come disponibile.
-
-## Rimozione delle offerte scadute
-
-![removing_expired_offers](bpmn/img/RemovingExpiredOffers.png)
-
-Il processo di cancellazione delle offerte di volo scadute presenti nel Database avviene ogni 12 ore. Le offerte di volo scadute comprendono i due voli di andata e ritorno che corrispondono ai voli di andata e ritorno di interesse degli utenti. Le offerte scadute sono quelle la cui data di scadenza del volo di partenza è antecedente a quella in cui si effettua l'operazione di cancellazione. La cancellazione non comporta l'eliminazione effettiva del record che descrive quell'offerta, bensì un cambiamento di stato che porta ACMEsky a non considerare più i voli dell'offerta (e l'offerta in sè) come disponibili.
-
-## Registrazione voli
-
-![search_flights](bpmn/img/SearchFlights.png)
-
-La ricerca delle offerte di volo viene fatta ad un certo intervallo di tempo per evitare l'invio di più richieste contemporaneamente ed evitare problemi di concorrenza. Per questo i voli delle offerte di interesse degli utenti vengono salvate sul DB per "bufferizzarle" in modo da non perderle ed utilizzarle una alla volta per cercare i voli delle compagnie aeree. L'intervallo di tempo è variabile dalle 12 ore a pochi minuti poichè si cerca un compromesso tra un sistema efficiente e un sistema che non fa aspettare troppo l'utente, che potrebbe decidere di non utilizzare ACMEsky.
-Quindi ad un certo intervallo e per ciascun Airline Service, ACMEsky recupera i voli di interesse degli utenti dal suo Database ed effettua una ricerca mirata dei voli compatibili con essi attraverso una chiamata ad una risorsa dei servizi di volo. I voli presenti nella risposta vengono salvati all'interno del DB (tabella available_flights). Se passa una certa quantità di tempo dovuto a ritardi o mancate risposte da parte dei Airline Service, per evitare che il flusso di esecuzione del sistema si fermi e non vada più avanti si è deciso di farlo terminare.
+---
 
 ## Match voli con interesse utente
 
 ![matching tra voli e voli di interesse](bpmn/img/Flights-InterestMatching.png)
 
-La generazione delle offerte di volo viene fatta ad un certo intervallo di tempo per evitare di gestire più offerte di interesse contemporaneamente ed evitare problemi di concorrenza. Per questo i voli delle offerte di interesse degli utenti vengono salvate sul DB per "bufferizzarle" in modo da non perderle e creare e offerte di volo corrispondenti una alla volta. L'intervallo di tempo è variabile da un'ora a pochi minuti poichè si cerca un compromesso tra un sistema efficiente e un sistema che non fa aspettare troppo l'utente, che potrebbe decidere di non utilizzare ACMEsky.
-Ogni ora e per ciascun volo di interesse ACMEsky cerca tra i voli disponibili presenti nel DB (tabella available_flights) se c'è una corrispondenza con l'offerta di interesse presa in esame(offerta comprende voli di andata e ritorno di interesse). In caso negativo semplicemente il flusso termina, altrimenti, se si trovano i voli corrispondenti a quelli di andata e ritorno richiesti, si procede alla preparazione ed al salvataggio in DB dell'offerta comprensiva dei voli di andata e ritorno interesse che l'utente cercava(relazione generated_offers). Infine l'offerta di volo viene inviata all'utente attraverso l'app di Prontogram e il flusso termina.
+La generazione delle offerte di volo viene fatta ad un certo intervallo di tempo, ciò consente di non sovraccaricare il sistema e di evitare problemi di concorrenza con altri processi che generano le offerte. Per questo motivo, i voli delle offerte di interesse degli utenti vengono salvati sul database finchè non vengono utilizzati dal processo. L'intervallo di tempo è variabile da un'ora a pochi minuti poichè si cerca un compromesso tra un sistema efficiente e un sistema che non faccia aspettare l'utente.
+
+Ogni ora, per ciascun offerta di interesse, __ACMEsky__ cerca tra i voli disponibili presenti nel database (tabella _available_flights_), se c'è una corrispondenza con l'interesse dell'utente allora prepara l'offerta, la salva nel database e la invia all'utente attraverso __Prontogram__. In caso negativo semplicemente il flusso termina passando all'interesse successivo.
+
+---
+
+## Registrazione dell'interesse dell'utente
+
+![register_user_interest](bpmn/img/RegisterUserInterest.png)
+
+Il seguente diagramma descrive il processo di raccolta e registrazione degli interessi degli utenti. L'utente descrive i suoi voli di interesse specificando: città/aereoporto di partenza, città/aereoporto di arrivo, data di partenza, data ritorno e quota massima di spesa.
+__ACMEsky__ salva i voli di interesse nel suo database, in particolare, nella tabella _flights_interest_ e in _users_interests_, che contiene l'interesse per uno specifico viaggio. 
+Infine, __ACMEsky__ invia la conferma di avvenuta creazione.
+
+---
 
 ## Conferma di acquisto, applicazione servizi premium e preparazione biglietti
 
 ![user_purchase_offer](bpmn/img/UserPurchaseOffer.png)
 
-In questa parte del diagramma si illustra la conferma di acquisto dell'offerta di volo da parte dell'utente, l'acquisto dell'offerta e l'applicazione di servizi premium se l'offerta rispetta le caratteristiche del servizio premium. Infine vi è il controllo per verificare che non ci siano errori e si prepara il biglietto che poi il cliente avrà disponibile. Queste feature verranno suddivise in sotto parti del diagramma in modo da facilitarne l'esposizione.
+In questa parte del diagramma viene illustrata la conferma di acquisto dell'offerta da parte dell'utente, l'acquisto dell'offerta e l'applicazione dei servizi premium se l'offerta rispetta le caratteristiche necessarie. 
+Infine, viene preparato il biglietto che poi l'utente potrà scaricare. 
+
+Per una magiore comprensione il diagramma è stato diviso in blocchi più piccoli.
 
 ### Conferma dell'offerta da parte dell'utente
 
 ![confirm_user_offer](bpmn/img/ConfirmOffer.png)
 
-L'App di Prontogram notifica l'utente del fatto che c'è un'offerta i cui voli di partenza e ritorno corrispondono ai voli di interesse da lui richiesti e termina il suo flusso. L'utente riceve l'offerta e può decidere se confermarla o meno attraverso l'invio di un token legato all'offerta stessa. ACMEsky recupera l'offerta corrispondente al token e si occupa di verificarne la validità, ovvero di controllare che il tempo di accettazione dell'offerta non sia terminato. In caso positivo si verifica se l'offerta di volo non è ancora scaduta e se anche in questo caso l'esito è positivo si invia all'utente la conferma di accettazione dell'offerta, altrimenti lo si informa dell'esito negativo dovuto alla scadenza dell'offerta o del token ed il flusso termina con un errore.
+L'app di __Prontogram__ notifica l'utente del fatto che c'è un'offerta disponibile.
+
+L'utente riceve l'offerta e può decidere se confermarla o meno attraverso l'invio di un token legato all'offerta stessa. __ACMEsky__ recupera l'offerta corrispondente al token e si occupa di verificarne la validità, ovvero, di controllare che il tempo di accettazione dell'offerta non sia terminato. In caso positivo si verifica se l'offerta di volo non sia scaduta e se anche in questo caso l'esito è positivo si invia all'utente la conferma di accettazione dell'offerta.
+In caso contrario lo si informa dell'esito negativo dovuto alla scadenza dell'offerta o del token non valido ed il flusso termina con un errore.
 
 ### Pagamento dei voli
 
 ![book_payment](bpmn/img/BookPayment.png)
 
-Il processo di pagamento inizia con una richiesta di pagamento del biglietto relativo all'offerta accettata. ACMEsky a questo punto si prende l'onere di prenotare i biglietti facendone richiesta all'Airline Service che offre i voli dell'offerta, la quale invierà in risposta i biglietti. Se c'è un errore relativo all'impossibilità di prenotare l'offerta poichè al servizio di Airline risulta che l'offerta sia già stata acquistata o per qualsiasi altro problema, si invia un messaggio di errore all'utente ed il flusso termina. Se invece la prenotazione va a buon fine e ACMEsky dispone dei biglietti chiederà il link di pagamento a Bank Service, la quale glielo invierà in risposta appena possibile, ovvero la cancellazione della prenotazione. Il link viene sottoposto all'utente a meno di eventuali problemi che se presenti porterebbero alla compensazione dei biglietti precedentemente prenotati. L'utente sceglierà se pagare o meno. Se è intenzionato a pagare effettua il pagamento e riceverà risposta da Bank Service per comunicargli l'esito del pagamento. Bank Service comunica l'esito anche ad ACMEsky la quale potrà decidere in base ad esso di chiudere il flusso di pagamento oppure occuparsi delle compensazioni. Se il pagamento non è avvenuto con successo si effettua la compensazione del biglietto, altrimenti se il servizio della banca non risponde entro 5 minuti dal pagamento si procede alla compensazione dei biglietti e alla compensazione del pagamento, ovvero all'emissione di un coupon spendibile dall'utente per acquistare nuove offerte di volo. In tal caso il flusso termina con un errore. Un errore nel pagamento (flusso ACMEsky) comporta il termine del flusso dell'utente.
+Il sottoprocesso inizia con la richiesta, da parte dell'utente, di pagamento del biglietto relativo all'offerta accettata. __ACMEsky__ a questo punto si prende l'onere di prenotare i biglietti facendone richiesta all'__Airline Service__ che fornisce i voli dell'offerta, la quale invierà in risposta i biglietti. Se c'è un errore relativo all'impossibilità di prenotare l'offerta poichè al servizio di airline risulta che l'offerta sia già stata acquistata o per qualsiasi altro problema, si invia un messaggio di errore all'utente ed il flusso termina. 
+
+Se la prenotazione va a buon fine, __ACMEsky__ chiederà il link di pagamento a __Bank Service__, la quale glielo invierà in risposta a meno di errori nel processo. Successivamente il link viene inoltrato all'utente che procederà al pagamento sulla piattaforma di __Bank Service__. Infine, __Bank Service__ comunica l'esito ad __ACMEsky__ che proseguirà nel sottoprocesso dei servizi premium.
+Se il servizio della banca non risponde entro 5 minuti dalla generazione del link si procede alla compensazione dei biglietti e del pagamento, in via preventiva. In questo caso il processo termina con errore.
 
 ### Servizi Premium voli
 
 ![premium_service](bpmn/img/PremiumService.png)
 
-In questa fase ci si occupa di un eventuale applicazione del servizio premium all'offerta di volo dell'utente. All'inizio ACMEsky controlla il prezzo dell'offerta del cliente, poichè se questo supera i mille euro si invia una richiesta al servizio di geolocalizzazione per conoscere la posizione dell'utente. In seguito alla risposta del servizio, ACMEsky sarà in grado di calcolare la distanza tra il domicilio dell'utente e l'aereoporto di partenza. Nel caso in cui la distanza sia superiore ai 30 km si richiede al Rent Service più vicino se c'è la possibilità di offrire all'utente un trasferimento gratuito dal suo domicilio all'aereoporto sia all'andata che al ritorno, e in tal caso modificherà i biglietti includendo tutte le informazioni necessarie dei due trasferimenti. Chiaramente in caso la distanza sia inferiore il servizio di trasferimento gratuito non è disponibile. In caso il prezzo dell'offerta sia inferiore alla soglia chiaramente non verrà offerto nessun servizio premium. Infine il flusso termina.
+In questa fase, se vengono rispettate le condizioni, vengono applicati all'offerta i servizi premium. Inizialmente __ACMEsky__ controlla il prezzo dell'offerta, se questo supera i mille euro invia una richiesta al servizio di __Geolocalizzazione__ per calcolare la distanza dell'utente dall'areoporto. Nel caso in cui la distanza sia superiore ai 30 km si richiede al __Rent Service__ più vicino se c'è la possibilità di offrire all'utente un trasferimento dal suo domicilio all'aereoporto. Questa operazione viene ripetuta sia all'andata che al ritorno, e in tal caso modificherà i biglietti includendo tutte le informazioni dei due trasferimenti. In caso la distanza sia inferiore ai 30Km o il prezzo dell'offerta sia inferiore a 1000€ non verrà richiesto nessun servizio.
+
+---
 
 ## Invio Biglietti
 
 ![prepare_tickets](bpmn/img/PrepareTickets.png)
 
-Arrivati a questo punto si cambierà lo stato dell'offerta riguardante l'acquisto e si prepareranno i biglietti che l'utente potrà scaricare. Il flusso termina per ACMEsky. L'utente può in qualunque momento richiedere i biglietti ad ACMEsky, la quale glieli restituirà. Il flusso termina sia per ACMEsky che per l'utente.
+Arrivati a questo punto viene cambiato lo stato dell'offerta e viene preparato il pdf contenente i biglietti che l'utente potrà scaricare. L'utente può in qualunque momento richiedere i biglietti che ha acquistato.
+
+---
+
+## Rimozione dei voli scaduti
+
+![removing_expired_flights](bpmn/img/RemovingExpiredFlights.png)
+
+Il processo di cancellazione dei voli scaduti presenti nel database avviene ogni 12 ore. I voli scaduti sono quei voli la cui data di scadenza è antecedente a quella in cui si effettua l'operazione di cancellazione. La cancellazione non comporta l'eliminazione effettiva del record che rappresenta quel volo, bensì un cambiamento di stato che porta ACMEsky a non considerare più quel volo come disponibile.
+
+---
+
+## Rimozione delle offerte scadute
+
+![removing_expired_offers](bpmn/img/RemovingExpiredOffers.png)
+
+Il processo di cancellazione delle offerte scadute presenti nel Database avviene ogni 12 ore. Le offerte di volo scadute comprendono i voli di andata e ritorno. Le offerte scadute sono quelle la cui data di scadenza del volo di partenza è antecedente a quella in cui si effettua l'operazione di cancellazione. La cancellazione non comporta l'eliminazione effettiva del record, bensì, un cambiamento di stato che porta ACMEsky a non considerare più i voli dell'offerta (e l'offerta in sè) come disponibili.
+
+---
+&nbsp;
+<div class="page-break"></div>

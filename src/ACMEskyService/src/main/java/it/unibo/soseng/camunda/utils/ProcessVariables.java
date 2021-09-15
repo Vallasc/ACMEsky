@@ -30,6 +30,7 @@ public final class ProcessVariables {
     public static final String IS_OFFER_EXPIRED = "isOfferExpired";
     public static final String USER_ADDRESS = "userAddress";
     public static final String USER_DISTANCE = "userDistance"; // float meters
+    public static final String NEAREST_RENT = "nearestRent";
     public static final String RENT_OUTBOUND = "rentOutbound"; // BookRentResponse
     public static final String RENT_BACK = "rentBack"; // BookRentResponse
     public static final String TICKET_FILE = "ticketFile"; // byte[]

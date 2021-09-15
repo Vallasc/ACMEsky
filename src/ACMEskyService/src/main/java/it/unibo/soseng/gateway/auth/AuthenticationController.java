@@ -33,6 +33,7 @@ import it.unibo.soseng.logic.DatabaseManager;
 import it.unibo.soseng.logic.DatabaseManager.EntityNotFoundException;
 import it.unibo.soseng.model.DomainEntity;
 import it.unibo.soseng.security.TokenProvider;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -112,7 +113,8 @@ public class AuthenticationController {
     @PUT
     @Path("/refresh")
     @RolesAllowed({ BANK, AIRLINE, USER })
-    @Operation(summary = "Refresh JWT", description = "Permette di richiedere un nuovo token utilizzando uno ancora non scaduto. Risorsa disponibile a tutte le entità del sistema.")
+    @Operation(summary = "Refresh JWT", description = "Permette di richiedere un nuovo token utilizzando uno ancora non scaduto. Risorsa disponibile a tutte le entità del sistema.",
+    security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponse(responseCode = "200", description = "Richiesta elaborata correttamente", content = @Content(array = @ArraySchema(schema = @Schema(implementation = AuthResponseDTO.class))))
     @ApiResponse(responseCode = "401", description = "Entità non autorizzta")
     public Response refresh() {

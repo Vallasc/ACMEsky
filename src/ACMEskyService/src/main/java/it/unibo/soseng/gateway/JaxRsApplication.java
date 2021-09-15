@@ -10,6 +10,9 @@ import javax.ws.rs.core.Application;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import io.swagger.v3.oas.annotations.servers.Server;
+import io.swagger.v3.oas.annotations.enums.*;
 
 @OpenAPIDefinition(
         info = @Info(
@@ -21,16 +24,16 @@ import io.swagger.v3.oas.annotations.info.Info;
                 "Prima di fare richieste alle risorse che richiedono l'autenticazione i servizi devono autenticarsi effettuando "+
                 "una richiesta POST ad '/auth' con username e password. Il token JWT ricevuto deve essere accompagnare ogni "+
                 "che viene fatta al servizio. A seconda del servizio i path a cui potrà accedere saranno differenti."
-        )
+        ),
+        servers = { @Server(url = "http://acmesky.duckdns.org:8080")}
+)
+@SecurityScheme(
+    name = "bearerAuth",
+    type = SecuritySchemeType.HTTP,
+    bearerFormat = "JWT",
+    scheme = "bearer"
 )
 @DeclareRoles({BANK, AIRLINE, USER})
 @ApplicationPath("/")
 public class JaxRsApplication extends Application {
-    
 }
-
-
-/*
-    @ApiResponse(responseCode = "400", description = "Richiesta non corretta",
-                    content = @Content( array = @ArraySchema(schema = @Schema(implementation = UserDTO.class))))
-                    */

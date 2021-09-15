@@ -2,13 +2,18 @@
 
 ## Prerequisiti
 
-- Avere Docker e Docker Compose installati sulla macchina
+- Docker
+- Docker compose
 - Un po' di pazienza!
 
 ## Esecuzione
 
-Aprire il terminale ed eseguire il seguente comando (su qualsiasi sistema operativo)
-
+Dalla root del progetto eseguire
 ```sh
-    docker-compose up --build
+docker-compose up --build
 ```
+
+I singoli servizi non devono essere compilati perchè questa operazione viene già fatta all'interno dei container.
+
+&nbsp;
+<div class="page-break"></div>

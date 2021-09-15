@@ -25,6 +25,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import it.unibo.soseng.gateway.user.dto.UserInterestDTO;
 import it.unibo.soseng.logic.InterestManager;
 import it.unibo.soseng.logic.DatabaseManager.InterestNotFoundException;
@@ -42,6 +43,7 @@ import static it.unibo.soseng.security.Constants.USER;
  */
 
 @Path("interests")
+@SecurityRequirement(name = "bearerAuth")
 public class InterestController {
 
     private final static Logger LOGGER = Logger.getLogger(InterestController.class.getName());

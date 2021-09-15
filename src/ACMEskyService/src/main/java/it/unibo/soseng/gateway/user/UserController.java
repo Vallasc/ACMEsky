@@ -31,6 +31,7 @@ import it.unibo.soseng.logic.UserManager;
 import it.unibo.soseng.logic.DatabaseManager.UserAlreadyInException;
 import it.unibo.soseng.logic.DatabaseManager.UserNotFoundException;
 import it.unibo.soseng.logic.UserManager.InvalidCredentialsException;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 import static it.unibo.soseng.security.Constants.USER;
 
@@ -54,7 +55,8 @@ public class UserController {
     @RolesAllowed({USER})
     @Produces( MediaType.APPLICATION_JSON )
     @Operation(summary = "Richiesta utente", 
-                description = "Restituisce l'utente identificato con il token jwt.  Risorsa esclusiva dell'utente.")
+                description = "Restituisce l'utente identificato con il token jwt.  Risorsa esclusiva dell'utente.",
+                security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponse(responseCode = "200", description = "Richiesta elaborata correttamente",
                 content = @Content( schema = @Schema(implementation = UserDTO.class)))
     @ApiResponse(responseCode = "401", description = "Entità non autorizzta")
@@ -110,7 +112,8 @@ public class UserController {
     @Consumes( MediaType.APPLICATION_JSON )
     @Produces( MediaType.APPLICATION_JSON )
     @Operation(summary = "Aggiornamento utente", 
-        description = "Aggiorna gli attributi dell'utente identificato con il token jwt. Risorsa esclusiva dell'utente.")
+        description = "Aggiorna gli attributi dell'utente identificato con il token jwt. Risorsa esclusiva dell'utente.",
+        security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponse(responseCode = "200", description = "Richiesta elaborata correttamente",
                 content = @Content( schema = @Schema(implementation = UserDTO.class)))
     @ApiResponse(responseCode = "400", description = "Parametri della richiesta non corretti")
@@ -133,7 +136,8 @@ public class UserController {
     @RolesAllowed({USER})
     @Consumes( MediaType.APPLICATION_JSON )
     @Operation(summary = "Eliminazione utente", 
-                description = "Elimina l'utente identificato con il token jwt. Risorsa esclusiva dell'utente.")
+                description = "Elimina l'utente identificato con il token jwt. Risorsa esclusiva dell'utente.",
+                security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponse(responseCode = "200", description = "Richiesta elaborata correttamente")
     @ApiResponse(responseCode = "401", description = "Entità non autorizzta")
     public Response deleteUser() {

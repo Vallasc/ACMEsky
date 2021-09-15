@@ -1,4 +1,6 @@
+
 # Coreografie
+In questa sezione vengono mostrate le coreografie.
 
 ## Nomenclatura
 
@@ -55,94 +57,98 @@
 // Conferma dell'offerta e pagamento
 // confirmOffer: messaggio di conferma offerta e pagamento
 ( 
-    confirmOffer: USERₓ -> ACME ; 
-    (
-        // ACMEsky conferma che l'offerta è disponibile
-        // responseOfferOk: messaggio di conferma offerta
-        // requestPaymentLink: richiesta di pagamento da parte dell'utente
-        (   
-            responseOfferOk: ACME -> USERₓ ;
-            requestPaymentLink: USERₓ -> ACME ;
-            (   
-                // Tickets ok
-                // bookTickets: prenota i biglietti 
-                // responseTickets: biglietti prenotati
-                // requestBankLink: richiesta creazione link di pagamento
-                // responselink: link di pagamento generato dalla banca
-                // paymentLink: link di pagamento generato dalla banca
-                // payment: pagamento attraverso il link generato
+  confirmOffer: USERₓ -> ACME ; 
+  (
+    // ACMEsky conferma che l'offerta è disponibile
+    // responseOfferOk: messaggio di conferma offerta
+    // requestPaymentLink: richiesta di pagamento da parte dell'utente
+    (   
+      responseOfferOk: ACME -> USERₓ ;
+      requestPaymentLink: USERₓ -> ACME ;
+      (   
+        // Tickets ok
+        // bookTickets: prenota i biglietti 
+        // responseTickets: biglietti prenotati
+        // requestBankLink: richiesta creazione link di pagamento
+        // responselink: link di pagamento generato dalla banca
+        // paymentLink: link di pagamento generato dalla banca
+        // payment: pagamento attraverso il link generato
+        (
+          bookTickets: ACME -> AIRₖ ;
+          responseTickets: AIRₖ -> ACME ;
+          requestBankLink: ACME -> BANK ; 
+          responselink: BANK -> ACME ;
+          paymentLink: ACME -> USERₓ ;
+          payment: USERₓ -> BANK ;
+          (
+            // Pagamento avvenuto con successo
+            // successPaymentBank: esito pagamento
+            (
+              successPaymentBank: BANK -> ACME ;
+              // Controllo Premium service
+              (
+                // Richiesta a Geodistance se costo > 1000€
+                1 
+                + 
+                // requestDistance: richiesta calcolo della distanza
+                // responseDistance: distanza calcolata
                 (
-                    bookTickets: ACME -> AIRₖ ;
-                    responseTickets: AIRₖ -> ACME ;
-                    requestBankLink: ACME -> BANK ; 
-                    responselink: BANK -> ACME ;
-                    paymentLink: ACME -> USERₓ ;
-                    payment: USERₓ -> BANK ;
+                  requestDistance: ACME -> GEO ; 
+                  responseDistance: GEO -> ACME ; 
+                  ( // Richiesta a Rent service se distanza <30Km
+                    1 
+                    +  
                     (
-                        // Pagamento avvenuto con successo
-                        // successPaymentBank: esito pagamento
-                        (
-                            successPaymentBank: BANK -> ACME ;
-
-                            // Controllo Premium service
-                            (
-                                // Richiesta a Geodistance se costo > 1000€
-                                1 
-                                + 
-                                // requestDistance: richiesta calcolo della distanza
-                                // responseDistance: distanza calcolata
-                                (
-                                    requestDistance: ACME -> GEO ; 
-                                    responseDistance: GEO -> ACME ; 
-                                    (   // Richiesta alla compagnia di noleggio se distanza <30Km
-                                        1 
-                                        +  
-                                        // requestRent1: richiesta noleggio veicoli 1
-                                        // responseRent1: risposta nolleggio 1
-                                        // requestRent2: richiesta noleggio veicoli 2
-                                        // responseRent2: risposta nolleggio 2
-                                        (
-                                            requestRent1: ACME -> RENTₜ₁ ; 
-                                            responseRent1: RENTₜ₁-> ACME ;
-                                            requestRent2: ACME -> RENTₜ₂ ; 
-                                            responseRent2: RENTₜ₂-> ACME 
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                        +
-                        (
-                            // Errore nel pagamento
-                            // unbookTickets: cancella la prenotazione dei biglietti
-                            // emitCoupon: pagamento fallito
-                            unbookTickets: ACME -> AIRₖ ;
-                            emitCoupon: ACME -> BANK 
-                        )
-                    ) 
+                      (
+                        // requestDistanceRent: richiesta distanza noleggio
+                        // responseDistanceRent: risposta con distanza
+                        requestDistanceRent: ACME -> GEO ; 
+                        responseDistanceRent: GEO -> ACME 
+                      )* ;
+                      // requestRentDeparture: richiesta noleggio andata
+                      // responseRentDeparture: risposta nolleggio andata
+                      // requestRentReturn: richiesta noleggio ritorno
+                      // responseRentReturn: risposta nolleggio ritorno
+                      requestRentDeparture: ACME -> RENTₜ ; 
+                      responseRentDeparture: RENTₜ-> ACME ;
+                      requestRentReturn: ACME -> RENTₜ ; 
+                      responseRentReturn: RENTₜ-> ACME 
+                    )
+                  )
                 )
-                // Errore nella prenotazione dei biglietti
-                // errorTickets: errore volo non disponibile
-                +
-                errorTickets: ACME -> USERₓ
+              )
             )
+            +
+            (
+              // Errore nel pagamento
+              // unbookTickets: cancella la prenotazione dei biglietti
+              // emitCoupon: pagamento fallito
+              unbookTickets: ACME -> AIRₖ ;
+              emitCoupon: ACME -> BANK 
+            )
+          ) 
         )
+        // Errore nella prenotazione dei biglietti
+        // errorTickets: errore volo non disponibile
         +
-        // ACMEsky controlla l'offerta e non è più disponibile
-        // responseOfferError: errore offerta
-        responseOfferError: ACME -> USERₓ
+        errorTickets: ACME -> USERₓ
+      )
     )
+    +
+    // ACMEsky controlla l'offerta e non è più disponibile
+    // responseOfferError: errore offerta
+    responseOfferError: ACME -> USERₓ
+  )
 )*
 
 ```
-
+---
 &nbsp;
 
 ## Verifica condizioni connectedness delle coreografie
 
-<!--Analizzando la coreografia si nota che essa fa parte del caso asincrono. -->
-
-Per stabilire la connectedness, e anche per una migliore lettura, la coreografia è stata divisa in 6 blocchi:
+Analizzando la coreografia si nota che essa fa parte del caso asincrono.
+Per stabilire la connectedness, e per una migliore lettura, la coreografia è stata divisa in 6 blocchi:
 
 1. __Query dei voli__
 2. __Ricezione offerte last-minute__
@@ -200,7 +206,7 @@ E' connessa anche per l'iterazione in quanto il ricevente in ___invoice___ è il
 ```fsharp
 1. ( confirmOffer: USERₓ -> ACME ; 
 ```
-E' connessa in quanto il ricevente di ___confirmOffer___ è il mittente di __(3)__ e di __(25)__.
+E' connessa in quanto il ricevente di ___confirmOffer___ è il mittente di __(3)__ e di __(27)__.
 ```fsharp
 2.   ( 
 3.     ( responseOfferOk: ACME -> USERₓ ; requestPaymentLink: USERₓ -> ACME ;
@@ -216,7 +222,7 @@ E' connessa per la sequenza in quanto il ricevente di ___requestPaymentLink___ �
 ```
 E' connessa per la sequenza in quanto il ricevente di ___bookTickets___ è il mittente di ___responseTickets___, il ricevente di ___requestBankLink___ è il mittente di ___responselink___, il ricevente di ___responselink___ è il mittente di ___paymentLink___ e il ricevente di ___paymentLink___ è il mittente di ___payment___.
 
-Inoltre, è connessa per la choice perché il destinatario di ___payment___ è il mittente di __(11)__ e di __(19)__
+Inoltre, è connessa per la choice perché il destinatario di ___payment___ è il mittente di __(11)__ e di __(21)__
 
 ```fsharp
 10.          ( 
@@ -230,39 +236,45 @@ E' connessa per la choice perché il destinatario di ___successPaymentBank___ è
 E' connessa per la sequenza perché il destinatario di ___requestDistance___ è il mittente di ___responseDistance___.
 E' connessa per la choice perché il destinatario di ___responseDistance___ è il mittente di __(14)__
 ```fsharp
-14.                  ( 1 + ( requestRent1: ACME -> RENTₜ₁ ; responseRent1: RENTₜ₁-> ACME ; 
-15.                          requestRent2: ACME -> RENTₜ₂ ; responseRent2: RENTₜ₂-> ACME )
-16.                  )
-17.                 )
-18.               )
+14.                  ( 1 +  ( ( requestDistanceRent: ACME -> GEO ; responseDistanceRent: GEO -> ACME )* ; 
 ```
-E' connessa per la sequenza perché il destinatario di ___requestRent1___ è il mittente di ___responseRent1___, il destinatario di ___responseRent1___ è il mittente di ___requestRent2___ e il destinatario di ___requestRent2___ è il mittente di ___responseRent2___.
-
+E' connessa per la sequenza perché il destinatario di ___requestDistanceRent___ è il mittente di ___responseDistanceRent___.
+E' connessa per l'iterazione perché destinatario di ___responseDistanceRent___ è il mittente di ___requestDistanceRent___, quindi la coreografia può essere iterata.
 ```fsharp
-19.             ) + ( errorPaymentBank: BANK -> ACME ; 
-20.                   unbookTickets: ACME -> AIRₖ ; unbookTicketsResponse: AIRₖ -> ACME ; 
-21.                   emitCoupon: ACME -> BANK ; emitCouponResponse: BANK -> ACME
+15.                      requestRentDeparture: ACME -> RENTₜ ; responseRentDeparture: RENTₜ-> ACME ;
+16.                      requestRentReturn: ACME -> RENTₜ ; responseRentReturn: RENTₜ-> ACME 
+17                     )
+18.                  )
+19.                 )
+20.               )
+```
+E' connessa per la sequenza perché il destinatario di ___responseDistanceRent___ è il mittente di ___requestRentDeparture___, il destinatario di ___requestRentDeparture___ è il mittente di ___responseRentDeparture___, il destinatario di ___responseRentDeparture___ è il mittente di ___requestRentReturn___ e il destinatario di requestRentReturn è il mittente di ___responseRentReturn___.
+```fsharp
+21.             ) + ( errorPaymentBank: BANK -> ACME ; 
+22.                   unbookTickets: ACME -> AIRₖ ; unbookTicketsResponse: AIRₖ -> ACME ; 
+23.                   emitCoupon: ACME -> BANK ; emitCouponResponse: BANK -> ACME
                 )
 ```
 E' connessa per la sequenza perché il destinatario di ___errorPaymentBank___ è il mittente di ___unbookTickets___, il destinatario di ___unbookTickets___ è il mittente di ___unbookTicketsResponse___, il destinatario di ___emitCoupon___ è il mittente di ___emitCouponResponse___.
 
 ```fsharp
-22           )
-23.         ) + errorTickets: ACME -> USERₓ
+24.           )
+25.         ) + errorTickets: ACME -> USERₓ
 ```
-E' connessa per la choice perchè i mittenti di __(6)__ e di __(23)__ sono gli stessi.
+E' connessa per la choice perchè i mittenti di __(6)__ e di __(25)__ sono gli stessi.
 ```fsharp
-24.       )
-25.     ) + responseOfferError: ACME -> USERₓ
-26.   ) 
+26.       )
+27.     ) + responseOfferError: ACME -> USERₓ
+28.   ) 
 ```
-E' connessa per la choice i sender di __(3)__ e di __(25)__ sono gli stessi.
+E' connessa per la choice i sender di __(3)__ e di __(27)__ sono gli stessi.
 ```fsharp
-27. )*
+29. )*
 ```
 
-La coreografia è connessa per l'iterazione in quanto __(23)__ e __(25)__ terminano con il ricevente __USER__ che è il mittente di __(1)__, mentre __(22)__ termina con __ACME__ che è connessa con __(1)__ secondo il pattern Receiver.
+La coreografia è connessa per l'iterazione in quanto __(25)__ e __(27)__ terminano con il ricevente __USER__ che è il mittente di __(1)__, mentre __(24)__ termina con __ACME__ che è connessa con __(1)__ secondo il pattern Receiver.
 
+---
 &nbsp;
 
 ## Proiezioni
@@ -311,12 +323,14 @@ proj(AcquistoOfferta, ACME) =
                 successPaymentBank@BANK ;
                         _______________
                 ( 1 + ( requestDistance@GEO ; responseDistance@GEO ;
-                         ____________
-                  ( 1 + (requestRent1@RENTₜ₁ ; responseRent1@RENTₜ₁ ;
-                         ____________
-                         requestRent2@RENTₜ₂ ; responseRent2@RENTₜ₂ 
-                  ))
-                ))  _____________        __________
+                            ___________________
+                  ( 1 + ( ( requestDistanceRent@GEO ; responseDistanceRent@GEO )* ;
+                    ____________________
+                    requestRentDeparture@RENTₜ ; responseRentDeparture@RENTₜ ;
+                    _________________
+                    requestRentReturn@RENTₜ ; responseRentReturn@RENTₜ
+                  ) )
+                ) ) _____________        __________
               ) + ( unbookTickets@AIRₖ ; emitCoupon@BANK )
             )
               ____________
@@ -365,7 +379,7 @@ proj(AcquistoOfferta, USERₓ) =
               (
                 1 ;
                 ( 1 + ( 1 ; 1 ;
-                  ( 1 + ( 1 ; 1 ; 1 ; 1 ) )
+                  ( 1 + (( 1 ; 1)* ; 1 ; 1 ; 1 ; 1 ))
                 ))
               ) + ( 1 ; 1 )
             )
@@ -412,7 +426,7 @@ proj(AcquistoOfferta, AIRₖ) =
             (
               ( 1 ;
                 ( 1 + ( 1 ; 1 ;
-                  ( 1 + ( 1 ; 1 ; 1 ; 1) )
+                  ( 1 + (( 1 ; 1)* ; 1 ; 1 ; 1 ; 1 ))
                 ))
               ) + ( unbookTickets@ACME ; 1 )
             )
@@ -458,7 +472,7 @@ proj(AcquistoOfferta, PTG) =
             (
               ( 1 ;
                 ( 1 + ( 1 ; 1 ;
-                  ( 1 + ( 1 ; 1  ; 1 ; 1 ) )
+                  ( 1 + (( 1 ; 1)* ; 1 ; 1 ; 1 ; 1 ))
                 ))
               ) + ( 1 ; 1 )
             )
@@ -506,7 +520,7 @@ proj(AcquistoOfferta, BANK) =
                 successPaymentBank@ACME ;
                         _______________
                 ( 1 + ( 1 ; 1 ;
-                  ( 1 + ( 1 ; 1  ; 1 ; 1 ) )
+                  ( 1 + (( 1 ; 1)* ; 1 ; 1 ; 1 ; 1 ))
                 ))
               ) + ( 1 ; emitCoupon@ACME )
             )
@@ -550,7 +564,9 @@ proj(AcquistoOfferta, GEO) =
               ( 1 ;
                                                ________________
                 ( 1 + ( requestDistance@ACME ; responseDistance@ACME ;
-                  ( 1 + ( 1 ; 1 ; 1 ; 1 ) )
+                                                      ____________________
+                  ( 1 + (( requestDistanceRent@ACME ; responseDistanceRent@ACME )* ; 
+                    1 ; 1 ; 1 ; 1 ))
                 ))
               ) + ( 1 ; 1 )
             )
@@ -564,27 +580,27 @@ proj(AcquistoOfferta, GEO) =
 ### Rent company
 
 ```fsharp
-proj(QueryDeiVoli, RENTₜ₁) = 
+proj(QueryDeiVoli, RENTₜ) = 
   ( 1 ; 1 )*
 ```
 ```fsharp
-proj(RicezioneOfferteLastMinute, RENTₜ₁) = 
+proj(RicezioneOfferteLastMinute, RENTₜ) = 
   ( 1 ; 1 )*
 ```
 ```fsharp
-proj(RegistrazioneInteresse, RENTₜ₁) = 
+proj(RegistrazioneInteresse, RENTₜ) = 
   ( 1 ; 1 )*
 ```
 ```fsharp
-proj(NotificaOfferta, RENTₜ₁) = 
+proj(NotificaOfferta, RENTₜ) = 
   ( 1 ; 1 ; 1 ; 1 )*
 ```
 ```fsharp
-proj(RichiestaRicevuta, RENTₜ₁) = 
+proj(RichiestaRicevuta, RENTₜ) = 
   ( 1 ; 1 )*
 ```
 ```fsharp
-proj(AcquistoOfferta, RENTₜ₁) = 
+proj(AcquistoOfferta, RENTₜ) = 
   ( 1 ; 
     (
       ( 1 ; 1 ;
@@ -592,9 +608,12 @@ proj(AcquistoOfferta, RENTₜ₁) =
           ( 1 ; 1 ; 1 ; 1 ; 1 ; 1 ;
             (
               ( 1 ;
-                ( 1 + ( 1 ; 1 ;               _____________
-                  ( 1 + ( requestRent1@ACME ; responseRent1@ACME ;
-                          1 ; 1 ) )
+                ( 1 + ( 1 ; 1 ;  
+                  ( 1 + (( 1 ; 1)* ; 
+                                                _____________________
+                    requestRentDeparture@ACME ; responseRentDeparture@ACME ;
+                                             __________________
+                    requestRentReturn@ACME ; responseRentReturn@ACME ))
                 ))
               ) + ( 1 ; 1 )
             )
@@ -604,3 +623,6 @@ proj(AcquistoOfferta, RENTₜ₁) =
     )
   )*
 ```
+
+&nbsp;
+<div class="page-break"></div>
