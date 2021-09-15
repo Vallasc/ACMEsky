@@ -42,23 +42,23 @@ Durante il design del sistema sono stati aggiunti dei vincoli per raffinare le s
 <div class = "hidden" >
 
 ## Struttura della documentazione
-* [Home](/)
-* [Coreografie](docs/coreografie)
-* [Diagramma BPMN](docs/BPMN)
-* [Coreografie BPMN](docs/coreografieBPMN)
-* [Diaramma UML](docs/UML)
-* [Struttura](docs/struttura)
-* [Esecuzione](docs/esecuzione)
+* [Home](/README.md)
+* [Coreografie](docs/coreografie.md)
+* [Diagramma BPMN](docs/BPMN.md)
+* [Coreografie BPMN](docs/coreografieBPMN.md)
+* [Diaramma UML](docs/UML.md)
+* [Struttura](docs/struttura.md)
+* [Esecuzione](docs/esecuzione.md)
 * Servizi
     * ACMEsky
-        * [Service](src/ACMEskyService/)
-        * [Database](src/ACMEskyDB/)
-        * [Web](src/ACMEskyWeb/)
-    * [AirlineService](src/AirlineService/)
-    * [BankService](src/BankService/)
-    * [Prontogram](src/Prontogram/)
-    * [RentService](src/RentService/)
-    * [GeographicalDistance](src/GeographicalDistanceService/)
+        * [Service](src/ACMEskyService/README.md)
+        * [Database](src/ACMEskyDB/README.md)
+        * [Web](src/ACMEskyWeb/README.md)
+    * [AirlineService](src/AirlineService/README.md)
+    * [BankService](src/BankService/README.md)
+    * [Prontogram](src/Prontogram/README.md)
+    * [RentService](src/RentService/README.md)
+    * [GeographicalDistance](src/GeographicalDistanceService/README.md)
 
 </div>
 
