@@ -1,4 +1,4 @@
-# Istruzioni per l'esecuzione del progetto
+# Istruzioni per l'esecuzione di tutti servizi
 
 ## Prerequisiti
 
@@ -8,12 +8,12 @@
 
 ## Esecuzione
 
-Dalla root del progetto eseguire
+Dalla root della repository eseguire
 ```sh
 docker-compose up --build
 ```
 
-I singoli servizi non devono essere compilati perchè questa operazione viene già fatta all'interno dei container.
+I singoli servizi non devono essere compilati poiché questa operazione viene già fatta a tempo di build all'interno dei container.
 
 &nbsp;
 <div class="page-break"></div>

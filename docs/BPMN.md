@@ -1,9 +1,11 @@
 
 # Diagramma BPMN
+In questa sezione della documentazione viene descritto il diagramma BPMN della _Service Oriented Architecture_ (SOA), nel quale viene mostrato come i servizi interagiscono con ACMEsky al fine di realizzare le funzionalità richieste.
 
+## Diagramma completo
 ![total](bpmn/img/total.png)
 
-In questa sezione della documentazione viene descritto il diagramma BPMN della _Service Oriented Architecture_ (SOA), nel quale viene mostrato come i servizi interagiscono con ACMEsky al fine di realizzare le funzionalità richieste. Per una migliore specificità e gestione della documentazione il diagramma verrà diviso in parti relative alle varie azioni degli attori, come ad esempio: la registrazione dell'interesse utente, la ricerca dei voli, salvataggio dei voli last-minute, gestione delle offerte, pagamento, ecc.
+ Per una migliore specificità e gestione della documentazione il diagramma verrà diviso in parti relative alle varie azioni degli attori, come ad esempio: la registrazione dell'interesse utente, la ricerca dei voli, salvataggio dei voli last-minute, gestione delle offerte, pagamento, ecc.
 
 ## Ricerca dei voli
 

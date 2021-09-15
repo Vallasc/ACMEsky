@@ -1,17 +1,29 @@
-# Implementazione
+# Struttura del sistema
 
-In questa sezione si presenta la struttura del progetto, specificando per ciascun servizio le tecnologie impiegate e la struttura scelta per l'implementazione.
-
+In questa sezione si presenta la struttura interna di ACMEsky e dei servizi con cui comunica.
 
 ![struttura acmesky](struttura/structure1.png)
-Come si può notare nell'immagine riportata qui sopra la struttura architetturale di ACMEsky Service è stata suddivisa in più parti, ognuna delle quali svolge un ruolo specifico all'interno del servizio di ACMEsky.
-Attraverso il Camunda Delegate il codice Java di ACMEsky Service può accedere alle istanze dei modelli BPMN e agli elementi del flusso corrente.
-Nel Model sono contenute tutte le classi contenenti tutti i dati che vengono utilizzate dall'applicazione per passare i dati tra i vari servizi di ACMEsky. Inoltre le classi del model corrispondono ai record presenti nel database attraverso l'uso del framework JPA (Java Persistence API) .
-La Business logic comunica con il Modello e in essa sono contenute tutte le classi Java che si occupano di gestire la parte logica di elaborazione. Ovvero l'insieme di regole che determinano il modo in cui i dati vengono archiviati o manipolati all'interno di ACMEsky Service.
-Il Gateway attraverso l'interazione con la Business logic raggruppa tutte le classi che implementano l'interfaccia REST di ACMEsky. Quest'ultime sono accessibili dall'esterno e vengono utilizzate per soddisfare le richieste da parte del client. Inoltre attraverso il "JWT request filter" il Gateway autentica ogni singola richiesta da parte di un'entità e successivamente la autorizza ad eseguire le richieste ad un certo path basandosi sul livello di autenticazione fatta. 
-ACMEsky Web è la web application di ACMEsky che permette all'utente di eseguire le richieste alle API di ACMEsky Sevice in maniera più intuitiva. ACMEsky Web non è strettamente necessario per effettuare le richieste ai servizi esposti da ACMEsky Service in quanto quest'ultimo potrebbe essere utilizzato in modalità "stand alone" attraverso un client REST.
+
+ACMEsky, internamente, è stato suddiviso in più parti, ognuna delle quali svolge un ruolo specifico nel sistema complessivo. Le parti sono:
+
+- **Camunda Delegate**: Sono le classi Java che implementano le funzionalità dei task nei processi BPMN.
+
+- **Model**: Contiene le classi che rappresentano i dati utilizzati da ACMEsky. Attraverso l'utilizzo del framework JPA (Java Persistence API) le classi del Model vengono mappate nelle tabelle del database.
+
+- **Business logic**: In essa sono contenute tutte le classi Java che, utilizzando il Model, si occupano di gestire la logica business dei servizi di ACMEsky. Inoltre, si interfaccia con il DBMS per manipolare e archiviare i dati che vengono elaborati.
+
+- **Gateway**: Raggruppa tutte le classi che implementano le API RESTful e SOAP di ACMEsky. La Business logic comunica con il Gateway per inviare e ricevere i messaggi dall'esterno. Inoltre, attraverso il filtro JWT il Gateway autentica l'entità che effettua la richiesta e successivamente la autorizza a compiere operazioni su specifiche risorse. 
+
+- **ACMEsky Web**: E' l'applicazione web di ACMEsky, essa permette all'utente di eseguire le richieste alle API di ACMEsky Sevice in maniera intuitiva per l'utente. ACMEsky Web non è strettamente necessario per effettuare le richieste ai servizi esposti da ACMEsky, in quanto quest'ultimo potrebbe essere interrogato attraverso un client REST.
+
+&nbsp;
+
+## Diagramma dei servizi
 
 ![struttura totale](struttura/structure2.png)
+
+
+
 In questa sezione vengono descritti gli stili architetturali delle comunicazioni che avvengono tra i vari servizi implementati nel progetto.
 Abbiamo utilizzato Docker per inserire tutti i servizi all'interno di container per simulare il più possibile un ambiente reale.
 Per gestire la persistenza dei dati è stato utilizzato il database relazionale PostgreSQL il quale permette di eseguire delle query sui dati attraverso l'uso del linguaggio SQL.
@@ -22,7 +34,10 @@ Tutti questi servizi comunicano con ACMEsky Service attraverso l'architettura RE
 Il servizio di Rent è stato implementato utilizzando il linguaggio di programmazione Jolie che permette al servizio di comunicare con altri programmi inviando e ricevendo messaggi su una rete.
 Come protocollo di comunicazione tra il servizio di Rent e ACMEsky Service abbiamo utilizzato SOAP.
 Quest'ultimo è lo standard di comunicazione dei Web Service e permette la formattazione di messaggi XML-based. Questi messaggi sono inviati ad altri Web Service tramite HTTP/S. Il ricevente estrae le informazioni dal messaggio e le trasforma in un protocollo conosciuto dal sistema residente.
-## ACMEsky
+
+## Servizi
+
+### ACMEsky
 
 - ACMEskyWeb: servizio sviluppato con SvelteJS, framework opensource per il frontend 
 
