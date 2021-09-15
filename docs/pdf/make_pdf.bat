@@ -1,14 +1,14 @@
 cd..
-type title.md ^
+type \md_utils\title.md ^
 ..\README.md ^
-index.md ^
+\md_utils\index.md ^
 coreografie.md ^
 BPMN.md ^
 coreografieBPMN.md ^
 UML.md ^
 struttura.md ^
 esecuzione.md ^
-servizi.md ^
+\md_utils\servizi.md ^
 ..\src\ACMEskyService\README.md ^
 ..\src\ACMEskyDB\README.md ^
 ..\src\ACMEskyWeb\README.md ^

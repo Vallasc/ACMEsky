@@ -5,41 +5,41 @@ partecipanti.
 
 ## Diagramma completo
 
-![coreografia-BPMN completa](coreografia-BPMN/img/diagram_all.png)
+![Coreografia completa](coreografie_bpmn/img/diagram_all.png)
 
 Il diagramma è stato suddiviso in parti per poterle spiegare singolarmente.
 
 ## Salvataggio degli interessi
 
-![coreografia-BPMN completa](coreografia-BPMN/img/send_interest.png)
+![Invio interesse](coreografie_bpmn/img/send_interest.png)
 
 La coreografia descrive come l'utente e *ACMEsky* interagiscono nello scenario dell'invio degli interessi. L'utente manda una User Interest, mentre ACMEsky risponde con un messaggio di corretto inserimento o di errore.
 
 
 ## Ricerca dei voli di interesse
 
-![coreografia-BPMN completa](coreografia-BPMN/img/search_flights.png)
+![Ricerca dei voli](coreografie_bpmn/img/search_flights.png)
 
 La coreografia descrive l'interazione tra *ACMEsky* e *Airline Service* al fine di cercare i voli che hanno una corrispondenza con quelli richiesti dagli utenti. Ogni ora e per ciascuna *Airline Service* registrata al servizio, *ACMEsky* recupera i voli di interesse degli utenti  e effettua una richiesta all'*Airline Service* che restituisce la lista dei voli disponibili.
 
 
-## Registrazione dei voli last-minute
+## Ricezione dei voli last-minute
 
-![coreografia-BPMN completa](coreografia-BPMN/img/last_minute.png)
+![Ricezione voli last-minute](coreografie_bpmn/img/last_minute.png)
 
 La coreografia descrive come *ACMEsky* e *Airline Service* interagiscono nello scenario della ricezione e salvataggio dei voli last-minute. *Airline Service* invia i voli last-minute ad ACMEsky che risponde con un messaggio di corretto inserimento o di errore.
 
 
-## Generazione dell'offerta di volo
+## Generazione dell'offerta
 
-![coreografia-BPMN completa](coreografia-BPMN/img/make_offer.png)
+![Generazione offerta](coreografie_bpmn/img/make_offer.png)
 
 La coreografia mostra come *ACMEsky*, *Prontogram* e l'utente si relazionano al fine di notificare l'utente della corretta generazione dell'offerta. Ogni ora, se ci sono delle nuove offerte per l'utente, *ACMEsky* manda un messaggio a *Prontogram* che a sua volta risponde con un messaggio di corretto inserimento o di errore. Successivamente *Prontogram* manda una notifica all'utente.
 
 
 ## Conferma e acquisto dell'offerta
 
-![coreografia-BPMN completa](coreografia-BPMN/img/confirm_pay_offer.png)
+![Conferma e acquisto](coreografie_bpmn/img/confirm_pay_offer.png)
 
 La coreografia descrive come l'utente, *ACMEsky*, *Bank Service*, *Airline Service*, *GeoDistance Service* e *Rent Service* interagiscono nel contesto della conferma e acquisto dell'offerta di volo da parte dell'utente. Quest'ultimo, conferma la volontà di voler acquistare l'offerta proposta inserendo il token ricevuto tramite l'app di Prontogram nel portale web di *ACMEsky*, il quale risponde con un messaggio di corretto inserimento o di errore. 
 
@@ -54,7 +54,7 @@ Infine, viene prenotato il trasporto per l'andata e per il ritono dall'areoporto
 
 ## Recupero del biglietto
 
-![coreografia-BPMN completa](coreografia-BPMN/img/request_ticket.png)
+![Recupero del biglietto](coreografie_bpmn/img/request_ticket.png)
 
 La coreografia descrive come l'utente richiede ad *ACMEsky* il biglietto precedentemente acquistato. L'utente specifica il biglietto al quale è interessato inviando il codice dell'offerta. Successivamente *ACMEsky* recupera il biglietto corrispondente all'offerta in formato PDF.
 
