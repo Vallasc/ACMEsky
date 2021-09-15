@@ -12,32 +12,40 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+/**
+ * descrive le entità degli utenti specificandone i campi con cui vengono
+ * registrati sul DB nella tabella users
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
 @Entity
-@Table(name="users")
+@Table(name = "users")
 public class User implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private long id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", nullable = false)
+	private long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "entity_id", nullable = false)
-    private DomainEntity entity;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "entity_id", nullable = false)
+	private DomainEntity entity;
 
-    @Column(name = "email", nullable = false)
-    private String email;
+	@Column(name = "email", nullable = false)
+	private String email;
 
 	@Column(name = "name", nullable = false)
-    private String name;
+	private String name;
 
 	@Column(name = "surname", nullable = false)
-    private String surname;
+	private String surname;
 
-    @Column(name = "prontogram_username", nullable = false)
-    private String prontogramUsername;
+	@Column(name = "prontogram_username", nullable = false)
+	private String prontogramUsername;
 
 	public long getId() {
 		return this.id;
@@ -78,7 +86,7 @@ public class User implements Serializable {
 	public void setEmail(String email) {
 		this.email = email;
 	}
- 
+
 	public String getProntogramUsername() {
 		return this.prontogramUsername;
 	}

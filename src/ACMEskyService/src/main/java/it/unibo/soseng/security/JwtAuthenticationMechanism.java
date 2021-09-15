@@ -15,7 +15,14 @@ import javax.security.enterprise.authentication.mechanism.http.HttpMessageContex
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
+/**
+ * gestisce l'autenticazione degli utenti e dei servizi esterni mediante il
+ * token jwt
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
 @RequestScoped
 public class JwtAuthenticationMechanism implements HttpAuthenticationMechanism {
 
@@ -24,14 +31,19 @@ public class JwtAuthenticationMechanism implements HttpAuthenticationMechanism {
     @Inject
     private TokenProvider tokenProvider;
 
+    /**
+     * si occupa di validare le richieste in base al token contenuto nel campo
+     * Authorization dell'header
+     */
     @Override
-    public AuthenticationStatus validateRequest(HttpServletRequest request, HttpServletResponse response, HttpMessageContext context) {
+    public AuthenticationStatus validateRequest(HttpServletRequest request, HttpServletResponse response,
+            HttpMessageContext context) {
 
         LOGGER.log(Level.INFO, "validateRequest: {0}", request.getRequestURI());
 
         String token = extractToken(context);
 
-       if (token != null) {
+        if (token != null) {
             return validateToken(token, context);
         } else if (context.isProtected()) {
             return context.responseUnauthorized();
@@ -40,10 +52,10 @@ public class JwtAuthenticationMechanism implements HttpAuthenticationMechanism {
     }
 
     /**
-     * To validate the JWT token e.g Signature check, JWT claims
-     * check(expiration) etc
+     * To validate the JWT token e.g Signature check, JWT claims check(expiration)
+     * etc
      *
-     * @param token The JWT access tokens
+     * @param token   The JWT access tokens
      * @param context
      * @return the AuthenticationStatus to notify the container
      */
@@ -52,13 +64,15 @@ public class JwtAuthenticationMechanism implements HttpAuthenticationMechanism {
         try {
             if (tokenProvider.validateToken(token)) {
                 JwtCredential credential = tokenProvider.getCredential(token);
-                LOGGER.log(Level.INFO, "Username: {0} - ROLE: {1}", new String[]{credential.getPrincipal(), (String) credential.getAuthorities().toArray()[0]});
+                LOGGER.log(Level.INFO, "Username: {0} - ROLE: {1}",
+                        new String[] { credential.getPrincipal(), (String) credential.getAuthorities().toArray()[0] });
                 return context.notifyContainerAboutLogin(credential.getPrincipal(), credential.getAuthorities());
             }
             // if token invalid, response with unauthorized status
             return context.responseUnauthorized();
         } catch (ExpiredJwtException eje) {
-            LOGGER.log(Level.INFO, "Security exception for user {0} - {1}", new String[]{eje.getClaims().getSubject(), eje.getMessage()});
+            LOGGER.log(Level.INFO, "Security exception for user {0} - {1}",
+                    new String[] { eje.getClaims().getSubject(), eje.getMessage() });
             return context.responseUnauthorized();
         }
     }

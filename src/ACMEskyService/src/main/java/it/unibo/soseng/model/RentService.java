@@ -11,6 +11,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+/**
+ * descrive le entità dei servizi di noleggio specificandone i campi con cui
+ * vengono registrati sul DB nella tabella rent_services
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
 @Entity
 @Table(name = "rent_services")
 public class RentService implements Serializable {
@@ -32,7 +40,6 @@ public class RentService implements Serializable {
     @Column(name = "ws_address", nullable = false)
     private String wsAddress;
 
-
     public long getId() {
         return this.id;
     }
@@ -41,13 +48,13 @@ public class RentService implements Serializable {
         this.id = id;
     }
 
-	public DomainEntity getEntity() {
-		return this.entity;
-	}
+    public DomainEntity getEntity() {
+        return this.entity;
+    }
 
-	public void setEntity(DomainEntity entity) {
-		this.entity = entity;
-	}
+    public void setEntity(DomainEntity entity) {
+        this.entity = entity;
+    }
 
     public String getAddress() {
         return this.address;

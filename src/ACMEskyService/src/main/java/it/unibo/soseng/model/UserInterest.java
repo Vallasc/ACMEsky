@@ -14,37 +14,45 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+/**
+ * descrive le offerte di volo di interesse degli utenti specificandone i campi
+ * con cui vengono registrati sul DB nella tabella users_interests
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
 @Entity
-@Table(name="users_interests")
+@Table(name = "users_interests")
 public class UserInterest implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+	@Column(name = "id", nullable = false)
 	private long id;
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id", nullable = false)
-    private User user;
+	private User user;
 
 	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "outbound_flight_interest_id", nullable = false)
+	@JoinColumn(name = "outbound_flight_interest_id", nullable = false)
 	private FlightInterest outboundFlightInterest;
 
 	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "flight_back_interest_id", nullable = false)
-    private FlightInterest flightBackInterest;
+	@JoinColumn(name = "flight_back_interest_id", nullable = false)
+	private FlightInterest flightBackInterest;
 
-    @Column(name = "price_limit", nullable = false)
-    private double priceLimit ;
-	
-    @Column(name = "expire_date", columnDefinition= "TIMESTAMP WITH TIME ZONE", nullable = false)
+	@Column(name = "price_limit", nullable = false)
+	private double priceLimit;
+
+	@Column(name = "expire_date", columnDefinition = "TIMESTAMP WITH TIME ZONE", nullable = false)
 	private OffsetDateTime expireDate;
-	
+
 	@Column(name = "used", nullable = false)
-    private boolean used ;
+	private boolean used;
 
 	public long getId() {
 		return this.id;
@@ -69,7 +77,7 @@ public class UserInterest implements Serializable {
 	public void setOutboundFlightInterest(FlightInterest outboundFlightInterest) {
 		this.outboundFlightInterest = outboundFlightInterest;
 	}
-    
+
 	public FlightInterest getFlightBackInterest() {
 		return this.flightBackInterest;
 	}
@@ -77,11 +85,11 @@ public class UserInterest implements Serializable {
 	public void setFlightBackInterest(FlightInterest flightBackInterest) {
 		this.flightBackInterest = flightBackInterest;
 	}
-    
+
 	public OffsetDateTime getExpireDate() {
 		return this.expireDate;
 	}
-	
+
 	public void setExpireDate(OffsetDateTime expireDate) {
 		this.expireDate = expireDate;
 	}

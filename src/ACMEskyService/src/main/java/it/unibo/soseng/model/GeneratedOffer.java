@@ -13,12 +13,20 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+/**
+ * descrive le offerte di volo generate specificandone i campi con cui vengono
+ * registrate sul DB nella tabella generated_offers
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
 @Entity
 @Table(name = "generated_offers")
 public class GeneratedOffer implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -32,7 +40,7 @@ public class GeneratedOffer implements Serializable {
     @JoinColumn(name = "flight_back_id", nullable = false)
     private Flight flightBack;
 
-    @Column(name = "expire_date", columnDefinition= "TIMESTAMP WITH TIME ZONE", nullable = false)
+    @Column(name = "expire_date", columnDefinition = "TIMESTAMP WITH TIME ZONE", nullable = false)
     private OffsetDateTime expireDate;
 
     @Column(name = "total_price", nullable = true)
@@ -48,7 +56,7 @@ public class GeneratedOffer implements Serializable {
     private String token;
 
     @ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Column(name = "rent")
@@ -61,7 +69,6 @@ public class GeneratedOffer implements Serializable {
     public void setUser(User user) {
         this.user = user;
     }
-
 
     public long getId() {
         return this.id;
