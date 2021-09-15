@@ -1,11 +1,13 @@
 package it.soseng.unibo.airlineService.controller;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
@@ -30,7 +32,7 @@ import it.soseng.unibo.airlineService.service.PdfService;
 
 /**
  * Controller che si occupa della generazione e gestione delle offerte di volo e
- * della comunicazione delle coordinate bancarie del servizio
+ * della generazione dei biglietti di volo
  * 
  * @author Andrea Di Ubaldo andrea.diubaldo@studio.unibo.it
  */
@@ -44,6 +46,11 @@ public class FlightOfferController {
     @Autowired
     private FlightOfferService s;
 
+    /**
+     * istanza di PdfService che consente di generare i biglietti per ogni richiesta
+     * sulla route corrispondente
+     * 
+     */
     @Autowired
     private PdfService p;
 
@@ -63,8 +70,7 @@ public class FlightOfferController {
 
     /**
      * si occupa di generare le offerte di volo randomicamente e automaticamente, ed
-     * inviarle ad ACMEsky se si tratta di offerte last minute. Seguono le eccezioni
-     * da considerare dovute alla creazione delle offerte da file json
+     * inviarle ad ACMEsky ogni 10 minuti.
      * 
      * @throws JsonProcessingException
      * @throws IOException
@@ -75,14 +81,28 @@ public class FlightOfferController {
 
     }
 
-    @PostConstruct
-    private void autoCreateOffer() throws JsonProcessingException, IOException {
-        s.createFlightOffers(FILE);
+    /**
+     * crea automaticamente tutte le offerte di volo non last-minute una sola volta
+     * dopo 6 secondi che il servizio viene eseguito.
+     */
+    @PostConstruct()
+    private void autoCreateOffer() {
+
+        ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+        executorService.schedule(new Runnable() {
+            public void run() {
+                try {
+                    s.createFlightOffers(FILE);
+                } catch (IOException e) {
+                    LOGGER.info("Error" + e.getMessage());
+                }
+            }
+        }, (long) 6, TimeUnit.SECONDS);
     }
 
     /**
-     * si occupa di restituire i voli che hanno un match con una specifica richiesta
-     * dell'utente
+     * si occupa di restituire i voli che hanno un match con quelli richiesti dagli
+     * utenti passati nel corpo della richiesta
      * 
      * @param r che contiene i parametri del volo che l'utente cerca
      * @return List<FlightOffer> che contiene tutte le offerte di lavoro prenotabili
@@ -93,8 +113,8 @@ public class FlightOfferController {
     }
 
     /**
-     * invia i biglietti in formato pdf relativi a quelle offerte che hanno il
-     * valore degli id corrispondenti a quelli passati attraverso i parametri
+     * invia il biglietto in formato pdf relativi ai voli di andata e ritorno i cui
+     * id vengono specificati nel parametro id
      * 
      * @param id dei voli che si vuole acquistare
      * @throws com.lowagie.text.DocumentException

@@ -8,40 +8,24 @@ import java.io.OutputStream;
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.lowagie.text.DocumentException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
 import org.xhtmlrenderer.pdf.ITextRenderer;
-
-import it.soseng.unibo.airlineService.auth.Auth;
-import it.soseng.unibo.airlineService.repository.FlightOfferRepository;
 
 @Service
 @Transactional
 public class PdfService {
 
   @Autowired
-  private FlightOfferRepository repo;
-
-  @Autowired
   TemplateEngine templateEngine;
 
   private FlightOfferService service;
-
-  private Auth auth = new Auth();
 
   private static final String PDF_RESOURCES = "/pdf-resources/";
 

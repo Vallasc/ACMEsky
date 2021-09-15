@@ -6,9 +6,7 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -16,16 +14,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.springframework.beans.factory.support.ManagedMap;
-
 import it.soseng.unibo.airlineService.DTO.Flight;
 import it.soseng.unibo.airlineService.DTO.UserRequest;
 import it.soseng.unibo.airlineService.repository.FlightOfferRepository;
 
 /**
  * Questa classe definisce una serie di funzioni utili per la generazione
- * randomica da file json delle offerte di volo e per il riconoscimento di
- * offerte last-minute
+ * randomica da file json delle offerte di volo, per la conversione delle
+ * offerte nei corrispondenti oggetti da inviare ad ACMEsky, e per cercare i
+ * voli che coincidono con i voli di interesse degli utenti
  * 
  * @author Andrea Di Ubaldo andrea.diubaldo@studio.unibo.it
  */
@@ -88,6 +85,16 @@ public class FlightUtility {
         }
         return n;
     }
+
+    /**
+     * restituisce la lista dei JsonNode contenenti tutti le offerte di volo non
+     * last-minute in formato JSON
+     * 
+     * @param file
+     * @return
+     * @throws JsonProcessingException
+     * @throws IOException
+     */
 
     public List<JsonNode> GetJsonOffers(File file) throws JsonProcessingException, IOException {
 
