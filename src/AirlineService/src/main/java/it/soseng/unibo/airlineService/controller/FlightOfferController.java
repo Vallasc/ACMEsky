@@ -97,7 +97,7 @@ public class FlightOfferController {
                     LOGGER.info("Error" + e.getMessage());
                 }
             }
-        }, (long) 6, TimeUnit.SECONDS);
+        }, (long) 600000, TimeUnit.SECONDS);
     }
 
     /**
