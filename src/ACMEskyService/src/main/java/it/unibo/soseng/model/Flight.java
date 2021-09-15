@@ -1,7 +1,6 @@
 package it.unibo.soseng.model;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -15,6 +14,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+/**
+ * descrive i voli specificandone i campi con cui vengono registrati sul DB
+ * nella tabella flights
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
 @Entity
 @Table(name = "flights")
 public class Flight implements Serializable {

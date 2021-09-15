@@ -34,6 +34,15 @@ import static it.unibo.soseng.camunda.utils.Events.SAVE_LAST_MINUTE;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.AIRLINE_FLIGHT_OFFERS;
 import static it.unibo.soseng.camunda.utils.ProcessVariables.AIRLINE_NAME;
 
+/**
+ * Logica che utilizza le classi del model e del gateway per interagire con le
+ * compagnie aeree
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
+
 @Stateless
 public class AirlineManager {
     private final static Logger LOGGER = Logger.getLogger(AirlineManager.class.getName());
@@ -47,6 +56,13 @@ public class AirlineManager {
     @Inject
     private AirlineClient client;
 
+    /**
+     * Procedura che fa iniziare il processo di salvataggio dell'offerta last-minute
+     * inviata dall'AirlineService del caso
+     * 
+     * @param request
+     * @throws BadRequestException
+     */
     // Camunda
     public void startSaveLastMinuteOffer(List<AirlineFlightOfferDTO> request) throws BadRequestException {
         LOGGER.info("StartSaveLastMinuteProcess");
@@ -65,6 +81,14 @@ public class AirlineManager {
         // throw new BadRequestException();
 
     }
+
+    /**
+     * Procedura che comunica con il DB Manager al fine di convertire l'oggetto
+     * ricevuto dalla compagnia aerea nel volo che verrà salvato in DB
+     * 
+     * @param airlineName
+     * @param airlineOffers
+     */
 
     public void handleConfirmLastMinuteOffer(String airlineName, List<AirlineFlightOfferDTO> airlineOffers) {
         // Control date time
@@ -98,10 +122,22 @@ public class AirlineManager {
         databaseManager.insertFlights(flights);
     }
 
+    /**
+     * Stampa il log dell'avvenuto salvataggio dell'offerta last-minute
+     * 
+     * @param airlineLastMinuteOffers
+     * @param airlineName
+     */
     public void saveAirlineOffers(List<AirlineFlightOfferDTO> airlineLastMinuteOffers, String airlineName) {
         LOGGER.log(Level.INFO, "Save offer of airline {0}", airlineName);
     }
 
+    /**
+     * converte il volo di interesse di un'offerta nel corrispettivo oggetto DTO
+     * 
+     * @param interests
+     * @return
+     */
     public List<InterestDTO> convertIntToIntDTO(List<FlightInterest> interests) {
         ArrayList<InterestDTO> list = new ArrayList<>();
         for (FlightInterest i : interests) {
@@ -111,6 +147,16 @@ public class AirlineManager {
         }
         return list;
     }
+
+    /**
+     * recupera la lista dei voli inviati ad ACMEsky in seguito ad una richiesta di
+     * ricerca verso una compagnia aerea e li converte nei corrispondenti oggetti
+     * registrabili sul DB
+     * 
+     * @param listDTO
+     * @param wsAddress
+     * @return
+     */
 
     public List<Flight> retrieveFlightsList(List<InterestDTO> listDTO, String wsAddress) {
         List<Flight> list = new ArrayList<>();
@@ -151,6 +197,9 @@ public class AirlineManager {
         return list;
     }
 
+    /**
+     * rimuove i voli delle offerte scadute
+     */
     public void removeExpiredFlights() {
         OffsetDateTime now = OffsetDateTime.now();
         List<Flight> expFlights = databaseManager.getAvailableFlights();
@@ -163,6 +212,17 @@ public class AirlineManager {
         }
     }
 
+    /**
+     * effettua la richiesta per recuperare i biglietti dei voli che compongono
+     * l'offerta che l'utente intende acquistare e aggiorna lo stato di
+     * prenotabilità dei voli stessi
+     * 
+     * @param offer
+     * @return
+     * @throws IOException
+     * @throws SendTicketException
+     * @throws BookTicketsException
+     */
     public byte[] bookOfferTicket(GeneratedOffer offer) throws IOException, SendTicketException, BookTicketsException {
 
         byte[] pdfTicket = client.getFlightTickets(offer.getOutboundFlight().getAirlineId().getWsAddress(),
@@ -175,6 +235,12 @@ public class AirlineManager {
         return pdfTicket;
     }
 
+    /**
+     * aggiorna lo stato di prenotabilità dei voli da non disponibili a disponibili
+     * 
+     * @param offer
+     * @throws IOException
+     */
     public void unbookOffer(GeneratedOffer offer) throws IOException {
         client.unbookFlights(offer);
         offer.setBooked(false);

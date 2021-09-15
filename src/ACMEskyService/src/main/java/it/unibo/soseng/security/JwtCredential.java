@@ -4,6 +4,13 @@ import java.util.Set;
 
 import javax.security.enterprise.credential.Credential;
 
+/**
+ * la classe descrive l'oggetto delle credenziali jwt
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
 public class JwtCredential implements Credential {
 
     private final String principal;

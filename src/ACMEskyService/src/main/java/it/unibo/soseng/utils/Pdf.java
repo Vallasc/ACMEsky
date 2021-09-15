@@ -20,47 +20,53 @@ import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.utils.PdfMerger;
 
+/**
+ * classe che si occupa della generazione del file pdf
+ * 
+ * @author Giacomo Vallorani
+ */
 @Stateless
 public class Pdf {
     private final static Logger LOGGER = Logger.getLogger(Pdf.class.getName());
-    
-    public void makePdf(GeneratedOffer offer, BookRentResponse rent1, BookRentResponse rent2) {
-        InputStream is = getClass().getClassLoader().getResourceAsStream("/template/invoice.html"); 
 
-        try{
+    public void makePdf(GeneratedOffer offer, BookRentResponse rent1, BookRentResponse rent2) {
+        InputStream is = getClass().getClassLoader().getResourceAsStream("/template/invoice.html");
+
+        try {
             String content = new String(is.readAllBytes(), StandardCharsets.UTF_8);
             content = content.replace("{{name}}", offer.getUser().getName());
             content = content.replace("{{surname}}", offer.getUser().getSurname());
             content = content.replace("{{orderToken}}", offer.getToken());
 
-            SimpleDateFormat formatter= new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
             Date date = new Date(System.currentTimeMillis());
             content = content.replace("{{date}}", formatter.format(date));
 
-            content = content.replace("{{row1}}", tableRow(offer.getOutboundFlight().toString(),
-                                                            UUID.randomUUID().toString().substring(0, 4) +
-                                                            offer.getOutboundFlight().getFlightCode(),
-                                                            String.format ("%.2f", offer.getOutboundFlight().getPrice())));
-            content = content.replace("{{row2}}", tableRow(offer.getFlightBack().toString(),
-                                                            UUID.randomUUID().toString().substring(0, 4) +
-                                                            offer.getFlightBack().getFlightCode(),
-                                                            String.format ("%.2f", offer.getFlightBack().getPrice())));
-            if(rent1 != null){
-                content = content.replace("{{row3}}", tableRow("Noleggio con autista (Andata)",
-                                                                rent1.getRentId(),"0.00"));
+            content = content.replace("{{row1}}",
+                    tableRow(offer.getOutboundFlight().toString(),
+                            UUID.randomUUID().toString().substring(0, 4) + offer.getOutboundFlight().getFlightCode(),
+                            String.format("%.2f", offer.getOutboundFlight().getPrice())));
+            content = content.replace("{{row2}}",
+                    tableRow(offer.getFlightBack().toString(),
+                            UUID.randomUUID().toString().substring(0, 4) + offer.getFlightBack().getFlightCode(),
+                            String.format("%.2f", offer.getFlightBack().getPrice())));
+            if (rent1 != null) {
+                content = content.replace("{{row3}}",
+                        tableRow("Noleggio con autista (Andata)", rent1.getRentId(), "0.00"));
             } else {
                 content = content.replace("{{row3}}", "");
             }
-            if(rent2 != null){
-                content = content.replace("{{row4}}", tableRow("Noleggio con autista (Ritorno)",
-                                                                rent2.getRentId(),"0.00"));
+            if (rent2 != null) {
+                content = content.replace("{{row4}}",
+                        tableRow("Noleggio con autista (Ritorno)", rent2.getRentId(), "0.00"));
             } else {
                 content = content.replace("{{row4}}", "");
             }
 
-            content = content.replace("{{subtotal}}", String.format ("%.2f", offer.getTotalPrice()));
-            content = content.replace("{{serviceCost}}", String.format ("%.2f", Float.valueOf(Env.ACMESKY_ADDITIONAL_PRICE)));
-            content = content.replace("{{total}}", String.format ("%.2f", offer.getTotalPrice()));
+            content = content.replace("{{subtotal}}", String.format("%.2f", offer.getTotalPrice()));
+            content = content.replace("{{serviceCost}}",
+                    String.format("%.2f", Float.valueOf(Env.ACMESKY_ADDITIONAL_PRICE)));
+            content = content.replace("{{total}}", String.format("%.2f", offer.getTotalPrice()));
 
             PdfWriter writer = new PdfWriter(offer.getToken() + "_tmp2.pdf");
             HtmlConverter.convertToPdf(content, writer);
@@ -70,22 +76,22 @@ public class Pdf {
             LOGGER.severe(e.toString());
             e.printStackTrace();
         }
-    }   
-    
-    private String tableRow(String desc, String id, String amt){
-        return "<tr class='item'><td class='desc'>" + desc + "</td>" +
-        "<td class='id num'>" + id + "</td><td class='amt'>€" + amt + "</td></tr>";
+    }
+
+    private String tableRow(String desc, String id, String amt) {
+        return "<tr class='item'><td class='desc'>" + desc + "</td>" + "<td class='id num'>" + id
+                + "</td><td class='amt'>€" + amt + "</td></tr>";
     }
 
     public void mergePdf(String src1, String src2, String dest) throws IOException {
         PdfDocument pdf = new PdfDocument(new PdfWriter(dest));
         PdfMerger merger = new PdfMerger(pdf);
 
-        //Add pages from the first document
+        // Add pages from the first document
         PdfDocument firstSourcePdf = new PdfDocument(new PdfReader(src1));
         merger.merge(firstSourcePdf, 1, firstSourcePdf.getNumberOfPages());
 
-        //Add pages from the second pdf document
+        // Add pages from the second pdf document
         PdfDocument secondSourcePdf = new PdfDocument(new PdfReader(src2));
         merger.merge(secondSourcePdf, 1, secondSourcePdf.getNumberOfPages());
 

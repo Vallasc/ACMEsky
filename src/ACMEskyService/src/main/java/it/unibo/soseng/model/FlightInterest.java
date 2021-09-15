@@ -13,19 +13,27 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+/**
+ * descrive i voli di interesse degli utenti specificandone i campi con cui
+ * vengono registrati sul DB nella tabella flights_interest
+ * 
+ * @author Giacomo Vallorani
+ * @author Andrea Di Ubaldo
+ * @author Riccardo Baratin
+ */
 @Entity
-@Table(name="flights_interest")
+@Table(name = "flights_interest")
 public class FlightInterest implements Serializable {
 
     private static final long serialVersionUID = 1L;
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", nullable = false)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private long id;
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "user_id")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -36,26 +44,27 @@ public class FlightInterest implements Serializable {
     @JoinColumn(name = "arrival_airport_id")
     private Airport arrivalAirport;
 
-    @Column(name = "departure_date_time", columnDefinition= "TIMESTAMP WITH TIME ZONE", nullable = false)
+    @Column(name = "departure_date_time", columnDefinition = "TIMESTAMP WITH TIME ZONE", nullable = false)
     private OffsetDateTime departureDateTime;
 
     @Column(name = "used", nullable = false)
-    private boolean used ;
-	
+    private boolean used;
+
     public long getId() {
-		return this.id;
-	}
-	public void setId(long id) {
-		this.id = id;
-	}
+        return this.id;
+    }
 
-	public User getUser() {
-		return this.user;
-	}
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	public void setUser(User user) {
-		this.user = user;
-	}
+    public User getUser() {
+        return this.user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public Airport getDepartureAirport() {
         return departureAirport;
@@ -72,20 +81,20 @@ public class FlightInterest implements Serializable {
     public void setArrivalAirport(Airport arrivalAirport) {
         this.arrivalAirport = arrivalAirport;
     }
-    
-	public OffsetDateTime getDepartureDateTime() {
-		return this.departureDateTime;
-	}
 
-	public void setDepartureDateTime(OffsetDateTime departureDateTime) {
-		this.departureDateTime = departureDateTime;
-	}
+    public OffsetDateTime getDepartureDateTime() {
+        return this.departureDateTime;
+    }
+
+    public void setDepartureDateTime(OffsetDateTime departureDateTime) {
+        this.departureDateTime = departureDateTime;
+    }
 
     public boolean getUsed() {
-		return this.used;
-	}
+        return this.used;
+    }
 
-	public void setUsed(boolean used) {
-		this.used = used;
-	}
+    public void setUsed(boolean used) {
+        this.used = used;
+    }
 }
