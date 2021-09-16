@@ -93,8 +93,9 @@ In questo caso ACMESky fa uso di diverse compagnie di noleggio con autista con c
 Durante il design del sistema sono stati aggiunti dei vincoli per raffinare le specifiche del progetto.
 - Ogni attore deve essere autenticato e autorizzato per poter interagire con ACMEsky;
 - I voli delle offerte generate provengono dalla stessa compagnia aerea;
+- La compagnia aerea restituisce una lista di voli (non necessariamente A/R);
 - Non viene gestito lo scambio di denaro dalla banca alla compagnia aerea; 
-- Se uno dei servizi per la gestione del calcolo premium non risponde i voli vengono acquistati senza servizi accesori;
+- Se uno dei servizi per la gestione del calcolo premium non risponde i voli vengono acquistati senza servizi accesori.
 
 ## Servizi implementati
 - **ACMEsky**: Servizio che genera offerte di voli A/R in base agli interssi degli utenti. 
@@ -1016,7 +1017,7 @@ Come BPMS si è optato per *Camunda* che fornisce un deployment già configurato
 I dati vengono gestiti da un database esterno al sistema.
 
 
-ACMEsky, internamente, è stato suddiviso in più moduli, che rispecchiano la struttura del codice, ognuno dei quali svolge un ruolo specifico nel sistema complessivo. Essi sono:
+ACMEsky, internamente, è stato suddiviso in più moduli che rispecchiano la struttura del codice, ognuno dei quali svolge un ruolo specifico nel sistema. Essi sono:
 
 - **Camunda Delegate**: Sono le classi Java che implementano le funzionalità dei task nei processi BPMN.
 
@@ -1024,31 +1025,30 @@ ACMEsky, internamente, è stato suddiviso in più moduli, che rispecchiano la st
 
 - **Business logic**: In essa sono contenute tutte le classi Java che, utilizzando il *Model*, si occupano di gestire la logica business dei servizi di ACMEsky. Inoltre, si interfaccia con il DBMS per manipolare e archiviare i dati che vengono elaborati.
 
-- **Gateway**: Raggruppa tutte le classi che implementano le API RESTful e SOAP di ACMEsky. La Business logic comunica con il *Gateway* per inviare e ricevere i messaggi dall'esterno. Inoltre, attraverso il filtro *JWT* il *Gateway* autentica l'entità che effettua la richiesta e successivamente la autorizza a compiere operazioni su specifiche risorse. 
+- **Gateway**: Raggruppa tutte le classi che implementano le API RESTful e SOAP di ACMEsky. La Business logic comunica con il *Gateway* per inviare e ricevere i messaggi dall'esterno. Inoltre, attraverso il filtro *JWT*, il *Gateway* autentica l'entità che effettua la richiesta e successivamente la autorizza a compiere operazioni su specifiche risorse. 
 
-- **ACMEsky Web**: E' l'applicazione web di ACMEsky, essa permette all'utente di eseguire le richieste alle API di ACMEsky Sevice in maniera intuitiva per l'utente. ACMEsky Web non è strettamente necessario per effettuare le richieste ai servizi esposti da ACMEsky, in quanto quest'ultimo potrebbe essere interrogato attraverso un semplice client REST.
+- **ACMEsky Web**: E' l'applicazione web di ACMEsky, essa permette all'utente di eseguire le richieste alle API di ACMEsky Sevice in maniera intuitiva. ACMEsky Web non è strettamente necessario per effettuare le richieste ai servizi esposti da ACMEsky, in quanto quest'ultimo potrebbe essere interrogato attraverso un semplice client REST.
 
 &nbsp;
 
 ## Diagramma dei servizi
 
 ![struttura totale](struttura/structure2.png)
-Per simulare un ambiente reale, ogni servizio, o parti de esso, è stato "incapsulato" in un container docker. Il diagramma mostra i container che vengono creati utilizzando il file `docker-compose.yml` che si trova nella root del progetto.
+Per simulare un ambiente reale, ogni servizio, o parti de esso, è stato "incapsulato" in un container docker. Il diagramma mostra i container che vengono creati utilizzando il file `docker-compose.yml` che si trova nella root della repository del progetto.
 Di seguito vengono spiegati brevemente i servizi e la loro counicazione con ACMEsky.
 
 - **ACMEsky**
-    - **ACMEsky Service**: Il server WildFly, che comprende il deplyment di ACMEsky e Camunda BPMS, è stato "incapsulato" in un container. Esso si interfaccia con un altro container che contiene il database.
+    - **ACMEsky Service**: Il server WildFly, che comprende il deployment di ACMEsky e Camunda BPMS, è stato inserito in un container. Esso si interfaccia con un altro container che contiene il database.
     - **ACMEsky Web**: L'applicazione web gira su un server NGNIX e si interfaccia ad ACMEsky attraverso le sue API RESTful.
-- **Airline Service**: E' il servizio che simula una compagnia aerea. I servizi di Airline Service sono due: uno che offre voli nazionali e uno che offre voli internazionali, modificando il file `docker-compose.yml` è possibile aggiungerne di nuovi o rimuovere quelli già presenti. Essi si interfacciano ad ACMEsky utilizzando le API RESTful.
-- **Bank Service**: E' il servizio con cui ACMEsky si interfaccia per la gestione dei pagamenti. Comunica con ACMEsky attraverso API RESTful.
-- **GeographicalDistanceService**
-Geographical Distance Service è il servizio di geolocalizzazione che calcola la distanza tra due indirizzi. Comunica con ACMEsky attraverso API RESTful.
-- **Prontogram**: Web-application che permette all'utente di ricevere le notifiche delle offerte dei voli dai servizi di ACMEsky. L'applicativo è stato sviluppato in Angular per quanto riguarda la parte front-end e in node.js per quanto riguarda la parte back-end. Comunica con ACMEsky attraverso API RESTful.
-- **Rent Service**: E' il servizio noleggio con autista. E' stato scritto in Jolie. Comunica con ACMEsky attraverso SOAP. Nel deployment sono 
+- **Airline Service**: E' il servizio che simula una compagnia aerea, realizzato utilizzando il framework Spring. I servizi di Airline Service sono due: uno che offre voli nazionali e uno che offre voli internazionali, modificando il file `docker-compose.yml` è possibile aggiungerne di nuovi o rimuovere quelli già presenti. Essi si interfacciano ad ACMEsky utilizzando le API RESTful.
+- **Bank Service**: E' il servizio con cui ACMEsky si interfaccia per la gestione simulata dei pagamenti, realizzato utilizzando il framework Spring. Viene ospitato in un container e comunica con ACMEsky attraverso le API RESTful.
+- **GeographicalDistanceService**: E' il servizio di geolocalizzazione che calcola la distanza tra due indirizzi o coordinate geografiche. E' scritto in NodeJS utilizzando la libreria ExpressJS. Viene ospitato in un container e comunica con ACMEsky attraverso API RESTful.
+- **Prontogram**: Applicazione web che permette all'utente di ricevere le notifiche delle offerte dei voli generate da ACMEsky. Il front-end è stato realizzatto utilizzando Angular, mentre il back-end è stato sviluppato utilizzando NodeJS. Comunica con ACMEsky attraverso API RESTful.
+- **Rental Service**: E' il servizio di noleggio con autista. E' stato realizzato in Jolie. Comunica con ACMEsky attraverso SOAP. Nel deployment sono presenti due copie del servizio ciascuna distribuita all'interno di un container. 
 
 &nbsp;
 
-## Porte assegnate ai servizi in Docker
+## Porte assegnate ai servizi nel file `docker-compose.yml`
 
 | Service | Port |
 | - | - |
@@ -1067,7 +1067,7 @@ Geographical Distance Service è il servizio di geolocalizzazione che calcola la
 &nbsp;
 <div class="page-break"></div>
 
-# Istruzioni per l'esecuzione dello stack di servizi
+# Istruzioni per l'esecuzione dello stack di container
 
 ## Prerequisiti
 
@@ -1090,10 +1090,118 @@ I singoli servizi non devono essere compilati poiché questa operazione viene gi
 # Descrizione dei servizi
 Di seguito vengono spiegati nel dettagglio i servizi.
 
-
 # ACMEsky Service
 
-ACMEskyService, il servizio principale del progetto
+ACMEsky Service è il modulo principale di ACMEsky, si relaziona con i vari servizi (AirlineServices, RentServices, Prontogram, BankService, ecc...) al fine di consentire agli utenti di richiedere ed acquistare le offerte dei voli che desiderano.
+
+ACMEsky Service comunica con il database (PostgreSQL) per gestire le entità che possono essere utenti o altri servizi, in modo da poterli autenticare e autorizzare quando inviano richieste HTTP.
+Inoltre, gestisce i voli di interesse degli utenti (A/R), i voli delle compagnie aeree (last-minute e non) e le offerte generate dai voli acquisiti dalle compagnie aeree.
+
+Esso interagisce con ACMEsky Web per rapportarsi con gli utenti, raccoglie i voli di interesse degli utenti. Al momento dell'inserimento del token per acquistare l'offerta verifica se è ancora valida e procede con l'acquisto e il pagamento dei biglietti aerei. Infine, ACMEsky consentirà all'utente di visualizzare i biglietti dei voli precedentemente acquistati dopo aver applicato eventuali servizi aggiuntivi.
+
+ACMEskyService si relaziona con i servizi di AirlineService (compagnie aeree) al fine di cercare, tra i voli che offrono, quelli che coincidono con gli interessi degli utenti. Gli interessi degli utenti sono composti da voli di andata e ritorno, mentre le offerte generate sono quelle che ACMEsky crea con i voli reali che riceve dalle compagnie aeree. Inoltre, il servizio riceve voli last-minute inviati dalle Airline Services con una certa frequenza.
+Infine, ACMEsky recupera i biglietti dei voli che gli utenti vogliono acquistare tramite una richiesta alla compagnia aerea, nel caso di errori o problemi di pagamento cancella la prenotazione informando l'AirlineService corrispondente.
+
+Per quanto riguarda il pagamento, il servizio interroga Bank Service (provider di pagamenti), per richiedere il link di pagamento da inviare all'utente, il quale poi interagirà con la banca per effettuare il pagamento. Infine, Bank Service informerà ACMEsky dell'avvenuto pagamento.
+
+Il servizio di ACMEsky interagisce con quello del calcolo delle distanze geografiche "GeographicalDistance Service" e con quelli di noleggio "Rental Service" per applicare eventuali servizi aggiuntivi all'offerta acquistata dell'utente. Effettua le richieste a GeographicalDistance Service per calcolare la distanza utente - areoporto e
+per trovare la compagnia di noleggio più vicina. Infine, prenota il trasferimento A/R da Rental Service e aggiunge i dettagli sulla ricevuta di viaggio.
+
+
+## Tecnologie utilizzate e scelte progettuali
+
+Il servizio è stato sviluppato utilizzando Java Enterprise Edition, il quale implementa la specifica JAX-RS (Java API for RESTful Web Services), un set di interfacce e annotazioni che facilitano lo sviluppo di applicazioni lato server. Per quanto riguarda il deployment si è scelto l'application server Wildfly che offre supporto completo a Java EE in tutti gli ambienti applicativi. E' stato utilizzato Camunda come BPMN per supportare i processi, il quale offre un deployment per Wildfly. Il servizio mette a disposizione la specifica di OpenAPI. I biglietti in formato pdf vengono generati grazie al framework opensource di Itext, che consente di convertire file html in pdf automaticamente. Il deployment di ACMEsky è basato sull'immagine Docker **_camunda-bpmn-platform:wildfly_** a cui viene aggiunto il file .war compilato dai sorgenti di ACMEsky.
+
+Il progetto è composto dai seguenti moduli:
+
+### camunda
+
+Questa parte del progetto si compone di tre sottodirectory, ovvero flights_manager, offers_manager e user_manager: questo perchè si è voluto riprendere la struttura del diagramma BPMN, che divide i vari flussi di esecuzione dei processi in queste tre lane che si differenziano per la loro funzione e per gli attori con cui interagiscono. Ciascuna classe implementa un task di un processo o sottoprocesso presente nel flusso di esecuzione, implementando l'interfaccia JavaDelegate e definendo il metodo execute.
+
+- **flights_manager** si suddivide nelle seguenti directory: _last_minute_ che ospita al proprio interno un file che consente di salvare le offerte che le compagniee aeree inviano ad ACMEsky, _remove_expired_flights_ la quale include i file per rimuovere i voli scaduti e _search_flights_ che consente di recuperare la lista degli AirlineService, cercare i voli di interesse e salvarli in db.
+- **offers_manager** comprende i Delegate per rimuovere le offerte di volo e relativi voli scaduti, scegliere tra i voli disponibili quelli che corrispondono agli interessi degli utenti, preparare l'offerta e inviarla all'utente.
+- **user_manager** si suddivide in: _book_payment_, che gestisce la prenotazione e l'acquisto dei biglietti aerei, _confirm_offer_, il quale si occupa della conferma dell'offerta espressa dall'utente inserendo il token e controllando che l'offerta sia ancora valida e _premium_service_, controlla l'applicazione di eventuali servizi aggiuntivi all'offerta. Infine _save_interest_ si occupa del salvataggio dell'offerta di interesse degli utenti.
+  Gli altri file sono legati ai task finali relativi al cambiamento dello stato dell'offerta acquistata con successo, la cancellazione del contenuto delle variabili dell'ambiente e l'invio del biglietto acquistato dall'utente quando lo richiede.
+
+Le classi presenti nella directory utils definiscono: le variabili dei processi, gli eventi di inizio e gli eventi di errore.
+
+### gateway
+
+Questa parte del progetto si compone di una directory per ciascun servizio, nelle quali si descrivono le interfacce esposte ad essi. Inoltre, ACMEsky implementa le api dei servizi esterni che verranno utilizzate dalla business logic.
+
+### business logic
+
+Ospita i manager, che utilizzando i modelli, implementa la business logic di ACMEsky. In particolare, interroga il database e attraverso il gateway comunica con i servizi esterni. Ciascuna classe si occupa della gestione dei servizi corrispondenti. E' composto da AirlineManager, BankManager, InterestManager e OfferManager.
+
+### model
+
+Descrive i dati coinvolti nel progetto: le entità (utente, AirlineService, BankService e RentService), i voli ricevuti dalle compagnie aeree e quelli di interesse, le offerte di interesse e quelle generate da ACMEsky, e gli aereoporti.
+
+### security
+
+Si occupa dell'autenticazione e dell'autorizzazione delle entità che fanno richieste attraverso le api di ACMEsky. Attraverso la route `/auth` è possibile autenticarsi e richiedere il token JWT, con il quale dovranno essere effettuate le successive richieste. Attraverso il token delle richieste viene consentito ai servizi di accedere alle risorse autorizzate per il proprio ruolo.
+
+### utils
+
+Contiene le classi che descrivono gli errori restituiti in caso di problemi nelle richieste, le variabili d'ambiente e quella di utilità per i pdf dei biglietti.
+
+### Formato ricevuta
+
+![Ricevuta](https://vallasc.github.io/ACMEsky/src/ACMEskyService/doc/ricevuta.png)
+
+## API
+
+Il file OpenAPI è disponibile al seguente [link](https://vallasc.github.io/ACMEsky/src/SwaggerUI/open-api.json)
+
+<iframe title="API"
+    width="900"
+    height="2700"
+    class="hidden"
+    src="
+    https://vallasc.github.io/ACMEsky/src/SwaggerUI/index.html?src=https://vallasc.github.io/ACMEsky/src/SwaggerUI/open-api.json
+    ">
+</iframe>
+
+&nbsp;
+
+## Risorse di autenticazione
+
+| Risorsa | Descrizione|
+| - | - |
+| POST `/auth` | Questa risorsa consente di autenticarsi nel sistema. Si richiede un oggetto AuthRequestDTO come parametro, composto da un attributo username e un attributo password. ACMEsky restituirà un token valido.|
+| PUT `/auth/refresh` | Questa risorsa consente alle entità di richiedere un nuovo token dato uno che sta per scadere. |
+
+## Risorse per AirlineServices
+
+| Risorsa | Descrizione|
+| - | - |
+| POST `/airlines/last_minute` | Questa risorsa è riservata esclusivamente agli AirlineServices. La chiamata a questa risorsa richiede come parametro una lista di oggetti AirlineFlightOfferDTO che verrà salvata nel database. |
+
+## Risorse per BankServices
+
+| Risorsa | Descrizione|
+| - | - |
+| GET `/bank/confirmPayment` | Questa risorsa è riservata esclusivamente ai servizi BankServices. La chiamata a questa risorsa richiede come parametro il codice dell'offerta di volo acquistata dall'utente.|
+
+## Risorse per ACMEskyWeb
+
+| Risorsa | Descrizione|
+| - | - |
+| GET `/airports`| Questa risorsa è riservata esclusivamente all'utente, esso accede a questa risorsa passando la query di ricerca dell'aereoporto per recuperare la lista dei suggerimenti.|
+| GET `/airports/{code}`| Questa risorsa è riservata esclusivamente all'utente, restituisce l'aereoporto associato al codice IATA fornito come parametro.|
+| POST `/interests`| Questa risorsa è riservata esclusivamente all'utente, e permette di inserire gli interessi specificati nell'oggetto UserInterestDTO.|
+| GET `/interests`| Questa risorsa è riservata esclusivamente all'utente. Consente di recuperare la lista di tutte le offerte di interesse dell'utente che si è autenticato sulla piattaforma ACMEskyWeb.|
+| GET `/interests/{id}`| Questa risorsa è riservata esclusivamente all'utente. Consente di recuperare l'offerta di interesse corrispondente all'identificativo passato come parametro del path della richiesta.|
+| DELETE `/interests/{id}`| Questa risorsa è riservata esclusivamente all'utente. Permette di cancellare l'offerta di interesse con lo stesso identificativo di quello passato come parametro del path della richiesta.|
+| PUT `/offers/confirm`| Questa risorsa è riservata esclusivamente all'utente. Il servizio web di ACMEsky chiama questa risorsa con un oggetto DTO dell'offerta di volo di interesse dell'utente come parametro per informare ACMEskyService del fatto che l'utente ha confermato l'offerta proposta inserendone il token. |
+| PUT `/offers/paymentLink`| Questa risorsa è riservata esclusivamente all'utente. Consente di recuperare il link di pagamento passando il DTO dell'indirizzo dell'utente come parametro.|
+| PUT `/offers/reset`| Questa risorsa è riservata esclusivamente all'utente. Consente di fare il reset del processo di conferma e acquisto dell'offerta passando come parametro un oggetto UserInterestDTO dell'utente. |
+| GET `/offers/`| Questa risorsa è riservata esclusivamente all'utente. Restituisce le offerte generate da ACMEsky sulla base delle preferenze dell'utente, filtrando le offerte che non sono state acquistate. |
+| GET `/offers/{token}`| Questa risorsa è riservata esclusivamente all'utente. Recupera l'offerta generata con il token corrispondete a quello specificato.|
+| GET `/offers/{token}/ticket` | Questa risorsa è riservata esclusivamente all'utente. Restituisce il biglietto dell'offerta con il token specificato dal parametro. |
+| GET `/users/me` | Questa risorsa è riservata esclusivamente all'utente. Recupera le informazioni dell'utente che si è autenticato.|
+| POST `/users/` | Tutti i nuovi servizi e utenti possono effettuare chiamate a questa route per registrarsi su ACMEsky. Il servizio chiamante può effettuare chiamate a questa route passando come argomento un oggetto di tipo UserSignUpdDTO, contenente email, password, name, surname e prontogramUsername, per registrare un utente.|| PUT `/users/me` | Questa risorsa è riservata esclusivamente all'utente. Consente di modificare la password, il nome ed il cognome.|
+| DELETE `/users/me` | Questa risorsa è riservata esclusivamente all'utente. Permette di cancellare l'utente dal db di ACMEsky.|
 
 ### comando per fare la build
 
@@ -1107,96 +1215,13 @@ mvn package
 docker-compose up --build
 ```
 
-<iframe title="API"
-    width="900"
-    height="2700"
-    class="hidden"
-    src="
-    https://vallasc.github.io/ACMEsky/src/SwaggerUI/index.html?src=https://vallasc.github.io/ACMEsky/src/SwaggerUI/open-api.json
-    ">
-</iframe>
-
-## Documentazione
-
-ACMEskyService è il servizio principale di ACMEsky che si relaziona con i vari servizi (ACMEskyWeb, AirlineServices, RentServices, Prontogram, BankService,...) al fine di consentire agli utenti di prenotare ed acquistare le offerte di volo che desiderano.
-
-ACMEskyService comunica con il servizio di ACMEskyDB (il quale consiste nel Database di PostgreSQL e del tool di pgAdmin4) per registrare gli utenti e i vari servizi che comunicano con ACMEsky, in modo da poterli riconoscere quando inviano richieste HTTP, anche per salvare le offerte di volo richieste dagli utenti (e i rispettivi voli), i voli delle compagnie aeree (last-minute e non), tutti gli aereoporti mondiali in codice IATA e le offerte di volo generate dai voli acquisiti dai servizi di volo secondo le offerte di interesse degli utenti. Inoltre interagisce con ACMEskyWeb per interfacciarsi con gli utenti: infatti raccoglie le offerte di volo che ciascun utente desidera, al momento dell'accettazione dell'inserimento del token per acquistare l'offerta verifica dal token se l'offerta è ancora valida e procede con il pagamento e del risultato dell'azione (restituzione del biglietto o cancellazione della prenotazione e rimborso). Infine il servizio di ACMEsky consentirà all'utente di visualizzare i biglietti dei voli precedentemente acquistati dopo aver applicato eventuali servizi aggiuntivi.
-ACMEskyService si relaziona con i servizi di AirlineService (compagnie aeree) al fine di cercare, tra i voli che offrono, quelli corrispondenti ai voli delle offerte di interesse degli utenti al fine di vendere loro le offerte generate sulla base delle loro preferenze. Le offerte di interesse sono composte dai voli di interesse di andata e ritorno, mentre le offerte generate sono quelle che ACMEsky crea con i voli che riceve dalle compagnie aeree. Inoltre il servizio riceve voli last-minute inviati dalle AirlineService con una certa frequenza, recupera i biglietti dei voli che gli utenti vogliono acquistare tramite una richiesta HTTP alla compagnia aerea che offre i voli in questione (se non sono già stati prenotati in precedenza), e nel caso di errori o problemi di pagamento cancella la prenotazione informando l'AirlineService corrispondente.
-Per quanto riguarda il pagamento, il servizio interroga BankService, il servizio bancario, per richiedere il link di pagamento da inviare all'utente tramite il servizio di ACMEskyWeb, il quale poi interagirà con la banca per gestire il pagamento. Infine BankService informerà ACMEsky solo se l'esito è positivo (in caso contrario quest'ultimo dovrà occuparsi della compensazione).
-Il servizio di ACMEsky interagisce con il servizio di geolocalizzazione "GeolocalizationService" e con quelli dei servizi di noleggio "RentService" per applicare eventuali servizi aggiuntivi all'offerta di volo acquistata dell'utente. Al servizio di geolocalizzazione fa una richiesta HTTP per conoscere le posizioni dell'aereoporto del volo e dell'indirizzo dell'utente per calcolarne la distanza, mentre ai servizi di noleggio chiede se è possibile accompagnare i passeggeri dal loro indirizzo all'aereoporto con un mezzo. Infine ACMEsky aggiunge i dettagli precedentemente descritti.
-
-# Panoramica
-
-## Struttura del servizio e tecnologie utilizzate
-
-Il servizio è stato sviluppato utilizzando Java Enterprise Edition, il quale implementa la specifica JAX-RS (Java API for RESTful Web Services), un set di interfacce e annotazioni che facilitano lo sviluppo di applicazioni lato server. Per quanto riguarda il deployment si è scelto Red Hat JBOSS Enterprise Application Platform che offre supporto completo a Java EE in tutti gli ambienti applicativi. Questa scelta è dovuta anche dal fatto che una delle distribuzioni di Camunda Platform si basa su Wildfly, l'application server di JBOSS. Si è scelto inoltre di fornire un'interfaccia web per presentare le risorse di ACMEskyService richiamabili da servizi esterni tramite Swagger UI, un linguaggio di descrizione delle API RESTful che implementa la specifica di OpenAPI. I biglietti in formato pdf vengono generati grazie al framework opensource di Itext, che consente di convertire file html in pdf automaticamente. La build e l'esecuzione del servizio viene svolta tramite Docker, in particolare nel file docker-compose viene definito l'immagine del container da creare e la connessione con la rete "acmesky-net" che consente agli altri container esterni al progetto ma connessi alla rete di comunicare con ACMEskyService (db, compagnie aeree, banche, ecc.).
-Il progetto è composto dalle seguenti cartelle:
-
-- camunda: questa parte del progetto si compone di tre sottocartelle, ovvero flights_manager, offers_manager e user_manager: questo perchè si è voluto riprendere la struttura del diagramma BPMN Total, che divide i vari flussi di esecuzione dei processi in queste tre pool a seconda della loro funzione e degli attori con cui interagiscono. Ciascuna classe implementa rappresenta un task di un processo o sottoprocesso presente nel flusso di esecuzione. La classe implementa l'interfaccia JavaDelegate e definisce il metodo execute, il quale viene richiamato ogni volta che si fa partire il flusso del diagramma a cui appartiene.
-  La cartella flights_manager si suddivide nelle successive cartelle: last_minute che ospita al proprio interno un file che consente di salvare le offerte che le compagniee aeree inviano ad ACMEsky, remove_expired_flights la quale include il file RemoveExpiredFlights che rimuove le i voli scaduti ricevuti dai servizi di volo, e search_flights a sua volta composto da quattro file la cui esecuzione consente di recuperare la lista degli AirlineService, recuperare la lista dei voli da cercare, fare una richiesta alle risorse dei servizi per richiedere i voli corrispondenti ai voli cercati e salvare tali voli.
-  La cartella offers_manager si compone delle seguenti parti: remove_expired_offers, ovvero la cartella contentente il file che una volta eseguito rimuove le offerte di volo e relativi voli scaduti, e i restanti file i cui metodi una volta richiamati i task corrispondenti permettono di controllare i voli di interesse disponibili, scegliere quindi tra i voli disponibili quelli che corrispondono agli interessi degli utenti, preparare l'offerta e inviarla all'utente che ha richiesto quei voli.
-  La cartella user_manager si suddivide in: book_payment, che riguarda la prenotazione e acquisto dei biglietti aerei, confirm_offer, il cui contenuto si occupa della conferma dell'offerta espressa dall'utente inserendo il token e controllando che l'offerta sia ancora valida, premium_service, per quanto concerne l'applicazione di eventuali servizi aggiuntivi all'offerta, save_interest include file collegati ai processi e sottoprocessi che si occupano del salvataggio dell'offerta di interesse degli utenti, gli altri file sono legati ai task finali che riguardano il cambiamento dello stato dell'offerta acquistata con successo, la cancellazione del contenuto delle variabili dell'ambiente e l'invio del biglietto acquistato dall'utente quando lo richiede.
-  I file della folder utils elencano tutte le variabili degli eventi e degli eventi di errore, stabiliscono le variabili dei processi e le caratteristiche lo stato dei processi stessi, incluso come impostarne lo stato, recuperarlo o recuperarlo per l'ultima volta prima di cancellarli.
-
-- gateway: questa parte del progetto si compone di una cartella per ciascun servizio, in cui si descrivono le route accessibili dai servizi esterni per registrarsi per la prima volta, autenticarsi e interagire con ACMEsky per raggiungere i loro obiettivi. Descrive inoltre le richieste che il servizio effettua verso gli attori esterni che verranno utilizzate dalle istanze manager della logica. Ovviamente include anche i Data Transfer Object necessari per fare le richieste e per chiamare le risorse.
-
-- logic: ospita i manager che utilizzano i modelli definiti dal model, le risorse e le chiamate stabilite dal gateway per interagire con il Database e con i vari servizi esterni. In particolare il DatabaseManager si occupa delle query sul DB, AirlineManager si occupa di tutto ciò che riguarda le compagnie aeree, BankManager per quanto riguarda le banche, InterestManager e OfferManager gestiscono rispettivamente gli interessi degli utenti e le offerte di volo generate dal servizio e quelle di interesse degli utenti.
-
-- model: descrive le entità coinvolte nel progetto, ovvero i servizi esterni, i voli, le offerte generate e gli interessi degli utenti e i relativi voli. Specifica gli attributi degli oggetti istanziati dalle classi, le rispettive proprietà nelle tabelle relazionali del database autogenerate a partire dalle classi stesse e le relazioni che intercorrono tra i campi delle tabelle.
-
-- security: si occupa dell'autenticazione dei servizi che fanno richieste attraverso le route di ACMEsky controllandone le credenziali, autorizza questi servizi restituendo, nel caso l'autenticazione abbia avuto successo, un token con il ruolo corrispondente a quello con cui si sono registrati e una scadenza. Al momento della chiamata ad una risorsa verifica che il token presente nell'header non sia scaduto e che il ruolo del jwt corrisponda sia a quello presente nel proprio record in DB e sia a quello richiesto dalla route. Nel caso positivo la richiesta del servizio viene accettata, altrimenti viene rigettata. Non mancano gli header da aggiungere alle richieste per il CORS e le costanti per fare i jwt token e i ruoli dei servizi
-
-- utils: contiene i file che descrivono le possibili stringhe di errore, alcune variabili d'ambiente come la finestra di tempo massimo in cui è possibile prenotare un volo d'andata a partire dalla data odierna e la classe che si occupa di creare il pdf dei biglietti.
-
-## Risorse necessarie per tutti i servizi
-
-| Risorsa           | Descrizione                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| POST/ auth/       | Questa risorsa consente ai servizi che vogliono chiamare le route del servizio di autenticarsi. Si richiede un oggetto AuthRequestDTO come parametro, il quale è composto da un attributo username e un attributo password. Il servizio chiamante dovrà inserire nel body l'argomento in formato JSON e ACMEsky restituirà un token valido per tutte le richieste alle route che richiedono il ruolo codificate in esso, a patto che le credenziali inserite siano corrette. |
-| PUT/ auth/refresh | Questa risorsa consente ai servizi BankService, ACMEskyWeb, AirlineService di richiedere un nuovo token a partire da quello scaduto.                                                                                                                                                                                                                                                                                                                                         |
-
-## Risorse per AirlineServices
-
-| Risorsa                    | Descrizione                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| POST/ airlines/last_minute | Questa risorsa è riservata esclusivamente agli AirlineServices, quindi i servizi dovranno presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. La chiamata a questa risorsa richiede come parametro una lista di oggetti AirlineFlightOfferDTO che verrà passata ad un metodo che avvierà un task di Camunda che si occuperà di convertire la lista di DTO in oggetti Flight da salvare in DB. |
-
-## Risorse per BankServices
-
-| Risorsa                  | Descrizione                                                                                                                                                                                                                                                                                                                                                                               |
-| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| GET/ bank/confirmPayment | Questa risorsa è riservata esclusivamente ai servizi BankServices, quindi essi dovranno presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla route di autenticazione. La chiamata a questa risorsa richiede come parametro il token dell'offerta di volo acquistata dall'utente per informare ACMEskyService del fatto che l'offerta è stata acquistata. |
-
-## Risorse per ACMEskyWeb
-
-| Risorsa                    | Descrizione                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| GET/ airports/             | Questa risorsa è riservata esclusivamente al servizio ACMEskyWeb, che dovrà presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. Il servizio web di ACMEsky chiama questa risorsa passando la query di ricerca dell'aereoporto per recuperare la lista dei suggerimenti per gli aereoporti di partenza e di arrivo dei voli sulla base dei caratteri inseriti dagli utenti nei rispettivi form della pagina al momento della ricerca. |
-| GET/ airports/{code}       | Questa risorsa è riservata esclusivamente al servizio ACMEskyWeb, che dovrà presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. Il servizio web di ACMEsky chiama questa risorsa passando la query di ricerca dell'aereoporto per recuperare l'aereoporto di partenza e di arrivo dei voli sulla base dei codici aereoportuali inseriti dagli utenti nei rispettivi form della pagina.                                               |
-| POST/ interests/           | Questa risorsa è riservata esclusivamente al servizio ACMEskyWeb, che dovrà presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. Il servizio web di ACMEsky chiama questa risorsa con un oggetto DTO dell'offerta di volo di interesse dell'utente per consentire ad ACMEskyService di registrare l'interesse dell'utente in DB.                                                                                                      |
-| GET/ interests/            | Questa risorsa è riservata esclusivamente al servizio ACMEskyWeb, che dovrà presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. Il servizio web di ACMEsky chiama questa risorsa senza parametri per recuperare la lista di tutte le offerte di interesse dell'utente che si è autenticato su ACMEskyWeb.                                                                                                                            |
-| GET/ interests/{id}        | Questa risorsa è riservata esclusivamente al servizio ACMEskyWeb, che dovrà presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. ACMEskyWeb chiama questa risorsa per recuperare l'offerta di interesse corrispondente all'identificativo passato come parametro del path della richiesta.                                                                                                                                            |
-| DELETE/ interests/{id}     | Questa risorsa è riservata esclusivamente al servizio ACMEskyWeb, che dovrà presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. ACMEskyWeb chiama questa risorsa per cancellare l'offerta di interesse con lo stesso identificativo di quello passato come parametro del path della richiesta.                                                                                                                                       |
-| PUT/ offers/confirm        | Questa risorsa è riservata esclusivamente al servizio ACMEskyWeb, che dovrà presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. Il servizio web di ACMEsky chiama questa risorsa con un oggetto DTO dell'offerta di volo di interesse dell'utente come parametro per informare ACMEskyService del fatto che l'utente ha confermato l'offerta proposta inserendone il token.                                                          |
-| PUT/ offers/paymentLink    | Questa risorsa è riservata esclusivamente al servizio ACMEskyWeb, che dovrà presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. Il servizio web di ACMEsky chiama questa risorsa passando il DTO dell'indirizzo dell'utente come parametro per informare ACMEskyService del fatto che lo stesso vuole acquistare l'offerta di volo per iniziare la procedura di pagamento.                                                           |
-| PUT/ offers/reset          | Questa risorsa è riservata esclusivamente al servizio ACMEskyWeb, che dovrà presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. Il servizio web di ACMEsky chiama questa risorsa con un oggetto DTO dell'offerta di volo di interesse dell'utente come parametro per informare ACMEskyService di eventuali errori nella fase di pagamento che portano al reset del processo di conferma e acquisto dell'offerta.                     |
-| GET/ offers/               | Questa risorsa è riservata esclusivamente al servizio ACMEskyWeb, che dovrà presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. Il servizio web di ACMEsky chiama questa risorsa per recuperare le offerte generate da ACMEsky sulla base delle preferenze dell'utente, filtrando le offerte che non sono state acquistate.                                                                                                          |
-| GET/ offers/{token}        | Questa risorsa è riservata esclusivamente al servizio ACMEskyWeb, che dovrà presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. Il servizio web di ACMEsky chiama questa risorsa passando come parametro il token presente nel path della route per recuperare l'offerta generata con quel token se è già stata acquistata, si ottiene errore.                                                                                       |
-| GET/ offers/{token}/ticket | Questa risorsa è riservata esclusivamente al servizio ACMEskyWeb, che dovrà presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. Il servizio web di ACMEsky chiama questa risorsa passando come parametro il token presente nel path della route per recuperare il biglietto dell'offerta se acquistata, altrimenti si riceve errore.                                                                                                 |
-| GET/ users/me              | Questa risorsa è riservata esclusivamente al servizio ACMEskyWeb, che dovrà presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. Il servizio web di ACMEsky chiama questa risorsa per recuperare le informazioni principali dell'utente che si è autenticato.                                                                                                                                                                         |
-| POST/ users/               | Tutti i nuovi servizi e utenti possono effettuare chiamate a questa route per iscriversi nel DB di ACMEsky e interagire con i vari servizi al fine di raggiungere i propri scopi. Il servizio chiamante può effettuare chiamate a questa route passando come argomento un oggetto di tipo UserSignUpdDTO, contenente email, password, name, surname e prontogramUsername, per registrare un utente.                                                                                               |
-| PUT/ users/me              | Questa risorsa è riservata esclusivamente al servizio ACMEskyWeb, che dovrà presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. Il servizio web di ACMEsky chiama questa risorsa passando un parametro di tipo UserUpdateDTO contenente tutti i campi necessari ad ACMEskyService per modificare la password, il nome ed il cognome.                                                                                                 |
-| DELETE/ users/me           | Questa risorsa è riservata esclusivamente al servizio ACMEskyWeb, che dovrà presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. Il servizio web di ACMEsky chiama questa risorsa passando un parametro di tipo UserDeleteDTO contenente tutti i campi necessari ad ACMEskyService (username e password corretti) per cancellare l'utente con codeste credenziali da ACMEsky.                                                         |
-
-\
 \
 &nbsp;
 
 # ACMEsky Database
 
 ACMEsky si interfaccia ad un database PostgreSQL.
-Il file docker-compose contiene tuto il necessario per far partire un'istanza del database con le tabelle e i dati inizializzati.
-Nello specifico, alla prima esecuzione, viene eseguito il file init.sql che contiene lo schema del database e i record iniziali per far partire ACMEsky da zero.
+Il file docker-compose, attraverso il file init.sql, contiene tuto il necessario per eseguire un'istanza del database con le tabelle e i record necessari ad ACMEsky.
 
 ## Database schema
 
@@ -1211,7 +1236,7 @@ Nello specifico, alla prima esecuzione, viene eseguito il file init.sql che cont
 |  | latitude |
 |  | longitude |
 
-La tabella ***airports*** contiene i record che rappresentano gli aereoporti nazionali e internazionali codificati secondo il codice IATA. Essa contiene il campo ***id*** (Chiave primaria), ***code***, ossia il codice dell'aereoporto in codifica IATA, ***name***, il nome dell'aereoporto, ***city_name***, il nome della città dove si trova, ***country_code***, iniziali del paese dove si trova, ***timezone***, ossia il fuso orario, ***latitude*** e ***longitude*** che rappresentano la posizione dell'aereoporto.
+La tabella ***airports*** contiene i record che rappresentano gli aereoporti nazionali e internazionali codificati secondo il codice IATA. Essa contiene il campo ***id*** (chiave primaria), ***code***  (codice dell'aereoporto in codifica IATA), ***name*** (nome dell'aereoporto), ***city_name*** (nome della città), ***country_code*** (codice del paese), ***timezone***(fuso orario), ***latitude*** e ***longitude*** (la posizione dell'aereoporto).
 
 |  | domain_entities |
 | - | - |
@@ -1221,8 +1246,7 @@ La tabella ***airports*** contiene i record che rappresentano gli aereoporti naz
 |  | salt |
 |  | role |
 
-La tabella ***domain_entities*** contiene i record che descrivono le entità del dominio, ossia gli attori che interagiscono con ACMEsky al fine di raggiungere i propri scopi. Così è possibile riconoscere il ruolo di ciascun servizio/utente in base alle proprie credenziali, evitando relazioni con parti sconosciute. Ogni tupla contiene il valore corrispondente al campo ***id*** (Chiave primaria), ai campi ***username*** e ***password*** (le credenziali), ***salt*** rappresenta un dato random addizionato all'input della funzione one-way (password) in modo da proteggere il DB da attacchi per violare password,
-ed al campo ***role***, il ruolo dell'entità.
+La tabella ***domain_entities*** contiene i record che descrivono le entità del dominio, ossia gli attori che interagiscono con ACMEsky al fine di raggiungere i propri scopi. Così è possibile riconoscere il ruolo di ciascun servizio/utente in base alle proprie credenziali, evitando relazioni con parti sconosciute. Ogni tupla contiene il valore corrispondente al campo ***id*** (chiave primaria), ai campi ***username*** e ***password*** (le credenziali), ***salt*** (dato random addizionato all'input della funzione one-way), e  ***role*** (il ruolo dell'entità nella SOA).
 
 |  | users |
 | - | - |
@@ -1244,7 +1268,7 @@ La tabella ***users*** rappresenta gli utenti che interagiscono con il sistema. 
 |  | departure_date_time |
 |  | used |
 
-La relazione ***flights_interest*** descrive un volo di interesse, ossia un volo che un utente richiede attraverso il servizio di ACMEskyWeb per acquistarlo. La relazione ha un campo ***id*** che rappresenta il codice identificativo con il quale viene salvato sul DB (Chiave primaria), ***user_id*** si riferisce al campo ***id*** della relazione ***users*** (Chiave esterna), ***departure_airport_id*** e ***arrival_airport_id*** indicano l'identificatore dell'aereoporto di partenza e arrivo, ***departure_date_time*** descrive la data di partenza senza specificare l'ora e il campo used assume valori booleani: se assume il valore ***true*** indica che ACMEsky ha già proposto all'utente il volo corrispondente all'interesse.  
+La relazione ***flights_interest*** descrive un volo di interesse, ossia un volo che un utente richiede attraverso il servizio di ACMEskyWeb per acquistarlo. La relazione ha un campo ***id*** (chiave primaria), ***user_id*** (chiave esterna della tabella ***users***), ***departure_airport_id*** e ***arrival_airport_id*** (indicano l'identificatore dell'aereoporto di partenza e arrivo), ***departure_date_time*** (data di partenza) e ***used*** (indica se ACMEsky ha già proposto all'utente il volo in un'offerta).  
 
 |  | users_interests |
 | - | - |
@@ -1256,7 +1280,7 @@ La relazione ***flights_interest*** descrive un volo di interesse, ossia un volo
 |  | expire_date |
 |  | used |
 
-La tabella ***users_interest*** descrive le offerte di volo di interesse degli utenti. Visto che gli utenti devono sempre prenotare un volo di interesse di andata e uno di ritorno entro un certo limite di prezzo, si è deciso di rappresentare questa scelta progettuale con il nome di offerta di volo. Il campo ***id*** è l'identificatore dell'offerta di interesse nella tabella (Chiave primaria), ***user_id*** è l'identificativo dell'utente nella tabella ***users*** (Chiave esterna), ***outbound_flight_interest_id*** è l'identificativo del volo di andata nella tabella ***flights_interest*** (Chiave esterna), ***flight_back_interest_id*** è l'identificativo del volo di ritorno nella tabella ***flights_interest*** (Chiave esterna), il campo ***price_limit*** si riferisce al limite di prezzo che l'offerta non può superare, ***expire_date*** sta per la data di scadenza entro cui l'offerta è prenotabile, mentre ***used*** rappresenta con valore booleano se l'offerta di interesse è stata già gestita da ACMEsky. 
+La tabella ***users_interest*** descrive le i voli di interesse degli utenti A/R. Comprende i campi: ***id*** (chiave primaria), ***user_id*** (chiave esterna dell'utente nella tabella ***users***), ***outbound_flight_interest_id*** (chiave esterna del volo di interesse di andata in ***flights_interest***),***flight_back_interest_id*** (chave esterna del volo di interesse di ritorno in ***flights_interest***), ***price_limit*** (limite di prezzo che l'offerta non può superare), ***expire_date*** (data di scadenza entro cui l'offerta è prenotabile) e ***used*** (valore booleano che segnala se l'interesse è stata già gestita da ACMEsky). 
 
 |  | airlines |
 | - | - |
@@ -1264,7 +1288,7 @@ La tabella ***users_interest*** descrive le offerte di volo di interesse degli u
 | FK | entity_id |
 |   | ws_address |
 
-La tabella ***airlines*** fa riferimento ai servizi delle compagnie aeree (AirlineService). Il campo ***id*** è l'identificativo della compagnia nella relazione (Chiave primaria), ***entity_id*** si riferisce all'identificativo della compagnia nella tabella ***domain_entities*** (Chiave esterna), e il campo ***ws_address*** rappresenta l'indirizzo del servizio con cui si possono fare richieste attraverso chiamate alle varie route messe a disposizione dal servizio stesso.
+La tabella ***airlines*** fa riferimento ai servizi delle compagnie aeree (AirlineService). Comprende i seguenti campi: ***id*** (chiave primaria), ***entity_id*** (chaive esterna dell'entità in ***domain_entities***) e  ***ws_address*** (l'indirizzo del server del servizio a cui si possono fare richieste).
 
 |  | flights |
 | - | - |
@@ -1280,7 +1304,7 @@ La tabella ***airlines*** fa riferimento ai servizi delle compagnie aeree (Airli
 |  | booked |
 |  | available |
 
-La relazione ***flights*** descrive i voli che vengono recuperati interrogando la compagnia aerea sulla base dei voli di interesse degli utenti. Il campo ***id*** è l'identificativo del volo nella tabella (Chiave primaria), ***departure_airport_id*** è l'identificativo dell'aereoporto di partenza del volo con il quale è registrato nella tabella ***airports*** (chiave esterna), ***arrival_airport_id*** è l'identificativo dell'aereoporto del volo di ritorno con il quale è registrato nella tabella ***airports*** (chiave esterna), il campo ***airline_id*** è l'identificativo con il quale la compagnia aerea viene registrata nella tabella ***airlines***, ***flight_code*** è il codice con il quale il volo viene registrato dalla compagnia, ***departure_date_time*** sta per la data e l'orario di partenza del volo, ***arrival_date_time*** sta per la data e l'orario di arrivo, ***price*** è il prezzo, ***expire_date*** rappresenta la data di scadenza del volo, ossia quando non è più prenotabile, ***booked*** è il flag utilizzato per indicare se il volo è stato prenotato o meno, invece il flage del campo ***available*** stabilisce se il volo è già stato inserito in un offerta (è quindi inutilizzabile), oppure no (quindi disponibile).  
+La tabella ***flights*** descrive i voli che vengono recuperati interrogando la compagnia aerea sulla base dei voli di interesse degli utenti. Sono presenti i seguenti campi: ***id*** (chiave primaria), ***departure_airport_id*** (chiave esterna dell'aereoporto di partenza nella tabella ***airports***), ***arrival_airport_id*** (chiave esterna dell'aereoporto di arrivo nella tabella ***airports***), ***airline_id*** (chiave esterna della compagnia aerea nella tabella ***airlines***), ***flight_code*** (codice con il quale il volo viene registrato dalla compagnia), ***departure_date_time*** (data e ora di partenza del volo), ***arrival_date_time*** (data e ora di arrivo), ***price*** (prezzo del volo), ***expire_date*** (data di scadenza del volo, ossia quando non è più prenotabile), ***booked*** (indica se il volo è stato prenotato) e ***available*** (stabilisce se il volo è già stato inserito in un offerta, quindi non più inutilizzabile).  
 
 |  | generated_offers |
 | - | - |
@@ -1293,7 +1317,7 @@ La relazione ***flights*** descrive i voli che vengono recuperati interrogando l
 |  | booked |
 |  | token |
 
-La relazione ***generated_offers*** rappresenta le offerte di volo generabili da ACMEsky sulla base delle offerte di volo di interesse degli utenti. Il campo ***id*** indica l'identificativo dell'offerta (chiave primaria), ***user_id*** è l'identificativo dell'utente nella tabella ***users*** (chiave esterna), ***outbound_flight_id*** è l'identificativo del volo di andata nella tabella ***flights*** (Chiave esterna), ***flight_back_interest_id*** è l'identificativo del volo di ritorno nella tabella ***flights*** (Chiave esterna), il campo ***total_price*** si riferisce al prezzo dell'offerta, il campo ***expire_date*** rappresenta la data di scadenza dell'offerta, ossia quando non è più prenotabile, ***booked*** è il flag utilizzato per indicare se l'offerta è stata prenotata o meno, ***token*** è il campo che si riferisce al token che l'utente utilizza per riscattare l'offerta.
+La tabella ***generated_offers*** rappresenta le offerte di volo generabili da ACMEsky sulla base degli interessi degli utenti. E' composta dai seguenti campi: ***id*** (chiave primaria), ***user_id*** (chiave esterna dell'utente nella tabella ***users***), ***outbound_flight_id*** (chiave esterna del volo di andata nella tabella ***flights***), ***flight_backt_id*** (chiave esterna del volo di ritorno nella tabella ***flights***), ***total_price*** (prezzo dell'offerta A/R), ***expire_date*** (data di scadenza dell'offerta, ossia quando non è più prenotabile), ***booked*** (indica se l'offerta è stata prenotata o meno), ***token*** (codice dell'offerta).
 
 |  | banks |
 | - | - |
@@ -1301,7 +1325,7 @@ La relazione ***generated_offers*** rappresenta le offerte di volo generabili da
 | FK | entity_id |
 |  | ws_address |
 
-La relazione ***banks*** fa riferimento ai servizi bancari. Il campo ***id*** è l'identificativo della banca nella tabella (Chiave primaria), ***entity_id*** si riferisce all'identificativo della banca nella tabella ***domain_entities*** (Chiave esterna), e il campo ***ws_address*** rappresenta l'indirizzo del servizio con cui si possono fare richieste attraverso chiamate alle varie route messe a disposizione dal servizio stesso.
+La tabella ***banks*** fa riferimento ai servizi bancari. E' composta dai seguenti campi: ***id*** (chiave primaria), ***entity_id*** (chiave esterna dell'entità della banca nella tabella ***domain_entities***) e ***ws_address*** (indirizzo del server del servizio).
 
 |  | rent_services |
 | - | - |
@@ -1310,7 +1334,7 @@ La relazione ***banks*** fa riferimento ai servizi bancari. Il campo ***id*** è
 |  | address |
 |  | ws_address |
 
-La tabella ***rent_services*** fa riferimento ai servizi di noleggio per accompagnare l'utente, eventualmente, all'aereoporto. Il campo ***id*** è l'identificativo del servizio nella relazione (Chiave primaria), ***entity_id*** si riferisce all'identificativo del noleggio nella tabella ***domain_entities*** (Chiave esterna), e il campo ***ws_address*** rappresenta l'indirizzo del servizio con cui si possono fare richieste attraverso chiamate alle varie route messe a disposizione dal servizio stesso.
+La tabella ***rent_services*** fa riferimento ai servizi di noleggio per accompagnare l'utente all'aereoporto. E' composta dai seguenti campi: ***id*** (chiave primaria), ***entity_id*** (chiave esterna riferita alla entità nella tabella ***domain_entities***) e  ***ws_address*** (indirizzo del server del servizio).
 
 \
 \
@@ -1323,6 +1347,20 @@ ACMEsky Web è una single webpage application che viene utilizzata dall'utente p
 - Svelte
 - Typescript
 - Bootstrap
+
+## Interfaccia grafica
+### Home
+![Home](https://vallasc.github.io/ACMEsky/src/ACMEskyWeb/doc/home.png)
+
+### Aggiunta interesse
+![Interesse](https://vallasc.github.io/ACMEsky/src/ACMEskyWeb/doc/interesse.png)
+
+### Conferma e acquisto offerta
+![offerta](https://vallasc.github.io/ACMEsky/src/ACMEskyWeb/doc/offerta.png)
+
+### Riepilogo
+![riepilogo](https://vallasc.github.io/ACMEsky/src/ACMEskyWeb/doc/riepilogo.png)
+
 
 ## Esecuzione
 
@@ -1347,39 +1385,44 @@ npm run build
 \
 \
 &nbsp;
+
 # Airline service
 
-Airline Service è il servizio che genera e invia ad ACMEsky i voli last-minute e quei voli che hanno una corrispondenza con i voli di interesse degli utenti raccolti da ACMEsky stessa. I voli vengono generati dopo circa 10 minuti che il servizio viene attivato e inviati ad ACMEsky su richiesta dei clienti, mentre i voli last-minute vengono generati e passati ogni 10 minuti indipendentemente dalla presenza di voli di interesse ad essi corrispondenti.
+Airline Service è il servizio che simula la compagnia aerea. 
+Attraverso le sue API permette di cercare i voli nel database e di acquistarne i biglietti. Inoltre, ad intervalli regolari, genera i voli last-minute e li invia ad ACMEsky.
 
-Il servizio manda i biglietti relativi ai voli per cui gli utenti manifestano la volontà di acquistare tramite il servizio di ACMEskyWeb.
+Per simulare un ambiente reale è stato creato un file `docker-compose.yml` che contiene due istanze di Airline, ovvero national_airline e international_airline.
+La prima offre voli da e verso aereoporti nazionali, mentre la seconda offre voli da e verso aereoporti internazionali.
 
-Al momento sono attive 2 istanze di AirlineService che comunicano con ACMEsky, ovvero national_airline e international_airline.
-La prima istanza offre voli da e verso aereoporti nazionali, mentre la seconda offre voli da aereoporti nazionali o internazionali verso quelli internazionali. Per il resto i due servizi si comportano allo stesso modo (generazione delle offerte di volo, creazione e invio automatico nel caso siano offerte last-minute, gestione dei voli acquistati dagli utenti, invio dei biglietti, ecc.). Le due istanze vengono create grazie a Docker.
+## Tecnologie utilizzate e scelte progettuali
 
-## Panoramica
+Il servizio è stato realizzato con il framework Spring boot che fornisce un ambiente per sviluppare applicazioni web JAVA e in particolare servizi REST. 
 
-### Informazioni generali su tecnologie e scelte progettuali del servizio
+Al primo avvio, viene prelevata la lista dei voli dal file JSON inserito nella directory fileSampleOffers e viene caricata nel database.
+Il file JSON è suddiviso due array: *"OFFERS"*, la quale include i biglietti per i voli subito disponibili e *"LAST-MINUTE"*  che racchiude i biglietti per i voli last-minute. Inoltre, è possibile aggiungere nuovi biglietti o rimuovere quelli già presenti integrando il file con nuovi oggetti.
 
-Il servizio è stato realizzato con il framework Spring boot che fornisce fin da subito un minimo di configurazione per sviluppare applicazioni web JAVA e in particolare servizi REST. Si è scelto di utilizzare Apache Maven per la gestione delle dipendenze del progetto, l'importazione di tutte le librerie necessarie per sviluppo del progetto e i relativi JAR, l'esecuzione dei vari goal per fare la build e l'esecuzione del servizio.
-Si è deciso di usare Docker per creare due istanze di AirlineService specificando nel dockerFile la versione di Java e i vari jar da copiare ed eseguire, mentre nel docker-compose.yml si è definita la lista delle immagini dei container da creare, le variabili di ambiente racchiuse nel file di configurazione di ciascun immagine, i volumi tra cui figurano i file JSON necessari per generare le offerte di volo e il db, le porte con cui si interfacciano con l'esterno e la rete a cui sono collegati tutti i container che vengono creati.
+La generazione dei biglietti per i voli last-minute viene efffettuata ogni 10 minuti scegliendo casualmente un volo tra quelli presenti nell'array.
+Le offerte di volo vengono convertite automaticamente in nuovi oggetti "Volo" prima di essere inviati ad ACMEsky, per racchiudere solo le informaioni utili.
 
-I file JSON dei voli sono suddivisi in due liste principali: "OFFERS", la quale ospita le liste che contengono gli oggetti JSON dei biglietti per i voli "normali", mentre "LAST-MINUTE" racchiude le liste che includono al proprio interno i biglietti per i voli last-minute. Infatti ci sono due liste fatte apposta per separare i voli standard dai voli last-minute: ciascuna di queste liste contiene a sua volta un insieme di array JSON che rappresentano i voli che il servizio organizza, e ciascun array contiene gli oggetti JSON rappresentanti i biglietti disponibili per un dato volo. La creazione dei biglietti dei voli standard avviene una sola volta convertendo gli oggetti JSON contenuti nelle liste in offerte di volo dopo 10 minuti dall'avvio del servizio, mentre la generazione dei biglietti per i voli last-minute viene fatta ogni 10 minuti scegliendo casualmente tra le liste di voli la lista che contiene i biglietti da creare, che verranno a loro volta convertiti in offerte di volo e inviati ad ACMEsky. In entrambi i casi le offerte di volo create vengono salvate sul Database. Si è scelto di convertire gli oggetti JSON dei biglietti nelle offerte di volo. Infatti le offerte di volo vengono convertite automaticamente in nuovi oggetti chiamati "Volo" prima di essere inviati ad ACMEsky per non mostrare informazioni inutili per l'utente come l'identificatore della compagnia aerea o la data di scadenza dell'offerta stessa, utili ai servizi per gestire i voli più comodamente. É possibile aggiungere nuovi biglietti o rimuovere quelli già presenti integrando i file con nuove liste di oggetti JSON che ne rispettano le caratteristiche, ovvero una chiave con l'opportuno nome per ogni campo e un valore adatto.
+Prima di inviare le offerte last-minute Airline si deve autenticare da ACMEsky, in caso di esito positivo, riceve un token JWT che dovrà inserire nella richiesta di invio delle offerte.
 
-Le offerte corrispondenti ai voli di interesse degli utenti vengono recuperate dal DB con una query che cerca tutte quelle offerte che hanno gli stessi aereoporti di partenza e arrivo dei voli richiesti e che partono lo stesso giorno dei voli di interesse degli utenti, a prescindere dall'ora esatta della partenza. Vengono ignorate tutte le offerte di voli last-minute (poichè ACMEsky li ha già ricevuti) e le offerte i cui biglietti sono stati già venduti. Il servizio invia ad ACMEsky solo voli non scaduti al momento della creazione nel caso dei voli, e al momento dell'invio se si tratta di voli last-minute. Prima di inviare le offerte last-minute il servizio chiede ad ACMEsky di autenticarsi e, in caso di esito positivo, riceve un token jwt che dovrà presentare nel campo Authorization nell'header della richiesta di invio delle offerte.
+Per la generazione dei biglietti aerei da inviare all'utente si è scelto di usare la libreria di Thymeleaf, che permette di generare file pdf partendo da un template in formato HTML e CSS riempito con i dati a runtime.
 
-Per la generazione dei biglietti aerei da inviare all'utente si è scelto di usare le librerie di Thymeleaf, che offre la possibilità ad applicazioni server side di realizzare template in grado di eseguire codice HTML e CSS in maniera semplice, oltre al loro riempimento con le informazioni del biglietto di volo ed alla generazione di file pdf.
+Per la persistenza dei dati è stato scelto H2, un leggero DBMS scritto in Java con tecnologia in-memory.
 
-Il DBMS che è stato scelto è quello di H2, scritto in Java con tecnologia in-memory, tra l'altro accessibile attraverso le route e le credenziali stabilite nel file application.properties, le cui impostazioni stabiliscono che il DB mantiene il suo stato anche se il server viene spento.
+## Struttura del codice
+Classi principali
+- **FlightOfferService**: Contiene i metodi per la creazione, ed il salvataggio delle offerte di volo nel database e per l'eventuale invio, nel caso siano last-minute.
+Inoltre, sono presenti i metodi per cercare le offerte di volo e per cambiare lo stato di acquisto dei biglietti. 
+- **PdfService**: Si occupa di generare i file pdf che contengono le informazioni sui biglietti.
 
-### Struttura del servizio
+Il package **model** include le classi per la definizione dell'offerta di volo (**FlightOffer**) e la classe per la definizione di alcune utility per la generazione e gestione delle offerte (**FlightUtility**).
 
-Il progetto è stato strutturato sulla base della Dependency Injection di Spring boot, quindi vi è il package service contenente i servizi ("FlightOfferService" e "PdfService") che vengono "iniettati" nel "FlightOfferController" presente nel package controller per offrire le feature richiamabili dalle risorse che verranno descritte in seguito. Il "FlightOfferService" si occupa di fornire i metodi e le funzioni richiamabili dalle risorse del controller per garantirne il funzionamento. Vi sono i metodi e le funzioni per la creazione, ed il salvataggio delle offerte di volo nel Database e per l'eventuale invio dei voli nel caso siano last-minute, le funzioni per cercare le offerte di volo compatibili con i voli di interesse degli utenti e l'invio dei rispettivi voli, il metodo per il cambiamento di stato delle offerte di volo da disponibili ad acquistate ed eventualmente il viceversa. Il "PdfService" si occupa di creare file pdf contenenti tutte le informazioni sui biglietti che l'utente vuole acquistare.
-Il package model include la classe per la definizione dell'offerta di volo, ovvero "FlightOffer", la classe per la definizione di alcune utility per la generazione e gestione delle offerte, ovvero "FlightUtility". E'stato creato il package per i Data Transfer Object (DTO) per rappresentare le richieste degli utenti ("UserRequest"), per rappresentare i voli che trovano una corrispondenza con gli interessi degli utenti ("Flight"), e il DTO per la richiesta di autenticazione chiamato "AuthRequest", impiegato per richiedere un token jwt per autenticarsi nel caso i servizi lo richiedono per fare richieste HTTP, come ad esempio ACMEsky.
-Inoltre è presente un package repository che contiene un interfaccia che estende una repository JPA utilizzata che consente di interfacciarsi con la tabella contenente le offerte di volo per la gestione delle funzionalità che offre il servizio di Airline.
-Nella directory resources vi sono le risorse necessarie per realizzare i biglietti aerei, ovvero il template "Ticket_template" e la sottodirectory "pdf-resources" che ospita la cartella css contentente un css impiegato dal template.
-|
+Il package **DTO** include le classi per rappresentare le richieste degli utenti (**UserRequest**), per rappresentare i voli che trovano una corrispondenza con gli interessi degli utenti (**Flight**), e il DTO per la richiesta di autenticazione (**AuthRequest**).
 
-### API:
+La directory **resources** contiene i file necessari per realizzare i biglietti aerei.
+
+## API:
 Il file OpenAPI è disponibile al seguente [link](https://vallasc.github.io/ACMEsky/src/AirlineService/swagger.json)
 
 
@@ -1397,8 +1440,10 @@ Il file OpenAPI è disponibile al seguente [link](https://vallasc.github.io/ACME
 ## Risorse
 | Risorsa | Descrizione |
 | - | - |
-| POST `/getFlights` | Questa risorsa consente di cercare i voli passati come parametro. Prende in input una lista di oggetti JSON che vengono deserializzati grazie a Jackson Json in oggetti di tipo UserRequest e cerca nella repository le offerte che hanno gli stessi aereoporti di partenza e arrivo e la stessa data di partenza (non si considera l'orario, infatti si cerca tutti i voli disponibili per l'intero giorno di andata). Se queste non sono offerte last-minute e non sono già state acquistate da altri utenti, vengono convertite in oggetti Flight e poi inviate in risposta alla chiamata, altrimenti no. |
-| GET `/getTickets`  | Le chiamate a questa risorsa che hanno come parametro la lista di identificatori delle offerte che l'utente ha intenzion di acquistare consentono di ricevere i biglietti dei voli in formato pdf. Nello specifico si cambia lo stato di acquisto delle offerte corrispondenti ai voli che si vuole acquistare e si restituisce un file che elenca e descrive brevemente le caratteristiche dei voli. Infine si imposta il tipo del contenuto del risultato, ovvero un pdf, e gli header che stabiliscono che vi un file in allegato alla risposta. |
+| POST `/getFlights` | Ricerca dei voli disponibili nel database. Prende in input una lista di oggetti *UserRequest*. |
+| GET `/getTickets`  | Acquista e eestituisce i biglietti identificati dal parametro *id* |
+
+&nbsp;
 
 ## Esecuzione 
 
@@ -1418,7 +1463,7 @@ docker-compose up --build
 
 ```sh
 http://localhost:8060/h2
-URL: jdbc:h2:file:./db/db
+URL: jdbc:h2:file:/db
 user: sa
 passw:
 ```
@@ -1427,16 +1472,15 @@ passw:
 
 ```sh
 http://localhost:8061/h2
-URL: jdbc:h2:file:./db/db
+URL: jdbc:h2:file:/db
 user: sa
 passw:
 ```
 ### URI
-Gli URI riferiti ai vari container che ospitano i servizi di AirlineService sono:
+Gli URI riferiti dei container definiti in `docker-compose.yml`:
 - http://localhost:8060 per airlineservice_national
 - http://localhost:8061 per airlineservice_international
 
-\
 \
 &nbsp;
 
@@ -1446,11 +1490,14 @@ Bank è il servizio con cui ACMEsky si interfaccia per la gestione dei pagamenti
 ACMEsky richiede a Bank i link di pagamento che poi verrano utilizzati dall'utente per pagare. Inoltre una volta effettuato il pagamento invia un messaggio ad ACMEsky con la relativa conferma.
 Tutte le richieste che vengono fatte alla banca devono esere autenticate utilizzando il token JWT che può essere richieste utilizzando la route `/path`.
 
-## Tecnologie utilizzate
+## Tecnologie utilizzate e scelte progettuali
 
 Il servizio è stato realizzato utilizzando il framework Spring boot che fornisce un ambiente per sviluppare applicazioni web JAVA. Per l'autenticazione degli utenti e l'autorizzazione delle richieste è stato utilizzata la libreria *Spring-Security* in accoppiata con *jsonwebtoken*.
 Per la gestione dei dati è stato utlizzato *H2*, un DBMS leggero che permette di salvare il database in un unico file.
 
+### Schermata di pagamento
+
+![Ricevuta](https://vallasc.github.io/ACMEsky/src/BankService/doc/pagamento.png)
 
 ## API:
 Il file OpenAPI è disponibile al seguente [link](https://vallasc.github.io/ACMEsky/src/BankService/openapi.json)
@@ -1507,14 +1554,16 @@ passw:
 
 # Prontogram
 
+![Prontogram](https://vallasc.github.io/ACMEsky/src/Prontogram/doc/prontogram.png)
+
 Prontogram è una applicazione web che permette di inviare notifiche agli utenti che vi sono iscritti.
-I messaggi inviati possono essere formattati utilizzado HTML, questo permette di rappresentare i dati in modo complesso, come ad esempio in una tabella.
+I messaggi inviati possono essere formattati utilizzado HTML, questo permette di rappresentare i dati in modo complesso (ad esempio in una tabella).
 
 L'applicazione di Prontogram si divide in due parti: front-end e back-end.
 La parte back-end si occupa di gestire tutte le chiamate delle API da e verso il client web. Mentre la parte fornt-end si occupa di creare l'interfaccia grafica e gestire le interazioni da parte dell'utente.
 
 
-## Tecnologie e scelte progettuali del servizio
+## Tecnologie utilizzate e scelte progettuali
 La parte front-end e la parte back-end sono state sviluppate utilizzando tecnologie e pattern strutturali differenti. 
 
 ### Front-end
@@ -1546,6 +1595,8 @@ Il file OpenAPI è disponibile al seguente [link](https://vallasc.github.io/ACME
     https://vallasc.github.io/ACMEsky/src/SwaggerUI/index.html?src=https://vallasc.github.io/ACMEsky/src/Prontogram/api.json
     ">
 </iframe>
+
+&nbsp;
 
 ## Risorse
 
@@ -1592,13 +1643,12 @@ docker-compose up --build
 ```
 
 \
-\
 &nbsp;
 
 # Rental service
 Servizio che simula una compagnia di noleggio.
 
-Utilizza SOAP per esporre i servizi.
+Implementato in Jolie, utilizza SOAP per esporre i servizi.
 
 ## Service ports
 | Name | Endpoint (Location) |
@@ -1655,7 +1705,6 @@ jolie server.ol $SERVICE_NAME
 docker-compose up
 ```
 \
-\
 &nbsp;
 
 # Geographical distance service
@@ -1682,6 +1731,5 @@ node index.js -p 8080
 ```sh
 docker-compose up
 ```
-\
 \
 &nbsp;

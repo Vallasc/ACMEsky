@@ -1,3 +1,4 @@
+
 # ACMEsky Service
 
 ACMEsky Service è il modulo principale di ACMEsky, si relaziona con i vari servizi (AirlineServices, RentServices, Prontogram, BankService, ecc...) al fine di consentire agli utenti di richiedere ed acquistare le offerte dei voli che desiderano.
@@ -55,7 +56,7 @@ Contiene le classi che descrivono gli errori restituiti in caso di problemi nell
 
 ### Formato ricevuta
 
-![Ricevuta](doc/ricevuta.png)
+![Ricevuta](https://vallasc.github.io/ACMEsky/src/ACMEskyService/doc/ricevuta.png)
 
 ## API
 
@@ -123,5 +124,5 @@ mvn package
 docker-compose up --build
 ```
 
-\
 &nbsp;
+<div class="page-break"></div>

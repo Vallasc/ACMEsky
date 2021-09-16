@@ -9,16 +9,16 @@ ACMEsky Web è una single webpage application che viene utilizzata dall'utente p
 
 ## Interfaccia grafica
 ### Home
-![Home](doc/home.png)
+![Home](https://vallasc.github.io/ACMEsky/src/ACMEskyWeb/doc/home.png)
 
 ### Aggiunta interesse
-![Interesse](doc/interesse.png)
+![Interesse](https://vallasc.github.io/ACMEsky/src/ACMEskyWeb/doc/interesse.png)
 
 ### Conferma e acquisto offerta
-![offerta](doc/offerta.png)
+![offerta](https://vallasc.github.io/ACMEsky/src/ACMEskyWeb/doc/offerta.png)
 
 ### Riepilogo
-![riepilogo](doc/riepilogo.png)
+![riepilogo](https://vallasc.github.io/ACMEsky/src/ACMEskyWeb/doc/riepilogo.png)
 
 
 ## Esecuzione
@@ -41,6 +41,5 @@ Per creare una versione ottimizzata
 npm run build
 ```
 
-\
-\
 &nbsp;
+<div class="page-break"></div>

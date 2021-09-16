@@ -117,6 +117,5 @@ La tabella ***banks*** fa riferimento ai servizi bancari. E' composta dai seguen
 
 La tabella ***rent_services*** fa riferimento ai servizi di noleggio per accompagnare l'utente all'aereoporto. E' composta dai seguenti campi: ***id*** (chiave primaria), ***entity_id*** (chiave esterna riferita alla entità nella tabella ***domain_entities***) e  ***ws_address*** (indirizzo del server del servizio).
 
-\
-\
 &nbsp;
+<div class="page-break"></div>

@@ -12,7 +12,7 @@ Per la gestione dei dati è stato utlizzato *H2*, un DBMS leggero che permette d
 
 ### Schermata di pagamento
 
-![Ricevuta](doc/pagamento.png)
+![Ricevuta](https://vallasc.github.io/ACMEsky/src/BankService/doc/pagamento.png)
 
 ## API:
 Il file OpenAPI è disponibile al seguente [link](https://vallasc.github.io/ACMEsky/src/BankService/openapi.json)
@@ -63,6 +63,5 @@ user: sa
 passw:
 ```
 
-\
-\
 &nbsp;
+<div class="page-break"></div>

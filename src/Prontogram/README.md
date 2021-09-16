@@ -1,7 +1,7 @@
 
 # Prontogram
 
-![Prontogram](doc/prontogram.png)
+![Prontogram](https://vallasc.github.io/ACMEsky/src/Prontogram/doc/prontogram.png)
 
 Prontogram è una applicazione web che permette di inviare notifiche agli utenti che vi sono iscritti.
 I messaggi inviati possono essere formattati utilizzado HTML, questo permette di rappresentare i dati in modo complesso (ad esempio in una tabella).
@@ -89,5 +89,5 @@ http-server
 docker-compose up --build
 ```
 
-\
 &nbsp;
+<div class="page-break"></div>
