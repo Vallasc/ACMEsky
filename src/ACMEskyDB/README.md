@@ -2,8 +2,7 @@
 # ACMEsky Database
 
 ACMEsky si interfaccia ad un database PostgreSQL.
-Il file docker-compose contiene tuto il necessario per far partire un'istanza del database con le tabelle e i dati inizializzati.
-Nello specifico, alla prima esecuzione, viene eseguito il file init.sql che contiene lo schema del database e i record iniziali per far partire ACMEsky da zero.
+Il file docker-compose, attraverso il file init.sql, contiene tuto il necessario per eseguire un'istanza del database con le tabelle e i record necessari ad ACMEsky.
 
 ## Database schema
 
@@ -18,7 +17,7 @@ Nello specifico, alla prima esecuzione, viene eseguito il file init.sql che cont
 |  | latitude |
 |  | longitude |
 
-La tabella ***airports*** contiene i record che rappresentano gli aereoporti nazionali e internazionali codificati secondo il codice IATA. Essa contiene il campo ***id*** (Chiave primaria), ***code***, ossia il codice dell'aereoporto in codifica IATA, ***name***, il nome dell'aereoporto, ***city_name***, il nome della città dove si trova, ***country_code***, iniziali del paese dove si trova, ***timezone***, ossia il fuso orario, ***latitude*** e ***longitude*** che rappresentano la posizione dell'aereoporto.
+La tabella ***airports*** contiene i record che rappresentano gli aereoporti nazionali e internazionali codificati secondo il codice IATA. Essa contiene il campo ***id*** (chiave primaria), ***code***  (codice dell'aereoporto in codifica IATA), ***name*** (nome dell'aereoporto), ***city_name*** (nome della città), ***country_code*** (codice del paese), ***timezone***(fuso orario), ***latitude*** e ***longitude*** (la posizione dell'aereoporto).
 
 |  | domain_entities |
 | - | - |
@@ -28,8 +27,7 @@ La tabella ***airports*** contiene i record che rappresentano gli aereoporti naz
 |  | salt |
 |  | role |
 
-La tabella ***domain_entities*** contiene i record che descrivono le entità del dominio, ossia gli attori che interagiscono con ACMEsky al fine di raggiungere i propri scopi. Così è possibile riconoscere il ruolo di ciascun servizio/utente in base alle proprie credenziali, evitando relazioni con parti sconosciute. Ogni tupla contiene il valore corrispondente al campo ***id*** (Chiave primaria), ai campi ***username*** e ***password*** (le credenziali), ***salt*** rappresenta un dato random addizionato all'input della funzione one-way (password) in modo da proteggere il DB da attacchi per violare password,
-ed al campo ***role***, il ruolo dell'entità.
+La tabella ***domain_entities*** contiene i record che descrivono le entità del dominio, ossia gli attori che interagiscono con ACMEsky al fine di raggiungere i propri scopi. Così è possibile riconoscere il ruolo di ciascun servizio/utente in base alle proprie credenziali, evitando relazioni con parti sconosciute. Ogni tupla contiene il valore corrispondente al campo ***id*** (chiave primaria), ai campi ***username*** e ***password*** (le credenziali), ***salt*** (dato random addizionato all'input della funzione one-way), e  ***role*** (il ruolo dell'entità nella SOA).
 
 |  | users |
 | - | - |
@@ -51,7 +49,7 @@ La tabella ***users*** rappresenta gli utenti che interagiscono con il sistema. 
 |  | departure_date_time |
 |  | used |
 
-La relazione ***flights_interest*** descrive un volo di interesse, ossia un volo che un utente richiede attraverso il servizio di ACMEskyWeb per acquistarlo. La relazione ha un campo ***id*** che rappresenta il codice identificativo con il quale viene salvato sul DB (Chiave primaria), ***user_id*** si riferisce al campo ***id*** della relazione ***users*** (Chiave esterna), ***departure_airport_id*** e ***arrival_airport_id*** indicano l'identificatore dell'aereoporto di partenza e arrivo, ***departure_date_time*** descrive la data di partenza senza specificare l'ora e il campo used assume valori booleani: se assume il valore ***true*** indica che ACMEsky ha già proposto all'utente il volo corrispondente all'interesse.  
+La relazione ***flights_interest*** descrive un volo di interesse, ossia un volo che un utente richiede attraverso il servizio di ACMEskyWeb per acquistarlo. La relazione ha un campo ***id*** (chiave primaria), ***user_id*** (chiave esterna della tabella ***users***), ***departure_airport_id*** e ***arrival_airport_id*** (indicano l'identificatore dell'aereoporto di partenza e arrivo), ***departure_date_time*** (data di partenza) e ***used*** (indica se ACMEsky ha già proposto all'utente il volo in un'offerta).  
 
 |  | users_interests |
 | - | - |
@@ -63,7 +61,7 @@ La relazione ***flights_interest*** descrive un volo di interesse, ossia un volo
 |  | expire_date |
 |  | used |
 
-La tabella ***users_interest*** descrive le offerte di volo di interesse degli utenti. Visto che gli utenti devono sempre prenotare un volo di interesse di andata e uno di ritorno entro un certo limite di prezzo, si è deciso di rappresentare questa scelta progettuale con il nome di offerta di volo. Il campo ***id*** è l'identificatore dell'offerta di interesse nella tabella (Chiave primaria), ***user_id*** è l'identificativo dell'utente nella tabella ***users*** (Chiave esterna), ***outbound_flight_interest_id*** è l'identificativo del volo di andata nella tabella ***flights_interest*** (Chiave esterna), ***flight_back_interest_id*** è l'identificativo del volo di ritorno nella tabella ***flights_interest*** (Chiave esterna), il campo ***price_limit*** si riferisce al limite di prezzo che l'offerta non può superare, ***expire_date*** sta per la data di scadenza entro cui l'offerta è prenotabile, mentre ***used*** rappresenta con valore booleano se l'offerta di interesse è stata già gestita da ACMEsky. 
+La tabella ***users_interest*** descrive le i voli di interesse degli utenti A/R. Comprende i campi: ***id*** (chiave primaria), ***user_id*** (chiave esterna dell'utente nella tabella ***users***), ***outbound_flight_interest_id*** (chiave esterna del volo di interesse di andata in ***flights_interest***),***flight_back_interest_id*** (chave esterna del volo di interesse di ritorno in ***flights_interest***), ***price_limit*** (limite di prezzo che l'offerta non può superare), ***expire_date*** (data di scadenza entro cui l'offerta è prenotabile) e ***used*** (valore booleano che segnala se l'interesse è stata già gestita da ACMEsky). 
 
 |  | airlines |
 | - | - |
@@ -71,7 +69,7 @@ La tabella ***users_interest*** descrive le offerte di volo di interesse degli u
 | FK | entity_id |
 |   | ws_address |
 
-La tabella ***airlines*** fa riferimento ai servizi delle compagnie aeree (AirlineService). Il campo ***id*** è l'identificativo della compagnia nella relazione (Chiave primaria), ***entity_id*** si riferisce all'identificativo della compagnia nella tabella ***domain_entities*** (Chiave esterna), e il campo ***ws_address*** rappresenta l'indirizzo del servizio con cui si possono fare richieste attraverso chiamate alle varie route messe a disposizione dal servizio stesso.
+La tabella ***airlines*** fa riferimento ai servizi delle compagnie aeree (AirlineService). Comprende i seguenti campi: ***id*** (chiave primaria), ***entity_id*** (chaive esterna dell'entità in ***domain_entities***) e  ***ws_address*** (l'indirizzo del server del servizio a cui si possono fare richieste).
 
 |  | flights |
 | - | - |
@@ -87,7 +85,7 @@ La tabella ***airlines*** fa riferimento ai servizi delle compagnie aeree (Airli
 |  | booked |
 |  | available |
 
-La relazione ***flights*** descrive i voli che vengono recuperati interrogando la compagnia aerea sulla base dei voli di interesse degli utenti. Il campo ***id*** è l'identificativo del volo nella tabella (Chiave primaria), ***departure_airport_id*** è l'identificativo dell'aereoporto di partenza del volo con il quale è registrato nella tabella ***airports*** (chiave esterna), ***arrival_airport_id*** è l'identificativo dell'aereoporto del volo di ritorno con il quale è registrato nella tabella ***airports*** (chiave esterna), il campo ***airline_id*** è l'identificativo con il quale la compagnia aerea viene registrata nella tabella ***airlines***, ***flight_code*** è il codice con il quale il volo viene registrato dalla compagnia, ***departure_date_time*** sta per la data e l'orario di partenza del volo, ***arrival_date_time*** sta per la data e l'orario di arrivo, ***price*** è il prezzo, ***expire_date*** rappresenta la data di scadenza del volo, ossia quando non è più prenotabile, ***booked*** è il flag utilizzato per indicare se il volo è stato prenotato o meno, invece il flage del campo ***available*** stabilisce se il volo è già stato inserito in un offerta (è quindi inutilizzabile), oppure no (quindi disponibile).  
+La tabella ***flights*** descrive i voli che vengono recuperati interrogando la compagnia aerea sulla base dei voli di interesse degli utenti. Sono presenti i seguenti campi: ***id*** (chiave primaria), ***departure_airport_id*** (chiave esterna dell'aereoporto di partenza nella tabella ***airports***), ***arrival_airport_id*** (chiave esterna dell'aereoporto di arrivo nella tabella ***airports***), ***airline_id*** (chiave esterna della compagnia aerea nella tabella ***airlines***), ***flight_code*** (codice con il quale il volo viene registrato dalla compagnia), ***departure_date_time*** (data e ora di partenza del volo), ***arrival_date_time*** (data e ora di arrivo), ***price*** (prezzo del volo), ***expire_date*** (data di scadenza del volo, ossia quando non è più prenotabile), ***booked*** (indica se il volo è stato prenotato) e ***available*** (stabilisce se il volo è già stato inserito in un offerta, quindi non più inutilizzabile).  
 
 |  | generated_offers |
 | - | - |
@@ -100,7 +98,7 @@ La relazione ***flights*** descrive i voli che vengono recuperati interrogando l
 |  | booked |
 |  | token |
 
-La relazione ***generated_offers*** rappresenta le offerte di volo generabili da ACMEsky sulla base delle offerte di volo di interesse degli utenti. Il campo ***id*** indica l'identificativo dell'offerta (chiave primaria), ***user_id*** è l'identificativo dell'utente nella tabella ***users*** (chiave esterna), ***outbound_flight_id*** è l'identificativo del volo di andata nella tabella ***flights*** (Chiave esterna), ***flight_back_interest_id*** è l'identificativo del volo di ritorno nella tabella ***flights*** (Chiave esterna), il campo ***total_price*** si riferisce al prezzo dell'offerta, il campo ***expire_date*** rappresenta la data di scadenza dell'offerta, ossia quando non è più prenotabile, ***booked*** è il flag utilizzato per indicare se l'offerta è stata prenotata o meno, ***token*** è il campo che si riferisce al token che l'utente utilizza per riscattare l'offerta.
+La tabella ***generated_offers*** rappresenta le offerte di volo generabili da ACMEsky sulla base degli interessi degli utenti. E' composta dai seguenti campi: ***id*** (chiave primaria), ***user_id*** (chiave esterna dell'utente nella tabella ***users***), ***outbound_flight_id*** (chiave esterna del volo di andata nella tabella ***flights***), ***flight_backt_id*** (chiave esterna del volo di ritorno nella tabella ***flights***), ***total_price*** (prezzo dell'offerta A/R), ***expire_date*** (data di scadenza dell'offerta, ossia quando non è più prenotabile), ***booked*** (indica se l'offerta è stata prenotata o meno), ***token*** (codice dell'offerta).
 
 |  | banks |
 | - | - |
@@ -108,7 +106,7 @@ La relazione ***generated_offers*** rappresenta le offerte di volo generabili da
 | FK | entity_id |
 |  | ws_address |
 
-La relazione ***banks*** fa riferimento ai servizi bancari. Il campo ***id*** è l'identificativo della banca nella tabella (Chiave primaria), ***entity_id*** si riferisce all'identificativo della banca nella tabella ***domain_entities*** (Chiave esterna), e il campo ***ws_address*** rappresenta l'indirizzo del servizio con cui si possono fare richieste attraverso chiamate alle varie route messe a disposizione dal servizio stesso.
+La tabella ***banks*** fa riferimento ai servizi bancari. E' composta dai seguenti campi: ***id*** (chiave primaria), ***entity_id*** (chiave esterna dell'entità della banca nella tabella ***domain_entities***) e ***ws_address*** (indirizzo del server del servizio).
 
 |  | rent_services |
 | - | - |
@@ -117,7 +115,7 @@ La relazione ***banks*** fa riferimento ai servizi bancari. Il campo ***id*** è
 |  | address |
 |  | ws_address |
 
-La tabella ***rent_services*** fa riferimento ai servizi di noleggio per accompagnare l'utente, eventualmente, all'aereoporto. Il campo ***id*** è l'identificativo del servizio nella relazione (Chiave primaria), ***entity_id*** si riferisce all'identificativo del noleggio nella tabella ***domain_entities*** (Chiave esterna), e il campo ***ws_address*** rappresenta l'indirizzo del servizio con cui si possono fare richieste attraverso chiamate alle varie route messe a disposizione dal servizio stesso.
+La tabella ***rent_services*** fa riferimento ai servizi di noleggio per accompagnare l'utente all'aereoporto. E' composta dai seguenti campi: ***id*** (chiave primaria), ***entity_id*** (chiave esterna riferita alla entità nella tabella ***domain_entities***) e  ***ws_address*** (indirizzo del server del servizio).
 
 \
 \

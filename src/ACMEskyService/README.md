@@ -1,39 +1,21 @@
 
 # ACMEsky Service
 
-ACMEskyService, il servizio principale del progetto
+ACMEsky Service è il modulo principale di ACMEsky, si relaziona con i vari servizi (AirlineServices, RentServices, Prontogram, BankService, ecc...) al fine di consentire agli utenti di richiedere ed acquistare le offerte dei voli che desiderano.
 
-### comando per fare la build
+ACMEsky Service comunica con il database (PostgreSQL) per gestire le entità che possono essere utenti o altri servizi, in modo da poterli autenticare e autorizzare quando inviano richieste HTTP.
+Inoltre, gestisce i voli di interesse degli utenti (A/R), i voli delle compagnie aeree (last-minute e non) e le offerte generate dai voli acquisiti dalle compagnie aeree. 
 
-```sh
-mvn package
-```
+Esso interagisce con ACMEsky Web per rapportarsi con gli utenti, raccoglie i voli di interesse degli utenti. Al momento dell'inserimento del token per acquistare l'offerta verifica se è ancora valida e procede con l'acquisto e il pagamento dei biglietti aerei. Infine, ACMEsky consentirà all'utente di visualizzare i biglietti dei voli precedentemente acquistati dopo aver applicato eventuali servizi aggiuntivi.
 
-### comando per fare la build del servizio e far partire il container Docker
+ACMEskyService si relaziona con i servizi di AirlineService (compagnie aeree) al fine di cercare, tra i voli che offrono, quelli che coincidono con gli interessi degli utenti. Gli interessi degli utenti sono composti da voli di andata e ritorno, mentre le offerte generate sono quelle che ACMEsky crea con i voli reali che riceve dalle compagnie aeree. Inoltre, il servizio riceve voli last-minute inviati dalle Airline Services con una certa frequenza.
+Infine, ACMEsky recupera i biglietti dei voli che gli utenti vogliono acquistare tramite una richiesta alla compagnia aerea, nel caso di errori o problemi di pagamento cancella la prenotazione informando l'AirlineService corrispondente.
 
-```sh
-docker-compose up --build
-```
+Per quanto riguarda il pagamento, il servizio interroga Bank Service (provider di pagamenti), per richiedere il link di pagamento da inviare all'utente, il quale poi interagirà con la banca per effettuare il pagamento. Infine, Bank Service informerà ACMEsky dell'avvenuto pagamento.
 
-<iframe title="API"
-    width="900"
-    height="2700"
-    class="hidden"
-    src="
-    https://vallasc.github.io/ACMEsky/src/SwaggerUI/index.html?src=https://vallasc.github.io/ACMEsky/src/SwaggerUI/open-api.json
-    ">
-</iframe>
+Il servizio di ACMEsky interagisce con quello del calcolo delle distanze geografiche "GeographicalDistance Service" e con quelli di noleggio "Rental Service" per applicare eventuali servizi aggiuntivi all'offerta acquistata dell'utente. Effettua le richieste a GeographicalDistance Service per calcolare la distanza utente - areoporto e
+per trovare la compagnia di noleggio più vicina. Infine, prenota il trasferimento A/R da Rental Service e aggiunge i dettagli sulla ricevuta di viaggio.
 
-## Documentazione
-
-ACMEskyService è il servizio principale di ACMEsky che si relaziona con i vari servizi (ACMEskyWeb, AirlineServices, RentServices, Prontogram, BankService,...) al fine di consentire agli utenti di prenotare ed acquistare le offerte di volo che desiderano.
-
-ACMEskyService comunica con il servizio di ACMEskyDB (il quale consiste nel Database di PostgreSQL e del tool di pgAdmin4) per registrare gli utenti e i vari servizi che comunicano con ACMEsky, in modo da poterli riconoscere quando inviano richieste HTTP, anche per salvare le offerte di volo richieste dagli utenti (e i rispettivi voli), i voli delle compagnie aeree (last-minute e non), tutti gli aereoporti mondiali in codice IATA e le offerte di volo generate dai voli acquisiti dai servizi di volo secondo le offerte di interesse degli utenti. Inoltre interagisce con ACMEskyWeb per interfacciarsi con gli utenti: infatti raccoglie le offerte di volo che ciascun utente desidera, al momento dell'accettazione dell'inserimento del token per acquistare l'offerta verifica dal token se l'offerta è ancora valida e procede con il pagamento e del risultato dell'azione (restituzione del biglietto o cancellazione della prenotazione e rimborso). Infine il servizio di ACMEsky consentirà all'utente di visualizzare i biglietti dei voli precedentemente acquistati dopo aver applicato eventuali servizi aggiuntivi.
-ACMEskyService si relaziona con i servizi di AirlineService (compagnie aeree) al fine di cercare, tra i voli che offrono, quelli corrispondenti ai voli delle offerte di interesse degli utenti al fine di vendere loro le offerte generate sulla base delle loro preferenze. Le offerte di interesse sono composte dai voli di interesse di andata e ritorno, mentre le offerte generate sono quelle che ACMEsky crea con i voli che riceve dalle compagnie aeree. Inoltre il servizio riceve voli last-minute inviati dalle AirlineService con una certa frequenza, recupera i biglietti dei voli che gli utenti vogliono acquistare tramite una richiesta HTTP alla compagnia aerea che offre i voli in questione (se non sono già stati prenotati in precedenza), e nel caso di errori o problemi di pagamento cancella la prenotazione informando l'AirlineService corrispondente.
-Per quanto riguarda il pagamento, il servizio interroga BankService, il servizio bancario, per richiedere il link di pagamento da inviare all'utente tramite il servizio di ACMEskyWeb, il quale poi interagirà con la banca per gestire il pagamento. Infine BankService informerà ACMEsky solo se l'esito è positivo (in caso contrario quest'ultimo dovrà occuparsi della compensazione).
-Il servizio di ACMEsky interagisce con il servizio di geolocalizzazione "GeolocalizationService" e con quelli dei servizi di noleggio "RentService" per applicare eventuali servizi aggiuntivi all'offerta di volo acquistata dell'utente. Al servizio di geolocalizzazione fa una richiesta HTTP per conoscere le posizioni dell'aereoporto del volo e dell'indirizzo dell'utente per calcolarne la distanza, mentre ai servizi di noleggio chiede se è possibile accompagnare i passeggeri dal loro indirizzo all'aereoporto con un mezzo. Infine ACMEsky aggiunge i dettagli precedentemente descritti.
-
-# Panoramica
 
 ## Struttura del servizio e tecnologie utilizzate
 
@@ -56,6 +38,15 @@ Il progetto è composto dalle seguenti cartelle:
 
 - utils: contiene i file che descrivono le possibili stringhe di errore, alcune variabili d'ambiente come la finestra di tempo massimo in cui è possibile prenotare un volo d'andata a partire dalla data odierna e la classe che si occupa di creare il pdf dei biglietti.
 
+
+<iframe title="API"
+    width="900"
+    height="2700"
+    class="hidden"
+    src="
+    https://vallasc.github.io/ACMEsky/src/SwaggerUI/index.html?src=https://vallasc.github.io/ACMEsky/src/SwaggerUI/open-api.json
+    ">
+</iframe>
 ## Risorse necessarie per tutti i servizi
 
 | Risorsa           | Descrizione                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
@@ -95,6 +86,18 @@ Il progetto è composto dalle seguenti cartelle:
 | POST/ users/               | Tutti i nuovi servizi e utenti possono effettuare chiamate a questa route per iscriversi nel DB di ACMEsky e interagire con i vari servizi al fine di raggiungere i propri scopi. Il servizio chiamante può effettuare chiamate a questa route passando come argomento un oggetto di tipo UserSignUpdDTO, contenente email, password, name, surname e prontogramUsername, per registrare un utente.                                                                                               |
 | PUT/ users/me              | Questa risorsa è riservata esclusivamente al servizio ACMEskyWeb, che dovrà presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. Il servizio web di ACMEsky chiama questa risorsa passando un parametro di tipo UserUpdateDTO contenente tutti i campi necessari ad ACMEskyService per modificare la password, il nome ed il cognome.                                                                                                 |
 | DELETE/ users/me           | Questa risorsa è riservata esclusivamente al servizio ACMEskyWeb, che dovrà presentare un bearer token valido rilasciato da ACMEskyService con una richiesta alla risorsa di autenticazione. Il servizio web di ACMEsky chiama questa risorsa passando un parametro di tipo UserDeleteDTO contenente tutti i campi necessari ad ACMEskyService (username e password corretti) per cancellare l'utente con codeste credenziali da ACMEsky.                                                         |
+
+### comando per fare la build
+
+```sh
+mvn package
+```
+
+### comando per fare la build del servizio e far partire il container Docker
+
+```sh
+docker-compose up --build
+```
 
 \
 \

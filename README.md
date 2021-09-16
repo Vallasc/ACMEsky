@@ -25,8 +25,9 @@ In questo caso ACMESky fa uso di diverse compagnie di noleggio con autista con c
 Durante il design del sistema sono stati aggiunti dei vincoli per raffinare le specifiche del progetto.
 - Ogni attore deve essere autenticato e autorizzato per poter interagire con ACMEsky;
 - I voli delle offerte generate provengono dalla stessa compagnia aerea;
+- La compagnia aerea restituisce una lista di voli (non necessariamente A/R);
 - Non viene gestito lo scambio di denaro dalla banca alla compagnia aerea; 
-- Se uno dei servizi per la gestione del calcolo premium non risponde i voli vengono acquistati senza servizi accesori;
+- Se uno dei servizi per la gestione del calcolo premium non risponde i voli vengono acquistati senza servizi accesori.
 
 ## Servizi implementati
 - **ACMEsky**: Servizio che genera offerte di voli A/R in base agli interssi degli utenti. 

@@ -142,8 +142,10 @@ public class OfferManager {
         for (Flight flight1 : flights) {
             if (this.isMatched(flight1, ui.getOutboundFlightInterest())) {
                 for (Flight flight2 : flights) {
-                    if (flight1 != flight2 && this.isMatched(flight2, ui.getFlightBackInterest())
-                            && flight1.getPrice() + flight2.getPrice() <= ui.getPriceLimit()) {
+                    if (flight1 != flight2 && 
+                        this.isMatched(flight2, ui.getFlightBackInterest()) &&
+                        flight1.getPrice() + flight2.getPrice() <= ui.getPriceLimit() &&
+                        flight1.getAirlineId().getId() == flight2.getAirlineId().getId()) {
                         matchedFlights.add(flight1);
                         matchedFlights.add(flight2);
                         return matchedFlights;
@@ -168,8 +170,10 @@ public class OfferManager {
         OffsetDateTime interestDateStart = fi.getDepartureDateTime();
         OffsetDateTime interestDateEnd = interestDateStart.plusDays(1);
 
-        return f.getDepartureAirport() == fi.getDepartureAirport() && f.getArrivalAirport() == fi.getArrivalAirport()
-                && interestDateStart.compareTo(flightDate) <= 0 && interestDateEnd.compareTo(flightDate) >= 0;
+        return f.getDepartureAirport() == fi.getDepartureAirport() && 
+                f.getArrivalAirport() == fi.getArrivalAirport() && 
+                interestDateStart.compareTo(flightDate) <= 0 && 
+                interestDateEnd.compareTo(flightDate) >= 0;
     }
 
     /**
