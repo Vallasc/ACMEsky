@@ -30,8 +30,11 @@ Università di Bologna
 \
 &nbsp;
 <div align="center" style="font-size: 22px">
-Progetto di Ingegneria del Software Orientata ai servizi
+Progetto di Ingegneria del Software Orientata ai Servizi
 </div>
+
+&nbsp;
+
 <div align="center" style="font-size: 22px">
 ACMEsky
 </div>
