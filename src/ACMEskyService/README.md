@@ -53,6 +53,10 @@ Si occupa dell'autenticazione e dell'autorizzazione delle entità che fanno rich
 
 Contiene le classi che descrivono gli errori restituiti in caso di problemi nelle richieste, le variabili d'ambiente e quella di utilità per i pdf dei biglietti.
 
+### Formato ricevuta
+
+![Ricevuta](doc/ricevuta.png)
+
 ## API
 
 Il file OpenAPI è disponibile al seguente [link](https://vallasc.github.io/ACMEsky/src/SwaggerUI/open-api.json)
@@ -119,6 +123,5 @@ mvn package
 docker-compose up --build
 ```
 
-\
 \
 &nbsp;

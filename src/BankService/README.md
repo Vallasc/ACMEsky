@@ -10,6 +10,9 @@ Tutte le richieste che vengono fatte alla banca devono esere autenticate utilizz
 Il servizio è stato realizzato utilizzando il framework Spring boot che fornisce un ambiente per sviluppare applicazioni web JAVA. Per l'autenticazione degli utenti e l'autorizzazione delle richieste è stato utilizzata la libreria *Spring-Security* in accoppiata con *jsonwebtoken*.
 Per la gestione dei dati è stato utlizzato *H2*, un DBMS leggero che permette di salvare il database in un unico file.
 
+### Schermata di pagamento
+
+![Ricevuta](doc/pagamento.png)
 
 ## API:
 Il file OpenAPI è disponibile al seguente [link](https://vallasc.github.io/ACMEsky/src/BankService/openapi.json)
