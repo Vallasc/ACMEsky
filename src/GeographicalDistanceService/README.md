@@ -24,5 +24,4 @@ node index.js -p 8080
 docker-compose up
 ```
 \
-\
 &nbsp;

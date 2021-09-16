@@ -7,6 +7,20 @@ ACMEsky Web è una single webpage application che viene utilizzata dall'utente p
 - Typescript
 - Bootstrap
 
+## Interfaccia grafica
+### Home
+![Home](doc/home.png)
+
+### Aggiunta interesse
+![Interesse](doc/interesse.png)
+
+### Conferma e acquisto offerta
+![offerta](doc/offerta.png)
+
+### Riepilogo
+![riepilogo](doc/riepilogo.png)
+
+
 ## Esecuzione
 
 Installa le dipendenze

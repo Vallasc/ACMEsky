@@ -17,7 +17,7 @@ Il servizio di ACMEsky interagisce con quello del calcolo delle distanze geograf
 per trovare la compagnia di noleggio più vicina. Infine, prenota il trasferimento A/R da Rental Service e aggiunge i dettagli sulla ricevuta di viaggio.
 
 
-## Struttura del servizio e tecnologie utilizzate
+## Tecnologie utilizzate e scelte progettuali
 
 Il servizio è stato sviluppato utilizzando Java Enterprise Edition, il quale implementa la specifica JAX-RS (Java API for RESTful Web Services), un set di interfacce e annotazioni che facilitano lo sviluppo di applicazioni lato server. Per quanto riguarda il deployment si è scelto Red Hat JBOSS Enterprise Application Platform che offre supporto completo a Java EE in tutti gli ambienti applicativi. Questa scelta è dovuta anche dal fatto che una delle distribuzioni di Camunda Platform si basa su Wildfly, l'application server di JBOSS. Si è scelto inoltre di fornire un'interfaccia web per presentare le risorse di ACMEskyService richiamabili da servizi esterni tramite Swagger UI, un linguaggio di descrizione delle API RESTful che implementa la specifica di OpenAPI. I biglietti in formato pdf vengono generati grazie al framework opensource di Itext, che consente di convertire file html in pdf automaticamente. La build e l'esecuzione del servizio viene svolta tramite Docker, in particolare nel file docker-compose viene definito l'immagine del container da creare e la connessione con la rete "acmesky-net" che consente agli altri container esterni al progetto ma connessi alla rete di comunicare con ACMEskyService (db, compagnie aeree, banche, ecc.).
 Il progetto è composto dalle seguenti cartelle:
