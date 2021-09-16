@@ -87,7 +87,7 @@ In fase di conferma il cliente deve anche procedere al pagamento, per la gestion
 
 Nel caso in cui il costo del volo risulti essere superiore ai 1000 euro ACMESky offre al cliente un servizio gratuito di trasferimento da/verso l'aeroporto se questo si trova entro i 30 chilometri dal suo domicilio.
 
-In questo caso ACMESky fa uso di diverse compagnie di noleggio con autista con cui ha degli accordi commerciali. La compagnia scelta è quelle che risulta avere una sede più vicina al domicilio del cliente. A tale compagnia ACMESky invia una richiesta per prenotare un trasferimento che parta due ore prima dell’orario previsto per il decollo del volo.
+In questo caso ACMESky fa uso di diverse compagnie di noleggio con autista con cui ha degli accordi commerciali. La compagnia scelta è quella che risulta avere una sede più vicina al domicilio del cliente. A tale compagnia ACMESky invia una richiesta per prenotare un trasferimento che parta due ore prima dell’orario previsto per il decollo del volo.
 
 ## Vincoli aggiuntivi
 Durante il design del sistema sono stati aggiunti dei vincoli per raffinare le specifiche del progetto.
@@ -366,7 +366,7 @@ E' connessa in quanto il ricevente di ___confirmOffer___ è il mittente di __(3)
 2.   ( 
 3.     ( responseOfferOk: ACME -> USERₓ ; requestPaymentLink: USERₓ -> ACME ; bookTickets: ACME -> AIRₖ
 ```
-E' connessa per la sequenza in quanto il ricevente di ___requestPaymentLink___ è il mittente di ___bookTickets___.
+E' connessa per la sequenza in quanto il ricevente di ___responseOfferOk___ è il mittente di ___requestPaymentLink___, il ricevente di ___requestPaymentLink___ è il mittente di ___bookTickets___.
 ```fsharp
 4.       (   
 5.         (
@@ -545,7 +545,7 @@ proj(AcquistoOfferta, USERₓ) =
   )*
 ```
 
-### Airline
+### Airline service
 
 ```fsharp
 proj(QueryDeiVoli, AIRₖ) = 
@@ -638,7 +638,7 @@ proj(AcquistoOfferta, PTG) =
   )*
 ```
 
-### Bank
+### Bank service
 
 ```fsharp
 proj(QueryDeiVoli, BANK) = 
@@ -685,7 +685,7 @@ proj(AcquistoOfferta, BANK) =
   )*
 ```
 
-### Geodistance service
+### Geographical Distance service
 
 ```fsharp
 proj(QueryDeiVoli, GEO) = 
@@ -731,7 +731,7 @@ proj(AcquistoOfferta, GEO) =
   )*
 ```
 
-### Rent company
+### Rental Service
 
 ```fsharp
 proj(QueryDeiVoli, RENTₜ) = 
@@ -1090,6 +1090,7 @@ I singoli servizi non devono essere compilati poiché questa operazione viene gi
 # Descrizione dei servizi
 Di seguito vengono spiegati nel dettagglio i servizi.
 
+
 # ACMEsky Service
 
 ACMEsky Service è il modulo principale di ACMEsky, si relaziona con i vari servizi (AirlineServices, RentServices, Prontogram, BankService, ecc...) al fine di consentire agli utenti di richiedere ed acquistare le offerte dei voli che desiderano.
@@ -1215,8 +1216,8 @@ mvn package
 docker-compose up --build
 ```
 
-\
 &nbsp;
+<div class="page-break"></div>
 
 # ACMEsky Database
 
@@ -1336,9 +1337,8 @@ La tabella ***banks*** fa riferimento ai servizi bancari. E' composta dai seguen
 
 La tabella ***rent_services*** fa riferimento ai servizi di noleggio per accompagnare l'utente all'aereoporto. E' composta dai seguenti campi: ***id*** (chiave primaria), ***entity_id*** (chiave esterna riferita alla entità nella tabella ***domain_entities***) e  ***ws_address*** (indirizzo del server del servizio).
 
-\
-\
 &nbsp;
+<div class="page-break"></div>
 
 # ACMEsky Web
 ACMEsky Web è una single webpage application che viene utilizzata dall'utente per interfacciarsi ai servizi di ACMEsky. Non aggiunge nessuna funzionalità al sistema, il suo unico scopo è quello di fare da wrapper grafico alle API REST di ACMEsky.
@@ -1382,9 +1382,8 @@ Per creare una versione ottimizzata
 npm run build
 ```
 
-\
-\
 &nbsp;
+<div class="page-break"></div>
 
 # Airline service
 
@@ -1481,8 +1480,8 @@ Gli URI riferiti dei container definiti in `docker-compose.yml`:
 - http://localhost:8060 per airlineservice_national
 - http://localhost:8061 per airlineservice_international
 
-\
 &nbsp;
+<div class="page-break"></div>
 
 # Bank service
 
@@ -1548,9 +1547,8 @@ user: sa
 passw:
 ```
 
-\
-\
 &nbsp;
+<div class="page-break"></div>
 
 # Prontogram
 
@@ -1642,8 +1640,8 @@ http-server
 docker-compose up --build
 ```
 
-\
 &nbsp;
+<div class="page-break"></div>
 
 # Rental service
 Servizio che simula una compagnia di noleggio.
@@ -1704,8 +1702,8 @@ jolie server.ol $SERVICE_NAME
 ```sh
 docker-compose up
 ```
-\
 &nbsp;
+<div class="page-break"></div>
 
 # Geographical distance service
 Servizio che si occupa di calcolare la distanza tra due punti specificati tramite indirizzo o coordinate geografiche. E' stato sviluppato utilizzando la libreria express.js, internamente utilizza le api di distancematrix.ai per il calcolo delle distanze.
@@ -1731,5 +1729,5 @@ node index.js -p 8080
 ```sh
 docker-compose up
 ```
-\
 &nbsp;
+<div class="page-break"></div>
