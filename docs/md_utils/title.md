@@ -64,7 +64,7 @@ Vallorani Giacomo
 \
 &nbsp;
 <div align="center" style="font-size: 14px">
-Anno ccademico 2020/2021
+Anno accademico 2020/2021
 </div>
 
 &nbsp;
