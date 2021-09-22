@@ -9,6 +9,7 @@
         "url": "http://acmesky.duckdns.org:8080",
         "variables": {}
     }],
+    "schemes": ["http"],
     "paths": {
         "/airlines/last_minute": {
             "post": {

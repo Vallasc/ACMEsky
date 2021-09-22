@@ -23,6 +23,3 @@ node index.js -p 8080
 ```sh
 docker-compose up
 ```
-\
-\
-&nbsp;

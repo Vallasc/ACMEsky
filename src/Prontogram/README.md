@@ -1,14 +1,16 @@
 
 # Prontogram
 
+![Prontogram](https://vallasc.github.io/ACMEsky/src/Prontogram/doc/prontogram.png)
+
 Prontogram è una applicazione web che permette di inviare notifiche agli utenti che vi sono iscritti.
-I messaggi inviati possono essere formattati utilizzado HTML, questo permette di rappresentare i dati in modo complesso, come ad esempio in una tabella.
+I messaggi inviati possono essere formattati utilizzado HTML, questo permette di rappresentare i dati in modo complesso (ad esempio in una tabella).
 
 L'applicazione di Prontogram si divide in due parti: front-end e back-end.
 La parte back-end si occupa di gestire tutte le chiamate delle API da e verso il client web. Mentre la parte fornt-end si occupa di creare l'interfaccia grafica e gestire le interazioni da parte dell'utente.
 
 
-## Tecnologie e scelte progettuali del servizio
+## Tecnologie utilizzate e scelte progettuali
 La parte front-end e la parte back-end sono state sviluppate utilizzando tecnologie e pattern strutturali differenti. 
 
 ### Front-end
@@ -40,6 +42,8 @@ Il file OpenAPI è disponibile al seguente [link](https://vallasc.github.io/ACME
     https://vallasc.github.io/ACMEsky/src/SwaggerUI/index.html?src=https://vallasc.github.io/ACMEsky/src/Prontogram/api.json
     ">
 </iframe>
+
+&nbsp;
 
 ## Risorse
 
@@ -85,6 +89,5 @@ http-server
 docker-compose up --build
 ```
 
-\
-\
 &nbsp;
+<div class="page-break"></div>

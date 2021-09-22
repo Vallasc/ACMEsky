@@ -1,3 +1,4 @@
+
 # ACMEsky Service
 
 ACMEsky Service è il modulo principale di ACMEsky, si relaziona con i vari servizi (AirlineServices, RentServices, Prontogram, BankService, ecc...) al fine di consentire agli utenti di richiedere ed acquistare le offerte dei voli che desiderano.
@@ -15,7 +16,8 @@ Per quanto riguarda il pagamento, il servizio interroga Bank Service (provider d
 Il servizio di ACMEsky interagisce con quello del calcolo delle distanze geografiche "GeographicalDistance Service" e con quelli di noleggio "Rental Service" per applicare eventuali servizi aggiuntivi all'offerta acquistata dell'utente. Effettua le richieste a GeographicalDistance Service per calcolare la distanza utente - areoporto e
 per trovare la compagnia di noleggio più vicina. Infine, prenota il trasferimento A/R da Rental Service e aggiunge i dettagli sulla ricevuta di viaggio.
 
-## Struttura del servizio e tecnologie utilizzate
+
+## Tecnologie utilizzate e scelte progettuali
 
 Il servizio è stato sviluppato utilizzando Java Enterprise Edition, il quale implementa la specifica JAX-RS (Java API for RESTful Web Services), un set di interfacce e annotazioni che facilitano lo sviluppo di applicazioni lato server. Per quanto riguarda il deployment si è scelto l'application server Wildfly che offre supporto completo a Java EE in tutti gli ambienti applicativi. E' stato utilizzato Camunda come BPMN per supportare i processi, il quale offre un deployment per Wildfly. Il servizio mette a disposizione la specifica di OpenAPI. I biglietti in formato pdf vengono generati grazie al framework opensource di Itext, che consente di convertire file html in pdf automaticamente. Il deployment di ACMEsky è basato sull'immagine Docker **_camunda-bpmn-platform:wildfly_** a cui viene aggiunto il file .war compilato dai sorgenti di ACMEsky.
 
@@ -51,6 +53,10 @@ Si occupa dell'autenticazione e dell'autorizzazione delle entità che fanno rich
 ### utils
 
 Contiene le classi che descrivono gli errori restituiti in caso di problemi nelle richieste, le variabili d'ambiente e quella di utilità per i pdf dei biglietti.
+
+### Formato ricevuta
+
+![Ricevuta](https://vallasc.github.io/ACMEsky/src/ACMEskyService/doc/ricevuta.png)
 
 ## API
 
@@ -118,6 +124,5 @@ mvn package
 docker-compose up --build
 ```
 
-\
-\
 &nbsp;
+<div class="page-break"></div>

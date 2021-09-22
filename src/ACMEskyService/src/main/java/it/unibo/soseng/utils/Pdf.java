@@ -63,7 +63,8 @@ public class Pdf {
                 content = content.replace("{{row4}}", "");
             }
 
-            content = content.replace("{{subtotal}}", String.format("%.2f", offer.getTotalPrice()));
+            content = content.replace("{{subtotal}}", String.format("%.2f", offer.getTotalPrice() -  
+                                                            Float.valueOf(Env.ACMESKY_ADDITIONAL_PRICE)));
             content = content.replace("{{serviceCost}}",
                     String.format("%.2f", Float.valueOf(Env.ACMESKY_ADDITIONAL_PRICE)));
             content = content.replace("{{total}}", String.format("%.2f", offer.getTotalPrice()));

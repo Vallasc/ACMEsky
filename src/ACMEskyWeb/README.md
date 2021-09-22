@@ -7,6 +7,20 @@ ACMEsky Web è una single webpage application che viene utilizzata dall'utente p
 - Typescript
 - Bootstrap
 
+## Interfaccia grafica
+### Home
+![Home](https://vallasc.github.io/ACMEsky/src/ACMEskyWeb/doc/home.png)
+
+### Aggiunta interesse
+![Interesse](https://vallasc.github.io/ACMEsky/src/ACMEskyWeb/doc/interesse.png)
+
+### Conferma e acquisto offerta
+![offerta](https://vallasc.github.io/ACMEsky/src/ACMEskyWeb/doc/offerta.png)
+
+### Riepilogo
+![riepilogo](https://vallasc.github.io/ACMEsky/src/ACMEskyWeb/doc/riepilogo.png)
+
+
 ## Esecuzione
 
 Installa le dipendenze
@@ -27,6 +41,5 @@ Per creare una versione ottimizzata
 npm run build
 ```
 
-\
-\
 &nbsp;
+<div class="page-break"></div>

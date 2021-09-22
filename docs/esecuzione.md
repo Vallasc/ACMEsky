@@ -1,5 +1,5 @@
 
-# Istruzioni per l'esecuzione dello stack di servizi
+# Istruzioni per l'esecuzione dello stack di container
 
 ## Prerequisiti
 

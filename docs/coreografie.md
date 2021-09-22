@@ -214,7 +214,7 @@ E' connessa in quanto il ricevente di ___confirmOffer___ è il mittente di __(3)
 2.   ( 
 3.     ( responseOfferOk: ACME -> USERₓ ; requestPaymentLink: USERₓ -> ACME ; bookTickets: ACME -> AIRₖ
 ```
-E' connessa per la sequenza in quanto il ricevente di ___requestPaymentLink___ è il mittente di ___bookTickets___.
+E' connessa per la sequenza in quanto il ricevente di ___responseOfferOk___ è il mittente di ___requestPaymentLink___, il ricevente di ___requestPaymentLink___ è il mittente di ___bookTickets___.
 ```fsharp
 4.       (   
 5.         (
@@ -393,7 +393,7 @@ proj(AcquistoOfferta, USERₓ) =
   )*
 ```
 
-### Airline
+### Airline service
 
 ```fsharp
 proj(QueryDeiVoli, AIRₖ) = 
@@ -486,7 +486,7 @@ proj(AcquistoOfferta, PTG) =
   )*
 ```
 
-### Bank
+### Bank service
 
 ```fsharp
 proj(QueryDeiVoli, BANK) = 
@@ -533,7 +533,7 @@ proj(AcquistoOfferta, BANK) =
   )*
 ```
 
-### Geodistance service
+### Geographical Distance service
 
 ```fsharp
 proj(QueryDeiVoli, GEO) = 
@@ -579,7 +579,7 @@ proj(AcquistoOfferta, GEO) =
   )*
 ```
 
-### Rent company
+### Rental Service
 
 ```fsharp
 proj(QueryDeiVoli, RENTₜ) = 

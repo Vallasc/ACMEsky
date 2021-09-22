@@ -30,8 +30,11 @@ Università di Bologna
 \
 &nbsp;
 <div align="center" style="font-size: 22px">
-Progetto di Ingegneria del Software Orientata ai servizi
+Progetto di Ingegneria del Software Orientata ai Servizi
 </div>
+
+&nbsp;
+
 <div align="center" style="font-size: 22px">
 ACMEsky
 </div>
@@ -61,7 +64,7 @@ Vallorani Giacomo
 \
 &nbsp;
 <div align="center" style="font-size: 14px">
-Anno ccademico 2020/2021
+Anno accademico 2020/2021
 </div>
 
 &nbsp;

@@ -5,11 +5,14 @@ Bank è il servizio con cui ACMEsky si interfaccia per la gestione dei pagamenti
 ACMEsky richiede a Bank i link di pagamento che poi verrano utilizzati dall'utente per pagare. Inoltre una volta effettuato il pagamento invia un messaggio ad ACMEsky con la relativa conferma.
 Tutte le richieste che vengono fatte alla banca devono esere autenticate utilizzando il token JWT che può essere richieste utilizzando la route `/path`.
 
-## Tecnologie utilizzate
+## Tecnologie utilizzate e scelte progettuali
 
 Il servizio è stato realizzato utilizzando il framework Spring boot che fornisce un ambiente per sviluppare applicazioni web JAVA. Per l'autenticazione degli utenti e l'autorizzazione delle richieste è stato utilizzata la libreria *Spring-Security* in accoppiata con *jsonwebtoken*.
 Per la gestione dei dati è stato utlizzato *H2*, un DBMS leggero che permette di salvare il database in un unico file.
 
+### Schermata di pagamento
+
+![Ricevuta](https://vallasc.github.io/ACMEsky/src/BankService/doc/pagamento.png)
 
 ## API:
 Il file OpenAPI è disponibile al seguente [link](https://vallasc.github.io/ACMEsky/src/BankService/openapi.json)
@@ -60,6 +63,5 @@ user: sa
 passw:
 ```
 
-\
-\
 &nbsp;
+<div class="page-break"></div>
