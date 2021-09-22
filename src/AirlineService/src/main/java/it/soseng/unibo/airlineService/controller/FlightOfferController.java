@@ -75,7 +75,7 @@ public class FlightOfferController {
      * @throws JsonProcessingException
      * @throws IOException
      */
-    @Scheduled(fixedRate = 600000)
+    @Scheduled(initialDelay = 180000, fixedRate = 600000)
     private void sendLastMinuteOffer() throws JsonProcessingException, IOException {
         s.handleLastMinuteOffer(FILE, ACMEskyRoute, user, pass);
 
@@ -97,7 +97,7 @@ public class FlightOfferController {
                     LOGGER.info("Error" + e.getMessage());
                 }
             }
-        }, (long) 600000, TimeUnit.SECONDS);
+        }, (long) 6000, TimeUnit.SECONDS);
     }
 
     /**
