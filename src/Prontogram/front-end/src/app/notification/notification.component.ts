@@ -62,9 +62,6 @@ export class NotificationComponent implements  OnDestroy,OnInit{
         //Create new Notification
         let notification = message['notification']
         let notify = new Notification ();
-        notify.flyBack = notification['data']['flyBack'];
-        notify.flyOutBound = notification['data']['flyOutBound'];
-        notify.offerToken = notification['data']['offerToken'];
         notify.username = notification['data']['username'];
         notify.message = notification['data']['message'];
         console.log ("Notifica ricevuta ", notify)
