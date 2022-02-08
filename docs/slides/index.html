@@ -1,0 +1,359 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>ACMEsky</title>
+
+		<link rel="stylesheet" href="./dist/reset.css">
+		<link rel="stylesheet" href="./dist/reveal.css">
+		<link rel="stylesheet" href="./custom.css">
+	</head>
+	<body>
+		<div class="theme-font-montserrat theme-color-white-blue" style="width: 100%; height: 100%;">
+			<div class="reveal">
+				<div class="slides">
+					<section>
+						<div class="sl-block" data-block-type="text" style="width: 384px; left: 448px; top: 289px; height: auto;">
+							<div class="sl-block-content" style="z-index: 10;">
+								<h1>ACMEsky</h1>
+							</div>
+						</div>
+						<div class="sl-block" data-block-type="text" data-name="text-c300ff" style="height: auto; width: 1075.5px; left: 102.25px; top: 239px;">
+							<div class="sl-block-content" style="z-index: 11;">
+								<h3>Progetto di ingegneria del software orientata ai servizi</h3>
+							</div>
+						</div>
+						<div class="sl-block" data-block-type="text" style="height: auto; width: 1075.5px; left: 102.25px; top: 628.5px;" data-name="text-a258a0">
+							<div class="sl-block-content" style="z-index: 12;">
+								<p>Anno accademico 2020/21</p>
+							</div>
+						</div>
+						<div class="sl-block" data-block-type="text" style="height: auto; width: 1075.5px; left: 102.25px; top: 72px;" data-name="text-d7f209">
+							<div class="sl-block-content" style="z-index: 13;">
+								<p>Università di Bologna</p>
+							</div>
+						</div>
+						<div class="sl-block" data-block-type="text" style="height: auto; width: 1075.5px; left: 102.25px; top: 537px;" data-name="text-d2d475">
+							<div class="sl-block-content" style="z-index: 14;">
+								<p>Baratin Riccardo, Di Ubaldo Andrea, Vallorani Giacomo</p>
+							</div>
+						</div>
+					</section>
+					<section>
+						<div class="sl-block" data-block-type="text" style="width: 1076px; left: 104px; top: 72px; height: auto;">
+							<div class="sl-block-content" style="z-index: 10;">
+								<h2>Scelte progettuali</h2>
+							</div>
+						</div>
+						<div class="sl-block" data-block-type="text" style="width: 1076px; left: 104px; top: 186.5px; height: auto;" data-name="text-17bed3">
+							<div class="sl-block-content" style="z-index: 12; text-align: left; line-height: 1.95;" data-has-line-height="">
+								<ul>
+									<li>I voli delle offerte generate provengono dalla stessa compagnia aerea</li>
+									<li>La compagnia aerea restituisce una lista di voli disponibili</li>
+									<li>In caso di errori da parte dei servizi necessari alla prenotazione del trasporto legato all'offerta, ACMEsky non offre tale servizio all'utente</li>
+									<li>Ogni attore deve essere autenticato e autorizzato per poter interagire con <em>ACMEsky</em>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</section>
+					<section>
+						<div class="sl-block" data-block-type="text" style="width: 806px; left: 234px; top: 16px; height: auto;">
+							<div class="sl-block-content" style="z-index: 10;">
+								<h2>Coreografia</h2>
+							</div>
+						</div>
+						<div class="sl-block" data-block-type="code" data-name="code-1126e8" style="width: 854.613px; height: 612.202px; left: 212.694px; top: 97.798px;">
+							<div class="sl-block-content notranslate" data-highlight-theme="monokai" data-code-frame="none" style="z-index: 11;" data-code-wrap="true">
+								<pre style="font-size: 16px; line-height: 19px;" class="none"><code data-line-numbers="">// Ricerca dei voli (ripetuta per tutte le compagnie aeree)
+// Viene ripetuta per ogni compagnia aerea collegata ad ACMEsky
+// queryFlights: Richesta di voli d'interesse per l'utente
+// responseFlights: Voli disponibili dell'Airline company
+( queryFlights: ACME -&gt; AIRₖ ; responseFlights: AIRₖ -&gt; ACME )* 
+| 
+
+// Ricezione offerte last minute (ripetuta per tutte le compagnie aeree)
+// Viene ripetuta per ogni compagnia aerea collegata ad ACMEsky
+// sendLastMinute: invia le offerte last minute
+// repsponseLastMinute: risposta successo o fallimento
+( sendLastMinute: AIRₖ -&gt; ACME ; repsponseLastMinute: ACME -&gt; AIRₖ )*
+|
+
+// Registrazione interesse dell'utente (ripetuta per tutti gli  utenti)
+// requestInterest: messaggio di richiesta con A/R
+// responseInterest: risposta successo o fallimento
+( requestInterest: USERₓ -&gt; ACME ; responseInterest: ACME -&gt; USERₓ )* 
+|   
+
+// Notifica dell'offerta all'utente
+// offerToken: mesaagio di offerta A/R
+// notifyUser: messaggio di notifica di Prontogram
+// notifyResponse: risposta da parte dell'utene dell'avvenuta ricezione
+// messageSended: risposta da parte di prontogram dell'avvenuto invio
+( offerToken: ACME -&gt; PTG ; notifyUser: PTG -&gt; USERₓ ; 
+	notifyResponse: USERₓ -&gt; PTG ; messageSended: PTG -&gt; ACME )*
+|
+
+// Richiesta ricevuta con i biglietti
+// getInvoice: mesaagio di richiesta ricevuta dell'offerta pagata
+// invoice: messaggio con la ricevuta del viaggio
+( getInvoice: USERₓ -&gt; ACME ; invoice: ACME -&gt; USERₓ )*
+|
+
+// Conferma dell'offerta e pagamento
+// confirmOffer: messaggio di conferma offerta e pagamento
+( 
+	confirmOffer: USERₓ -&gt; ACME ; 
+	(
+	// ACMEsky conferma che l'offerta è disponibile
+	// responseOfferOk: messaggio di conferma offerta
+	// requestPaymentLink: richiesta di pagamento da parte dell'utente
+	(   
+		responseOfferOk: ACME -&gt; USERₓ ;
+		requestPaymentLink: USERₓ -&gt; ACME ;
+		bookTickets: ACME -&gt; AIRₖ ;
+		(   
+		// Tickets ok
+		// bookTickets: prenota i biglietti 
+		// responseTickets: biglietti prenotati
+		// requestBankLink: richiesta creazione link di pagamento
+		// responselink: link di pagamento generato dalla banca
+		// paymentLink: link di pagamento generato dalla banca
+		// payment: pagamento attraverso il link generato
+		(
+			responseTickets: AIRₖ -&gt; ACME ;
+			requestBankLink: ACME -&gt; BANK ; 
+			responselink: BANK -&gt; ACME ;
+			paymentLink: ACME -&gt; USERₓ ;
+			payment: USERₓ -&gt; BANK ;
+			(
+			// Pagamento avvenuto con successo
+			// successPaymentBank: esito pagamento
+			(
+				successPaymentBank: BANK -&gt; ACME ;
+				// Controllo Premium service
+				(
+				// Richiesta a Geodistance se costo &gt; 1000€
+				1 
+				+ 
+				// requestDistance: richiesta calcolo della distanza
+				// responseDistance: distanza calcolata
+				(
+					requestDistance: ACME -&gt; GEO ; 
+					responseDistance: GEO -&gt; ACME ; 
+					( // Richiesta a Rent service se distanza &lt;30Km
+					1 
+					+  
+					(
+						(
+						// requestDistanceRent: richiesta distanza noleggio
+						// responseDistanceRent: risposta con distanza
+						requestDistanceRent: ACME -&gt; GEO ; 
+						responseDistanceRent: GEO -&gt; ACME 
+						)* ;
+						// requestRentDeparture: richiesta noleggio andata
+						// responseRentDeparture: risposta nolleggio andata
+						// requestRentReturn: richiesta noleggio ritorno
+						// responseRentReturn: risposta nolleggio ritorno
+						requestRentDeparture: ACME -&gt; RENTₜ ; 
+						responseRentDeparture: RENTₜ-&gt; ACME ;
+						requestRentReturn: ACME -&gt; RENTₜ ; 
+						responseRentReturn: RENTₜ-&gt; ACME 
+					)
+					)
+				)
+				)
+			)
+			+
+			(
+				// Errore nel pagamento
+				// unbookTickets: cancella la prenotazione dei biglietti
+				// emitCoupon: pagamento fallito
+				unbookTickets: ACME -&gt; AIRₖ ;
+				emitCoupon: ACME -&gt; BANK 
+			)
+			) 
+		)
+		// Errore nella prenotazione dei biglietti
+		// flightNotFound: volo non trovato
+		// errorTickets: errore volo non disponibile
+		+
+		(
+			flightNotFound: AIRₖ -&gt; ACME ;
+			errorTickets: ACME -&gt; USERₓ
+		)
+		)
+	)
+	+
+	// ACMEsky controlla l'offerta e non è più disponibile
+	// responseOfferError: errore offerta
+	responseOfferError: ACME -&gt; USERₓ
+	)
+)*</code></pre>
+							</div>
+						</div>
+					</section>
+					<section data-auto-animate="" data-auto-animate-easing="linear">
+						<div class="sl-block" data-block-type="text" style="width: 806px; left: 237px; top: 43px; height: auto;" data-name="text-6dafe7">
+							<div class="sl-block-content" style="z-index: 12;">
+								<h2>Diagramma BPMN</h2>
+							</div>
+						</div>
+						<div class="sl-block" data-block-type="image" style="width: 925.686px; height: 206.567px; left: 178.157px; top: 256.716px; min-width: 1px; min-height: 1px;" data-name="image-719489">
+							<div class="sl-block-style" style="z-index: 10; filter: drop-shadow(rgba(0, 0, 0, 0.5) 0px 0px 5px);">
+								<div class="sl-block-content" style="z-index: 10; border-width: 1px;"><img style="" data-natural-width="19386" data-natural-height="4326" data-lazy-loaded="" data-src="https://vallasc.github.io/acmesky-imgs/bpmn/Total.jpg"></div>
+							</div>
+						</div>
+					</section>
+					<section data-auto-animate="" data-auto-animate-easing="linear">
+						<div class="sl-block" data-block-type="image" style="width: 4219.81px; height: 941.654px; left: 83px; top: 144px; min-width: 1px; min-height: 1px;" data-name="image-719489">
+							<div class="sl-block-style" style="z-index: 10; filter: drop-shadow(rgba(0, 0, 0, 0.5) 0px 0px 5px);">
+								<div class="sl-block-content" style="z-index: 10; border-width: 1px;"><img style="" data-natural-width="19386" data-natural-height="4326" data-lazy-loaded="" data-src="https://vallasc.github.io/acmesky-imgs/bpmn/Total.jpg"></div>
+							</div>
+						</div>
+						<div class="sl-block" data-block-type="text" style="width: 1280px; left: 0px; top: 35px; height: auto;">
+							<div class="sl-block-content" style="z-index: 11;">
+								<h2>Diagramma BPMN: Interessi, voli e offerte</h2>
+							</div>
+						</div>
+					</section>
+					<section data-auto-animate-easing="linear" data-auto-animate="">
+						<div class="sl-block" data-block-type="image" style="width: 4219.81px; height: 941.654px; left: 0px; top: -221.654px; min-width: 1px; min-height: 1px;" data-name="image-719489">
+							<div class="sl-block-style" style="z-index: 10; filter: drop-shadow(rgba(0, 0, 0, 0.5) 0px 0px 5px);">
+								<div class="sl-block-content" style="z-index: 10; border-width: 1px;"><img style="" data-natural-width="19386" data-natural-height="4326" data-lazy-loaded="" data-src="https://vallasc.github.io/acmesky-imgs/bpmn/Total.jpg"></div>
+							</div>
+						</div>
+					</section>
+					<section data-auto-animate="" data-auto-animate-easing="linear">
+		
+						<div class="sl-block" data-block-type="image" style="width: 4219.81px; height: 941.654px; left: -818.85px; top: 144px; min-width: 1px; min-height: 1px;" data-name="image-719489">
+							<div class="sl-block-style" style="z-index: 10; filter: drop-shadow(rgba(0, 0, 0, 0.5) 0px 0px 5px);">
+								<div class="sl-block-content" style="z-index: 10; border-width: 1px;"><img style="" data-natural-width="19386" data-natural-height="4326" data-lazy-loaded="" data-src="https://vallasc.github.io/acmesky-imgs/bpmn/Total.jpg"></div>
+							</div>
+						</div>
+						<div class="sl-block" data-block-type="text" style="width: 1120px; left: 80px; top: 41px; height: auto;" data-name="text-6dafe7">
+							<div class="sl-block-content" style="z-index: 11;">
+								<h2>Diagramma BPMN: Conferma offerte</h2>
+							</div>
+						</div>
+					</section>
+					<section data-auto-animate="" data-auto-animate-easing="linear">
+						<div class="sl-block" data-block-type="text" style="width: 1120px; left: 80px; top: 43px; height: auto;" data-name="text-6dafe7">
+							<div class="sl-block-content" style="z-index: 12;">
+								<h2>Diagramma BPMN: Acquisto offerte</h2>
+							</div>
+						</div>
+						<div class="sl-block" data-block-type="image" style="width: 4219.81px; height: 941.654px; left: -1589.85px; top: 144px; min-width: 1px; min-height: 1px;" data-name="image-719489">
+							<div class="sl-block-style" style="z-index: 10; filter: drop-shadow(rgba(0, 0, 0, 0.5) 0px 0px 5px);">
+								<div class="sl-block-content" style="z-index: 10; border-width: 1px;"><img style="" data-natural-width="19386" data-natural-height="4326" data-lazy-loaded="" data-src="https://vallasc.github.io/acmesky-imgs/bpmn/Total.jpg"></div>
+							</div>
+						</div>
+					</section>
+					<section data-auto-animate="" data-auto-animate-easing="linear">
+						<div class="sl-block" data-block-type="text" style="width: 1120px; left: 80px; top: 43px; height: auto;" data-name="text-6dafe7">
+							<div class="sl-block-content" style="z-index: 11;">
+								<h2>Diagramma BPMN: Servizi premium</h2>
+							</div>
+						</div>
+						<div class="sl-block" data-block-type="image" style="width: 4219.81px; height: 941.654px; left: -2752.85px; top: 144px; min-width: 1px; min-height: 1px;" data-name="image-719489">
+							<div class="sl-block-style" style="z-index: 10; filter: drop-shadow(rgba(0, 0, 0, 0.5) 0px 0px 5px);">
+								<div class="sl-block-content" style="z-index: 10; border-width: 1px;"><img style="" data-natural-width="19386" data-natural-height="4326" data-lazy-loaded="" data-src="https://vallasc.github.io/acmesky-imgs/bpmn/Total.jpg"></div>
+							</div>
+						</div>
+					</section>
+					<section data-auto-animate="" data-auto-animate-easing="linear">
+						<div class="sl-block" data-block-type="text" style="width: 1120px; left: 80px; top: 43px; height: auto;" data-name="text-6dafe7">
+							<div class="sl-block-content" style="z-index: 11;" dir="ui">
+								<h2>Diagramma BPMN: Richiesta biglietto</h2>
+							</div>
+						</div>
+						<div class="sl-block" data-block-type="image" style="width: 4219.81px; height: 941.654px; left: -3019.81px; top: 144px; min-width: 1px; min-height: 1px;" data-name="image-719489">
+							<div class="sl-block-style" style="z-index: 10; filter: drop-shadow(rgba(0, 0, 0, 0.5) 0px 0px 5px);">
+								<div class="sl-block-content" style="z-index: 10; border-width: 1px;"><img style="" data-natural-width="19386" data-natural-height="4326" data-lazy-loaded="" data-src="https://vallasc.github.io/acmesky-imgs/bpmn/Total.jpg"></div>
+							</div>
+						</div>
+					</section>
+					<section data-auto-animate="">
+						<div class="sl-block" data-block-type="image" data-name="image-b77771" style="width: 474.027px; height: 576px; left: 404.973px; top: 144px; min-width: 1px; min-height: 1px;">
+							<div class="sl-block-content" style="z-index: 10;"><img style="" data-natural-width="1111" data-natural-height="1350" data-lazy-loaded="" data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/1978535/images/8939587/diagram6.png"></div>
+						</div>
+						<div class="sl-block" data-block-type="text" style="width: 1187px; left: 46.5px; top: 35.5px; height: auto;">
+							<div class="sl-block-content" style="z-index: 11;" dir="ui">
+								<h2>Diagramma UML: Booking e pagamento</h2>
+							</div>
+						</div>
+					</section>
+					<section data-auto-animate="">
+						<div class="sl-block" data-block-type="image" data-name="image-b77771" style="width: 952.892px; height: 1157.88px; left: 140.598px; top: 0px; min-width: 1px; min-height: 1px;">
+							<div class="sl-block-content" style="z-index: 10;"><img style="" data-natural-width="1111" data-natural-height="1350" data-lazy-loaded="" data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/1978535/images/8939587/diagram6.png"></div>
+						</div>
+					</section>
+					<section data-auto-animate="">
+						<div class="sl-block" data-block-type="image" data-name="image-b77771" style="width: 977.771px; height: 1188.11px; left: 151.115px; top: -468.11px; min-width: 1px; min-height: 1px;">
+							<div class="sl-block-content" style="z-index: 10;"><img style="" data-natural-width="1111" data-natural-height="1350" data-lazy-loaded="" data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/1978535/images/8939587/diagram6.png"></div>
+						</div>
+					</section>
+					<section>
+						<div class="sl-block" data-block-type="image" data-name="image-2fc406" style="width: 824.114px; height: 615px; left: 209px; top: 96px; min-width: 1px; min-height: 1px;">
+							<div class="sl-block-content" style="z-index: 10;"><img data-natural-width="1202" data-natural-height="897" style="" data-lazy-loaded="" data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/1978535/images/8939683/diagram7.png"></div>
+						</div>
+						<div class="sl-block" data-block-type="text" style="width: 1268px; left: 6px; top: 16px; height: auto;" data-name="text-6dafe7">
+							<div class="sl-block-content" style="z-index: 11;" dir="ui">
+								<h2><span style="font-size:0.7em">Diagramma UML: Prenotazione noleggio e richiesta tickets</span></h2>
+							</div>
+						</div>
+					</section>
+					<section>
+						<div class="sl-block" data-block-type="text" style="width: 1076px; left: 102px; top: 35.5px; height: auto;">
+							<div class="sl-block-content" style="z-index: 10;">
+								<h2>ACMEsky</h2>
+							</div>
+						</div>
+						<div class="sl-block" data-block-type="image" data-name="image-487a72" style="width: 1153.24px; height: 475.802px; left: 63.38px; top: 161px; min-width: 1px; min-height: 1px;">
+							<div class="sl-block-content" style="z-index: 11;"><img style="" data-natural-width="1733" data-natural-height="715" data-lazy-loaded="" data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/430094/images/8946360/structure1.png"></div>
+						</div>
+					</section>
+					<section>
+						<div class="sl-block" data-block-type="iframe" data-name="iframe-657d54" style="width: 1141.37px; height: 603px; left: 58.63px; top: 116px;">
+							<div class="sl-block-content" style="z-index: 10;">
+								<iframe allowfullscreen="" allow="fullscreen" data-src="https://vallasc.github.io/ACMEsky/src/SwaggerUI/index.html?src=https://vallasc.github.io/ACMEsky/src/ACMEskyService/swagger/open-api.json" sandbox="allow-forms allow-scripts allow-popups allow-same-origin allow-pointer-lock allow-presentation"></iframe>
+							</div>
+						</div>
+						<div class="sl-block" data-block-type="text" style="width: 806px; left: 239px; top: 43px; height: auto;" data-name="text-6dafe7">
+							<div class="sl-block-content" style="z-index: 11;">
+								<h2>ACMEsky: OpenAPI</h2>
+							</div>
+						</div>
+					</section>
+					<section>
+						<div class="sl-block" data-block-type="image" data-name="image-e7039a" style="width: 950.822px; height: 601.435px; left: 164.589px; top: 108.5px; min-width: 1px; min-height: 1px;">
+							<div class="sl-block-content" style="z-index: 10;"><img style="" data-natural-width="1475" data-natural-height="933" data-lazy-loaded="" data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/1978535/images/8939626/structure2.png"></div>
+						</div>
+						<div class="sl-block" data-block-type="text" style="width: 806px; left: 237px; top: 35.5px; height: auto;" data-name="text-6dafe7">
+							<div class="sl-block-content" style="z-index: 11;">
+								<h2>Stack dei container</h2>
+							</div>
+						</div>
+					</section>
+				</div>
+			</div>
+		</div>
+
+		<script src="./dist/reveal.js"></script>
+		<script src="./plugin/markdown/markdown.js"></script>
+		<script src="./plugin/highlight/highlight.js"></script>
+		<script>
+			Reveal.initialize({
+				hash: true,
+				plugins: [ RevealMarkdown, RevealHighlight ],
+				width: 1280,
+				height: 720,
+				transition: "fade",
+				backgroundTransition: "slide",
+				center: false
+			});
+		</script>
+	</body>
+</html>
